@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C57ED93B17028A1900505ECF /* ImageView_Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageView_Scale.m */; };
+		C57ED93E17028C9B00505ECF /* PhotoDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93D17028C9B00505ECF /* PhotoDetailController.m */; };
+		C588B0A817003032006BBC34 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A717003032006BBC34 /* UIKit.framework */; };
+		C588B0AA17003032006BBC34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A917003032006BBC34 /* Foundation.framework */; };
+		C588B0AC17003032006BBC34 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0AB17003032006BBC34 /* CoreGraphics.framework */; };
+		C588B0B217003032006BBC34 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C588B0B017003032006BBC34 /* InfoPlist.strings */; };
+		C588B0B417003032006BBC34 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0B317003032006BBC34 /* main.m */; };
+		C588B0B817003032006BBC34 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0B717003032006BBC34 /* AppDelegate.m */; };
+		C588B0BA17003032006BBC34 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0B917003032006BBC34 /* Default.png */; };
+		C588B0BC17003032006BBC34 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0BB17003032006BBC34 /* Default@2x.png */; };
+		C588B0BE17003032006BBC34 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0BD17003032006BBC34 /* Default-568h@2x.png */; };
+		C588B0CB1700305B006BBC34 /* IIViewDeckController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0C71700305B006BBC34 /* IIViewDeckController.m */; };
+		C588B0CC1700305B006BBC34 /* IIWrapController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0C91700305B006BBC34 /* IIWrapController.m */; };
+		C588B0CD1700305B006BBC34 /* LeftSideViewIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */; };
+		C588B0CF170036FB006BBC34 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0CE170036FB006BBC34 /* QuartzCore.framework */; };
+		C588B0D217003750006BBC34 /* LeftMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0D117003750006BBC34 /* LeftMenuController.m */; };
+		C588B0D5170039CC006BBC34 /* LocalAlbumsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0D4170039CC006BBC34 /* LocalAlbumsController.m */; };
+		C588B0D717003A13006BBC34 /* NavigationBarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0D617003A13006BBC34 /* NavigationBarBG.png */; };
+		C588B0DA17003CD0006BBC34 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0D917003CD0006BBC34 /* AssetsLibrary.framework */; };
+		C588B0E0170048F1006BBC34 /* PhotoAlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0DF170048F1006BBC34 /* PhotoAlbumCell.m */; };
+		C588B0E3170057EF006BBC34 /* AlbumPhotoesController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0E2170057EF006BBC34 /* AlbumPhotoesController.m */; };
+		C588B0E917013063006BBC34 /* PhotoesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0E817013063006BBC34 /* PhotoesCell.m */; };
+		C588B0EE170142AD006BBC34 /* DataBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0ED170142AD006BBC34 /* DataBaseManager.m */; };
+		C588B0F0170143B2006BBC34 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0EF170143B2006BBC34 /* libsqlite3.dylib */; };
+		C588B0F3170177E1006BBC34 /* LocalPhotoesController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0F2170177E1006BBC34 /* LocalPhotoesController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C57ED93917028A1900505ECF /* ImageView_Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageView_Scale.h; sourceTree = "<group>"; };
+		C57ED93A17028A1900505ECF /* ImageView_Scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageView_Scale.m; sourceTree = "<group>"; };
+		C57ED93C17028C9B00505ECF /* PhotoDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailController.h; sourceTree = "<group>"; };
+		C57ED93D17028C9B00505ECF /* PhotoDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDetailController.m; sourceTree = "<group>"; };
+		C588B0A417003032006BBC34 /* SohuPhotoAlbum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SohuPhotoAlbum.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C588B0A717003032006BBC34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C588B0A917003032006BBC34 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C588B0AB17003032006BBC34 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C588B0AF17003032006BBC34 /* SohuPhotoAlbum-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SohuPhotoAlbum-Info.plist"; sourceTree = "<group>"; };
+		C588B0B117003032006BBC34 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C588B0B317003032006BBC34 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C588B0B517003032006BBC34 /* SohuPhotoAlbum-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SohuPhotoAlbum-Prefix.pch"; sourceTree = "<group>"; };
+		C588B0B617003032006BBC34 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C588B0B717003032006BBC34 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C588B0B917003032006BBC34 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		C588B0BB17003032006BBC34 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		C588B0BD17003032006BBC34 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		C588B0C61700305B006BBC34 /* IIViewDeckController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIViewDeckController.h; sourceTree = "<group>"; };
+		C588B0C71700305B006BBC34 /* IIViewDeckController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIViewDeckController.m; sourceTree = "<group>"; };
+		C588B0C81700305B006BBC34 /* IIWrapController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIWrapController.h; sourceTree = "<group>"; };
+		C588B0C91700305B006BBC34 /* IIWrapController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIWrapController.m; sourceTree = "<group>"; };
+		C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeftSideViewIcon.png; sourceTree = "<group>"; };
+		C588B0CE170036FB006BBC34 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C588B0D017003750006BBC34 /* LeftMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuController.h; sourceTree = "<group>"; };
+		C588B0D117003750006BBC34 /* LeftMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuController.m; sourceTree = "<group>"; };
+		C588B0D3170039CC006BBC34 /* LocalAlbumsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAlbumsController.h; sourceTree = "<group>"; };
+		C588B0D4170039CC006BBC34 /* LocalAlbumsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAlbumsController.m; sourceTree = "<group>"; };
+		C588B0D617003A13006BBC34 /* NavigationBarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NavigationBarBG.png; sourceTree = "<group>"; };
+		C588B0D917003CD0006BBC34 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		C588B0DE170048F1006BBC34 /* PhotoAlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumCell.h; sourceTree = "<group>"; };
+		C588B0DF170048F1006BBC34 /* PhotoAlbumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAlbumCell.m; sourceTree = "<group>"; };
+		C588B0E1170057EF006BBC34 /* AlbumPhotoesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumPhotoesController.h; sourceTree = "<group>"; };
+		C588B0E2170057EF006BBC34 /* AlbumPhotoesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumPhotoesController.m; sourceTree = "<group>"; };
+		C588B0E717013063006BBC34 /* PhotoesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoesCell.h; sourceTree = "<group>"; };
+		C588B0E817013063006BBC34 /* PhotoesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoesCell.m; sourceTree = "<group>"; };
+		C588B0EC170142AD006BBC34 /* DataBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBaseManager.h; sourceTree = "<group>"; };
+		C588B0ED170142AD006BBC34 /* DataBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBaseManager.m; sourceTree = "<group>"; };
+		C588B0EF170143B2006BBC34 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		C588B0F1170177E1006BBC34 /* LocalPhotoesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPhotoesController.h; sourceTree = "<group>"; };
+		C588B0F2170177E1006BBC34 /* LocalPhotoesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPhotoesController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C588B0A117003032006BBC34 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C588B0F0170143B2006BBC34 /* libsqlite3.dylib in Frameworks */,
+				C588B0DA17003CD0006BBC34 /* AssetsLibrary.framework in Frameworks */,
+				C588B0CF170036FB006BBC34 /* QuartzCore.framework in Frameworks */,
+				C588B0A817003032006BBC34 /* UIKit.framework in Frameworks */,
+				C588B0AA17003032006BBC34 /* Foundation.framework in Frameworks */,
+				C588B0AC17003032006BBC34 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C57ED935170287E100505ECF /* PhotoDetail */ = {
+			isa = PBXGroup;
+			children = (
+				C57ED93C17028C9B00505ECF /* PhotoDetailController.h */,
+				C57ED93D17028C9B00505ECF /* PhotoDetailController.m */,
+				C57ED93917028A1900505ECF /* ImageView_Scale.h */,
+				C57ED93A17028A1900505ECF /* ImageView_Scale.m */,
+			);
+			name = PhotoDetail;
+			sourceTree = "<group>";
+		};
+		C588B09B17003032006BBC34 = {
+			isa = PBXGroup;
+			children = (
+				C588B0AD17003032006BBC34 /* SohuPhotoAlbum */,
+				C588B0A617003032006BBC34 /* Frameworks */,
+				C588B0A517003032006BBC34 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C588B0A517003032006BBC34 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0A417003032006BBC34 /* SohuPhotoAlbum.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C588B0A617003032006BBC34 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0EF170143B2006BBC34 /* libsqlite3.dylib */,
+				C588B0D917003CD0006BBC34 /* AssetsLibrary.framework */,
+				C588B0CE170036FB006BBC34 /* QuartzCore.framework */,
+				C588B0A717003032006BBC34 /* UIKit.framework */,
+				C588B0A917003032006BBC34 /* Foundation.framework */,
+				C588B0AB17003032006BBC34 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C588B0AD17003032006BBC34 /* SohuPhotoAlbum */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0B617003032006BBC34 /* AppDelegate.h */,
+				C588B0B717003032006BBC34 /* AppDelegate.m */,
+				C588B0D017003750006BBC34 /* LeftMenuController.h */,
+				C588B0D117003750006BBC34 /* LeftMenuController.m */,
+				C588B0EB17014291006BBC34 /* DataBase */,
+				C588B0DD170048C0006BBC34 /* LocalPhotoes */,
+				C57ED935170287E100505ECF /* PhotoDetail */,
+				C588B0D817003A1B006BBC34 /* Resource */,
+				C588B0C41700304A006BBC34 /* external */,
+				C588B0AE17003032006BBC34 /* Supporting Files */,
+			);
+			path = SohuPhotoAlbum;
+			sourceTree = "<group>";
+		};
+		C588B0AE17003032006BBC34 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0AF17003032006BBC34 /* SohuPhotoAlbum-Info.plist */,
+				C588B0B017003032006BBC34 /* InfoPlist.strings */,
+				C588B0B317003032006BBC34 /* main.m */,
+				C588B0B517003032006BBC34 /* SohuPhotoAlbum-Prefix.pch */,
+				C588B0B917003032006BBC34 /* Default.png */,
+				C588B0BB17003032006BBC34 /* Default@2x.png */,
+				C588B0BD17003032006BBC34 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C588B0C41700304A006BBC34 /* external */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0C51700305B006BBC34 /* ViewDeck */,
+			);
+			name = external;
+			sourceTree = "<group>";
+		};
+		C588B0C51700305B006BBC34 /* ViewDeck */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0C61700305B006BBC34 /* IIViewDeckController.h */,
+				C588B0C71700305B006BBC34 /* IIViewDeckController.m */,
+				C588B0C81700305B006BBC34 /* IIWrapController.h */,
+				C588B0C91700305B006BBC34 /* IIWrapController.m */,
+				C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */,
+			);
+			path = ViewDeck;
+			sourceTree = "<group>";
+		};
+		C588B0D817003A1B006BBC34 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0D617003A13006BBC34 /* NavigationBarBG.png */,
+			);
+			name = Resource;
+			sourceTree = "<group>";
+		};
+		C588B0DD170048C0006BBC34 /* LocalPhotoes */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0D3170039CC006BBC34 /* LocalAlbumsController.h */,
+				C588B0D4170039CC006BBC34 /* LocalAlbumsController.m */,
+				C588B0F1170177E1006BBC34 /* LocalPhotoesController.h */,
+				C588B0F2170177E1006BBC34 /* LocalPhotoesController.m */,
+				C588B0DE170048F1006BBC34 /* PhotoAlbumCell.h */,
+				C588B0DF170048F1006BBC34 /* PhotoAlbumCell.m */,
+				C588B0E1170057EF006BBC34 /* AlbumPhotoesController.h */,
+				C588B0E2170057EF006BBC34 /* AlbumPhotoesController.m */,
+				C588B0E717013063006BBC34 /* PhotoesCell.h */,
+				C588B0E817013063006BBC34 /* PhotoesCell.m */,
+			);
+			name = LocalPhotoes;
+			sourceTree = "<group>";
+		};
+		C588B0EB17014291006BBC34 /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+				C588B0EC170142AD006BBC34 /* DataBaseManager.h */,
+				C588B0ED170142AD006BBC34 /* DataBaseManager.m */,
+			);
+			name = DataBase;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C588B0A317003032006BBC34 /* SohuPhotoAlbum */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C588B0C117003032006BBC34 /* Build configuration list for PBXNativeTarget "SohuPhotoAlbum" */;
+			buildPhases = (
+				C588B0A017003032006BBC34 /* Sources */,
+				C588B0A117003032006BBC34 /* Frameworks */,
+				C588B0A217003032006BBC34 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SohuPhotoAlbum;
+			productName = SohuPhotoAlbum;
+			productReference = C588B0A417003032006BBC34 /* SohuPhotoAlbum.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C588B09C17003032006BBC34 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Qu;
+			};
+			buildConfigurationList = C588B09F17003032006BBC34 /* Build configuration list for PBXProject "SohuPhotoAlbum" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C588B09B17003032006BBC34;
+			productRefGroup = C588B0A517003032006BBC34 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C588B0A317003032006BBC34 /* SohuPhotoAlbum */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C588B0A217003032006BBC34 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C588B0B217003032006BBC34 /* InfoPlist.strings in Resources */,
+				C588B0BA17003032006BBC34 /* Default.png in Resources */,
+				C588B0BC17003032006BBC34 /* Default@2x.png in Resources */,
+				C588B0BE17003032006BBC34 /* Default-568h@2x.png in Resources */,
+				C588B0CD1700305B006BBC34 /* LeftSideViewIcon.png in Resources */,
+				C588B0D717003A13006BBC34 /* NavigationBarBG.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C588B0A017003032006BBC34 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C588B0B417003032006BBC34 /* main.m in Sources */,
+				C588B0B817003032006BBC34 /* AppDelegate.m in Sources */,
+				C588B0CB1700305B006BBC34 /* IIViewDeckController.m in Sources */,
+				C588B0CC1700305B006BBC34 /* IIWrapController.m in Sources */,
+				C588B0D217003750006BBC34 /* LeftMenuController.m in Sources */,
+				C588B0D5170039CC006BBC34 /* LocalAlbumsController.m in Sources */,
+				C588B0E0170048F1006BBC34 /* PhotoAlbumCell.m in Sources */,
+				C588B0E3170057EF006BBC34 /* AlbumPhotoesController.m in Sources */,
+				C588B0E917013063006BBC34 /* PhotoesCell.m in Sources */,
+				C588B0EE170142AD006BBC34 /* DataBaseManager.m in Sources */,
+				C588B0F3170177E1006BBC34 /* LocalPhotoesController.m in Sources */,
+				C57ED93B17028A1900505ECF /* ImageView_Scale.m in Sources */,
+				C57ED93E17028C9B00505ECF /* PhotoDetailController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C588B0B017003032006BBC34 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C588B0B117003032006BBC34 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C588B0BF17003032006BBC34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C588B0C017003032006BBC34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C588B0C217003032006BBC34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SohuPhotoAlbum/SohuPhotoAlbum-Prefix.pch";
+				INFOPLIST_FILE = "SohuPhotoAlbum/SohuPhotoAlbum-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C588B0C317003032006BBC34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SohuPhotoAlbum/SohuPhotoAlbum-Prefix.pch";
+				INFOPLIST_FILE = "SohuPhotoAlbum/SohuPhotoAlbum-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C588B09F17003032006BBC34 /* Build configuration list for PBXProject "SohuPhotoAlbum" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C588B0BF17003032006BBC34 /* Debug */,
+				C588B0C017003032006BBC34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C588B0C117003032006BBC34 /* Build configuration list for PBXNativeTarget "SohuPhotoAlbum" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C588B0C217003032006BBC34 /* Debug */,
+				C588B0C317003032006BBC34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C588B09C17003032006BBC34 /* Project object */;
+}
