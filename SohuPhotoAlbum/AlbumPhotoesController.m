@@ -7,6 +7,7 @@
 //
 
 #import "AlbumPhotoesController.h"
+#import "PhotoDetailController.h"
 
 @interface AlbumPhotoesController ()
 
@@ -59,7 +60,6 @@
              });
              return;
          }
-//         NSLog(@"%@,%@",[[[result defaultRepresentation] url] absoluteString],[[result defaultRepresentation] url]);
          [self.assetsArray addObject:result];
     }];
     [pool release];
@@ -113,5 +113,11 @@
     if (indexPath.row < self.dataSourceArray.count)
         cell.dataSource = [[self dataSourceArray] objectAtIndex:indexPath.row];
     return cell;
+}
+#pragma mark photoClick
+- (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
+{
+    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset] autorelease];
+    [self.navigationController pushViewController:ph animated:YES];
 }
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "LocalPhotoesController.h"
+#import "PhotoDetailController.h"
 
 @interface LocalPhotoesController ()
 @property(nonatomic,retain)NSMutableArray *assetGroups;
@@ -115,6 +116,7 @@
 {
     //asserts按日期大小排序;
     self.assetsArray = [[[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy] autorelease];
+    
     //对asset分组
     [self divideAssettByDayTime];
     [_myTableView reloadData];
@@ -124,7 +126,6 @@
     NSLog(@"start divide");
     self.assetsSection = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
-    
     for (int i = 0; i < self.assetsArray.count; i++) {
         ALAsset * asset = [self.assetsArray objectAtIndex:i];
         NSDate * date = [asset valueForProperty:ALAssetPropertyDate];
@@ -142,21 +143,29 @@
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (NSMutableArray * array in tempArray )
         [self.dataSourceArray addObject:[self coverAssertToDataSource:array]];
-    NSLog(@"divide end");
+     NSLog(@"divide end");
 }
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {
     NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < array.count; i+=4) {
-        PhotoesCellDataSource * source = [[[PhotoesCellDataSource alloc] init] autorelease];
+        PhotoesCellDataSource * source = [[PhotoesCellDataSource alloc] init];
         source.firstAsset = [self.assetsArray objectAtIndex:i];
-        if (i + 1 < self.assetsArray.count)
-            source.secoundAsset = [self.assetsArray objectAtIndex:i+1];
-        if (i + 2 < self.assetsArray.count)
-            source.thridAsset = [self.assetsArray objectAtIndex:i+2];
-        if (i + 3 < self.assetsArray.count)
-            source.lastAsset = [self.assetsArray objectAtIndex:i+3];
+        if (i + 3 < array.count) {
+            source.secoundAsset = [array objectAtIndex:i+1];
+            source.thridAsset = [array objectAtIndex:i+2];
+            source.lastAsset = [array objectAtIndex:i+3];
+        }else if (i + 2 < array.count){
+            source.secoundAsset = [array objectAtIndex:i+1];
+            source.thridAsset = [array objectAtIndex:i+2];
+            source.lastAsset = nil;
+        }else if (i + 1 < array.count){
+            source.secoundAsset = [array objectAtIndex:i+1];
+            source.lastAsset = nil;
+            source.thridAsset = nil;
+        }
         [finalArray addObject:source];
+        [source release];
     }
     return finalArray;
 }
@@ -235,5 +244,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     return cell;
 }
-
+#pragma mark photoClick
+- (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
+{
+    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset] autorelease];
+    [self.navigationController pushViewController:ph animated:YES];
+}
 @end

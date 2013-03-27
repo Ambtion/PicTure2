@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C57ED93B17028A1900505ECF /* ImageView_Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageView_Scale.m */; };
+		C57ED93B17028A1900505ECF /* ImageScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageScaleView.m */; };
 		C57ED93E17028C9B00505ECF /* PhotoDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93D17028C9B00505ECF /* PhotoDetailController.m */; };
 		C588B0A817003032006BBC34 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A717003032006BBC34 /* UIKit.framework */; };
 		C588B0AA17003032006BBC34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A917003032006BBC34 /* Foundation.framework */; };
@@ -35,8 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C57ED93917028A1900505ECF /* ImageView_Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageView_Scale.h; sourceTree = "<group>"; };
-		C57ED93A17028A1900505ECF /* ImageView_Scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageView_Scale.m; sourceTree = "<group>"; };
+		C57ED93917028A1900505ECF /* ImageScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageScaleView.h; sourceTree = "<group>"; };
+		C57ED93A17028A1900505ECF /* ImageScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScaleView.m; sourceTree = "<group>"; };
 		C57ED93C17028C9B00505ECF /* PhotoDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailController.h; sourceTree = "<group>"; };
 		C57ED93D17028C9B00505ECF /* PhotoDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDetailController.m; sourceTree = "<group>"; };
 		C588B0A417003032006BBC34 /* SohuPhotoAlbum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SohuPhotoAlbum.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,8 +99,8 @@
 			children = (
 				C57ED93C17028C9B00505ECF /* PhotoDetailController.h */,
 				C57ED93D17028C9B00505ECF /* PhotoDetailController.m */,
-				C57ED93917028A1900505ECF /* ImageView_Scale.h */,
-				C57ED93A17028A1900505ECF /* ImageView_Scale.m */,
+				C57ED93917028A1900505ECF /* ImageScaleView.h */,
+				C57ED93A17028A1900505ECF /* ImageScaleView.m */,
 			);
 			name = PhotoDetail;
 			sourceTree = "<group>";
@@ -298,7 +298,7 @@
 				C588B0E917013063006BBC34 /* PhotoesCell.m in Sources */,
 				C588B0EE170142AD006BBC34 /* DataBaseManager.m in Sources */,
 				C588B0F3170177E1006BBC34 /* LocalPhotoesController.m in Sources */,
-				C57ED93B17028A1900505ECF /* ImageView_Scale.m in Sources */,
+				C57ED93B17028A1900505ECF /* ImageScaleView.m in Sources */,
 				C57ED93E17028C9B00505ECF /* PhotoDetailController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

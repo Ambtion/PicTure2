@@ -1484,6 +1484,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 #pragma mark - Left Side
 
 - (BOOL)toggleLeftView {
+    NSLog(@"%s",__FUNCTION__);
     return [self toggleLeftViewAnimated:YES];
 }
 
@@ -2086,6 +2087,8 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 #pragma mark - Panning
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner {
+    NSString * gesture;
+    return NO;
     if (self.panningMode == IIViewDeckNavigationBarOrOpenCenterPanning && panner.view == self.slidingControllerView && [self isAnySideOpen])
         return NO;
     

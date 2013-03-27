@@ -38,7 +38,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.contentView.backgroundColor = [UIColor blackColor];
         [self initSubViews];
     }
     return self;
@@ -73,8 +72,9 @@
 }
 - (void)setImageViews:(UIImageView*)imageView With:(ALAsset *)asset
 {
+    
     if (asset) {
-        imageView.image = [UIImage imageWithCGImage:[_dataSource.firstAsset aspectRatioThumbnail]];
+        imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
         [imageView setUserInteractionEnabled:YES];
     }else{
         imageView.image = nil;
@@ -84,6 +84,25 @@
 }
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
 {
-    NSLog(@"%s",__FUNCTION__);
+    UIView * view = [gesture view];
+    ALAsset * asset = nil;
+    switch (view.tag) {
+        case 1000:
+            asset = self.dataSource.firstAsset;
+            break;
+        case 1001:
+            asset = self.dataSource.secoundAsset;
+            break;
+        case 1002:
+            asset = self.dataSource.thridAsset;
+            break;
+        case 1003:
+            asset = self.dataSource.lastAsset;
+            break;
+        default:
+            break;
+    }
+    if ([_delegate respondsToSelector:@selector(photoesCell:clickAsset:)] && asset)
+        [_delegate photoesCell:self clickAsset:asset];
 }
 @end
