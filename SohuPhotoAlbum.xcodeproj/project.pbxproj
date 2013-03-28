@@ -27,7 +27,6 @@
 		C583CF131703E61100CD3485 /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = C583CF0D1703E61100CD3485 /* line.png */; };
 		C583CF141703E61100CD3485 /* cloundPhoto.png in Resources */ = {isa = PBXBuildFile; fileRef = C583CF0E1703E61100CD3485 /* cloundPhoto.png */; };
 		C583CF151703E61100CD3485 /* accountBar.png in Resources */ = {isa = PBXBuildFile; fileRef = C583CF0F1703E61100CD3485 /* accountBar.png */; };
-		C583CF181703EC3C00CD3485 /* 侧边栏焦点态.png in Resources */ = {isa = PBXBuildFile; fileRef = C583CF171703EC3C00CD3485 /* 侧边栏焦点态.png */; };
 		C583CF1B1703ECAC00CD3485 /* AccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C583CF1A1703ECAC00CD3485 /* AccountCell.m */; };
 		C583CF1E1703F3ED00CD3485 /* MenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C583CF1D1703F3ED00CD3485 /* MenuCell.m */; };
 		C583CF201703F5DF00CD3485 /* LocalPhoto.png in Resources */ = {isa = PBXBuildFile; fileRef = C583CF1F1703F5DF00CD3485 /* LocalPhoto.png */; };
@@ -81,7 +80,6 @@
 		C583CF0D1703E61100CD3485 /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line.png; sourceTree = "<group>"; };
 		C583CF0E1703E61100CD3485 /* cloundPhoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloundPhoto.png; sourceTree = "<group>"; };
 		C583CF0F1703E61100CD3485 /* accountBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accountBar.png; sourceTree = "<group>"; };
-		C583CF171703EC3C00CD3485 /* 侧边栏焦点态.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "侧边栏焦点态.png"; sourceTree = "<group>"; };
 		C583CF191703ECAC00CD3485 /* AccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCell.h; sourceTree = "<group>"; };
 		C583CF1A1703ECAC00CD3485 /* AccountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountCell.m; sourceTree = "<group>"; };
 		C583CF1C1703F3ED00CD3485 /* MenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCell.h; sourceTree = "<group>"; };
@@ -176,7 +174,6 @@
 				C583CF0C1703E61100CD3485 /* setting.png */,
 				C583CF0A1703E61100CD3485 /* menuBackground.png */,
 				C583CF0D1703E61100CD3485 /* line.png */,
-				C583CF171703EC3C00CD3485 /* 侧边栏焦点态.png */,
 			);
 			name = LeftMenu;
 			sourceTree = "<group>";
@@ -388,7 +385,6 @@
 				C583CF131703E61100CD3485 /* line.png in Resources */,
 				C583CF141703E61100CD3485 /* cloundPhoto.png in Resources */,
 				C583CF151703E61100CD3485 /* accountBar.png in Resources */,
-				C583CF181703EC3C00CD3485 /* 侧边栏焦点态.png in Resources */,
 				C583CF201703F5DF00CD3485 /* LocalPhoto.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
