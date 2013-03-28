@@ -76,7 +76,7 @@
     [_leftLabel setText:[NSString stringWithFormat:@"%@(%d)",[self.dataSource.leftGroup valueForProperty:ALAssetsGroupPropertyName],[self.dataSource.leftGroup numberOfAssets]]];
     if (self.dataSource.rightGroup) {
         [_rithtImgae setImage:[UIImage imageWithCGImage:[self.dataSource.rightGroup posterImage]]];
-        [_rigthLabel setText:[NSString stringWithFormat:@"%@(%d)",[self.dataSource.rightGroup valueForProperty:ALAssetsGroupPropertyName],[self.dataSource.leftGroup numberOfAssets]]];
+        [_rigthLabel setText:[NSString stringWithFormat:@"%@(%d)",[self.dataSource.rightGroup valueForProperty:ALAssetsGroupPropertyName],[self.dataSource.rightGroup numberOfAssets]]];
     }
 }
 - (void)handleGusture:(UITapGestureRecognizer *)gesture

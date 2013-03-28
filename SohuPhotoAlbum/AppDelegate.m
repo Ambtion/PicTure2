@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "LeftMenuController.h"
 #import "LocalAlbumsController.h"
-
+#import "LocalALLPhotoesController.h"
 #import "DataBaseManager.h"
 
 @implementation AppDelegate
@@ -23,12 +23,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    
     //主视图
-    UIViewController * localPhoto = [[[LocalAlbumsController alloc] init] autorelease];
-    localPhoto.title = @"本地";
-    UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:localPhoto] autorelease];
-    [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
+    LocalALLPhotoesController * lp = [[[LocalALLPhotoesController alloc] init] autorelease];
+    UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
+//    [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
     //左菜单
     LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
     IIViewDeckController *vc = [[[IIViewDeckController alloc] initWithCenterViewController:navApiVC leftViewController:leftVC] autorelease];

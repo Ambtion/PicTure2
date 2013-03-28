@@ -10,11 +10,13 @@
 #import "AppDelegate.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoAlbumCell.h"
+#import "CusNavigationBar.h"
 
 @interface LocalAlbumsController : UIViewController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;
     BOOL _isReading; //for app bacome background
+    
 }
 @end

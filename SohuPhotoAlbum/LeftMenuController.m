@@ -10,7 +10,7 @@
 
 #import "LocalAlbumsController.h" //本地相册
 //test
-#import "LocalPhotoesController.h" //测试用
+#import "LocalALLPhotoesController.h" //测试用
 
 #define MENUMAXNUMBER 4
 static NSString * menu[4] = {@"账号",@"本地相册",@"网络相册",@"图片墙"};
@@ -69,19 +69,11 @@ static NSString * menu[4] = {@"账号",@"本地相册",@"网络相册",@"图片�
             self.viewDeckController.centerController = navApiVC;
         }
         if (indexPath.row == 2) {
-            LocalPhotoesController * lp = [[[LocalPhotoesController alloc] init] autorelease];
+            LocalALLPhotoesController * lp = [[[LocalALLPhotoesController alloc] init] autorelease];
             UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = navApiVC;
         }
-//        UIViewController * apiVC = [[[CenterController alloc] init] autorelease];
-//        apiVC.title = [NSString stringWithFormat:@"第%d页面",indexPath.row];
-//        CGFloat rgp = indexPath.row /4.f;
-//        apiVC.view.backgroundColor = [UIColor colorWithRed:rgp green:rgp blue:rgp alpha:1.f];
-//        UINavigationController *navApiVC = [[[UINavigationController alloc]
-//                                             initWithRootViewController:apiVC] autorelease];
-//        [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
-//        self.viewDeckController.centerController = navApiVC;
         self.view.userInteractionEnabled = YES;
     }];
 }

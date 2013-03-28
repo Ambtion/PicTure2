@@ -30,7 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self customerNavigationBar];
     CGRect rect = [[UIScreen mainScreen] bounds];
     rect.size.height -= 64;
     _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];
@@ -41,13 +40,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [self readAlbum];
 }
-- (void)customerNavigationBar
+- (void)viewWillAppear:(BOOL)animated
 {
-    UIButton *leftBtn = [[[UIButton alloc] init] autorelease];
-    [leftBtn setImage:[UIImage imageNamed:@"LeftSideViewIcon.png"] forState:UIControlStateNormal];
-    leftBtn.frame = CGRectMake(0.0, 0.0, 53.0, 30.0);
-    [leftBtn addTarget:self action:@selector(leftButtonClickHandler:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:leftBtn] autorelease];
+//    [self customerNavigationBar];
 }
 - (void)leftButtonClickHandler:(id)sender
 {
@@ -78,7 +73,6 @@
         }
         if ([group numberOfAssets]){
             [self.assetGroups addObject:group];
-//            NSLog(@"%@",[group valueForProperty:ALAssetsGroupPropertyName]);
         }
             
     } failureBlock:^(NSError *error) {
