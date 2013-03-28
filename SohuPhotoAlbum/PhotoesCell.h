@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "StatusImageView.h"
 
 @class PhotoesCell;
 @interface PhotoesCellDataSource : NSObject
@@ -19,8 +20,9 @@
 @end
 
 @protocol PhotoesCellDelegate <NSObject>
-@optional
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset;
+- (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected;
+
 @end
 @interface PhotoesCell : UITableViewCell
 {
@@ -29,4 +31,7 @@
 
 @property(nonatomic,assign)id<PhotoesCellDelegate> delegate;
 @property(nonatomic,retain)PhotoesCellDataSource * dataSource;
+
+- (void)showCellSelectedStatus;
+- (void)hiddenCellSelectedStatus;
 @end

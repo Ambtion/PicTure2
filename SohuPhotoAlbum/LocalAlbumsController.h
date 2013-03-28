@@ -11,8 +11,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoAlbumCell.h"
 #import "CusNavigationBar.h"
+#import "BaseViewController.h"
 
-@interface LocalAlbumsController : UIViewController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
+@interface LocalAlbumsController : BaseViewController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;

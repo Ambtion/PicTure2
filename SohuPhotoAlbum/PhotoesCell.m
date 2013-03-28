@@ -7,8 +7,10 @@
 //
 
 #import "PhotoesCell.h"
+#import "DataBaseManager.h"
+#import <QuartzCore/QuartzCore.h>
 
-#define CELLHIGTH  79.f
+#define CELLHIGTH  80.f
 
 @implementation PhotoesCellDataSource
 @synthesize firstAsset,secoundAsset,thridAsset,lastAsset;
@@ -37,6 +39,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.frame = CGRectMake(0, 0, 320, CELLHIGTH);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self initSubViews];
     }
@@ -44,10 +47,12 @@
 }
 - (void)initSubViews
 {
-    UIImageView * imageView;
-    CGRect frame = CGRectMake(4, 2, 75, 75);
+    StatusImageView * imageView;
+    CGRect frame = CGRectMake(4, 5, 75, 75);
     for (int i = 0; i < 4; i++) {
-        imageView = [[UIImageView alloc] initWithFrame:frame];
+        imageView = [[StatusImageView alloc] initWithFrame:frame];
+        
+//        imageView.layer.borderWidth = 1.f;
         imageView.tag = 1000+i;
         [self.contentView addSubview:imageView];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGustrure:)];
@@ -65,14 +70,13 @@
 }
 - (void)updataViews
 {
-    [self setImageViews:(UIImageView *)[self.contentView viewWithTag:1000] With:_dataSource.firstAsset];
-    [self setImageViews:(UIImageView *)[self.contentView viewWithTag:1001] With:_dataSource.secoundAsset];
-    [self setImageViews:(UIImageView *)[self.contentView viewWithTag:1002] With:_dataSource.thridAsset];
-    [self setImageViews:(UIImageView *)[self.contentView viewWithTag:1003] With:_dataSource.lastAsset];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1000] With:_dataSource.firstAsset];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1001] With:_dataSource.secoundAsset];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1002] With:_dataSource.thridAsset];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1003] With:_dataSource.lastAsset];
 }
-- (void)setImageViews:(UIImageView*)imageView With:(ALAsset *)asset
+- (void)setImageViews:(StatusImageView*)imageView With:(ALAsset *)asset
 {
-    
     if (asset) {
         imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
         [imageView setUserInteractionEnabled:YES];
@@ -84,7 +88,8 @@
 }
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
 {
-    UIView * view = [gesture view];
+    StatusImageView * view = (StatusImageView *)[gesture view];
+    [view setSelected:!view.isSelected];
     ALAsset * asset = nil;
     switch (view.tag) {
         case 1000:
@@ -102,7 +107,41 @@
         default:
             break;
     }
-    if ([_delegate respondsToSelector:@selector(photoesCell:clickAsset:)] && asset)
-        [_delegate photoesCell:self clickAsset:asset];
+    if (view.isShowStatus) {
+        if ([_delegate respondsToSelector:@selector(photoesCell:clickAsset:Select:)]) {
+            [_delegate photoesCell:self clickAsset:asset Select:view.isSelected];
+        }
+    }else{
+        if ([_delegate respondsToSelector:@selector(photoesCell:clickAsset:)]){
+            [_delegate photoesCell:self clickAsset:asset];
+        }
+    }
+    
+}
+#pragma mark ImageViewStatus
+
+- (void)showCellSelectedStatus
+{
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1000] byAsset:_dataSource.firstAsset];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1001] byAsset:_dataSource.secoundAsset];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1002] byAsset:_dataSource.thridAsset];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1003] byAsset:_dataSource.lastAsset];
+}
+
+- (void)hiddenCellSelectedStatus
+{
+    [(StatusImageView *)[self.contentView viewWithTag:1000] resetStatusImageToHidden];
+    [(StatusImageView *)[self.contentView viewWithTag:1001] resetStatusImageToHidden];
+    [(StatusImageView *)[self.contentView viewWithTag:1002] resetStatusImageToHidden];
+    [(StatusImageView *)[self.contentView viewWithTag:1003] resetStatusImageToHidden];
+}
+- (void)showImageViewStatus:(StatusImageView *)imageView byAsset:(ALAsset *)asset
+{
+    if (!asset) return;
+    if ([[DataBaseManager defaultDataBaseManager] hasPhotoURL:[[asset defaultRepresentation] url]]) {
+        [imageView showStatusWithUpload];
+    }else{
+        [imageView showStatusWithOutUpload];
+    }
 }
 @end

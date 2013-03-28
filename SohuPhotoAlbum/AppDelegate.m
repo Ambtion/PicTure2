@@ -26,7 +26,7 @@
     //主视图
     LocalALLPhotoesController * lp = [[[LocalALLPhotoesController alloc] init] autorelease];
     UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
-//    [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
+    [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
     //左菜单
     LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
     IIViewDeckController *vc = [[[IIViewDeckController alloc] initWithCenterViewController:navApiVC leftViewController:leftVC] autorelease];

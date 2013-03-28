@@ -16,6 +16,7 @@
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;
+    
     BOOL _isReading; //for app bacome background
 }
 @end

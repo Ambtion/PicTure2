@@ -80,11 +80,12 @@ static DataBaseManager * defaultDataBaseManager = nil;
 }
 
 #pragma mark - action
-- (BOOL)insertPhotoURLIntoTable:(NSString *)photoURL
+- (BOOL)insertPhotoURLIntoTable:(NSURL *)photoURL
 {
+    NSString * photoURLS = [photoURL absoluteString];
     NSString* insertSql = [NSString stringWithFormat:
                            @"INSERT INTO %@(PhotoURL) VALUES('%@')",
-                           TABLENAME,photoURL];
+                           TABLENAME,photoURLS];
     char * error = NULL;
     if (sqlite3_exec(_dataBase, [insertSql UTF8String], NULL, NULL, &error)!= SQLITE_OK) {
         NSLog(@"insert error::%s", error);
@@ -94,9 +95,10 @@ static DataBaseManager * defaultDataBaseManager = nil;
     return YES;
 }
 
-- (BOOL)deletePhotoURLFromTable:(NSString *)photoURL
+- (BOOL)deletePhotoURLFromTable:(NSURL *)photoURL
 {
-    NSString * deletaSql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE PhotoURL = '%@'",TABLENAME,photoURL];
+    NSString * photoURLS = [photoURL absoluteString];
+    NSString * deletaSql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE PhotoURL = '%@'",TABLENAME,photoURLS];
     
     char* error = NULL;
     if (sqlite3_exec(_dataBase, [deletaSql UTF8String], NULL, NULL, &error)!=SQLITE_OK) {
@@ -107,10 +109,11 @@ static DataBaseManager * defaultDataBaseManager = nil;
     return YES;
 }
 
-- (BOOL)canSelectedPhotoURL:(NSString *)photoURL
+- (BOOL)hasPhotoURL:(NSURL *)photoURL
 {
+    NSString * photoURLS = [photoURL absoluteString];
     int count = 0;
-    NSString * selectSql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE PhotoURL = '%@'",TABLENAME,photoURL];
+    NSString * selectSql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE PhotoURL = '%@'",TABLENAME,photoURLS];
     sqlite3_stmt * statment = NULL;
     if (sqlite3_prepare_v2(_dataBase, [selectSql UTF8String], -1, &statment, NULL) == SQLITE_OK) {
 //        NSLog(@"%s",__FUNCTION__);

@@ -7,6 +7,7 @@
 //
 
 #import "LocalALLPhotoesController.h"
+#import "LocalAlbumsController.h"
 #import "PhotoDetailController.h"
 
 #define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
@@ -15,10 +16,11 @@
 @property(nonatomic,retain)NSMutableArray *assetsArray;
 @property(nonatomic,retain)NSMutableArray *dataSourceArray;
 @property(nonatomic,retain)NSMutableArray *assetsSection;
+@property(nonatomic,retain)NSMutableArray *selectedArray;
 @end
 
 @implementation LocalALLPhotoesController
-@synthesize assetGroups,assetsArray,dataSourceArray,assetsSection;
+@synthesize assetGroups,assetsArray,dataSourceArray,assetsSection,selectedArray;
 
 - (void)dealloc
 {
@@ -29,13 +31,14 @@
     [assetsArray release];
     [dataSourceArray release];
     [assetsSection release];
+    [selectedArray release];
     [_cusBar release];
+    
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self customerNavigationBar];
     CGRect rect = [[UIScreen mainScreen] bounds];
     rect.size.height -= 64;
     _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];
@@ -43,19 +46,16 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
+    self.selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:_myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [self readAlbum];
 }
 
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self customerNavigationBar];
-}
-
-- (void)customerNavigationBar
-{
+    [super viewWillAppear:animated];
+    [self readAlbum];
     if (!_cusBar){
         _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
         [_cusBar.leftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
@@ -67,17 +67,31 @@
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
 }
+
 - (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
+    if (button.tag == RIGHT1BUTTON) {
+        LocalAlbumsController * lcA = [[[LocalAlbumsController alloc] init] autorelease];
+        [self.navigationController pushViewController:lcA animated:NO];
+    }
+    if (button.tag == RIGHT2BUTTON ) {
+        _viewState = DeleteState;
+        [_myTableView reloadData];
+    }
+    if (button.tag == RIGHT3BUTTON) {
+        _viewState = UPloadState;
+        [_myTableView reloadData];
+    }
 }
+
+#pragma mark - read data
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readAlbum];
 }
-#pragma mark - read data
 - (void) readAlbum
 {
     if (_isReading) return;
@@ -160,7 +174,7 @@
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (NSMutableArray * array in tempArray )
         [self.dataSourceArray addObject:[self coverAssertToDataSource:array]];
-     NSLog(@"divide end");
+    NSLog(@"divide end");
 }
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {
@@ -274,6 +288,8 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     if (indexPath.section < self.dataSourceArray.count
         && indexPath.row < [[self.dataSourceArray objectAtIndex:indexPath.section] count])
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    if (_viewState != NomalState)
+        [cell showCellSelectedStatus];
     return cell;
 }
 #pragma mark photoClick
@@ -281,5 +297,14 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 {
     PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset] autorelease];
     [self.navigationController pushViewController:ph animated:YES];
+}
+- (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected
+{
+    //    NSLog(@"%@ : %d",[[asset defaultRepresentation] url], isSelected);
+    if (isSelected) {
+        [self.selectedArray addObject:asset];
+    }else if([self.selectedArray containsObject:asset]){
+        [self.selectedArray removeObject:asset];
+    }
 }
 @end

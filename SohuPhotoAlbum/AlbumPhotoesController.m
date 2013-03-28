@@ -120,4 +120,8 @@
     PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset] autorelease];
     [self.navigationController pushViewController:ph animated:YES];
 }
+- (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected
+{
+    
+}
 @end

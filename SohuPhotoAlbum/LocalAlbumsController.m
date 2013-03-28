@@ -21,6 +21,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_cusBar release];
     [_myTableView release];
     [_library release];
     [_assetGroups release];
@@ -38,16 +39,33 @@
     _myTableView.separatorColor = [UIColor clearColor];
     [self.view addSubview:_myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [self readAlbum];
 }
+#pragma mark - CUSBar
 - (void)viewWillAppear:(BOOL)animated
 {
-//    [self customerNavigationBar];
+    [super viewWillAppear:animated];
+    [self readAlbum];
+    if (!_cusBar){
+        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        [_cusBar.leftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
+        [_cusBar.labelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
+        [_cusBar.rightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
+        [_cusBar.rightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+    }
+    if (!_cusBar.superview)
+        [self.navigationController.navigationBar addSubview:_cusBar];
 }
-- (void)leftButtonClickHandler:(id)sender
+
+- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
 {
-    [self.viewDeckController toggleLeftViewAnimated:YES];
+    if (button.tag == LEFTBUTTON) {
+        [self.viewDeckController toggleLeftViewAnimated:YES];
+    }
+    if (button.tag == RIGHT1BUTTON) {
+        [self.navigationController popViewControllerAnimated:NO];
+    }
 }
+#pragma mark - ReadData
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readAlbum];
