@@ -149,4 +149,5 @@
     if ([_delegate respondsToSelector:@selector(photoAlbumCell:clickCoverGroup:)])
         [_delegate photoAlbumCell:self clickCoverGroup:group];
 }
+
 @end

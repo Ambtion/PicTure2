@@ -20,9 +20,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        _actualView = [[UIImageView alloc] initWithFrame:self.bounds];
+        [self addSubview:_actualView];
+        
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
         [self addSubview:_statuImage];
+        self.backgroundColor = [UIColor clearColor];
         [self resetStatusImageToHidden];
     }
     return self;
@@ -34,9 +39,10 @@
     }
     _selected = selected;
     if (selected) {
-        
+        [_actualView setAlpha:1.f];
+        [_statuImage setImage:[UIImage imageNamed:@"check_box_select_image.png"]];
     }else{
-        
+        [self uploadStatus];
     }
 }
 - (void)showStatusWithOutUpload
@@ -61,9 +67,10 @@
     }
     [_statuImage setHidden:NO];
     if (isUpload) {
-        
+        [_actualView setAlpha:0.5];
+        [_statuImage setImage:[UIImage imageNamed:@"upload_pic.png"]];
     }else{
-        [self setAlpha:0.5];
+        [_actualView setAlpha:0.5], [_statuImage setImage:nil];
     }
 }
 - (void)resetStatusImageToHidden
@@ -71,9 +78,19 @@
     self.selected = NO;
     isShowStatus = NO;
     isUpload = NO;
-    [self setAlpha:1.0];
+    [_actualView setAlpha:1.0];
     [_statuImage setHidden:YES];
     _statuImage.image = nil;
     [_statuImage setBackgroundColor:[UIColor clearColor]];
 }
+#pragma mark - Reloadfunctions
+- (void)setImage:(UIImage *)image
+{
+    _actualView.image = image;
+}
+- (UIImage *)image
+{
+    return _actualView.image;
+}
+
 @end

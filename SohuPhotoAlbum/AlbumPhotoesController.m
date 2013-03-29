@@ -16,13 +16,14 @@
 
 @property(nonatomic,retain)NSMutableArray * assetsArray;
 @property(nonatomic,retain)NSMutableArray * dataSourceArray;
-
+@property(nonatomic,retain)NSMutableArray * selectedArray;
 @end
 
 @implementation AlbumPhotoesController
 @synthesize assetGroup = _assetGroup;
 @synthesize assetsArray = _assetsArray;
 @synthesize dataSourceArray = _dataSourceArray;
+@synthesize selectedArray = _selectedArray;
 
 - (void)dealloc
 {
@@ -30,12 +31,14 @@
     [_myTableView release];
     [_assetsArray release];
     [_dataSourceArray release];
+    [_selectedArray release];
     [super dealloc];
 }
 - (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state
 {
     if (self = [super init]) {
         self.assetGroup = AnAssetGroup;
+        _selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
         _viewState = state;
         if (state == UPloadState) {
             isInitUpload = YES;
@@ -81,26 +84,6 @@
     [self readPhotoAssetes];
 }
 
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
-{
-    if (button.tag == LEFTBUTTON) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    if (button.tag == RIGHT1BUTTON) {
-        //上传页面
-        _viewState = UPloadState;
-        [_cusBar switchBarState];
-
-    }
-    if(button.tag == CANCELBUTTONTAG){
-        if (isInitUpload) {
-            [self.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-        _viewState = NomalState;
-        [_cusBar switchBarState];
-    }
-}
 - (void)readPhotoAssetes
 {
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
@@ -173,7 +156,49 @@
     }
     if (indexPath.row < self.dataSourceArray.count)
         cell.dataSource = [[self dataSourceArray] objectAtIndex:indexPath.row];
+    if (_viewState != NomalState){
+        [cell showCellSelectedStatus];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
+    }else{
+        [cell hiddenCellSelectedStatus];
+    }
     return cell;
+}
+
+#pragma mark - NavigationBarDelegate
+- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+{
+    if (button.tag == LEFTBUTTON) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    if (button.tag == RIGHT1BUTTON) { //上传
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar switchBarState];
+        _viewState = UPloadState;
+        [_myTableView reloadData];
+    }
+    if (button.tag == CANCELBUTTONTAG) {
+        if (isInitUpload) {
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+        [_cusBar switchBarState];
+        [self.selectedArray removeAllObjects];
+        _viewState = NomalState;
+        [_myTableView reloadData];
+    }
+    if (button.tag == ALLSELECTEDTAG) {
+        if (self.selectedArray.count != self.assetsArray.count ){
+            [self.selectedArray removeAllObjects];
+            [self.selectedArray addObjectsFromArray:self.assetsArray];
+        }else{
+            [self.selectedArray removeAllObjects];
+        }
+        [_myTableView reloadData];
+    }
 }
 
 #pragma mark photoClick
@@ -185,5 +210,10 @@
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected
 {
     
+    if (isSelected) {
+        [self.selectedArray addObject:asset];
+    }else if([self.selectedArray containsObject:asset]){
+        [self.selectedArray removeObject:asset];
+    }
 }
 @end

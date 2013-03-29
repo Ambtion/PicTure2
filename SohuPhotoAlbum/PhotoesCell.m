@@ -141,7 +141,33 @@
     [(StatusImageView *)[self.contentView viewWithTag:1002] resetStatusImageToHidden];
     [(StatusImageView *)[self.contentView viewWithTag:1003] resetStatusImageToHidden];
 }
-
+- (BOOL)hasSelectedAsset:(ALAsset *)asset
+{
+    if (_dataSource.firstAsset == asset ||
+        _dataSource.secoundAsset == asset ||
+        _dataSource.thridAsset == asset ||
+        _dataSource.lastAsset == asset)
+    {
+        return YES;
+    }
+    return NO;
+}
+- (void)isShow:(BOOL)isShow SelectedAsset:(ALAsset *)asset
+{
+    
+    if (_dataSource.firstAsset == asset ) {
+        [(StatusImageView *)[self.contentView viewWithTag:1000] setSelected:isShow];
+    }
+    if ( _dataSource.secoundAsset == asset) {
+        [(StatusImageView *)[self.contentView viewWithTag:1001] setSelected:isShow];
+    }
+    if ( _dataSource.thridAsset == asset) {
+        [(StatusImageView *)[self.contentView viewWithTag:1002] setSelected:isShow];
+    }
+    if (_dataSource.lastAsset == asset) {
+        [(StatusImageView *)[self.contentView viewWithTag:1003] setSelected:isShow];
+    }
+}
 - (void)showImageViewStatus:(StatusImageView *)imageView byAsset:(ALAsset *)asset
 {
     if (!asset) return;
@@ -151,4 +177,5 @@
         [imageView showStatusWithOutUpload];
     }
 }
+
 @end

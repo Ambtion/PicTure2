@@ -66,6 +66,8 @@
 		C588B0F0170143B2006BBC34 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0EF170143B2006BBC34 /* libsqlite3.dylib */; };
 		C588B0F3170177E1006BBC34 /* LocalALLPhotoesController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0F2170177E1006BBC34 /* LocalALLPhotoesController.m */; };
 		C58DC14D17052FFA00E97E8C /* higlight.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC14C17052FFA00E97E8C /* higlight.png */; };
+		C58DC1531705416A00E97E8C /* upload_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1501705416A00E97E8C /* upload_pic.png */; };
+		C58DC1541705416A00E97E8C /* check_box_select_image.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1511705416A00E97E8C /* check_box_select_image.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -150,6 +152,8 @@
 		C588B0F1170177E1006BBC34 /* LocalALLPhotoesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalALLPhotoesController.h; sourceTree = "<group>"; };
 		C588B0F2170177E1006BBC34 /* LocalALLPhotoesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalALLPhotoesController.m; sourceTree = "<group>"; };
 		C58DC14C17052FFA00E97E8C /* higlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = higlight.png; sourceTree = "<group>"; };
+		C58DC1501705416A00E97E8C /* upload_pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_pic.png; sourceTree = "<group>"; };
+		C58DC1511705416A00E97E8C /* check_box_select_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_box_select_image.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,6 +326,7 @@
 		C588B0D817003A1B006BBC34 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				C58DC14E1705415B00E97E8C /* pictureState */,
 				C583CF2A17044B5100CD3485 /* fullScreenImage */,
 				C583CF281704448800CD3485 /* back.png */,
 				C583CF26170434F000CD3485 /* album_nb@2x.png */,
@@ -349,10 +354,10 @@
 				C588B0F2170177E1006BBC34 /* LocalALLPhotoesController.m */,
 				C588B0DE170048F1006BBC34 /* PhotoAlbumCell.h */,
 				C588B0DF170048F1006BBC34 /* PhotoAlbumCell.m */,
-				C583CF23170434BE00CD3485 /* CountLabel.h */,
-				C583CF24170434BE00CD3485 /* CountLabel.m */,
 				C588B0E717013063006BBC34 /* PhotoesCell.h */,
 				C588B0E817013063006BBC34 /* PhotoesCell.m */,
+				C583CF23170434BE00CD3485 /* CountLabel.h */,
+				C583CF24170434BE00CD3485 /* CountLabel.m */,
 				C583CF061703D6B300CD3485 /* StatusImageView.h */,
 				C583CF071703D6B300CD3485 /* StatusImageView.m */,
 			);
@@ -366,6 +371,15 @@
 				C588B0ED170142AD006BBC34 /* DataBaseManager.m */,
 			);
 			name = DataBase;
+			sourceTree = "<group>";
+		};
+		C58DC14E1705415B00E97E8C /* pictureState */ = {
+			isa = PBXGroup;
+			children = (
+				C58DC1501705416A00E97E8C /* upload_pic.png */,
+				C58DC1511705416A00E97E8C /* check_box_select_image.png */,
+			);
+			name = pictureState;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -452,6 +466,8 @@
 				C583CF3917044B6D00CD3485 /* full_screen_title-bar.png in Resources */,
 				C583CF3A17044B6D00CD3485 /* full_screen_upload_icon.png in Resources */,
 				C58DC14D17052FFA00E97E8C /* higlight.png in Resources */,
+				C58DC1531705416A00E97E8C /* upload_pic.png in Resources */,
+				C58DC1541705416A00E97E8C /* check_box_select_image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

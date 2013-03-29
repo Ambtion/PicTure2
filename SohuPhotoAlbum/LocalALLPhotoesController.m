@@ -71,27 +71,6 @@
         [self.navigationController.navigationBar addSubview:_cusBar];
 }
 
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
-{
-    if (button.tag == LEFTBUTTON) {
-        [self.viewDeckController toggleLeftViewAnimated:YES];
-    }
-    if (button.tag == RIGHT1BUTTON) { //切换页面
-        LocalAlbumsController * lcA = [[[LocalAlbumsController alloc] init] autorelease];
-        [self.navigationController pushViewController:lcA animated:NO];
-    }
-    if (button.tag == RIGHT2BUTTON) { //上传
-        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
-        [_cusBar switchBarState];
-        _viewState = UPloadState;
-        [_myTableView reloadData];
-    }
-    if (button.tag == CANCELBUTTONTAG) {
-        [_cusBar switchBarState];
-        _viewState = NomalState;
-        [_myTableView reloadData];
-    }
-}
 
 #pragma mark - read data
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -153,9 +132,12 @@
 {
     //asserts按日期大小排序;
     self.assetsArray = [[[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy] autorelease];
-    
+    NSLog(@"%d",self.assetsArray.count);
     //对asset分组
     [self divideAssettByDayTime];
+//    NSLog(@"<<<<-%@",((PhotoesCellDataSource *)[[self.dataSourceArray objectAtIndex:0] objectAtIndex:0]).firstAsset);
+//    NSLog(@"<<<<-%@",((PhotoesCellDataSource *)[[self.dataSourceArray objectAtIndex:1] objectAtIndex:0]).firstAsset);
+//    NSLog(@"<<<<-%@",((PhotoesCellDataSource *)[[self.dataSourceArray objectAtIndex:2] objectAtIndex:0]).firstAsset);
     [_myTableView reloadData];
 }
 - (void)divideAssettByDayTime
@@ -187,7 +169,7 @@
     NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < array.count; i+=4) {
         PhotoesCellDataSource * source = [[PhotoesCellDataSource alloc] init];
-        source.firstAsset = [self.assetsArray objectAtIndex:i];
+        source.firstAsset = [array objectAtIndex:i];
         if (i + 3 < array.count) {
             source.secoundAsset = [array objectAtIndex:i+1];
             source.thridAsset = [array objectAtIndex:i+2];
@@ -299,10 +281,48 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (_viewState != NomalState){
         [cell showCellSelectedStatus];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
+        [cell isShow:[self.selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
     }else{
         [cell hiddenCellSelectedStatus];
     }
     return cell;
+}
+
+#pragma mark - NavigationBarDelegate
+- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+{
+    if (button.tag == LEFTBUTTON) {
+        [self.viewDeckController toggleLeftViewAnimated:YES];
+    }
+    if (button.tag == RIGHT1BUTTON) { //切换页面
+        LocalAlbumsController * lcA = [[[LocalAlbumsController alloc] init] autorelease];
+        [self.navigationController pushViewController:lcA animated:NO];
+    }
+    if (button.tag == RIGHT2BUTTON) { //上传
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar switchBarState];
+        _viewState = UPloadState;
+        [_myTableView reloadData];
+    }
+    if (button.tag == CANCELBUTTONTAG) {
+        [_cusBar switchBarState];
+        [self.selectedArray removeAllObjects];
+        _viewState = NomalState;
+        [_myTableView reloadData];
+    }
+    if (button.tag == ALLSELECTEDTAG) {
+        if (self.selectedArray.count != self.assetsArray.count ){
+            [self.selectedArray removeAllObjects];
+            [self.selectedArray addObjectsFromArray:self.assetsArray];
+        }else{
+            [self.selectedArray removeAllObjects];
+        }
+        [_myTableView reloadData];
+        
+    }
 }
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
@@ -312,6 +332,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected
 {
+    
     if (isSelected) {
         [self.selectedArray addObject:asset];
     }else if([self.selectedArray containsObject:asset]){

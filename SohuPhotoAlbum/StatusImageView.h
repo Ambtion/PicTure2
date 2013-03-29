@@ -11,6 +11,7 @@
 @interface StatusImageView : UIImageView
 {
     UIImageView * _statuImage;
+    UIImageView * _actualView;
     BOOL isShowStatus;
     BOOL isUpload;
 }

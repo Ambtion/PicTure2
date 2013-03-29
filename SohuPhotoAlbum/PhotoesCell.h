@@ -35,4 +35,7 @@
 
 - (void)showCellSelectedStatus;
 - (void)hiddenCellSelectedStatus;
+
+- (BOOL)hasSelectedAsset:(ALAsset *)asset;
+- (void)isShow:(BOOL)isShow SelectedAsset:(ALAsset *)asset;
 @end

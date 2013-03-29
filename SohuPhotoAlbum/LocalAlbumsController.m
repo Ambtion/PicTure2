@@ -162,6 +162,7 @@
 {
     cell.backgroundColor = BACKGORUNDCOLOR;
 }
+
 #pragma mark CellDelegate
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
 {
