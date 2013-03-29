@@ -26,6 +26,10 @@
 {
     return CELLHIGTH;
 }
+- (CGFloat)cellLastHigth
+{
+    return CELLHIGTH + 5;
+}
 @end
 @implementation PhotoesCell
 @synthesize delegate = _delegate;
@@ -51,9 +55,9 @@
     CGRect frame = CGRectMake(4, 5, 75, 75);
     for (int i = 0; i < 4; i++) {
         imageView = [[StatusImageView alloc] initWithFrame:frame];
-        
-//        imageView.layer.borderWidth = 1.f;
         imageView.tag = 1000+i;
+        imageView.layer.borderWidth = 0.5f;
+        imageView.layer.borderColor = [[UIColor colorWithRed:192.f/255.f green:192.f/255.f blue:192.f/255.f alpha:1.f]CGColor];
         [self.contentView addSubview:imageView];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGustrure:)];
         [imageView addGestureRecognizer:tap];
@@ -79,11 +83,13 @@
 {
     if (asset) {
         imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+        imageView.layer.borderWidth = 0.5f;
         [imageView setUserInteractionEnabled:YES];
     }else{
         imageView.image = nil;
         [imageView setUserInteractionEnabled:NO];
         imageView.backgroundColor = [UIColor clearColor];
+        imageView.layer.borderWidth = 0.f;
     }
 }
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
@@ -135,6 +141,7 @@
     [(StatusImageView *)[self.contentView viewWithTag:1002] resetStatusImageToHidden];
     [(StatusImageView *)[self.contentView viewWithTag:1003] resetStatusImageToHidden];
 }
+
 - (void)showImageViewStatus:(StatusImageView *)imageView byAsset:(ALAsset *)asset
 {
     if (!asset) return;

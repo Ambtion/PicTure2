@@ -82,8 +82,8 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
 #pragma mark SelectRow
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.view.userInteractionEnabled = NO;
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         if (indexPath.row == 1) {
             LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];

@@ -8,6 +8,9 @@
 
 #import "AlbumPhotoesController.h"
 #import "PhotoDetailController.h"
+#import "AppDelegate.h"
+
+#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface AlbumPhotoesController ()
 
@@ -29,10 +32,16 @@
     [_dataSourceArray release];
     [super dealloc];
 }
-- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup
+- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state
 {
     if (self = [super init]) {
         self.assetGroup = AnAssetGroup;
+        _viewState = state;
+        if (state == UPloadState) {
+            isInitUpload = YES;
+        }else{
+            isInitUpload = NO;
+        }
     }
     return self;
 }
@@ -44,10 +53,55 @@
     _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];    _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
+    _myTableView.backgroundColor = BACKGORUNDCOLOR;
+    [_myTableView setScrollsToTop:YES];
     [self.view addSubview:_myTableView];
+}
+
+#pragma mark - NavigationBar
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (!_cusBar){
+        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+        [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
+        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
+        
+        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        if (_viewState == UPloadState)
+            [_cusBar switchBarState];
+    }
+    if (!_cusBar.superview)
+        [self.navigationController.navigationBar addSubview:_cusBar];
+    [self.navigationItem setHidesBackButton:YES animated:NO];
     [self readPhotoAssetes];
 }
--(void)readPhotoAssetes
+
+- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+{
+    if (button.tag == LEFTBUTTON) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    if (button.tag == RIGHT1BUTTON) {
+        //上传页面
+        _viewState = UPloadState;
+        [_cusBar switchBarState];
+
+    }
+    if(button.tag == CANCELBUTTONTAG){
+        if (isInitUpload) {
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+        _viewState = NomalState;
+        [_cusBar switchBarState];
+    }
+}
+- (void)readPhotoAssetes
 {
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -61,7 +115,7 @@
              return;
          }
          [self.assetsArray addObject:result];
-    }];
+     }];
     [pool release];
 }
 - (void)prepareDataWithTimeOrder
@@ -97,9 +151,16 @@
 {
     return self.dataSourceArray.count;
 }
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = BACKGORUNDCOLOR;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PhotoesCellDataSource * source = [self.dataSourceArray objectAtIndex:indexPath.row];
+    if (indexPath.row == self.dataSourceArray.count - 1) {
+        return [source cellLastHigth];
+    }
     return [source cellHigth];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -114,6 +175,7 @@
         cell.dataSource = [[self dataSourceArray] objectAtIndex:indexPath.row];
     return cell;
 }
+
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {

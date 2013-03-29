@@ -9,16 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "CusNavigationBar.h"
 
-typedef enum photoState {
+typedef enum ViewState {
     NomalState  ,
     UPloadState ,
-    DeleteState ,
-    MoveState
-}photoState;
+}viewState;
 
 @interface BaseViewController : UIViewController<CusNavigationBarDelegate>
 {
     CusNavigationBar * _cusBar;
-    photoState _viewState;
+    viewState _viewState;
 }
 @end

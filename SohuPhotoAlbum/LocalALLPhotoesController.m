@@ -11,6 +11,7 @@
 #import "PhotoDetailController.h"
 
 #define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+
 @interface LocalALLPhotoesController ()
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableArray *assetsArray;
@@ -46,6 +47,7 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
+    [_myTableView setScrollsToTop:YES];
     self.selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:_myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -58,11 +60,12 @@
     [self readAlbum];
     if (!_cusBar){
         _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
-        [_cusBar.leftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.labelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
-        [_cusBar.rightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
-        [_cusBar.rightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        [_cusBar.rightButton3 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
+        [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
+//        [_cusBar.rightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
@@ -73,16 +76,19 @@
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) {
+    if (button.tag == RIGHT1BUTTON) { //切换页面
         LocalAlbumsController * lcA = [[[LocalAlbumsController alloc] init] autorelease];
         [self.navigationController pushViewController:lcA animated:NO];
     }
-    if (button.tag == RIGHT2BUTTON ) {
-        _viewState = DeleteState;
+    if (button.tag == RIGHT2BUTTON) { //上传
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar switchBarState];
+        _viewState = UPloadState;
         [_myTableView reloadData];
     }
-    if (button.tag == RIGHT3BUTTON) {
-        _viewState = UPloadState;
+    if (button.tag == CANCELBUTTONTAG) {
+        [_cusBar switchBarState];
+        _viewState = NomalState;
         [_myTableView reloadData];
     }
 }
@@ -244,7 +250,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 
 #pragma mark - tableDataSource
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.dataSourceArray.count;
@@ -275,6 +280,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    if (indexPath.row == [[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
+        return [source cellLastHigth];
+    }
     return [source cellHigth];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -288,8 +297,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     if (indexPath.section < self.dataSourceArray.count
         && indexPath.row < [[self.dataSourceArray objectAtIndex:indexPath.section] count])
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    if (_viewState != NomalState)
+    if (_viewState != NomalState){
         [cell showCellSelectedStatus];
+    }else{
+        [cell hiddenCellSelectedStatus];
+    }
     return cell;
 }
 #pragma mark photoClick
@@ -300,7 +312,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected
 {
-    //    NSLog(@"%@ : %d",[[asset defaultRepresentation] url], isSelected);
     if (isSelected) {
         [self.selectedArray addObject:asset];
     }else if([self.selectedArray containsObject:asset]){

@@ -23,6 +23,9 @@
     [_assetsArray release];
     [_curImageArray release];
     [_scrollView release];
+    [_tabBar release];
+    [_cusBar release];
+    [_library release];
     [super dealloc];
 }
 
@@ -34,6 +37,8 @@
         self.assetsArray = [[array copy] autorelease];
         NSLog(@"assetArray:%d, cunum:%d",_assetsArray.count,_curPageNum);
         _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
+        _isHidingBar = NO;
+        _library = [[ALAssetsLibrary alloc] init];
     }
     return self;
 }
@@ -42,18 +47,55 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self customizingBar];
     [self initSubViews];
     [self setScrollViewProperty];
     [self refreshScrollView];
 }
-- (void)customizingBar
+- (void)viewDidAppear:(BOOL)animated
 {
-    //cus
-//    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    UITabBarItem * tab = [[UITabBarItem alloc] initWithTitle:@"titile" image:nil tag:0];
-    self.tabBarItem = tab;
+    [super viewDidAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
 }
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [super viewWillDisappear:animated];
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    if (!_cusBar){
+        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        _cusBar.backgroundColor = [UIColor clearColor];
+        [_cusBar setBackgroundImage:[UIImage imageNamed:@"full_screen_title-bar.png"]];
+        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"full_screen_back.png"] forState:UIControlStateNormal];
+        _cusBar.nLabelText.textColor = [UIColor whiteColor];
+        _cusBar.nLabelText.font = [UIFont systemFontOfSize:22];
+        [self upCusTitle];
+        [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
+        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
+        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+    }
+    if (!_cusBar.superview)
+        [self.view addSubview:_cusBar];
+
+    if (!_tabBar) {
+        _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, 0, 0) delegate:self];
+        //bar没有隐藏 view.higth = 416;
+    }
+    if (!_tabBar.superview) {
+        [self.view addSubview:_tabBar];
+    }
+        
+}
+
+- (void)upCusTitle
+{
+    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum, _assetsArray.count]];
+}
+
 - (void)initSubViews
 {
     CGRect rect = self.view.bounds;
@@ -64,9 +106,11 @@
     [self.view addSubview:_scrollView];
     
     _fontScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX,0, self.view.bounds.size.width, self.view.bounds.size.height)];
-    _fontScaleImage.imageView.backgroundColor = [UIColor redColor];
+    _fontScaleImage.Adelegate = self;
     _curScaleImage = [[ImageScaleView alloc]initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    _curScaleImage.Adelegate = self;
     _rearScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width * 2, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    _rearScaleImage.Adelegate = self;
     [_scrollView addSubview:_fontScaleImage];
     [_scrollView addSubview:_curScaleImage];
     [_scrollView addSubview:_rearScaleImage];
@@ -82,7 +126,8 @@
 #pragma mark - Refresh ScrollView
 - (void)refreshScrollView
 {
-    self.title = [NSString stringWithFormat:@"%d/%d",_curPageNum + 1,_assetsArray.count];
+    if (!_assetsArray.count) return;
+    [self upCusTitle];
     if (_assetsArray.count <= 3) {
         [self refreshScrollViewWhenPhotonumLessThree];
     }else if (_curPageNum == 0) {
@@ -147,6 +192,7 @@
 //    if (![aScrollView isDragging] || !_assetsArray || !_assetsArray.count)      return;
     if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
+        [self upCusTitle];
         return;
     }
     int x = aScrollView.contentOffset.x;
@@ -196,5 +242,61 @@
     if(value >= _assetsArray.count) value = _assetsArray.count - 1;
     return value;
 }
+#pragma mark - BarDelegate
+- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+{
+    if (button.tag == LEFTBUTTON)
+        [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
+{
+    if (button.tag == TABSHARETAG) {
+        
+    }
+    if (button.tag == TABDOWNLOADNTAG) {
+        
+    }
+    if (button.tag == TABEDITTAG) {
+        
+    }
+    if (button.tag == TABDELETETAG) {
+        
+    }
+}
 
+#pragma mark - handleGuesture
+- (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
+{
+    if (_isHidingBar) {
+        [self showBar];
+    }else{
+        [self hideBar];
+    }
+}
+- (void)showBar
+{
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut  animations:^{
+        CGRect navBar = CGRectMake(0, 0, 320, 44);
+        CGRect tabBar = CGRectMake(0, self.view.frame.size.height - 44, 320, 44);
+        _cusBar.frame = navBar;
+        _tabBar.frame = tabBar;
+    } completion:^(BOOL finished) {
+        [self.view setUserInteractionEnabled:YES];
+        _isHidingBar = NO;
+    }];
+}
+- (void)hideBar
+{
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut  animations:^{
+        CGRect navBar = CGRectMake(0, -44, 320, 44);
+        CGRect tabBar = CGRectMake(0, self.view.frame.size.height, 320, 44);
+        _cusBar.frame = navBar;
+        _tabBar.frame = tabBar;
+    } completion:^(BOOL finished) {
+        [self.view setUserInteractionEnabled:YES];
+        _isHidingBar = YES;
+    }];
+}
 @end

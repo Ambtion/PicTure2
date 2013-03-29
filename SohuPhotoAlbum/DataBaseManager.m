@@ -26,11 +26,9 @@ static DataBaseManager * defaultDataBaseManager = nil;
     return defaultDataBaseManager;
 }
 
-
 #pragma mark init -
 - (id)init
 {
-    NSLog(@"%s",__FUNCTION__);
     self = [super init];
     if (self) {
         [self initDataBase];

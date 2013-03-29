@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "CountLabel.h"
 
 @class PhotoAlbumCell;
 @interface  PhotoAlbumCellDataSource:NSObject
@@ -23,9 +24,11 @@
 @interface PhotoAlbumCell : UITableViewCell
 {
     UIImageView * _leftImage;
-    UIImageView * _rithtImgae;
+    UIImageView * _rightImgae;
     UILabel * _leftLabel;
     UILabel * _rigthLabel;
+    CountLabel * _leftCount;
+    CountLabel * _rightCount;
 }
 @property(nonatomic,retain)PhotoAlbumCellDataSource * dataSource;
 @property(nonatomic,assign)id<PhotoAlbumCellDelegate> delegate;

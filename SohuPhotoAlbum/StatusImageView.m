@@ -61,9 +61,9 @@
     }
     [_statuImage setHidden:NO];
     if (isUpload) {
-        [_statuImage setBackgroundColor:[UIColor redColor]];
+        
     }else{
-        [_statuImage setBackgroundColor:[UIColor grayColor]];
+        [self setAlpha:0.5];
     }
 }
 - (void)resetStatusImageToHidden
@@ -71,6 +71,7 @@
     self.selected = NO;
     isShowStatus = NO;
     isUpload = NO;
+    [self setAlpha:1.0];
     [_statuImage setHidden:YES];
     _statuImage.image = nil;
     [_statuImage setBackgroundColor:[UIColor clearColor]];

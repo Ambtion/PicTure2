@@ -15,12 +15,14 @@
 {
     [labelText release];
     [leftImage release];
+    [_myHigtView release];
     [super dealloc];
 }
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+//        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.frame = CGRectMake(0, 0, 320, 48);
         leftImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, (self.bounds.size.height - 44)/2.f, 44, 44)];
         [self.contentView addSubview:leftImage];
@@ -33,14 +35,23 @@
         UIImageView * lineimage = [[[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height - 1 , 320, 1)] autorelease];
         lineimage.image = [UIImage imageNamed:@"line.png"];
         [self.contentView addSubview:lineimage];
+        
+        _myHigtView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _myHigtView.image = [UIImage imageNamed:@"higlight.png"];
+        self.selectedBackgroundView = _myHigtView;
     }
     return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
+//    if (selected) {
+//        [self.contentView addSubview:_myHigtView];
+//        [self.contentView sendSubviewToBack:_myHigtView];
+//    }else{
+//        [_myHigtView removeFromSuperview];
+//    }
     [super setSelected:selected animated:animated];
-    // Configure the view for the selected state
 }
 
 @end

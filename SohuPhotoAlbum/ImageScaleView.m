@@ -36,22 +36,20 @@
 
 - (void)addImageView
 {
-//    frame.origin.x += OFFSETX;
-//    frame.size.width -= 2* OFFSETX;
     _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
     _imageView.backgroundColor = [UIColor clearColor];
     [self addSubview:_imageView];
     [_imageView setUserInteractionEnabled:YES];
-    UITapGestureRecognizer * tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTwoTap:)];
+    UITapGestureRecognizer * tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)];
     tapGesture1.numberOfTapsRequired = 1;
-    UITapGestureRecognizer * tapGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTwoTap:)];
+    UITapGestureRecognizer * tapGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)];
     tapGesture2.numberOfTapsRequired = 2;
     [_imageView addGestureRecognizer:tapGesture1];
     [_imageView addGestureRecognizer:tapGesture2];
     [tapGesture1 requireGestureRecognizerToFail:tapGesture2];
     
 }
-- (void)handleTapgestureWithTwoTap:(UITapGestureRecognizer *)tap
+- (void)handleTapgestureWithTap:(UITapGestureRecognizer *)tap
 {
     if (tap.numberOfTapsRequired == 2) {
         if (self.zoomScale != self.maximumZoomScale) {
@@ -61,7 +59,6 @@
         }
     }
     if (tap.numberOfTapsRequired == 1) {
-        NSLog(@"%s",__FUNCTION__);
         if ([_Adelegate respondsToSelector:@selector(imageViewScale:clickCurImage:)])
             [_Adelegate imageViewScale:self clickCurImage:_imageView];
     }

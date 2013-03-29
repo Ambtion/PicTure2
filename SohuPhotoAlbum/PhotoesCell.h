@@ -17,6 +17,7 @@
 @property(nonatomic,retain)ALAsset * thridAsset;
 @property(nonatomic,retain)ALAsset * lastAsset;
 - (CGFloat)cellHigth;
+- (CGFloat)cellLastHigth;
 @end
 
 @protocol PhotoesCellDelegate <NSObject>

@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoesCell.h"
+#import "BaseViewController.h"
 
-@interface AlbumPhotoesController : UIViewController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
+@interface AlbumPhotoesController : BaseViewController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
 {
     ALAssetsGroup * _assetGroup;
     UITableView * _myTableView;
+    BOOL isInitUpload;
 }
 @property(nonatomic,retain)ALAssetsGroup * assetGroup;
 
-- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup;
+- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state;
 @end

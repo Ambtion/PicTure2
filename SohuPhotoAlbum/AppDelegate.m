@@ -32,6 +32,8 @@
     IIViewDeckController *vc = [[[IIViewDeckController alloc] initWithCenterViewController:navApiVC leftViewController:leftVC] autorelease];
     self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
+    //INIT DATABASE
+    [DataBaseManager defaultDataBaseManager];
     return YES;
 }
 

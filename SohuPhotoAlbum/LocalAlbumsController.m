@@ -9,6 +9,8 @@
 #import "LocalAlbumsController.h"
 #import "AlbumPhotoesController.h"
 
+#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+
 @interface LocalAlbumsController ()
 @property(nonatomic,retain)NSMutableArray *assetGroups;
 @property(nonatomic,retain)NSMutableArray *dataSourceArray;
@@ -37,6 +39,8 @@
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
+    _myTableView.backgroundColor = BACKGORUNDCOLOR;
+    [_myTableView setScrollsToTop:YES];
     [self.view addSubview:_myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
@@ -47,13 +51,19 @@
     [self readAlbum];
     if (!_cusBar){
         _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
-        [_cusBar.leftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.labelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
-        [_cusBar.rightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
-        [_cusBar.rightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
+        [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        _cusBar.sLabelText.text = @"请选择专辑";
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.sRightStateButton setHidden:YES];
+        [_cusBar.sAllSelectedbutton setHidden:YES];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
+    [self.navigationItem setHidesBackButton:YES animated:NO];
 }
 
 - (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
@@ -63,6 +73,14 @@
     }
     if (button.tag == RIGHT1BUTTON) {
         [self.navigationController popViewControllerAnimated:NO];
+    }
+    if (button.tag == RIGHT2BUTTON) {
+        _viewState = UPloadState;
+        [_cusBar switchBarState];
+    }
+    if (button.tag == CANCELBUTTONTAG) {
+        _viewState = NomalState;
+        [_cusBar switchBarState];
     }
 }
 #pragma mark - ReadData
@@ -140,10 +158,13 @@
         cell.dataSource =[self.dataSourceArray objectAtIndex:indexPath.row];
     return cell;
 }
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = BACKGORUNDCOLOR;
+}
 #pragma mark CellDelegate
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
 {
-    NSLog(@"%@",[group valueForProperty:ALAssetsGroupPropertyName]);
-    [self.navigationController pushViewController:[[[AlbumPhotoesController alloc] initWithAssetGroup:group] autorelease] animated:YES];
+    [self.navigationController pushViewController:[[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] autorelease] animated:YES];
 }
 @end
