@@ -26,18 +26,24 @@
     }
     return self;
 }
-- (void)viewWillAppear:(BOOL)animated
-{
-    if (_cusBar.superview)
-        [_cusBar removeFromSuperview];
-}
+
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if (_cusBar.superview)
-        [_cusBar removeFromSuperview];
+    if (_cusBar.superview){
+        [UIView animateWithDuration:0.3 animations:^{
+            [_cusBar removeFromSuperview];
+        }];
+    }
 }
 - (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
 {
     //for reload
+}
+- (CGRect)subTableViewRect
+{
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    rect.size.height -= 64;
+    rect.origin.y = 20;
+    return rect;
 }
 @end

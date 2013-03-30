@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "IIViewDeckController.h"
+#import "LocalShareController.h"
+
+@class LocalShareController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property (strong, nonatomic) SinaWeibo * sinaweibo;
 
 @end

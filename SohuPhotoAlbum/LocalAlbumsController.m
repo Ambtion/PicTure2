@@ -33,9 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    rect.size.height -= 64;
-    _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];
+    _myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];

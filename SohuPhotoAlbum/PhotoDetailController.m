@@ -7,6 +7,8 @@
 //
 
 #import "PhotoDetailController.h"
+#import "LocalShareController.h"
+
 #define OFFSETX 20
 
 @interface PhotoDetailController ()
@@ -33,9 +35,9 @@
 {
     self = [super init];
     if (self) {
+        self.wantsFullScreenLayout = YES;
         self.curPageNum = [array indexOfObject:asset];
         self.assetsArray = [[array copy] autorelease];
-        NSLog(@"assetArray:%d, cunum:%d",_assetsArray.count,_curPageNum);
         _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
         _isHidingBar = NO;
         _library = [[ALAssetsLibrary alloc] init];
@@ -51,23 +53,19 @@
     [self setScrollViewProperty];
     [self refreshScrollView];
 }
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
-}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     if (!_cusBar){
         _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        _cusBar.frame = CGRectMake(0, 20, 320, 44);
         _cusBar.backgroundColor = [UIColor clearColor];
         [_cusBar setBackgroundImage:[UIImage imageNamed:@"full_screen_title-bar.png"]];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"full_screen_back.png"] forState:UIControlStateNormal];
@@ -88,7 +86,6 @@
     if (!_tabBar.superview) {
         [self.view addSubview:_tabBar];
     }
-        
 }
 
 - (void)upCusTitle
@@ -98,11 +95,13 @@
 
 - (void)initSubViews
 {
+    self.view.frame = [[UIScreen mainScreen] bounds];
     CGRect rect = self.view.bounds;
     rect.size.width += OFFSETX * 2;
     rect.origin.x -= OFFSETX;
     _scrollView = [[UIScrollView alloc] initWithFrame:rect];
     _scrollView.delegate = self;
+    _scrollView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_scrollView];
     
     _fontScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX,0, self.view.bounds.size.width, self.view.bounds.size.height)];
@@ -251,7 +250,7 @@
 - (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == TABSHARETAG) {
-        
+        [self.navigationController pushViewController:[[[LocalShareController alloc] init] autorelease] animated:YES];
     }
     if (button.tag == TABDOWNLOADNTAG) {
         
@@ -276,11 +275,12 @@
 - (void)showBar
 {
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut  animations:^{
-        CGRect navBar = CGRectMake(0, 0, 320, 44);
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
+        CGRect navBar = CGRectMake(0, 20, 320, 44);
         CGRect tabBar = CGRectMake(0, self.view.frame.size.height - 44, 320, 44);
         _cusBar.frame = navBar;
         _tabBar.frame = tabBar;
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
     } completion:^(BOOL finished) {
         [self.view setUserInteractionEnabled:YES];
         _isHidingBar = NO;
@@ -289,9 +289,10 @@
 - (void)hideBar
 {
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut  animations:^{
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
         CGRect navBar = CGRectMake(0, -44, 320, 44);
         CGRect tabBar = CGRectMake(0, self.view.frame.size.height, 320, 44);
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
         _cusBar.frame = navBar;
         _tabBar.frame = tabBar;
     } completion:^(BOOL finished) {

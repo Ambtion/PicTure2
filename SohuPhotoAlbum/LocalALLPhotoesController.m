@@ -10,6 +10,8 @@
 #import "LocalAlbumsController.h"
 #import "PhotoDetailController.h"
 
+#define SLABELTEXT @"请选择照片"
+
 #define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalALLPhotoesController ()
@@ -42,6 +44,7 @@
     [super viewDidLoad];
     CGRect rect = [[UIScreen mainScreen] bounds];
     rect.size.height -= 64;
+    rect.origin.y = 20;
     _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
@@ -52,7 +55,6 @@
     [self.view addSubview:_myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
-
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -63,9 +65,10 @@
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
-//        [_cusBar.rightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        [_cusBar.sLabelText setText:SLABELTEXT];
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
@@ -262,7 +265,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    
     if (indexPath.row == [[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
         return [source cellLastHigth];
     }
@@ -302,7 +304,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self.navigationController pushViewController:lcA animated:NO];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
-        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar switchBarState];
         _viewState = UPloadState;
         [_myTableView reloadData];
@@ -321,7 +322,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
             [self.selectedArray removeAllObjects];
         }
         [_myTableView reloadData];
-        
     }
 }
 #pragma mark photoClick
@@ -337,6 +337,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self.selectedArray addObject:asset];
     }else if([self.selectedArray containsObject:asset]){
         [self.selectedArray removeObject:asset];
+    }
+    if (self.selectedArray.count) {
+        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",selectedArray.count]];
+    }else{
+        [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
 @end

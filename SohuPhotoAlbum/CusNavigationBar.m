@@ -14,7 +14,7 @@
 
 @end
 @implementation CusNavigationBar
-@synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton;
+@synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
 - (void)dealloc
 {
     [_normalBar release];
@@ -26,6 +26,7 @@
     [nRightButton3 release];
     [_stateBar release];
     [sLabelText release];
+    [sLeftButton release];
     [sAllSelectedbutton release];
     [sRightStateButton release];
     [super dealloc];
@@ -52,7 +53,7 @@
         [_normalBar addSubview:nLeftButton];
         self.nLabelImage = [[[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)] autorelease];
         [_normalBar addSubview:nLabelImage];
-        self.nLabelText = [[[UILabel alloc] initWithFrame:CGRectMake(50, 0, 90, 44)] autorelease];
+        self.nLabelText = [[[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)] autorelease];
         self.nLabelText.backgroundColor = [UIColor clearColor];
         self.nLabelText.textColor = [UIColor blackColor];
         [_normalBar addSubview:nLabelText];
@@ -68,24 +69,26 @@
     [_stateBar setUserInteractionEnabled:YES];
     _stateBar.image = [UIImage imageNamed:@"title-bar.png"];
     
-    self.sLabelText = [[[UILabel alloc] initWithFrame:CGRectMake(50, 0, 90, 44)] autorelease];
+    self.sLabelText = [[[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)] autorelease];
     self.sLabelText.backgroundColor = [UIColor clearColor];
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];
 
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(0, 0, 44, 44);
-    button.tag = CANCELBUTTONTAG;
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_stateBar addSubview:button];
+    self.sLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sLeftButton.frame = CGRectMake(0, 0, 44, 44);
+    sLeftButton.tag = CANCELBUTTONTAG;
+    [sLeftButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+    [sLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_stateBar addSubview:sLeftButton];
     
-    self.sAllSelectedbutton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    sAllSelectedbutton.frame = CGRectMake(200, 0, 44, 44);
-    sAllSelectedbutton.tag = ALLSELECTEDTAG;
-    [sAllSelectedbutton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_stateBar addSubview:sAllSelectedbutton];
+    //全选按钮
+//    self.sAllSelectedbutton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    sAllSelectedbutton.frame = CGRectMake(200, 0, 44, 44);
+//    sAllSelectedbutton.tag = ALLSELECTEDTAG;
+//    [sAllSelectedbutton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [_stateBar addSubview:sAllSelectedbutton];
     
-    self.sRightStateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.sRightStateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sRightStateButton.frame = CGRectMake(320 - 50, 0, 44, 44);
     sRightStateButton.tag = RIGHTSTATETAG;
     [sRightStateButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];

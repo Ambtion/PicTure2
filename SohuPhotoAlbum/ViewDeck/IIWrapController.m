@@ -86,7 +86,6 @@
     self.view.autoresizingMask = _wrappedController.view.autoresizingMask;
     _wrappedController.view.frame = self.view.bounds;
     _wrappedController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
     if ([self respondsToSelector:@selector(addChildViewController:)])
         [self addChildViewController:self.wrappedController];
     [self.view addSubview:self.wrappedController.view];

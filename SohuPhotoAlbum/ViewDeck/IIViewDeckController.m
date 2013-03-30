@@ -307,8 +307,8 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         self.rightController = nil;
         self.topController = nil;
         self.bottomController = nil;
-
         _ledge[IIViewDeckLeftSide] = _ledge[IIViewDeckRightSide] = _ledge[IIViewDeckTopSide] = _ledge[IIViewDeckBottomSide] = 44;
+        self.centerController.view.frame = CGRectMake(0, 20, 320, 460);
     }
     return self;
 }
@@ -467,7 +467,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             CGFloat right = _maxLedge - self.referenceBounds.size.width;
             offset = MAX(offset, right);
         }
-        
         return offset;
     }
     else {
@@ -750,6 +749,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view.autoresizesSubviews = YES;
     self.view.clipsToBounds = YES;
+
 }
 
 - (void)viewDidLoad {
@@ -793,24 +793,18 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self.view addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
-
     if (!_viewFirstAppeared) {
         _viewFirstAppeared = YES;
-        
         void(^applyViews)(void) = ^{
             [self.centerController.view removeFromSuperview];
             [self.centerView addSubview:self.centerController.view];
-            
             [self doForControllers:^(UIViewController* controller, IIViewDeckSide side) {
                 [controller.view removeFromSuperview];
                 [self.referenceView insertSubview:controller.view belowSubview:self.slidingControllerView];
             }];
-            
             [self setSlidingFrameForOffset:_offset forOrientation:_offsetOrientation];
             self.slidingControllerView.hidden = NO;
-            
             self.centerView.frame = self.centerViewBounds;
             self.centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             self.centerController.view.frame = self.centerView.bounds;
@@ -2659,7 +2653,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 - (void)setCenterController:(UIViewController *)centerController {
     if (_centerController == centerController) return;
-    
+
     void(^beforeBlock)(UIViewController* controller) = ^(UIViewController* controller){};
     void(^afterBlock)(UIViewController* controller) = ^(UIViewController* controller){};
     
@@ -2699,7 +2693,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             [controller viewDidAppear:NO];
         };
     }
-    
+
     // start the transition
     if (_centerController) {
         currentFrame = _centerController.view.frame;
@@ -2721,7 +2715,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         [_centerController setViewDeckController:nil];
         [_centerController removeFromParentViewController];
 
-        
         [_centerController didMoveToParentViewController:nil];
         II_RELEASE(_centerController);
     }
@@ -2744,7 +2737,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             self.tabBarItem.image = _centerController.tabBarItem.image;
             self.hidesBottomBarWhenPushed = _centerController.hidesBottomBarWhenPushed;
         }
-        
         afterBlock(_centerController);
         [_centerController didMoveToParentViewController:self];
         
@@ -2753,6 +2745,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         }
 
     }
+
 }
 
 - (void)setAutomaticallyUpdateTabBarItems:(BOOL)automaticallyUpdateTabBarItems {
@@ -3017,8 +3010,5 @@ static const char* viewDeckControllerKey = "ViewDeckController";
 - (void)vdc_didMoveToParentViewController:(UIViewController *)parent {
     // intentionally empty
 }
-
-
-
 
 @end

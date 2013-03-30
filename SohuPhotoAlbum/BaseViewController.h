@@ -19,4 +19,5 @@ typedef enum ViewState {
     CusNavigationBar * _cusBar;
     viewState _viewState;
 }
+- (CGRect)subTableViewRect;
 @end

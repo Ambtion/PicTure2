@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 
 #define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+#define SLABELTEXT @"请选择照片"
 
 @interface AlbumPhotoesController ()
 
@@ -51,14 +52,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    rect.size.height -= 64;
-    _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];    _myTableView.delegate = self;
+    _myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
+    _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
     [_myTableView setScrollsToTop:YES];
     [self.view addSubview:_myTableView];
+
 }
 
 #pragma mark - NavigationBar
@@ -72,9 +73,13 @@
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        
-        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
-        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        if (_viewState == UPloadState) {
+            [_cusBar.sLabelText setText:SLABELTEXT];
+            [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+        }else{
+            [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
+        }
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
         if (_viewState == UPloadState)
             [_cusBar switchBarState];
     }
@@ -214,6 +219,11 @@
         [self.selectedArray addObject:asset];
     }else if([self.selectedArray containsObject:asset]){
         [self.selectedArray removeObject:asset];
+    }
+    if (self.selectedArray.count) {
+        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
+    }else{
+        [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
 @end

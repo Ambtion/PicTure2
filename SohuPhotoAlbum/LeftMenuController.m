@@ -12,6 +12,7 @@
 #import "MenuCell.h"
 
 #import "LocalAlbumsController.h" //测试用
+#import "BaseNaviController.h"
 
 #define MENUMAXNUMBER 5
 
@@ -28,7 +29,8 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
 {
     [super viewDidLoad];
     CGRect rect = [[UIScreen mainScreen] bounds];
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, rect.size.width, rect.size.height)
+    //控制statuBar
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 20.0, rect.size.width, rect.size.height - 20)
                                               style:UITableViewStylePlain];
     _tableView.separatorColor = [UIColor clearColor];
     _tableView.sectionHeaderHeight = 32;
@@ -87,13 +89,13 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         if (indexPath.row == 1) {
             LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];
-            UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:la] autorelease];
+            BaseNaviController *navApiVC = [[[BaseNaviController alloc] initWithRootViewController:la] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = navApiVC;
         }
         if (indexPath.row == 2) {
             LocalAlbumsController * lp = [[[LocalAlbumsController alloc] init] autorelease];
-            UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
+            BaseNaviController *navApiVC = [[[BaseNaviController alloc] initWithRootViewController:lp] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = navApiVC;
         }

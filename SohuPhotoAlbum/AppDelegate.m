@@ -11,11 +11,15 @@
 #import "LocalAlbumsController.h"
 #import "LocalALLPhotoesController.h"
 #import "DataBaseManager.h"
+#import "BaseNaviController.h"
+
 
 @implementation AppDelegate
+@synthesize sinaweibo;
 
 - (void)dealloc
 {
+    [sinaweibo release];
     [_window release];
     [super dealloc];
 }
@@ -24,8 +28,9 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     //主视图
+    [application setStatusBarHidden:YES];
     LocalALLPhotoesController * lp = [[[LocalALLPhotoesController alloc] init] autorelease];
-    UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
+    BaseNaviController *navApiVC = [[[BaseNaviController alloc] initWithRootViewController:lp] autorelease];
     [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
     //左菜单
     LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
@@ -34,29 +39,28 @@
     [self.window makeKeyAndVisible];
     //INIT DATABASE
     [DataBaseManager defaultDataBaseManager];
+    [application setStatusBarHidden:NO];
+
+    //init Sina
+    sinaweibo = [[SinaWeibo alloc] initWithAppKey:kAppKey appSecret:kAppSecret appRedirectURI:kAppRedirectURI andDelegate:nil];
+    
     return YES;
 }
-
-- (void)applicationWillResignActive:(UIApplication *)application
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+//    return [TencentOAuth HandleOpenURL:url];
+//}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    return [self.sinaweibo handleOpenURL:url];
 }
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    return [self.sinaweibo handleOpenURL:url];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self.sinaweibo applicationDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

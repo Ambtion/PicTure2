@@ -36,6 +36,7 @@
 @property(nonatomic,retain)UIButton * nRightButton3;
 
 @property(nonatomic,retain)UILabel * sLabelText;
+@property(nonatomic,retain)UIButton * sLeftButton;
 @property(nonatomic,retain)UIButton * sAllSelectedbutton;
 @property(nonatomic,retain)UIButton * sRightStateButton;
 
