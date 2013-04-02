@@ -69,8 +69,14 @@
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
-}
+    self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.viewDeckController.panningMode = IIViewDeckNoPanning;
+}
 
 #pragma mark - read data
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -297,8 +303,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //切换页面
-        LocalAlbumsController * lcA = [[[LocalAlbumsController alloc] init] autorelease];
-        [self.navigationController pushViewController:lcA animated:NO];
+        self.viewDeckController.centerController = [[[LocalAlbumsController alloc] init] autorelease];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         [_cusBar switchBarState];

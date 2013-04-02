@@ -7,6 +7,7 @@
 //
 
 #import "BaseViewController.h"
+#import "AppDelegate.h"
 //#import "BaseNaviController.h"
 @interface BaseViewController ()
 
@@ -26,7 +27,11 @@
     }
     return self;
 }
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+}
 - (void)viewDidDisappear:(BOOL)animated
 {
     if (_cusBar.superview){
@@ -41,10 +46,9 @@
 }
 - (CGRect)subTableViewRect
 {
-//    CGRect rect = [[UIScreen mainScreen] bounds];
-//    rect.size.height -= 64;
-//    rect.origin.y = 20;
-//    return rect;
-    return self.view.bounds;
+//    NSLog(@"subTableViewRect:%@",NSStringFromCGRect(self.view.frame));
+    CGRect rect = self.view.bounds;
+    rect.size.height -= 44;
+    return rect;
 }
 @end

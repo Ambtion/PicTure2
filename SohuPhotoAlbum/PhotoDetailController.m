@@ -8,7 +8,7 @@
 
 #import "PhotoDetailController.h"
 #import "LocalShareController.h"
-
+#import "AppDelegate.h"
 #define OFFSETX 20
 
 @interface PhotoDetailController ()
@@ -30,7 +30,6 @@
     [_library release];
     [super dealloc];
 }
-
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset
 {
     self = [super init];
@@ -57,35 +56,26 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self resetStatueBar];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setStatueBar];
+    
+}
+- (void)setStatueBar
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    if (!_cusBar){
-        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
-        _cusBar.frame = CGRectMake(0, 20, 320, 44);
-        _cusBar.backgroundColor = [UIColor clearColor];
-        [_cusBar setBackgroundImage:[UIImage imageNamed:@"full_screen_title-bar.png"]];
-        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"full_screen_back.png"] forState:UIControlStateNormal];
-        _cusBar.nLabelText.textColor = [UIColor whiteColor];
-        _cusBar.nLabelText.font = [UIFont systemFontOfSize:22];
-        [self upCusTitle];
-        [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
-    }
-    if (!_cusBar.superview)
-        [self.view addSubview:_cusBar];
-
-    if (!_tabBar) {
-        _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, 0, 0) delegate:self];
-        //bar没有隐藏 view.higth = 416;
-    }
-    if (!_tabBar.superview) {
-        [self.view addSubview:_tabBar];
-    }
+    [self.navigationController.view bringSubviewToFront:self.view];
+//    if (!_cusBar.superview)
+//        [self.view addSubview:_cusBar];
+}
+- (void)resetStatueBar
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)upCusTitle
@@ -95,8 +85,7 @@
 
 - (void)initSubViews
 {
-    
-    self.view.frame = [[UIScreen mainScreen] bounds];
+    self.view.backgroundColor = [UIColor clearColor];
     CGRect rect = self.view.bounds;
     rect.size.width += OFFSETX * 2;
     rect.origin.x -= OFFSETX;
@@ -114,11 +103,29 @@
     [_scrollView addSubview:_fontScaleImage];
     [_scrollView addSubview:_curScaleImage];
     [_scrollView addSubview:_rearScaleImage];
+    [self addBar];
+}
+- (void)addBar
+{
+    _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+    _cusBar.frame = CGRectMake(0, 20, 320, 44);
+    _cusBar.backgroundColor = [UIColor clearColor];
+    [_cusBar setBackgroundImage:[UIImage imageNamed:@"full_screen_title-bar.png"]];
+    [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"full_screen_back.png"] forState:UIControlStateNormal];
+    _cusBar.nLabelText.textColor = [UIColor whiteColor];
+    _cusBar.nLabelText.font = [UIFont systemFontOfSize:22];
+    [self upCusTitle];
+    [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
+    [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
+    [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+    [self.view addSubview:_cusBar];
+    
+    _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
+    [self.view addSubview:_tabBar];
 }
 - (void)setScrollViewProperty
 {
     _scrollView.pagingEnabled = YES;
-//    _scrollView.bounces = NO;
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width * 3 , _scrollView.bounds.size.height);
     _scrollView.showsHorizontalScrollIndicator = NO;
 }

@@ -12,16 +12,11 @@
 #import "MenuCell.h"
 
 #import "LocalAlbumsController.h" //测试用
-//#import "BaseNaviController.h"
 
 #define MENUMAXNUMBER 5
 
 static NSString * menuText[5] = {@"账号",@"本地相册",@"云备份",@"分享历史",@"设置"};
 static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"setting.png"};
-
-@interface LeftMenuController ()
-
-@end
 
 @implementation LeftMenuController
 
@@ -30,7 +25,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     [super viewDidLoad];
     CGRect rect = [[UIScreen mainScreen] bounds];
     //控制statuBar
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 20.0, rect.size.width, rect.size.height - 20)
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.f, rect.size.width, rect.size.height)
                                               style:UITableViewStylePlain];
     _tableView.separatorColor = [UIColor clearColor];
     _tableView.sectionHeaderHeight = 32;
@@ -91,13 +86,13 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
             LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];
             UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:la] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
-            self.viewDeckController.centerController = navApiVC;
+            self.viewDeckController.centerController = la;
         }
         if (indexPath.row == 2) {
             LocalAlbumsController * lp = [[[LocalAlbumsController alloc] init] autorelease];
             UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
-            self.viewDeckController.centerController = navApiVC;
+            self.viewDeckController.centerController = lp;
         }
         self.view.userInteractionEnabled = YES;
     }];

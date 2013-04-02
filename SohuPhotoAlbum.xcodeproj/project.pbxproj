@@ -45,6 +45,7 @@
 		C583CF3D1704503A00CD3485 /* CusTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C583CF3C1704503A00CD3485 /* CusTabBar.m */; };
 		C585B8751705A3F100D54CDE /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C585B8731705A3F100D54CDE /* cancel.png */; };
 		C585B8761705A3F100D54CDE /* YES.png in Resources */ = {isa = PBXBuildFile; fileRef = C585B8741705A3F100D54CDE /* YES.png */; };
+		C5870B64170AEB9A00CBDB23 /* IIViewDeckController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5870B63170AEB9A00CBDB23 /* IIViewDeckController.m */; };
 		C588B0A817003032006BBC34 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A717003032006BBC34 /* UIKit.framework */; };
 		C588B0AA17003032006BBC34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A917003032006BBC34 /* Foundation.framework */; };
 		C588B0AC17003032006BBC34 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0AB17003032006BBC34 /* CoreGraphics.framework */; };
@@ -54,7 +55,6 @@
 		C588B0BA17003032006BBC34 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0B917003032006BBC34 /* Default.png */; };
 		C588B0BC17003032006BBC34 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0BB17003032006BBC34 /* Default@2x.png */; };
 		C588B0BE17003032006BBC34 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0BD17003032006BBC34 /* Default-568h@2x.png */; };
-		C588B0CB1700305B006BBC34 /* IIViewDeckController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0C71700305B006BBC34 /* IIViewDeckController.m */; };
 		C588B0CC1700305B006BBC34 /* IIWrapController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0C91700305B006BBC34 /* IIWrapController.m */; };
 		C588B0CD1700305B006BBC34 /* LeftSideViewIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */; };
 		C588B0CF170036FB006BBC34 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0CE170036FB006BBC34 /* QuartzCore.framework */; };
@@ -223,6 +223,8 @@
 		C583CF3C1704503A00CD3485 /* CusTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CusTabBar.m; sourceTree = "<group>"; };
 		C585B8731705A3F100D54CDE /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C585B8741705A3F100D54CDE /* YES.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YES.png; sourceTree = "<group>"; };
+		C5870B62170AEB9A00CBDB23 /* IIViewDeckController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIViewDeckController.h; sourceTree = "<group>"; };
+		C5870B63170AEB9A00CBDB23 /* IIViewDeckController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIViewDeckController.m; sourceTree = "<group>"; };
 		C588B0A417003032006BBC34 /* SohuPhotoAlbum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SohuPhotoAlbum.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C588B0A717003032006BBC34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C588B0A917003032006BBC34 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -236,8 +238,6 @@
 		C588B0B917003032006BBC34 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C588B0BB17003032006BBC34 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C588B0BD17003032006BBC34 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C588B0C61700305B006BBC34 /* IIViewDeckController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIViewDeckController.h; sourceTree = "<group>"; };
-		C588B0C71700305B006BBC34 /* IIViewDeckController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIViewDeckController.m; sourceTree = "<group>"; };
 		C588B0C81700305B006BBC34 /* IIWrapController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIWrapController.h; sourceTree = "<group>"; };
 		C588B0C91700305B006BBC34 /* IIWrapController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIWrapController.m; sourceTree = "<group>"; };
 		C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LeftSideViewIcon.png; sourceTree = "<group>"; };
@@ -600,8 +600,8 @@
 		C588B0C51700305B006BBC34 /* ViewDeck */ = {
 			isa = PBXGroup;
 			children = (
-				C588B0C61700305B006BBC34 /* IIViewDeckController.h */,
-				C588B0C71700305B006BBC34 /* IIViewDeckController.m */,
+				C5870B62170AEB9A00CBDB23 /* IIViewDeckController.h */,
+				C5870B63170AEB9A00CBDB23 /* IIViewDeckController.m */,
 				C588B0C81700305B006BBC34 /* IIWrapController.h */,
 				C588B0C91700305B006BBC34 /* IIWrapController.m */,
 				C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */,
@@ -1164,7 +1164,6 @@
 			files = (
 				C588B0B417003032006BBC34 /* main.m in Sources */,
 				C588B0B817003032006BBC34 /* AppDelegate.m in Sources */,
-				C588B0CB1700305B006BBC34 /* IIViewDeckController.m in Sources */,
 				C588B0CC1700305B006BBC34 /* IIWrapController.m in Sources */,
 				C588B0D217003750006BBC34 /* LeftMenuController.m in Sources */,
 				C588B0D5170039CC006BBC34 /* LocalAlbumsController.m in Sources */,
@@ -1238,6 +1237,7 @@
 				C58B38B2170920A800A0BA07 /* ROPublishPhotoInternal.m in Sources */,
 				C58B38DA1709666E00A0BA07 /* ShareBaseController.m in Sources */,
 				C58A1EBC170A6ED600E61ED3 /* AppDelegateOauthor.m in Sources */,
+				C5870B64170AEB9A00CBDB23 /* IIViewDeckController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

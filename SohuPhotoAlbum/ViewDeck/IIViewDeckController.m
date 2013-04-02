@@ -277,8 +277,9 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         _elastic = YES;
         _willAppearShouldArrangeViewsAfterRotation = (UIInterfaceOrientation)UIDeviceOrientationUnknown;
         _panningMode = IIViewDeckFullViewPanning;
-        _navigationControllerBehavior = IIViewDeckNavigationControllerContained;
-        _centerhiddenInteractivity = IIViewDeckCenterHiddenUserInteractive;
+//        _navigationControllerBehavior = IIViewDeckNavigationControllerContained;
+        _navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
+        _centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
         _sizeMode = IIViewDeckLedgeSizeMode;
         _viewAppeared = 0;
         _viewFirstAppeared = NO;
@@ -307,8 +308,8 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         self.rightController = nil;
         self.topController = nil;
         self.bottomController = nil;
+
         _ledge[IIViewDeckLeftSide] = _ledge[IIViewDeckRightSide] = _ledge[IIViewDeckTopSide] = _ledge[IIViewDeckBottomSide] = 44;
-        self.centerController.view.frame = CGRectMake(0, 20, 320, 460);
     }
     return self;
 }
@@ -467,6 +468,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             CGFloat right = _maxLedge - self.referenceBounds.size.width;
             offset = MAX(offset, right);
         }
+        
         return offset;
     }
     else {
@@ -749,7 +751,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view.autoresizesSubviews = YES;
     self.view.clipsToBounds = YES;
-
 }
 
 - (void)viewDidLoad {
@@ -792,19 +793,25 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 #pragma mark - Appearance
 
 - (void)viewWillAppear:(BOOL)animated {
+    
     [super viewWillAppear:animated];
     [self.view addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
+
     if (!_viewFirstAppeared) {
         _viewFirstAppeared = YES;
         void(^applyViews)(void) = ^{
+            
             [self.centerController.view removeFromSuperview];
             [self.centerView addSubview:self.centerController.view];
+            
             [self doForControllers:^(UIViewController* controller, IIViewDeckSide side) {
                 [controller.view removeFromSuperview];
                 [self.referenceView insertSubview:controller.view belowSubview:self.slidingControllerView];
             }];
+            
             [self setSlidingFrameForOffset:_offset forOrientation:_offsetOrientation];
             self.slidingControllerView.hidden = NO;
+//            NSLog(@"centerViewBounds :%@ :%@",NSStringFromCGRect(self.centerViewBounds),self.referenceView);
             self.centerView.frame = self.centerViewBounds;
             self.centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             self.centerController.view.frame = self.centerView.bounds;
@@ -852,15 +859,16 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     [self.centerController viewDidAppear:animated];
+//    NSLog(@"devView:%@",NSStringFromCGRect(self.view.frame));
+//    NSLog(@"centerView:%@",NSStringFromCGRect(self.centerView.frame));
+//    NSLog(@"centerController:%@",NSStringFromCGRect(self.centerController.view.frame));
     [self transitionAppearanceFrom:1 to:2 animated:animated];
     _viewAppeared = 2;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     [self.centerController viewWillDisappear:animated];
     [self transitionAppearanceFrom:2 to:1 animated:animated];
     _viewAppeared = 1;
@@ -959,9 +967,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 }
 
 - (void)arrangeViewsAfterRotation {
-//    _willAppearShouldArrangeViewsAfterRotation = UIDeviceOrientationUnknown;
-    _willAppearShouldArrangeViewsAfterRotation = 0;
-
+    _willAppearShouldArrangeViewsAfterRotation = UIInterfaceOrientationPortrait;
     if (_preRotationSize.width <= 0 || _preRotationSize.height <= 0) return;
     
     CGFloat offset, max, preSize;
@@ -1478,7 +1484,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 #pragma mark - Left Side
 
 - (BOOL)toggleLeftView {
-    NSLog(@"%s",__FUNCTION__);
     return [self toggleLeftViewAnimated:YES];
 }
 
@@ -2080,10 +2085,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 #pragma mark - Panning
 
-- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner
-{    
-    NSString * gesture;
-    return NO;
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner {
     if (self.panningMode == IIViewDeckNavigationBarOrOpenCenterPanning && panner.view == self.slidingControllerView && [self isAnySideOpen])
         return NO;
     
@@ -2654,7 +2656,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 - (void)setCenterController:(UIViewController *)centerController {
     if (_centerController == centerController) return;
-
+    
     void(^beforeBlock)(UIViewController* controller) = ^(UIViewController* controller){};
     void(^afterBlock)(UIViewController* controller) = ^(UIViewController* controller){};
     
@@ -2694,7 +2696,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             [controller viewDidAppear:NO];
         };
     }
-
+    
     // start the transition
     if (_centerController) {
         currentFrame = _centerController.view.frame;
@@ -2715,14 +2717,13 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         @catch (NSException *exception) {}
         [_centerController setViewDeckController:nil];
         [_centerController removeFromParentViewController];
-
         [_centerController didMoveToParentViewController:nil];
         II_RELEASE(_centerController);
     }
     
     // make the switch
     _centerController = centerController;
-    
+
     if (_centerController) {
         // and finish the transition
         II_RETAIN(_centerController);
@@ -2738,6 +2739,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             self.tabBarItem.image = _centerController.tabBarItem.image;
             self.hidesBottomBarWhenPushed = _centerController.hidesBottomBarWhenPushed;
         }
+        
         afterBlock(_centerController);
         [_centerController didMoveToParentViewController:self];
         
@@ -2746,7 +2748,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         }
 
     }
-
 }
 
 - (void)setAutomaticallyUpdateTabBarItems:(BOOL)automaticallyUpdateTabBarItems {
@@ -3011,5 +3012,8 @@ static const char* viewDeckControllerKey = "ViewDeckController";
 - (void)vdc_didMoveToParentViewController:(UIViewController *)parent {
     // intentionally empty
 }
+
+
+
 
 @end

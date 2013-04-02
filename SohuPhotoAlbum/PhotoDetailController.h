@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ImageScaleView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "BaseViewController.h"
+#import "CusNavigationBar.h"
 #import "CusTabBar.h"
 
 typedef enum _imageStatePosition
@@ -20,7 +20,7 @@ typedef enum _imageStatePosition
     
 }imageStatePosition;
 
-@interface PhotoDetailController : BaseViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate>
+@interface PhotoDetailController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate,CusNavigationBarDelegate>
 {
     UIScrollView *_scrollView;
     ImageScaleView * _fontScaleImage;
@@ -31,6 +31,7 @@ typedef enum _imageStatePosition
     CusTabBar * _tabBar;
     BOOL _isHidingBar;
     ALAssetsLibrary * _library;
+    CusNavigationBar * _cusBar;
     
 }
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset;

@@ -8,7 +8,7 @@
 
 #import "LocalAlbumsController.h"
 #import "AlbumPhotoesController.h"
-
+#import "LocalALLPhotoesController.h"
 //#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalAlbumsController ()
@@ -19,7 +19,6 @@
 @implementation LocalAlbumsController
 @synthesize assetGroups = _assetGroups;
 @synthesize dataSourceArray = _dataSourceArray;
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -63,15 +62,21 @@
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     [self.navigationItem setHidesBackButton:YES animated:NO];
+    self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.viewDeckController.panningMode = IIViewDeckNoPanning;
 
+}
 - (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) {
-        [self.navigationController popViewControllerAnimated:NO];
+        self.viewDeckController.centerController  = [[[LocalALLPhotoesController alloc] init] autorelease];
     }
     if (button.tag == RIGHT2BUTTON) {
         _viewState = UPloadState;
