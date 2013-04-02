@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-
+//#import "BaseNaviController.h"
 @interface BaseViewController ()
 
 @end
@@ -30,7 +30,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     if (_cusBar.superview){
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.0 animations:^{
             [_cusBar removeFromSuperview];
         }];
     }
@@ -41,9 +41,10 @@
 }
 - (CGRect)subTableViewRect
 {
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    rect.size.height -= 64;
-    rect.origin.y = 20;
-    return rect;
+//    CGRect rect = [[UIScreen mainScreen] bounds];
+//    rect.size.height -= 64;
+//    rect.origin.y = 20;
+//    return rect;
+    return self.view.bounds;
 }
 @end

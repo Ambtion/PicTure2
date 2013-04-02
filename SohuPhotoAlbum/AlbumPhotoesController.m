@@ -10,7 +10,6 @@
 #import "PhotoDetailController.h"
 #import "AppDelegate.h"
 
-#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 #define SLABELTEXT @"请选择照片"
 
 @interface AlbumPhotoesController ()
@@ -59,7 +58,6 @@
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
     [_myTableView setScrollsToTop:YES];
     [self.view addSubview:_myTableView];
-
 }
 
 #pragma mark - NavigationBar
@@ -75,7 +73,7 @@
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         if (_viewState == UPloadState) {
             [_cusBar.sLabelText setText:SLABELTEXT];
-            [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//            [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         }else{
             [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
         }

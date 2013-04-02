@@ -9,7 +9,7 @@
 #import "LocalAlbumsController.h"
 #import "AlbumPhotoesController.h"
 
-#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+//#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalAlbumsController ()
 @property(nonatomic,retain)NSMutableArray *assetGroups;
@@ -55,6 +55,7 @@
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         _cusBar.sLabelText.text = @"请选择专辑";
+        [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.sRightStateButton setHidden:YES];
         [_cusBar.sAllSelectedbutton setHidden:YES];

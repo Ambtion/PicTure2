@@ -9,80 +9,118 @@
 #import "LocalShareController.h"
 #import "AppDelegate.h"
 
-@interface LocalShareController ()
+//#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
-@end
 
 @implementation LocalShareController
+@synthesize uploadAsset = _uploadAsset;
+
 - (void)dealloc
 {
-    [_tencentOAuth release];
+    [_cusBar release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(0, 20, 50, 40);
-    [button addTarget:self action:@selector(Login:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
-    [self initOauhtorizes];
+    [self.sinaAcountBtn setImage:[UIImage imageNamed:@"share_sina.png"] forState:UIControlStateNormal];
+    [self.sinaAcountBtn setImage:[UIImage imageNamed:@"share_sina_press.png"] forState:UIControlStateHighlighted];
+    self.sinaAcountBtn.labelText.text =@"新浪分享";
+    
+    [self.renrenAcountBtn setImage:[UIImage imageNamed:@"share_renren.png"] forState:UIControlStateNormal];
+    [self.renrenAcountBtn setImage:[UIImage imageNamed:@"share_renren_press.png"] forState:UIControlStateHighlighted];
+    self.renrenAcountBtn.labelText.text =@"人人";
+    
+    [self.weixinAcountBtn setImage:[UIImage imageNamed:@"share_weixin.png"] forState:UIControlStateNormal];
+    [self.weixinAcountBtn setImage:[UIImage imageNamed:@"share_weixin_press.png"] forState:UIControlStateHighlighted];
+    self.weixinAcountBtn.labelText.text =@"微信";
+    
+    [self.qqAcountBtn setImage:[UIImage imageNamed:@"share_Q_zone.png"] forState:UIControlStateNormal];
+    [self.qqAcountBtn setImage:[UIImage imageNamed:@"share_Q_zone_press.png"] forState:UIControlStateHighlighted];
+    self.qqAcountBtn.labelText.text =@"QQ空间";
 }
-- (void)initOauhtorizes
+#pragma mark Action
+- (AppDelegate *)Appdelegate
 {
-    _tencentOAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:self];
-    [[self sinaweibo] setDelegate:self];
+    return [[UIApplication sharedApplication] delegate];
 }
-- (void)Login:(UIButton *)sender
+- (void)upPicture:(UIButton *)button
 {
-    if (!sender.tag) {
-//        [self qqLogin];
-    }else{
-//        [self qqUploadPic];
+    if (button.tag == kSinaTag) {
+        [[self Appdelegate] sinaLoginWithDelegate:self];
     }
-    sender.tag = !sender.tag;
+    if (button.tag == kRenrenTag) {
+        [self renrenUPlaodPic];
+    }
+    if (button.tag == kQQTag) {
+        [[self Appdelegate] qqLoginWithDelegate:self];
+    }
+    if (button.tag == kWeixinTag) {
+        [[self Appdelegate] weiXinregisterWithDelegate:self];
+        [self weixinUploadPic];
+    }
 }
 #pragma mark - SINA UPloadPic
-- (SinaWeibo *)sinaweibo
-{
-    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    return delegate.sinaweibo;
-}
-- (void)sinaLogin
-{
-    [[self sinaweibo] logIn];
-}
 - (void)sinaweiboDidLogIn:(SinaWeibo *)sinaweibo
 {
-    
+    [self sinaUploadPic];
 }
 - (void)sinaweibo:(SinaWeibo *)sinaweibo logInDidFailWithError:(NSError *)error
 {
-    
+    [self showInvalidTokenOrOpenIDMessageWithMes:[error description]];
 }
+
 - (void)sinaUploadPic
 {
+    //uplaod image
+    [[[self Appdelegate] sinaweibo] requestWithURL:@"statuses/upload.json"
+                              params:[NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                      @"要发表的内容", @"status",
+                                      [UIImage imageWithCGImage:[[self.uploadAsset defaultRepresentation] fullScreenImage]], @"pic", nil]
+                          httpMethod:@"POST"
+                            delegate:self];
+}
+- (void)request:(SinaWeiboRequest *)request didFinishLoadingWithResult:(id)result
+{
     
+    //发送
+    if ([request.url hasSuffix:@"statuses/upload.json"])
+    {
+        if ([(NSDictionary *)result objectForKey:@"error"]) {
+            [self showInvalidTokenOrOpenIDMessageWithMes:[(NSDictionary *)result objectForKey:@"error"]];
+            return;
+        }
+    [self showInvalidTokenOrOpenIDMessageWithMes:[result objectForKey:@"text"]];
+    }
+}
+- (void)request:(SinaWeiboRequest *)request didFailWithError:(NSError *)error
+{
+    [self showInvalidTokenOrOpenIDMessageWithMes:[error description]];
+}
+
+#pragma mark RenRen upload
+- (void)renrenUPlaodPic
+{
+    UIImage* image = [UIImage imageWithCGImage:[[self.uploadAsset defaultRepresentation] fullScreenImage]];
+    NSString *caption = @"这是一张测试图片";
+    [[Renren sharedRenren] publishPhotoSimplyWithImage:image caption:caption];
+}
+- (void)renren:(Renren *)renren requestDidReturnResponse:(ROResponse *)response
+{
+    if (response.error) {
+        [self showInvalidTokenOrOpenIDMessageWithMes:[[response error] localizedDescription]];
+    }
 }
 
 #pragma mark - QQ UPloadPic
-- (void)qqLogin
-{
-    NSArray * qqPermissions = [[NSArray arrayWithObjects:
-                       kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
-                       kOPEN_PERMISSION_ADD_PIC_T, /** 上传图片并发表消息到腾讯微博 */
-                       kOPEN_PERMISSION_UPLOAD_PIC,  /** 上传一张照片到QQ空间相册(<b>需要申请权限</b>) */
-                     nil] retain];
-	[_tencentOAuth authorize:qqPermissions inSafari:NO];
-}
 - (void)tencentDidLogin
 {
-    
+    [self qqUploadPic];
 }
 - (void)tencentDidNotLogin:(BOOL)cancelled
 {
-
+    
 }
 - (void)tencentDidNotNetWork
 {
@@ -103,11 +141,10 @@
     params.paramX = @"39.909407";
     params.paramY = @"116.397521";
     
-	if(![_tencentOAuth uploadPicWithParams:params]){
-        [self showInvalidTokenOrOpenIDMessage];
+	if(![[[self Appdelegate] tencentOAuth] uploadPicWithParams:params]){
+        [self showInvalidTokenOrOpenIDMessageWithMes:@"error"];
     }
 	[img release];
-	
 }
 - (void)uploadPicResponse:(APIResponse*) response {
 	if (response.retCode == URLREQUEST_SUCCEED)
@@ -132,10 +169,60 @@
 	
 }
 
-#pragma mark UpFailture
-- (void)showInvalidTokenOrOpenIDMessage
+#pragma mark - Weixin
+-(void) weixinUploadPic
 {
-    UIAlertView *alert = [[[UIAlertView alloc]initWithTitle:@"api调用失败" message:@"可能授权已过期，请重新获取" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] autorelease];
+    if ([WXApi isWXAppInstalled]) {
+        NSLog(@"%s",__FUNCTION__);
+        [self RespImageContent];
+    }else{
+        [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
+    }
+}
+-(void) onReq:(BaseReq*)req
+{
+    
+}
+- (void) RespImageContent
+{
+    //发送内容给微信
+    WXMediaMessage *message = [WXMediaMessage message];
+    [message setThumbImage:[UIImage imageWithCGImage:[self.uploadAsset aspectRatioThumbnail]]];
+    WXImageObject *ext = [WXImageObject object];
+    ext.imageData = [self getDataFromAsset:self.uploadAsset];
+    message.mediaObject = ext;
+    SendMessageToWXReq* req = [[[SendMessageToWXReq alloc] init]autorelease];
+    req.bText = NO;
+    req.message = message;
+    req.scene = WXSceneTimeline;
+    [WXApi sendReq:req];
+}
+- (NSData *)getDataFromAsset:(ALAsset *)asset
+{
+    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
+    Byte *buffer = (Byte*)malloc(defaultRep.size);
+    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+    return data;
+}
+-(void) onResp:(BaseResp*)resp
+{
+    if([resp isKindOfClass:[SendMessageToWXResp class]])
+    {
+        NSString *strTitle = [NSString stringWithFormat:@"发送结果"];
+        NSString *strMsg = [NSString stringWithFormat:@"发送媒体消息结果:%d %@", resp.errCode,resp.errStr];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+        [alert release];
+    }
+}
+
+
+#pragma mark UpFailture
+- (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
+{
+    UIAlertView *alert = [[[UIAlertView alloc]initWithTitle:@"操作结果" message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] autorelease];
     [alert show];
 }
 @end

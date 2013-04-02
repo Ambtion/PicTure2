@@ -8,10 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "LocalShareRef.h"
-#import "BaseViewController.h"
+#import "ShareBaseController.h"
 
-@interface LocalShareController : BaseViewController<TencentSessionDelegate,SinaWeiboDelegate,SinaWeiboRequestDelegate>
-{
-    TencentOAuth * _tencentOAuth;
-}
+@interface LocalShareController : ShareBaseController<TencentSessionDelegate,SinaWeiboDelegate,SinaWeiboRequestDelegate,RenrenDelegate,WXApiDelegate>
+
 @end

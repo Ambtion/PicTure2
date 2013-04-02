@@ -12,7 +12,7 @@
 
 #define SLABELTEXT @"请选择照片"
 
-#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+//#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalALLPhotoesController ()
 @property(nonatomic,retain)NSMutableArray *assetGroups;
@@ -42,10 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    rect.size.height -= 64;
-    rect.origin.y = 20;
-    _myTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];
+    _myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
@@ -259,13 +256,13 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.dataSourceArray objectAtIndex:section] count];
+    return [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    if (indexPath.row == [[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
+    if (indexPath.row == [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
         return [source cellLastHigth];
     }
     return [source cellHigth];
@@ -279,7 +276,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         cell.delegate = self;
     }
     if (indexPath.section < self.dataSourceArray.count
-        && indexPath.row < [[self.dataSourceArray objectAtIndex:indexPath.section] count])
+        && indexPath.row < [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count])
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (_viewState != NomalState){
         [cell showCellSelectedStatus];

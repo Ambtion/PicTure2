@@ -74,7 +74,7 @@
         [self upCusTitle];
         [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        [_cusBar.nRightButton3 :NO];
     }
     if (!_cusBar.superview)
         [self.view addSubview:_cusBar];
@@ -95,6 +95,7 @@
 
 - (void)initSubViews
 {
+    
     self.view.frame = [[UIScreen mainScreen] bounds];
     CGRect rect = self.view.bounds;
     rect.size.width += OFFSETX * 2;
@@ -126,6 +127,8 @@
 - (void)refreshScrollView
 {
     if (!_assetsArray.count) return;
+    //prevent than  when seting offset it can  scrollViewDidScroll
+    _scrollView.delegate = nil;
     [self upCusTitle];
     if (_assetsArray.count <= 3) {
         [self refreshScrollViewWhenPhotonumLessThree];
@@ -136,6 +139,7 @@
     }else{
         [self refreshScrollViewNormal];
     }
+    _scrollView.delegate = self;
 }
 - (void)refreshScrollViewOnMinBounds
 {
@@ -219,10 +223,31 @@
 - (void)resetAllImagesFrame
 {
     //设置图片的大小
+    _fontScaleImage.zoomScale = 1.f;
+    _curScaleImage.zoomScale = 1.f;
+    _rearScaleImage.zoomScale = 1.f;
+
+    [self resetImageRect:_curScaleImage.imageView];
+    [self resetImageRect:_fontScaleImage.imageView];
+    [self resetImageRect:_rearScaleImage.imageView];
+}
+- (void)resetImageRect:(UIImageView *)imageView
+{
+    CGFloat w = imageView.image.size.width;
+    CGFloat h = imageView.image.size.height;
+    CGSize size = [[UIScreen mainScreen] bounds].size;
+    CGFloat scale = MAX(w / size.width, h /size.height);
+
+    if (imageView.image) {
+        imageView.frame = CGRectMake(0, 0, w / scale, h / scale);
+        imageView.center = CGPointMake(160, size.height /2.f);
+    }else{
+        imageView.frame = CGRectMake(0, 0, size.width,size.height);
+    }
 }
 - (UIImage *)getImageFromAsset:(ALAsset *)asset
 {
-    return [UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage]];
+    return [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
 }
 - (NSArray *)getDisplayImagesWithCurpage:(int)page
 {    
@@ -232,9 +257,9 @@
     [_curImageArray addObject:[_assetsArray objectAtIndex:pre]];
     [_curImageArray addObject:[_assetsArray objectAtIndex:_curPageNum]];
     [_curImageArray addObject:[_assetsArray objectAtIndex:last]];
-    
     return _curImageArray;
 }
+
 - (int)validPageValue:(NSInteger)value
 {
     if(value <= 0) value = 0;                   // value＝1为第一张，value = 0为前面一张
@@ -250,7 +275,7 @@
 - (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == TABSHARETAG) {
-        [self.navigationController pushViewController:[[[LocalShareController alloc] init] autorelease] animated:YES];
+        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
     }
     if (button.tag == TABDOWNLOADNTAG) {
         

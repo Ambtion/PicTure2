@@ -82,7 +82,7 @@
 - (void)setImageViews:(StatusImageView*)imageView With:(ALAsset *)asset
 {
     if (asset) {
-        imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+        imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
         imageView.layer.borderWidth = 0.5f;
         [imageView setUserInteractionEnabled:YES];
     }else{

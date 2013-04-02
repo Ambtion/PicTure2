@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "CusNavigationBar.h"
 
+#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+
 typedef enum ViewState {
     NomalState  ,
     UPloadState ,

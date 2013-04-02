@@ -2080,7 +2080,8 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 #pragma mark - Panning
 
-- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner {
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner
+{    
     NSString * gesture;
     return NO;
     if (self.panningMode == IIViewDeckNavigationBarOrOpenCenterPanning && panner.view == self.slidingControllerView && [self isAnySideOpen])

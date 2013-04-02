@@ -12,7 +12,7 @@
 #import "MenuCell.h"
 
 #import "LocalAlbumsController.h" //测试用
-#import "BaseNaviController.h"
+//#import "BaseNaviController.h"
 
 #define MENUMAXNUMBER 5
 
@@ -89,13 +89,13 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         if (indexPath.row == 1) {
             LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];
-            BaseNaviController *navApiVC = [[[BaseNaviController alloc] initWithRootViewController:la] autorelease];
+            UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:la] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = navApiVC;
         }
         if (indexPath.row == 2) {
             LocalAlbumsController * lp = [[[LocalAlbumsController alloc] init] autorelease];
-            BaseNaviController *navApiVC = [[[BaseNaviController alloc] initWithRootViewController:lp] autorelease];
+            UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
             [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = navApiVC;
         }
