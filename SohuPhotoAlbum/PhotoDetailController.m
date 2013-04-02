@@ -74,7 +74,7 @@
         [self upCusTitle];
         [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton3 :NO];
+        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
     }
     if (!_cusBar.superview)
         [self.view addSubview:_cusBar];
