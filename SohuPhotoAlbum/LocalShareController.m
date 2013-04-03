@@ -59,6 +59,7 @@
     if (button.tag == kWeixinTag) {
         [[self Appdelegate] weiXinregisterWithDelegate:self];
         [self weixinUploadPic];
+        
     }
 }
 #pragma mark - SINA UPloadPic
@@ -128,10 +129,7 @@
 }
 - (void)qqUploadPic
 {
-	NSString *path = @"http://img1.gtimg.com/tech/pics/hv1/95/153/847/55115285.jpg";
-	NSURL *url = [NSURL URLWithString:path];
-	NSData *data = [NSData dataWithContentsOfURL:url];
-	UIImage *img  = [[UIImage alloc] initWithData:data];
+	UIImage * img = [UIImage imageWithCGImage:[[self.uploadAsset defaultRepresentation] fullScreenImage]];
     TCUploadPicDic * params = [TCUploadPicDic dictionary];
     params.paramPicture = img;
     params.paramTitle = @"风云乔布斯";
@@ -170,20 +168,33 @@
 }
 
 #pragma mark - Weixin
--(void) weixinUploadPic
+-(void)weixinUploadPic
 {
     if ([WXApi isWXAppInstalled]) {
-        NSLog(@"%s",__FUNCTION__);
-        [self RespImageContent];
+        UIActionSheet * act = [[[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil] autorelease];
+        [act showInView:self.view];
     }else{
         [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
+    }
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self respImageContentToSence:WXSceneTimeline];
+            break;
+        case 1:
+            [self respImageContentToSence:WXSceneSession];
+            break;
+        default:
+            break;
     }
 }
 -(void) onReq:(BaseReq*)req
 {
     
 }
-- (void) RespImageContent
+- (void) respImageContentToSence:(enum WXScene)scene
 {
     //发送内容给微信
     WXMediaMessage *message = [WXMediaMessage message];
@@ -194,16 +205,18 @@
     SendMessageToWXReq* req = [[[SendMessageToWXReq alloc] init]autorelease];
     req.bText = NO;
     req.message = message;
-    req.scene = WXSceneTimeline;
+    req.scene = scene;
     [WXApi sendReq:req];
 }
 - (NSData *)getDataFromAsset:(ALAsset *)asset
 {
-    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
-    Byte *buffer = (Byte*)malloc(defaultRep.size);
-    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-    return data;
+//    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
+//    Byte *buffer = (Byte*)malloc(defaultRep.size);
+//    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+//    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+    CGImageRef imageRef = [[asset defaultRepresentation] fullScreenImage];
+    UIImage * image = [UIImage imageWithCGImage:imageRef];
+    return UIImageJPEGRepresentation(image, 1.f);
 }
 -(void) onResp:(BaseResp*)resp
 {
@@ -218,11 +231,10 @@
     }
 }
 
-
 #pragma mark UpFailture
 - (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
 {
-    UIAlertView *alert = [[[UIAlertView alloc]initWithTitle:@"操作结果" message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] autorelease];
+    UIAlertView *alert = [[[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] autorelease];
     [alert show];
 }
 @end

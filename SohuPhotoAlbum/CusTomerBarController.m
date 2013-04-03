@@ -6,14 +6,14 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "CusTomerBarController.h"
 #import "AppDelegate.h"
 //#import "BaseNaviController.h"
-@interface BaseViewController ()
+@interface CusTomerBarController ()
 
 @end
 
-@implementation BaseViewController
+@implementation CusTomerBarController
 
 - (void)dealloc
 {

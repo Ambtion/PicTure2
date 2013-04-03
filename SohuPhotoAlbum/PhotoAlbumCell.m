@@ -137,6 +137,7 @@
                              label.frame.size.width > 22 ? label.frame.size.width : 22 , 22);
 
 }
+
 - (void)handleGusture:(UITapGestureRecognizer *)gesture
 {
     id view = [gesture view];
@@ -149,5 +150,18 @@
     if ([_delegate respondsToSelector:@selector(photoAlbumCell:clickCoverGroup:)])
         [_delegate photoAlbumCell:self clickCoverGroup:group];
 }
-
+////customise delete button
+//- (void)willTransitionToState:(UITableViewCellStateMask)state
+//{
+//    [super willTransitionToState:state];
+//    if ((state & UITableViewCellStateShowingEditControlMask) == UITableViewCellStateShowingDeleteConfirmationMask) {
+//        for (UIView *subview in self.subviews) {
+//            if ([NSStringFromClass([subview class]) isEqualToString:@"UITableViewCellDeleteConfirmationControl"]) {
+//                UIImageView *deleteBtn = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 64, 33)];
+//                [[subview.subviews objectAtIndex:0] addSubview:deleteBtn];
+//                [deleteBtn release];
+//            }
+//        }
+//    }
+//}
 @end

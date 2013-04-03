@@ -10,6 +10,6 @@
 #import "LocalShareRef.h"
 #import "ShareBaseController.h"
 
-@interface LocalShareController : ShareBaseController<TencentSessionDelegate,SinaWeiboDelegate,SinaWeiboRequestDelegate,RenrenDelegate,WXApiDelegate>
+@interface LocalShareController : ShareBaseController<TencentSessionDelegate,SinaWeiboDelegate,SinaWeiboRequestDelegate,RenrenDelegate,WXApiDelegate,UIActionSheetDelegate>
 
 @end

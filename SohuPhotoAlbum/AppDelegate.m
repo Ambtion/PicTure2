@@ -26,18 +26,17 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     //主视图
-//    [application setStatusBarHidden:YES];
     LocalALLPhotoesController * lp = [[[LocalALLPhotoesController alloc] init] autorelease];
-//    UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
-//    [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
-    
+
     //左菜单
     LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
+    
     IIViewDeckController *vc = [[[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC] autorelease];
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:vc];
     [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
+    
     //INIT DATABASE
     [DataBaseManager defaultDataBaseManager];
 //    [application setStatusBarHidden:NO];

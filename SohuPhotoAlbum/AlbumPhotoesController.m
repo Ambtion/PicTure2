@@ -9,6 +9,7 @@
 #import "AlbumPhotoesController.h"
 #import "PhotoDetailController.h"
 #import "AppDelegate.h"
+#import "LoginStateManager.h"
 
 #define SLABELTEXT @"请选择照片"
 
@@ -68,16 +69,21 @@
         _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
+        
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
+
         if (_viewState == UPloadState) {
             [_cusBar.sLabelText setText:SLABELTEXT];
-//            [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+            [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"cancal.png"] forState:UIControlStateNormal];
+            [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
+
         }else{
             [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
+            [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+
         }
-        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
         if (_viewState == UPloadState)
             [_cusBar switchBarState];
     }
@@ -178,10 +184,13 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //上传
-        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
-        [_cusBar switchBarState];
-        _viewState = UPloadState;
-        [_myTableView reloadData];
+        if ([LoginStateManager isLogin]) {
+            [_cusBar switchBarState];
+            _viewState = UPloadState;
+            [_myTableView reloadData];
+        }else{
+            [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
+        }
     }
     if (button.tag == CANCELBUTTONTAG) {
         if (isInitUpload) {

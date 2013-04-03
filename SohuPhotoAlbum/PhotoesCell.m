@@ -54,10 +54,11 @@
     StatusImageView * imageView;
     CGRect frame = CGRectMake(4, 5, 75, 75);
     for (int i = 0; i < 4; i++) {
-        imageView = [[StatusImageView alloc] initWithFrame:frame];
+        imageView = [[[StatusImageView alloc] initWithFrame:frame] autorelease];
         imageView.tag = 1000+i;
         imageView.layer.borderWidth = 0.5f;
         imageView.layer.borderColor = [[UIColor colorWithRed:192.f/255.f green:192.f/255.f blue:192.f/255.f alpha:1.f]CGColor];
+        imageView.layer.shouldRasterize = YES;
         [self.contentView addSubview:imageView];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGustrure:)];
         [imageView addGestureRecognizer:tap];

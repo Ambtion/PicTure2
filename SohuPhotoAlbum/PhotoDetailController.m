@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #define OFFSETX 20
 
+#define FLAG
 @interface PhotoDetailController ()
 @property(nonatomic,retain)NSArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
@@ -25,7 +26,7 @@
     [_assetsArray release];
     [_curImageArray release];
     [_scrollView release];
-    [_tabBar release];
+//    [_tabBar release];
     [_cusBar release];
     [_library release];
     [super dealloc];
@@ -52,25 +53,22 @@
     [self setScrollViewProperty];
     [self refreshScrollView];
 }
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setStatueBar];
+}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self resetStatueBar];
 }
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setStatueBar];
-    
-}
+
 - (void)setStatueBar
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self.navigationController.view bringSubviewToFront:self.view];
-//    if (!_cusBar.superview)
-//        [self.view addSubview:_cusBar];
 }
 - (void)resetStatueBar
 {
@@ -80,7 +78,7 @@
 
 - (void)upCusTitle
 {
-    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum, _assetsArray.count]];
+    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
 }
 
 - (void)initSubViews
@@ -115,13 +113,12 @@
     _cusBar.nLabelText.textColor = [UIColor whiteColor];
     _cusBar.nLabelText.font = [UIFont systemFontOfSize:22];
     [self upCusTitle];
-    [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
-    [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
+    [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"full_screen_download_icon.png"] forState:UIControlStateNormal];
+    [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
     [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
     [self.view addSubview:_cusBar];
-    
-    _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
-    [self.view addSubview:_tabBar];
+//    _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
+//    [self.view addSubview:_tabBar];
 }
 - (void)setScrollViewProperty
 {
@@ -150,27 +147,42 @@
 }
 - (void)refreshScrollViewOnMinBounds
 {
+#ifdef FLAG
     _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:0]];
     _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
     _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:2]];
+#else
+    [self setImageView:_fontScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:0]];
+    [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:1]];
+    [self setImageView:_rearScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:2]];
+#endif
+    
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointZero];
     Imagestate = AtLess;
 }
 - (void)refreshScrollViewOnMaxBounds
 {
+#ifdef FLAG
     _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
     _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
     _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
+#else
+    [self setImageView:_fontScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
+    [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
+    [self setImageView:_rearScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
+#endif
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * 2,0)];
     Imagestate = AtMore;
 }
 - (void)refreshScrollViewWhenPhotonumLessThree
 {
+#ifdef FLAG
     _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:0]];
     if (_assetsArray.count == 2) {
         _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
+
     }else if(_assetsArray.count == 3){
         _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
         _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:2]];
@@ -178,6 +190,19 @@
         _curScaleImage.imageView.image = nil;
         _rearScaleImage.imageView.image = nil;
     }
+#else
+    [self setImageView:_fontScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:0]];
+    if (_assetsArray.count == 2) {
+        [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:2]];
+        
+    }else if(_assetsArray.count == 3){
+        [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:1]];
+        [self setImageView:_rearScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:2]];
+    }else{
+        _curScaleImage.imageView.image = nil;
+        _rearScaleImage.imageView.image = nil;
+    }
+#endif
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * _curPageNum, 0)];
 }
@@ -186,26 +211,31 @@
     if ([self getDisplayImagesWithCurpage:_curPageNum])
     {
         //read images into curImages
-        _fontScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:0]];
+#ifdef FLAG
+        _fontScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:0] ];
         _curScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:1]];
         _rearScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:2]];
+#else
+        [self setImageView:_fontScaleImage.imageView WithAsset:[_curImageArray objectAtIndex:0]];
+        [self setImageView:_curScaleImage.imageView WithAsset:[_curImageArray objectAtIndex:1]];
+        [self setImageView:_rearScaleImage.imageView WithAsset:[_curImageArray objectAtIndex:2]];
+#endif
         [self resetAllImagesFrame];
         [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
     }
     Imagestate = AtNomal;
 }
 
-
 #pragma mark - ScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
-//    if (![aScrollView isDragging] || !_assetsArray || !_assetsArray.count)      return;
+
     if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];
         return;
     }
-    int x = aScrollView.contentOffset.x;
+    int  x = aScrollView.contentOffset.x;
     if (x == aScrollView.frame.size.width) {
         if (Imagestate != AtNomal) {
             if (Imagestate == AtLess) _curPageNum++;
@@ -215,17 +245,44 @@
         }
         return;
     }
-    if(x == (aScrollView.frame.size.width * 2)) {
+    if(x >= (aScrollView.frame.size.width * 2) && _curPageNum <= _assetsArray.count - 2) {
         _curPageNum = [self validPageValue:_curPageNum + 1];
         [self refreshScrollView];
         return;
     }
-    if(x == 0) {
+    if(x == (aScrollView.frame.size.width * 2) && _curPageNum == _assetsArray.count - 2) {
+        _curPageNum = [self validPageValue:_curPageNum + 1];
+        [self refreshScrollView];
+        return;
+    }
+    if(x <= 0 && _curPageNum >= 1) {
         _curPageNum = [self validPageValue:_curPageNum - 1];
         [self refreshScrollView];
+        return;
+    }
+    if(x == 0  && _curPageNum == 1) {
+        _curPageNum = [self validPageValue:_curPageNum - 1];
+        [self refreshScrollView];
+        return;
     }
 }
-
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
+                                            0), ^{
+        [self setActureImage];
+    });
+}
+- (void)setActureImage
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+     _curScaleImage.imageView.image = [UIImage imageWithCGImage:[[(ALAsset *)[_assetsArray objectAtIndex:_curPageNum] defaultRepresentation] fullResolutionImage]];
+    });
+}
 #pragma mark - Function
 - (void)resetAllImagesFrame
 {
@@ -252,9 +309,13 @@
         imageView.frame = CGRectMake(0, 0, size.width,size.height);
     }
 }
+- (void)setImageView:(UIImageView *)imageView WithAsset:(ALAsset *)asset
+{
+    imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+}
 - (UIImage *)getImageFromAsset:(ALAsset *)asset
 {
-    return [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]];
+    return [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
 }
 - (NSArray *)getDisplayImagesWithCurpage:(int)page
 {    
@@ -278,22 +339,26 @@
 {
     if (button.tag == LEFTBUTTON)
         [self.navigationController popViewControllerAnimated:YES];
+    if (button.tag == RIGHT1BUTTON)
+        return ;
+    if (button.tag == RIGHT2BUTTON)
+         [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
 }
-- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
-{
-    if (button.tag == TABSHARETAG) {
-        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
-    }
-    if (button.tag == TABDOWNLOADNTAG) {
-        
-    }
-    if (button.tag == TABEDITTAG) {
-        
-    }
-    if (button.tag == TABDELETETAG) {
-        
-    }
-}
+//- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
+//{
+//    if (button.tag == TABSHARETAG) {
+//        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
+//    }
+//    if (button.tag == TABDOWNLOADNTAG) {
+//        
+//    }
+//    if (button.tag == TABEDITTAG) {
+//        
+//    }
+//    if (button.tag == TABDELETETAG) {
+//        
+//    }
+//}
 
 #pragma mark - handleGuesture
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
@@ -309,9 +374,9 @@
     [self.view setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
         CGRect navBar = CGRectMake(0, 20, 320, 44);
-        CGRect tabBar = CGRectMake(0, self.view.frame.size.height - 44, 320, 44);
+//        CGRect tabBar = CGRectMake(0, self.view.frame.size.height - 44, 320, 44);
         _cusBar.frame = navBar;
-        _tabBar.frame = tabBar;
+//        _tabBar.frame = tabBar;
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
     } completion:^(BOOL finished) {
         [self.view setUserInteractionEnabled:YES];
@@ -323,10 +388,10 @@
     [self.view setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
         CGRect navBar = CGRectMake(0, -44, 320, 44);
-        CGRect tabBar = CGRectMake(0, self.view.frame.size.height, 320, 44);
+//        CGRect tabBar = CGRectMake(0, self.view.frame.size.height, 320, 44);
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         _cusBar.frame = navBar;
-        _tabBar.frame = tabBar;
+//        _tabBar.frame = tabBar;
     } completion:^(BOOL finished) {
         [self.view setUserInteractionEnabled:YES];
         _isHidingBar = YES;

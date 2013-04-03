@@ -48,14 +48,13 @@
 - (void)qqLoginWithDelegate:(id<TencentSessionDelegate>)delegate
 {
     self.state = QQUpload;
-
     tencentOAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:delegate];
 //    tencentOAuth.localAppId = kURLSCHEMES;
-    NSArray * qqPermissions = [[NSArray arrayWithObjects:
+    NSArray * qqPermissions = [NSArray arrayWithObjects:
                                 kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
                                 kOPEN_PERMISSION_ADD_PIC_T, /** 上传图片并发表消息到腾讯微博 */
                                 kOPEN_PERMISSION_UPLOAD_PIC,  /** 上传一张照片到QQ空间相册(<b>需要申请权限</b>) */
-                                nil] retain];
+                                nil];
 	[tencentOAuth authorize:qqPermissions inSafari:NO];
 }
 
@@ -75,6 +74,7 @@
 }
 - (BOOL)ssoReturn:(NSURL *)url
 {
+    NSLog(@"%@",[url absoluteString]);
     if ([[url absoluteString] rangeOfString:@"wxd"].location != NSNotFound) {
         return  [WXApi handleOpenURL:url delegate:_tempDelegate];
     }

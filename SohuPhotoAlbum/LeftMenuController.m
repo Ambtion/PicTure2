@@ -28,6 +28,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.f, rect.size.width, rect.size.height)
                                               style:UITableViewStylePlain];
     _tableView.separatorColor = [UIColor clearColor];
+    _tableView.scrollEnabled = NO;
     _tableView.sectionHeaderHeight = 32;
     _tableView.dataSource = self;
     _tableView.delegate = self;

@@ -2157,7 +2157,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         return [self.panningGestureDelegate gestureRecognizer:gestureRecognizer
            shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer];
     }
-    
     return NO;
 }
 

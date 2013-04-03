@@ -10,13 +10,12 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "AppDelegate.h"
 #import "PhotoesCell.h"
-#import "BaseViewController.h"
+#import "CusTomerBarController.h"
 
-@interface LocalALLPhotoesController : BaseViewController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
+@interface LocalALLPhotoesController : CusTomerBarController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;
-    
     BOOL _isReading; //for app bacome background
 }
 @end

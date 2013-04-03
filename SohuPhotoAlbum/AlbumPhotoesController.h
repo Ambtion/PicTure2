@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoesCell.h"
-#import "BaseViewController.h"
+#import "CusTomerBarController.h"
 
-@interface AlbumPhotoesController : BaseViewController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
+@interface AlbumPhotoesController : CusTomerBarController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
 {
     ALAssetsGroup * _assetGroup;
     UITableView * _myTableView;

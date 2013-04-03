@@ -16,7 +16,7 @@ typedef enum ViewState {
     UPloadState ,
 }viewState;
 
-@interface BaseViewController : UIViewController<CusNavigationBarDelegate>
+@interface CusTomerBarController : UIViewController<CusNavigationBarDelegate>
 {
     CusNavigationBar * _cusBar;
     viewState _viewState;
