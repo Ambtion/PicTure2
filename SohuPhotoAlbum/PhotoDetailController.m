@@ -9,10 +9,10 @@
 #import "PhotoDetailController.h"
 #import "LocalShareController.h"
 #import "AppDelegate.h"
+#import "LimitCacheForImage.h"
 
 #define OFFSETX 20
 
-#define FLAG
 @interface PhotoDetailController ()
 @property(nonatomic,retain)NSArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
@@ -21,12 +21,13 @@
 @property(nonatomic,retain)ImageScaleView * curScaleImage;
 @property(nonatomic,retain)ImageScaleView * rearScaleImage;
 @property(nonatomic,retain)CusNavigationBar * cusBar;
+@property(nonatomic,retain)LimitCacheForImage * cache;
 @end
 
 @implementation PhotoDetailController
 @synthesize assetsArray = _assetsArray;
 @synthesize curPageNum = _curPageNum;
-@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar;
+@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar,cache = _cache;
 - (void)dealloc
 {
     [_assetsArray release];
@@ -36,6 +37,7 @@
     [_curScaleImage release];
     [_rearScaleImage release];
     [_cusBar release];
+    [_cache release];
 //    [_tabBar release];
     [super dealloc];
 }
@@ -46,6 +48,7 @@
         self.wantsFullScreenLayout = YES;
         self.curPageNum = [array indexOfObject:asset];
         self.assetsArray = [[array copy] autorelease];
+        self.cache = [[[LimitCacheForImage alloc] init] autorelease];
         _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
         _isHidingBar = NO;
         _isInit = YES;
@@ -164,9 +167,11 @@
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width * 3 , _scrollView.bounds.size.height);
     _scrollView.showsHorizontalScrollIndicator = NO;
 }
+
 #pragma mark - Ratation
 - (CGAffineTransform )getTransfrom
 {
+    if (!_isHidingBar) return CGAffineTransformIdentity;
     UIInterfaceOrientation orientation = (UIInterfaceOrientation)[[UIDevice currentDevice] orientation];
     if (UIInterfaceOrientationIsPortrait(orientation))
         return CGAffineTransformIdentity;
@@ -261,38 +266,26 @@
 }
 - (void)refreshScrollViewOnMinBounds
 {
-#ifdef FLAG
     _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:0]];
     _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
     _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:2]];
-#else
-    [self setImageView:_fontScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:0]];
-    [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:1]];
-    [self setImageView:_rearScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:2]];
-#endif
-    
+
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointZero];
     Imagestate = AtLess;
 }
 - (void)refreshScrollViewOnMaxBounds
 {
-#ifdef FLAG
     _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
     _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
     _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
-#else
-    [self setImageView:_fontScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
-    [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
-    [self setImageView:_rearScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
-#endif
+
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * 2,0)];
     Imagestate = AtMore;
 }
 - (void)refreshScrollViewWhenPhotonumLessThree
 {
-#ifdef FLAG
     _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:0]];
     if (_assetsArray.count == 2) {
         _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
@@ -304,19 +297,6 @@
         _curScaleImage.imageView.image = nil;
         _rearScaleImage.imageView.image = nil;
     }
-#else
-    [self setImageView:_fontScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:0]];
-    if (_assetsArray.count == 2) {
-        [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:2]];
-        
-    }else if(_assetsArray.count == 3){
-        [self setImageView:_curScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:1]];
-        [self setImageView:_rearScaleImage.imageView WithAsset:[_assetsArray objectAtIndex:2]];
-    }else{
-        _curScaleImage.imageView.image = nil;
-        _rearScaleImage.imageView.image = nil;
-    }
-#endif
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * _curPageNum, 0)];
 }
@@ -325,15 +305,10 @@
     if ([self getDisplayImagesWithCurpage:_curPageNum])
     {
         //read images into curImages
-#ifdef FLAG
         _fontScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:0] ];
         _curScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:1]];
         _rearScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:2]];
-#else
-        [self setImageView:_fontScaleImage.imageView WithAsset:[_curImageArray objectAtIndex:0]];
-        [self setImageView:_curScaleImage.imageView WithAsset:[_curImageArray objectAtIndex:1]];
-        [self setImageView:_rearScaleImage.imageView WithAsset:[_curImageArray objectAtIndex:2]];
-#endif
+
         [self resetAllImagesFrame];
         [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
     }
@@ -389,11 +364,24 @@
     });
     canGetActualImage =  NO;
 }
+#pragma mark - GetImageFromAsset
+
+- (void)setImageView:(UIImageView *)imageView WithAsset:(ALAsset *)asset
+{
+    imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+}
+- (UIImage *)getImageFromAsset:(ALAsset *)asset
+{
+    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
+    if (!image) {
+        image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+    }
+    return image;
+}
 - (void)setActureImage
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (Imagestate == AtLess) {
-//            NSLog(@"%d",[_fontScaleImage.imageView.image imageOrientation]);
             _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
         }else if (Imagestate == AtMore) {
             _rearScaleImage.imageView.image = [self getActualImage:[_assetsArray lastObject] andOrientation:0];
@@ -404,7 +392,19 @@
 }
 - (UIImage *)getActualImage:(ALAsset *)asset andOrientation:(UIImageOrientation)orientation
 {
-    return [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];
+    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
+    if (!image) {
+        image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
+        });
+    }
+    return image;
+}
+- (UIImage *)getImageFromCacheWithKey:(id)aKey
+{
+    NSData * imageData = [self.cache objectForKey:aKey];
+    return [UIImage imageWithData:imageData];
 }
 #pragma mark - Function
 - (void)resetAllImagesFrame
@@ -429,14 +429,7 @@
         imageView.frame = CGRectMake(0, 0, size.width,size.height);
     }
 }
-- (void)setImageView:(UIImageView *)imageView WithAsset:(ALAsset *)asset
-{
-    imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
-}
-- (UIImage *)getImageFromAsset:(ALAsset *)asset
-{
-    return [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
-}
+
 - (NSArray *)getDisplayImagesWithCurpage:(int)page
 {    
     int pre = [self validPageValue:_curPageNum -1];

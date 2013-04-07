@@ -207,6 +207,7 @@
 		C5A32BC3170706A00084B253 /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A32BBC170706A00084B253 /* SinaWeiboAuthorizeView.m */; };
 		C5A32BC4170706A00084B253 /* SinaWeiboRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A32BBF170706A00084B253 /* SinaWeiboRequest.m */; };
 		C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */; };
+		C5B76EF71711829E001FCC8C /* LimitCacheForImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF61711829E001FCC8C /* LimitCacheForImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -513,6 +514,8 @@
 		C5A32BBF170706A00084B253 /* SinaWeiboRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeiboRequest.m; sourceTree = "<group>"; };
 		C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
+		C5B76EF51711829E001FCC8C /* LimitCacheForImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitCacheForImage.h; sourceTree = "<group>"; };
+		C5B76EF61711829E001FCC8C /* LimitCacheForImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitCacheForImage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -560,6 +563,8 @@
 				C583CF3C1704503A00CD3485 /* CusTabBar.m */,
 				C57ED93C17028C9B00505ECF /* PhotoDetailController.h */,
 				C57ED93D17028C9B00505ECF /* PhotoDetailController.m */,
+				C5B76EF51711829E001FCC8C /* LimitCacheForImage.h */,
+				C5B76EF61711829E001FCC8C /* LimitCacheForImage.m */,
 				C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */,
 				C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */,
 				C57ED93917028A1900505ECF /* ImageScaleView.h */,
@@ -1434,6 +1439,7 @@
 				C584D117170BBF7A00ACCD7C /* LoginViewController.m in Sources */,
 				C584D13B170BC1F100ACCD7C /* EmailTextField.m in Sources */,
 				C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */,
+				C5B76EF71711829E001FCC8C /* LimitCacheForImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -72,6 +72,7 @@
 }
 - (void)scrollViewDidZoom:(UIScrollView *)aScrollView
 {
+    //保持X,Y方向的偏移量一致(也就是时刻保持居中)
     CGFloat offsetX = (self.bounds.size.width > self.contentSize.width) ?
     (self.bounds.size.width - self.contentSize.width) * 0.5 : 0.0;
     CGFloat offsetY = (self.bounds.size.height > self.contentSize.height)?
@@ -79,6 +80,7 @@
     _imageView.center = CGPointMake(self.contentSize.width * 0.5 + offsetX,
                                    self.contentSize.height * 0.5 + offsetY);
 }
+
 #pragma mark Scale Funciton
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center
 {
@@ -90,6 +92,7 @@
     zoomRect.size.width  = [self frame].size.width  / scale;
     
     // choose an origin so as to get the right center.
+    //make gesture location as the scale center,then get origin
     zoomRect.origin.x    = center.x - (zoomRect.size.width  / 2.0);
     zoomRect.origin.y    = center.y - (zoomRect.size.height / 2.0);
     return zoomRect;
