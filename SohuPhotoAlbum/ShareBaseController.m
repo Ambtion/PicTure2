@@ -19,7 +19,7 @@
 {
     self = [super init];
     if (self) {
-        self.labelText  = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 15, self.frame.size.width, 15)];
+        self.labelText  = [[[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 15, self.frame.size.width, 15)] autorelease];
         self.labelText.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         self.autoresizesSubviews = YES;
         [self addSubview:self.labelText];
@@ -30,7 +30,7 @@
 {
     [super setFrame:frame];
     if (!self.labelText) {
-        self.labelText  = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 19, self.frame.size.width, 13)];
+        self.labelText  = [[[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 19, self.frame.size.width, 13)] autorelease];
         self.labelText.font = [UIFont systemFontOfSize:12];
         self.labelText.textAlignment = UITextAlignmentCenter;
         self.labelText.backgroundColor = [UIColor clearColor];
@@ -62,7 +62,7 @@
     self.view.backgroundColor = BACKGORUNDCOLOR;
     CGFloat offset = 20.f;
     
-    UIImageView * bgIVw = [[UIImageView alloc] initWithFrame:CGRectMake((320 - 144)/2.f, 8 + offset, 144, 144)];
+    UIImageView * bgIVw = [[[UIImageView alloc] initWithFrame:CGRectMake((320 - 144)/2.f, 8 + offset, 144, 144)] autorelease];
     bgIVw.image = [UIImage imageNamed:@"share_pic_frame.png"];
     UIImageView * imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 124, 124)] autorelease];
     imageView.image = [UIImage imageWithCGImage:[[self.uploadAsset defaultRepresentation] fullScreenImage]];

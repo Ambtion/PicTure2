@@ -22,18 +22,21 @@ typedef enum _imageStatePosition
 
 @interface PhotoDetailController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusNavigationBarDelegate>
 {
-    UIScrollView *_scrollView;
+    UIScrollView * _scrollView;
     ImageScaleView * _fontScaleImage;
     ImageScaleView * _curScaleImage;
     ImageScaleView * _rearScaleImage;
     NSMutableArray * _curImageArray;
     imageStatePosition Imagestate;
+    CusNavigationBar * _cusBar;
+
+    BOOL canGetActualImage;
 //    CusTabBar * _tabBar;
     BOOL _isHidingBar;
-    ALAssetsLibrary * _library;
-    CusNavigationBar * _cusBar;
-    NSOperationQueue * quene;
-        
+    BOOL _isInit;
+    BOOL _isRotating;
+    BOOL _isAnimating;
+    
 }
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset;
 

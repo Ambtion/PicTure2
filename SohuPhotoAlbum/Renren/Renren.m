@@ -69,11 +69,11 @@ static Renren *sharedRenren = nil;
 }
 
 + (Renren *)newRenRen{
-    Renren *newRenrenObject = [[Renren alloc] init];
+    Renren *newRenrenObject = [[[Renren alloc] init] autorelease];
     [newRenrenObject isSessionValid];
     newRenrenObject.appKey = kAPI_Key;
     newRenrenObject.appId = kAPP_ID;
-    return [newRenrenObject autorelease];
+    return newRenrenObject;
 }
 
 + (Renren *)sharedRenren {

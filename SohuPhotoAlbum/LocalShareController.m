@@ -142,7 +142,6 @@
 	if(![[[self Appdelegate] tencentOAuth] uploadPicWithParams:params]){
         [self showInvalidTokenOrOpenIDMessageWithMes:@"error"];
     }
-	[img release];
 }
 - (void)uploadPicResponse:(APIResponse*) response {
 	if (response.retCode == URLREQUEST_SUCCEED)

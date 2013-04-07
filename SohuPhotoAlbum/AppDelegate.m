@@ -32,20 +32,14 @@
     LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
     
     IIViewDeckController *vc = [[[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC] autorelease];
-    UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:vc];
-    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
+    UINavigationController * nav =[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+//    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
-    
     //INIT DATABASE
     [DataBaseManager defaultDataBaseManager];
 //    [application setStatusBarHidden:NO];
     return YES;
 }
-
-
-
-
-
 
 @end

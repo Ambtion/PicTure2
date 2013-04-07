@@ -30,6 +30,7 @@
 {
     self.maximumZoomScale = 2.f;
     self.minimumZoomScale = 1.f;
+    self.bouncesZoom = YES;
     self.backgroundColor = [UIColor clearColor];
     self.delegate = self;
 }
@@ -40,9 +41,9 @@
     _imageView.backgroundColor = [UIColor clearColor];
     [self addSubview:_imageView];
     [_imageView setUserInteractionEnabled:YES];
-    UITapGestureRecognizer * tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)];
+    UITapGestureRecognizer * tapGesture1 = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)] autorelease];
     tapGesture1.numberOfTapsRequired = 1;
-    UITapGestureRecognizer * tapGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)];
+    UITapGestureRecognizer * tapGesture2 = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)] autorelease];
     tapGesture2.numberOfTapsRequired = 2;
     [_imageView addGestureRecognizer:tapGesture1];
     [_imageView addGestureRecognizer:tapGesture2];
@@ -51,11 +52,12 @@
 }
 - (void)handleTapgestureWithTap:(UITapGestureRecognizer *)tap
 {
+    
     if (tap.numberOfTapsRequired == 2) {
         if (self.zoomScale != self.maximumZoomScale) {
-            [self setZoomScale:self.maximumZoomScale animated:YES];
+            [self zoomToRect:[self zoomRectForScale:self.maximumZoomScale withCenter:[tap locationInView:tap.view]] animated:YES];
         }else{
-            [self setZoomScale:self.minimumZoomScale animated:YES];
+            [self zoomToRect:[self zoomRectForScale:self.minimumZoomScale withCenter:[tap locationInView:tap.view]] animated:YES];
         }
     }
     if (tap.numberOfTapsRequired == 1) {
@@ -63,9 +65,33 @@
             [_Adelegate imageViewScale:self clickCurImage:_imageView];
     }
 }
+
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return _imageView;
 }
-
+- (void)scrollViewDidZoom:(UIScrollView *)aScrollView
+{
+    CGFloat offsetX = (self.bounds.size.width > self.contentSize.width) ?
+    (self.bounds.size.width - self.contentSize.width) * 0.5 : 0.0;
+    CGFloat offsetY = (self.bounds.size.height > self.contentSize.height)?
+    (self.bounds.size.height - self.contentSize.height) * 0.5 : 0.0;
+    _imageView.center = CGPointMake(self.contentSize.width * 0.5 + offsetX,
+                                   self.contentSize.height * 0.5 + offsetY);
+}
+#pragma mark Scale Funciton
+- (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center
+{
+    CGRect zoomRect;
+    // the zoom rect is in the content view's coordinates.
+    //    At a zoom scale of 1.0, it would be the size of the imageScrollView's bounds.
+    //    As the zoom scale decreases, so more content is visible, the size of the rect grows.
+    zoomRect.size.height = [self frame].size.height / scale;
+    zoomRect.size.width  = [self frame].size.width  / scale;
+    
+    // choose an origin so as to get the right center.
+    zoomRect.origin.x    = center.x - (zoomRect.size.width  / 2.0);
+    zoomRect.origin.y    = center.y - (zoomRect.size.height / 2.0);
+    return zoomRect;
+}
 @end

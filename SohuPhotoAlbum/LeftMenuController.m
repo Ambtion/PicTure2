@@ -28,7 +28,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.f, rect.size.width, rect.size.height)
                                               style:UITableViewStylePlain];
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.scrollEnabled = NO;
+    _tableView.scrollEnabled = YES;
     _tableView.sectionHeaderHeight = 32;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -63,7 +63,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
         AccountCell * cell = [tableView dequeueReusableCellWithIdentifier:accout];
         if (!cell)
             cell = [[[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accout] autorelease];
-        cell.labelText.text = @"账号";
+        cell.labelText.text = @"账号登陆";
         return cell;
     }
     MenuCell * cell = [tableView dequeueReusableCellWithIdentifier:str];

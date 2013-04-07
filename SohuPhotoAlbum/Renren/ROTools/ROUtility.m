@@ -169,9 +169,9 @@
 
 + (UIImage *)getImageWithWatermark:(UIImage *)inImage{
     CGRect imageViewFrame = CGRectMake(0, 0, inImage.size.width, inImage.size.height);
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:inImage];
+    UIImageView *imageView = [[[UIImageView alloc] initWithImage:inImage] autorelease];
     imageView.frame = imageViewFrame;
-    UILabel *label = [[UILabel alloc] init];
+    UILabel *label = [[[UILabel alloc] init] autorelease];
     CGRect labelFrame = CGRectMake(10, imageViewFrame.size.height-40, imageViewFrame.size.width-20, 30);
     label.frame = labelFrame;
     label.text = kWatermarkString;
