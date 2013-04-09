@@ -79,15 +79,16 @@
 {
     [super viewWillDisappear:animated];
     [self resetStatueBar];
-    if ([[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications])
-        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 
 }
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self
+    [[NSNotificationCenter defaultCegnter] addObserver:self
                                              selector:@selector(listOrientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
@@ -96,7 +97,6 @@
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    [self.navigationController.view bringSubviewToFront:self.view];
 }
 - (void)resetStatueBar
 {
@@ -258,6 +258,7 @@
 }
 - (void)listOrientationChanged:(NSNotification *)notification
 {
+//    NSLog(@"%s",__FUNCTION__ );
     if (_isInit || !_isHidingBar) return;
     [self.view setUserInteractionEnabled:NO];
     _isAnimating = YES;

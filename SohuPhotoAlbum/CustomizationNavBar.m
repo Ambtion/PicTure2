@@ -42,7 +42,6 @@
     self = [super initWithFrame:CGRectMake(0, 0, 320, 44)];
     if (self) {
         [self setUserInteractionEnabled:YES];
-        
         _normalBar = [[UIImageView alloc] initWithFrame:self.bounds];
         [_normalBar setUserInteractionEnabled:YES];
         _normalBar.image = [UIImage imageNamed:@"title-bar.png"];

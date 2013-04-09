@@ -13,6 +13,8 @@
 @synthesize isShowStatus;
 - (void)dealloc
 {
+//    [_statuImage removeObserver:self forKeyPath:@"image"];
+    [_actualView release];
     [_statuImage release];
     [super dealloc];
 }
@@ -20,17 +22,25 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.backgroundColor = [UIColor clearColor];
         _actualView = [[UIImageView alloc] initWithFrame:self.bounds];
         [self addSubview:_actualView];
+        _actualView.layer.borderWidth = 0.5f;
+        _actualView.layer.borderColor = [[UIColor colorWithRed:192.f/255.f green:192.f/255.f blue:192.f/255.f alpha:1.f]CGColor];
+        _actualView.layer.shouldRasterize = YES;
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
+//        [_statuImage addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
         [self addSubview:_statuImage];
         self.backgroundColor = [UIColor clearColor];
         [self resetStatusImageToHidden];
     }
     return self;
 }
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    
+//}
 - (void)setSelected:(BOOL)selected
 {
     if (!isShowStatus)
@@ -38,7 +48,9 @@
     _selected = selected;
     if (selected) {
         [_actualView setAlpha:1.f];
+        [self shouldShowAcutalViewLayer:NO];
         [_statuImage setImage:[UIImage imageNamed:@"check_box_select_image.png"]];
+        
     }else{
         [self uploadStatus];
     }
@@ -67,8 +79,10 @@
     if (isUpload) {
         [_actualView setAlpha:0.5];
         [_statuImage setImage:[UIImage imageNamed:@"upload_pic.png"]];
+        [self shouldShowAcutalViewLayer:YES];
     }else{
         [_actualView setAlpha:0.5], [_statuImage setImage:nil];
+        [self shouldShowAcutalViewLayer:NO];
     }
 }
 - (void)resetStatusImageToHidden
@@ -79,11 +93,26 @@
     [_actualView setAlpha:1.0];
     [_statuImage setHidden:YES];
     _statuImage.image = nil;
-    [_statuImage setBackgroundColor:[UIColor clearColor]];
+}
+- (void)shouldShowAcutalViewLayer:(BOOL)isShow
+{
+    if (isShow || _actualView.image) {
+        [_actualView.layer setBorderWidth:0.5f];
+    }else{
+        [_actualView.layer setBorderWidth:0.0f];
+    }
 }
 #pragma mark - Reloadfunctions
 - (void)setImage:(UIImage *)image
 {
+    if (!image) {
+//        NSLog(@"%s",__FUNCTION__);
+        [self setUserInteractionEnabled:NO];
+        _actualView.layer.borderWidth = 0.f;
+    }else{
+        [self setUserInteractionEnabled:YES];
+        _actualView.layer.borderWidth = 0.5f;
+    }
     _actualView.image = image;
 }
 - (UIImage *)image
