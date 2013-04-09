@@ -88,7 +88,7 @@
 {
     [super viewDidAppear:animated];
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCegnter] addObserver:self
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(listOrientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
