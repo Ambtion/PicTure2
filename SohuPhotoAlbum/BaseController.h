@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CusNavigationBar.h"
+#import "CustomizationNavBar.h"
+
 
 #define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
@@ -16,9 +17,9 @@ typedef enum ViewState {
     UPloadState ,
 }viewState;
 
-@interface CusTomerBarController : UIViewController<CusNavigationBarDelegate>
+@interface BaseController : UIViewController<CusNavigationBarDelegate>
 {
-    CusNavigationBar * _cusBar;
+    CustomizationNavBar * _cusBar;
     viewState _viewState;
 }
 - (CGRect)subTableViewRect;

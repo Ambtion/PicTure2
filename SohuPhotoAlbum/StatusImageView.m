@@ -23,7 +23,6 @@
         
         _actualView = [[UIImageView alloc] initWithFrame:self.bounds];
         [self addSubview:_actualView];
-        
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
         [self addSubview:_statuImage];
@@ -34,9 +33,8 @@
 }
 - (void)setSelected:(BOOL)selected
 {
-    if (!isShowStatus) {
+    if (!isShowStatus)
         return;
-    }
     _selected = selected;
     if (selected) {
         [_actualView setAlpha:1.f];

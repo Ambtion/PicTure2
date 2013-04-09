@@ -14,22 +14,24 @@
 #define OFFSETX 20
 
 @interface PhotoDetailController ()
-@property(nonatomic,retain)NSArray * assetsArray;
+@property(nonatomic,retain)NSMutableArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
 @property(nonatomic,retain)UIScrollView * scrollView;
 @property(nonatomic,retain)ImageScaleView * fontScaleImage;
 @property(nonatomic,retain)ImageScaleView * curScaleImage;
 @property(nonatomic,retain)ImageScaleView * rearScaleImage;
-@property(nonatomic,retain)CusNavigationBar * cusBar;
+@property(nonatomic,retain)CustomizationNavBar * cusBar;
 @property(nonatomic,retain)LimitCacheForImage * cache;
+@property(nonatomic,retain)ALAssetsGroup * group;
 @end
 
 @implementation PhotoDetailController
 @synthesize assetsArray = _assetsArray;
 @synthesize curPageNum = _curPageNum;
-@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar,cache = _cache;
+@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar,cache = _cache,group = _group;
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_assetsArray release];
     [_curImageArray release];
     [_scrollView release];
@@ -39,9 +41,11 @@
     [_cusBar release];
     [_cache release];
 //    [_tabBar release];
+    [_libiary release];
+    self.group = nil; //不一定创建
     [super dealloc];
 }
-- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset
+- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
 {
     self = [super init];
     if (self) {
@@ -53,6 +57,7 @@
         _isHidingBar = NO;
         _isInit = YES;
         _isRotating = NO;
+        self.group = group;
     }
     return self;
 }
@@ -62,6 +67,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [self reloadAllSubViews];
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -102,8 +108,50 @@
 {
     [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
 }
-
-#pragma mark reloadSubViews
+#pragma mark  -  ReadData
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    [self readPhotoes];
+}
+- (void)readPhotoes
+{
+    ALAsset * asset = [self.assetsArray objectAtIndex:_curPageNum];
+    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
+    if (!_libiary)
+        _libiary = [[ALAssetsLibrary alloc] init];
+    NSMutableArray * tempArry = [NSMutableArray arrayWithCapacity:0];
+    if (!self.group) {
+        [_libiary readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
+            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
+        } failture:^(NSError *error) {
+            
+        }];
+    }else{
+        [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
+            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
+        }];
+    }
+}
+- (NSMutableArray *)revertObjectArray:(NSMutableArray *)array
+{
+    NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
+    for (int i = array.count - 1; i >= 0; i--)
+        [finalArray addObject:[array objectAtIndex:i]];
+    return finalArray;
+}
+- (void)resetCurNumWhenAssetArryChangeWithPreAsset:(ALAsset *)asset
+{
+    self.assetsArray = [self revertObjectArray:self.assetsArray]; //逆序排序
+    NSUInteger curnum = [self.assetsArray indexOfObject:asset];
+    if (curnum == NSNotFound) {
+        _curPageNum = [self validPageValue:_curPageNum];
+    }else{
+        _curPageNum =  curnum;
+    }
+    _canGetActualImage = YES;
+    [self refreshScrollView];
+}
+#pragma mark - ReloadSubViews
 - (void)reloadAllSubViews
 {
     [self initSubViews];
@@ -142,7 +190,7 @@
 }
 - (void)addBar
 {
-    self.cusBar = [[[CusNavigationBar alloc] initwithDelegate:self] autorelease];
+    self.cusBar = [[[CustomizationNavBar alloc] initwithDelegate:self] autorelease];
     if (_isHidingBar) {
         _cusBar.frame = CGRectMake(0, -44, 320, 44);
     }else{
@@ -220,15 +268,11 @@
         transform = CGAffineTransformInvert(self.view.transform);
         CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:YES];
         scale = MIN( identifySzie.width / [self getCurrentImageView].imageView.frame.size.width, identifySzie.height / [self getCurrentImageView].frame.size.height);
-//        NSLog(@"identifySziepor change:%@",NSStringFromCGSize(identifySzie));
-//        NSLog(@"NNN:%f %@",scale,NSStringFromCGSize(CGSizeMake([self getCurrentImageView].imageView.frame.size.width * scale, [self getCurrentImageView].imageView.frame.size.height * scale)));
+
     }else{
         CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:NO];
-//        NSLog(@"identifySzie change:%@",NSStringFromCGSize(identifySzie));
         scale = MIN( identifySzie.width / [self getCurrentImageView].imageView.frame.size.width, identifySzie.height / [self getCurrentImageView].imageView.frame.size.height);
         transform = [self getTransfrom];
-//        NSLog(@"MMM:%f %@",scale,NSStringFromCGSize(CGSizeMake([self getCurrentImageView].imageView.frame.size.width * scale, [self getCurrentImageView].imageView.frame.size.height * scale)));
-
     }
     transform  = CGAffineTransformConcat(transform, CGAffineTransformMakeScale(scale, scale));
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut    animations:^{
@@ -249,7 +293,7 @@
 - (void)refreshScrollView
 {
     if (!_assetsArray.count) return;
-    canGetActualImage = YES;
+    _canGetActualImage = YES;
     //prevent than  when seting offset it can  scrollViewDidScroll
     _scrollView.delegate = nil;
     [self upCusTitle];
@@ -272,7 +316,7 @@
 
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointZero];
-    Imagestate = AtLess;
+    _imagestate = AtLess;
 }
 - (void)refreshScrollViewOnMaxBounds
 {
@@ -282,7 +326,7 @@
 
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * 2,0)];
-    Imagestate = AtMore;
+    _imagestate = AtMore;
 }
 - (void)refreshScrollViewWhenPhotonumLessThree
 {
@@ -312,7 +356,7 @@
         [self resetAllImagesFrame];
         [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
     }
-    Imagestate = AtNomal;
+    _imagestate = AtNomal;
 }
 
 #pragma mark - ScrollView Delegate
@@ -326,10 +370,10 @@
     }
     int  x = aScrollView.contentOffset.x;
     if (x == aScrollView.frame.size.width) {
-        if (Imagestate != AtNomal) {
-            if (Imagestate == AtLess) _curPageNum++;
-            if (Imagestate == AtMore) _curPageNum--;
-            Imagestate = AtNomal;
+        if (_imagestate != AtNomal) {
+            if (_imagestate == AtLess) _curPageNum++;
+            if (_imagestate == AtMore) _curPageNum--;
+            _imagestate = AtNomal;
             [self refreshScrollView];
         }
         return;
@@ -358,11 +402,25 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if (!canGetActualImage)     return;
+    [self fixScrollViewOffset:scrollView];
+    if (!_canGetActualImage)     return;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self setActureImage];
     });
-    canGetActualImage =  NO;
+    _canGetActualImage =  NO;
+}
+- (void)fixScrollViewOffset:(UIScrollView *)scrollView
+{
+    CGPoint point = CGPointZero;
+    point.y = 0;
+    if (_curPageNum > 0 && _curPageNum < self.assetsArray.count - 1) {
+        point.x = scrollView.frame.size.width;
+    }else if(_curPageNum == 0){
+        point.x = 0;
+    }else{
+        point.x = scrollView.frame.size.width * 2;
+    }
+    [scrollView setContentOffset:point animated:NO];
 }
 #pragma mark - GetImageFromAsset
 
@@ -381,9 +439,28 @@
 - (void)setActureImage
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (Imagestate == AtLess) {
+        if (_assetsArray.count <= 3) {
+            switch (_assetsArray.count) {
+                case 1:
+                    _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+                    break;
+                case 2:
+                    _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+                    _curScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
+                    break;
+                case 3:
+                    _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+                    _curScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
+                    _rearScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:2] andOrientation:0];
+                    break;
+                default:
+                    break;
+            }
+            return ;
+        }
+        if (_imagestate == AtLess) {
             _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-        }else if (Imagestate == AtMore) {
+        }else if (_imagestate == AtMore) {
             _rearScaleImage.imageView.image = [self getActualImage:[_assetsArray lastObject] andOrientation:0];
         }else{
             _curScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:_curPageNum] andOrientation:0];
@@ -448,7 +525,7 @@
     return value;
 }
 #pragma mark - BarDelegate
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON)
         [self.navigationController popViewControllerAnimated:YES];
@@ -510,5 +587,11 @@
         [self.view setUserInteractionEnabled:YES];
         _isHidingBar = YES;
     }];
+}
+#pragma mark didReceiveMemoryWarning
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [self.cache clear];
 }
 @end

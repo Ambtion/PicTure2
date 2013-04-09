@@ -40,14 +40,14 @@
     [_myTableView setScrollsToTop:YES];
     [self.view addSubview:_myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [self readAlbum];
 }
 #pragma mark - CUSBar
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self readAlbum];
     if (!_cusBar){
-        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
@@ -70,7 +70,7 @@
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 
 }
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
@@ -96,29 +96,14 @@
 {
     if (_isReading) return;
     _isReading = YES;
-    
     if (!_library)
         _library = [[ALAssetsLibrary alloc] init];
 	self.assetGroups = [NSMutableArray arrayWithCapacity:0];
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    // Load Albums into assetGroups
-    [_library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        if (group == nil)
-        {
-            //finished
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self prepareData];
-            });
-            return ;
-        }
-        if ([group numberOfAssets]){
-            [self.assetGroups addObject:group];
-        }
-            
-    } failureBlock:^(NSError *error) {
+    [_library readAlbumsIntoGroupArray:self.assetGroups sucess:^{
+        [self prepareData];
+    } failture:^(NSError *error) {
         
     }];
-    [pool drain];
 }
 
 - (void)prepareData

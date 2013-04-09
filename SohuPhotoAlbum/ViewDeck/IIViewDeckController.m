@@ -277,7 +277,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         _elastic = YES;
         _willAppearShouldArrangeViewsAfterRotation = (UIInterfaceOrientation)UIDeviceOrientationUnknown;
         _panningMode = IIViewDeckFullViewPanning;
-//        _navigationControllerBehavior = IIViewDeckNavigationControllerContained;
         _navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
         _centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
         _sizeMode = IIViewDeckLedgeSizeMode;
@@ -2940,6 +2939,7 @@ static const char* viewDeckControllerKey = "ViewDeckController";
 }
 
 + (void)vdc_swizzle {
+    
     SEL presentModal = @selector(presentModalViewController:animated:);
     SEL vdcPresentModal = @selector(vdc_presentModalViewController:animated:);
     method_exchangeImplementations(class_getInstanceMethod(self, presentModal), class_getInstanceMethod(self, vdcPresentModal));

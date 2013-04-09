@@ -31,9 +31,12 @@
     //左菜单
     LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
     
-    IIViewDeckController *vc = [[[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC] autorelease];
-    UINavigationController * nav =[[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
-//    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
+    IIViewDeckController *deckViewController = [[[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC] autorelease];
+    deckViewController.navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
+    deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
+    
+    UINavigationController * nav =[[[UINavigationController alloc] initWithRootViewController:deckViewController] autorelease];
+    
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     //INIT DATABASE

@@ -67,4 +67,9 @@ static natural_t get_free_memory(void)
 {
     return [cacheContainer objectForKey:aKey];
 }
+- (void)clear
+{
+    if ([cacheContainer allKeys].count)
+        [cacheContainer removeAllObjects];
+}
 @end

@@ -9,7 +9,6 @@
 #import "LocalALLPhotoesController.h"
 #import "LocalAlbumsController.h"
 #import "PhotoDetailController.h"
-
 #import "LoginStateManager.h"
 #import "LoginViewController.h"
 
@@ -53,15 +52,15 @@
     [_myTableView setScrollsToTop:YES];
     self.selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:_myTableView];
+    [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self readAlbum];
     if (!_cusBar){
-        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
@@ -80,11 +79,12 @@
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
 
-#pragma mark - read data
+#pragma mark - ReadData
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readAlbum];
 }
+
 - (void) readAlbum
 {
     if (_isReading) return;
@@ -92,60 +92,24 @@
     if (!_library)
         _library = [[ALAssetsLibrary alloc] init];
 	self.assetGroups = [NSMutableArray arrayWithCapacity:0];
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    // Load Albums into assetGroups
-    [_library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        if (group == nil)
-        {
-            //finished
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self readPhotoes];
-            });
-            return ;
-        }
-        if ([group numberOfAssets])
-            [self.assetGroups addObject:group];
-    } failureBlock:^(NSError *error) {
+    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
+    [_library readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+        [self prepareDataWithTimeOrder];
+    } failture:^(NSError *error) {
         
     }];
-    [pool drain];
 }
-- (void)readPhotoes
-{
-    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
-    [self readPhotoesWithgroup:self.assetGroups];
-}
-- (void)readPhotoesWithgroup:(NSMutableArray *)groupArray
-{
-    if (!groupArray.count) {
-        [self prepareDataWithTimeOrder];
-        return;
-    }
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [[groupArray lastObject] enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
-     {
-         if(result == nil){
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 [groupArray removeLastObject];
-                 [self readPhotoesWithgroup:groupArray];
-             });
-             return;
-         }
-         [self.assetsArray addObject:result];
-     }];
-    [pool release];
-}
-#pragma mark dataSort
+
+#pragma mark -  DataSort
 - (void)prepareDataWithTimeOrder
 {
     //asserts按日期大小排序;
     self.assetsArray = [[[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy] autorelease];
     //对asset分组
     [self divideAssettByDayTime];
-//    NSLog(@"<<<<-%@",((PhotoesCellDataSource *)[[self.dataSourceArray objectAtIndex:0] objectAtIndex:0]).firstAsset);
-//    NSLog(@"<<<<-%@",((PhotoesCellDataSource *)[[self.dataSourceArray objectAtIndex:1] objectAtIndex:0]).firstAsset);
-//    NSLog(@"<<<<-%@",((PhotoesCellDataSource *)[[self.dataSourceArray objectAtIndex:2] objectAtIndex:0]).firstAsset);
+    NSLog(@"myTableView reload");
     [_myTableView reloadData];
+    _isReading = NO;
 }
 - (void)divideAssettByDayTime
 {
@@ -168,12 +132,11 @@
             [array addObject:asset];
         }
     }
-//    NSLog(@"%d",self.assetSectionisShow.count);
-//    NSLog(@"%d",self.assetsSection.count);
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (NSMutableArray * array in tempArray )
         [self.dataSourceArray addObject:[self coverAssertToDataSource:array]];
-    NSLog(@"divide end");
+    NSLog(@"start end");
+
 }
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {
@@ -242,17 +205,16 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         return NSOrderedAscending;
     }
 }
-
-#pragma mark - 
+#pragma mark - SectionClick
 - (void)handleTapInSection:(UITapGestureRecognizer *)gesture
 {
-//    NSLog(@"%d",[gesture view].tag);
     NSNumber * num = [self.assetSectionisShow objectAtIndex:[gesture view].tag];
     BOOL isShow = ![num boolValue];
     [self.assetSectionisShow replaceObjectAtIndex:[gesture view].tag withObject:[NSNumber numberWithBool:isShow]];
     [_myTableView reloadData];
 }
-#pragma mark - tableDataSource
+
+#pragma mark - TableDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.dataSourceArray.count;
@@ -283,7 +245,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 {
     return [[self.assetSectionisShow objectAtIndex:section] boolValue] ? [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count]: 0;
 }
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
@@ -312,11 +273,12 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     }else{
         [cell hiddenCellSelectedStatus];
     }
+//    NSLog(@"cell : %@",indexPath);
     return cell;
 }
 
 #pragma mark - NavigationBarDelegate
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
@@ -349,10 +311,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [_myTableView reloadData];
     }
 }
+
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
-    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset] autorelease];
+    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:nil] autorelease];
     [self.navigationController pushViewController:ph animated:YES];
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected

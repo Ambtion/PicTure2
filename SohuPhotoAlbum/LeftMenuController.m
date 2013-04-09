@@ -77,7 +77,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     return cell;
 }
 
-#pragma mark SelectRow
+#pragma mark Selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.view.userInteractionEnabled = NO;
@@ -85,14 +85,10 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         if (indexPath.row == 1) {
             LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];
-            UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:la] autorelease];
-            [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = la;
         }
         if (indexPath.row == 2) {
             LocalAlbumsController * lp = [[[LocalAlbumsController alloc] init] autorelease];
-            UINavigationController *navApiVC = [[[UINavigationController alloc] initWithRootViewController:lp] autorelease];
-            [navApiVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
             self.viewDeckController.centerController = lp;
         }
         self.view.userInteractionEnabled = YES;

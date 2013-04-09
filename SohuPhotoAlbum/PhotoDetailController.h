@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ImageScaleView.h"
-#import <AssetsLibrary/AssetsLibrary.h>
-#import "CusNavigationBar.h"
+#import "CustomizationNavBar.h"
 //#import "CusTabBar.h"
 
 typedef enum _imageStatePosition
@@ -27,17 +26,18 @@ typedef enum _imageStatePosition
     ImageScaleView * _curScaleImage;
     ImageScaleView * _rearScaleImage;
     NSMutableArray * _curImageArray;
-    imageStatePosition Imagestate;
-    CusNavigationBar * _cusBar;
-
-    BOOL canGetActualImage;
-//    CusTabBar * _tabBar;
+    CustomizationNavBar * _cusBar;
+    imageStatePosition _imagestate;
+    
+    BOOL _canGetActualImage;
     BOOL _isHidingBar;
     BOOL _isInit;
     BOOL _isRotating;
     BOOL _isAnimating;
     
+    ALAssetsLibrary * _libiary;
+    ALAssetsGroup * _group;
 }
-- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset;
-
+- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group;
+ 
 @end

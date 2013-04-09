@@ -6,14 +6,14 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CusNavigationBar.h"
+#import "CustomizationNavBar.h"
 
 
 
-@interface CusNavigationBar()
+@interface CustomizationNavBar()
 
 @end
-@implementation CusNavigationBar
+@implementation CustomizationNavBar
 @synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
 - (void)dealloc
 {

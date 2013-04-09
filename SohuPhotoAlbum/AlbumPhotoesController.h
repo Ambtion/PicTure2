@@ -7,15 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoesCell.h"
-#import "CusTomerBarController.h"
+#import "BaseController.h"
 
-@interface AlbumPhotoesController : CusTomerBarController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
+@interface AlbumPhotoesController : BaseController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
 {
     ALAssetsGroup * _assetGroup;
     UITableView * _myTableView;
-    BOOL isInitUpload;
+    ALAssetsLibrary * _libiary;
+    BOOL _isInitUpload;
+    BOOL _isReading;
 }
 @property(nonatomic,retain)ALAssetsGroup * assetGroup;
 

@@ -16,12 +16,12 @@
 #define ALLSELECTEDTAG  10005
 #define RIGHTSTATETAG   10006
 
-@class CusNavigationBar;
+@class CustomizationNavBar;
 @protocol CusNavigationBarDelegate <NSObject>
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button;
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button;
 @end
 
-@interface CusNavigationBar : UIView
+@interface CustomizationNavBar : UIView
 {
     UIImageView * _normalBar;
     UIImageView * _stateBar;

@@ -6,14 +6,14 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CusTomerBarController.h"
+#import "BaseController.h"
 #import "AppDelegate.h"
 //#import "BaseNaviController.h"
-@interface CusTomerBarController ()
+@interface BaseController ()
 
 @end
 
-@implementation CusTomerBarController
+@implementation BaseController
 
 - (void)dealloc
 {
@@ -40,7 +40,7 @@
         }];
     }
 }
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     //for reload
 }

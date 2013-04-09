@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface StatusImageView : UIImageView
+@interface StatusImageView : UIView
 {
     UIImageView * _statuImage;
     UIImageView * _actualView;
@@ -22,4 +22,6 @@
 - (void)showStatusWithUpload;
 
 - (void)resetStatusImageToHidden;
+- (void)setImage:(UIImage *)image;
+- (UIImage *)image;
 @end

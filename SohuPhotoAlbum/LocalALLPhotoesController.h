@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AssetsLibrary/AssetsLibrary.h>
 #import "AppDelegate.h"
 #import "PhotoesCell.h"
-#import "CusTomerBarController.h"
+#import "BaseController.h"
 
-@interface LocalALLPhotoesController : CusTomerBarController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
+@interface LocalALLPhotoesController : BaseController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;

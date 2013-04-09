@@ -43,15 +43,4 @@
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-//    if (selected) {
-//        [self.contentView addSubview:_myHigtView];
-//        [self.contentView sendSubviewToBack:_myHigtView];
-//    }else{
-//        [_myHigtView removeFromSuperview];
-//    }
-    [super setSelected:selected animated:animated];
-}
-
 @end

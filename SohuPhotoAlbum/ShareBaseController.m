@@ -101,7 +101,7 @@
 {
     [super viewWillAppear:animated];
     if (!_cusBar){
-        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back_press.png"] forState:UIControlStateHighlighted];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
@@ -114,7 +114,7 @@
     [self.navigationItem setHidesBackButton:YES animated:NO];
     
 }
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];

@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-#import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoAlbumCell.h"
-#import "CusNavigationBar.h"
-#import "CusTomerBarController.h"
+#import "CustomizationNavBar.h"
+#import "BaseController.h"
 
-@interface LocalAlbumsController : CusTomerBarController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
+@interface LocalAlbumsController : BaseController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;

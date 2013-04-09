@@ -28,11 +28,13 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_assetGroup release];
     [_myTableView release];
     [_assetsArray release];
     [_dataSourceArray release];
     [_selectedArray release];
+    [_libiary release];
     [super dealloc];
 }
 - (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state
@@ -42,9 +44,9 @@
         _selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
         _viewState = state;
         if (state == UPloadState) {
-            isInitUpload = YES;
+            _isInitUpload = YES;
         }else{
-            isInitUpload = NO;
+            _isInitUpload = NO;
         }
     }
     return self;
@@ -59,6 +61,8 @@
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
     [_myTableView setScrollsToTop:YES];
     [self.view addSubview:_myTableView];
+    [self readPhotoAssetes];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 #pragma mark - NavigationBar
@@ -66,7 +70,7 @@
 {
     [super viewWillAppear:animated];
     if (!_cusBar){
-        _cusBar = [[CusNavigationBar alloc] initwithDelegate:self];
+        _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
         
@@ -89,25 +93,23 @@
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     [self.navigationItem setHidesBackButton:YES animated:NO];
+}
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
     [self readPhotoAssetes];
 }
-
 - (void)readPhotoAssetes
 {
+    if (_isReading) return;
+    _isReading = YES;
+    if (!_libiary)
+        _libiary = [[ALAssetsLibrary alloc] init];
+    
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [self.assetGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
-     {
-         if(result == nil){
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 self.assetsArray = [self revertObjectArray:self.assetsArray];
-                 [self prepareDataWithTimeOrder];
-             });
-             return;
-         }
-         [self.assetsArray addObject:result];
-     }];
-    [pool release];
+    [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.assetGroup sucess:^{
+        self.assetsArray = [self revertObjectArray:self.assetsArray];
+        [self prepareDataWithTimeOrder];
+    }];
 }
 - (void)prepareDataWithTimeOrder
 {
@@ -124,6 +126,7 @@
         [self.dataSourceArray addObject:source];
     }
     [_myTableView reloadData];
+    _isReading = NO;
 }
 - (NSMutableArray *)revertObjectArray:(NSMutableArray *)array
 {
@@ -177,7 +180,7 @@
 }
 
 #pragma mark - NavigationBarDelegate
-- (void)cusNavigationBar:(CusNavigationBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -188,11 +191,12 @@
             _viewState = UPloadState;
             [_myTableView reloadData];
         }else{
+            
             [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
         }
     }
     if (button.tag == CANCELBUTTONTAG) {
-        if (isInitUpload) {
+        if (_isInitUpload) {
             [self.navigationController popViewControllerAnimated:YES];
             return;
         }
@@ -215,7 +219,7 @@
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
-    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset] autorelease];
+    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:self.assetGroup] autorelease];
     [self.navigationController pushViewController:ph animated:YES];
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected

@@ -6,9 +6,9 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CusTabBar.h"
+#import "CustomizetionTabBar.h"
 
-@implementation CusTabBar
+@implementation CustomizetionTabBar
 @synthesize delegate = _delegate;
 
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate

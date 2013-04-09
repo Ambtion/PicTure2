@@ -121,6 +121,7 @@
     
     if (self.dataSource.rightGroup) {
         [_rightImgae.superview setHidden:NO];
+        [(ALAssetsGroup *)self.dataSource.rightGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
         [_rightImgae setImage:[UIImage imageWithCGImage:[self.dataSource.rightGroup posterImage]]];
         [_rigthLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.rightGroup valueForProperty:ALAssetsGroupPropertyName]]];
         [self setCoutLabelFrame:_rightCount WithNumber:[[self.dataSource rightGroup] numberOfAssets]];

@@ -13,12 +13,12 @@
 #define TABEDITTAG          11113
 #define TABDELETETAG        11114
 
-@class CusTabBar;
+@class CustomizetionTabBar;
 @protocol CusTabBarDelegate <NSObject>
-- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button;
+- (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button;
 @end
 
-@interface CusTabBar : UIImageView
+@interface CustomizetionTabBar : UIImageView
 @property(nonatomic,assign)id<CusTabBarDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate;
 @end
