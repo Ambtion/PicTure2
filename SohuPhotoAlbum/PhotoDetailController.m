@@ -25,6 +25,8 @@
 @property(nonatomic,retain)ALAssetsGroup * group;
 @end
 
+static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
+
 @implementation PhotoDetailController
 @synthesize assetsArray = _assetsArray;
 @synthesize curPageNum = _curPageNum;
@@ -81,7 +83,6 @@
     [self resetStatueBar];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
 
 }
 - (void)viewDidAppear:(BOOL)animated
@@ -256,15 +257,31 @@
         view = self.rearScaleImage;
     return view;
 }
+- (BOOL)isSupportOrientation
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (PreOrientation != orientation
+        &&(UIDeviceOrientationIsPortrait(orientation)
+           || UIDeviceOrientationIsLandscape(orientation))) {
+            //可以旋转方向
+            NSLog(@"can rotation %d",orientation);
+            if (UIDeviceOrientationIsLandscape(PreOrientation))
+                return UIDeviceOrientationIsPortrait(orientation);
+            if (UIDeviceOrientationIsPortrait(PreOrientation))
+                return UIDeviceOrientationIsLandscape(orientation);
+    }
+    return NO;
+}
 - (void)listOrientationChanged:(NSNotification *)notification
 {
-//    NSLog(@"%s",__FUNCTION__ );
-    if (_isInit || !_isHidingBar) return;
+    if (_isInit || !_isHidingBar ||![self isSupportOrientation]) return;
+    PreOrientation = [[UIDevice currentDevice] orientation];
+    NSLog(@"%d",PreOrientation);
     [self.view setUserInteractionEnabled:NO];
     _isAnimating = YES;
     CGFloat scale = 1.0;
     CGAffineTransform transform = CGAffineTransformIdentity;
-    
+    [self getCurrentImageView].tapEnabled = NO;
     if (CGAffineTransformEqualToTransform([self getTransfrom], CGAffineTransformIdentity)) {
         transform = CGAffineTransformInvert(self.view.transform);
         CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:YES];
