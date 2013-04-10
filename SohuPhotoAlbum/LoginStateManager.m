@@ -34,6 +34,7 @@
 @end
 
 @implementation LoginStateManager
+
 + (BOOL)isLogin
 {
     return [self dataForKey:USER_TOKEN] != nil;
@@ -45,11 +46,9 @@
     [self storeData:uid forKey:USER_ID];
     [self storeData:token forKey:USER_TOKEN];
     [self storeData:refreshToken forKey:REFRESH_TOKEN];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginStateChange" object:nil userInfo:[NSDictionary dictionaryWithObject:@"Login" forKey:@"LogState"]];
 }
 + (void)refreshToken:(NSString *)token RefreshToken:(NSString *)refreshToken
 {
-//    NSLog(@"afterrefresh :Toke :%@",token);
     [self storeData:token forKey:USER_TOKEN];
     [self storeData:refreshToken forKey:REFRESH_TOKEN];
 }
@@ -58,7 +57,6 @@
     [self removeDataForKey:USER_ID];
     [self removeDataForKey:USER_TOKEN];
     [self removeDataForKey:REFRESH_TOKEN];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginStateChange" object:nil userInfo:[NSDictionary dictionaryWithObject:@"Logout" forKey:@"LogState"]];
 }
 
 + (NSString *)currentUserId

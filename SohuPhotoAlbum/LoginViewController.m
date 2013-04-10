@@ -8,12 +8,10 @@
 
 #import "LoginViewController.h"
 
-//#import "SCPMenuNavigationController.h"
-//#import "SCPMainTabController.h"
 #import "RegisterViewController.h"
-//#import "SCPLoginPridictive.h"
-
-//#import "AccountSystemRequset.h"
+#import "AccountLoginBox.h"
+#import "LoginStateManager.h"
+#import "PopAlertView.h"
 //#import "SCPAlert_WaitView.h"
 //#import "SCPAlertView_LoginTip.h"
 
@@ -204,8 +202,36 @@
 }
 - (void)loginButtonClicked:(UIButton*)button
 {
+    if (!_usernameTextField.text|| [_usernameTextField.text isEqualToString:@""]) {
+        PopAlertView * alterview = [[[PopAlertView alloc] initWithTitle:@"您还没有填写用户名" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+        [alterview show];
+        return;
+    }
+    if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
+        PopAlertView * alterview = [[[PopAlertView alloc] initWithTitle:@"您还没有填写密码" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+        [alterview show];
+        return;
+    }
+    [_passwordTextField resignFirstResponder];
+    [_usernameTextField resignFirstResponder];
     
+    NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
+    NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
+    MBProgressHUD * hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
+    hud.delegate = self;
+    [self.view addSubview:hud];
+    [hud show:YES];
+    [AccountLoginBox sohuLoginWithuseName:useName password:passWord sucessBlock:^(NSDictionary *response) {
+        NSLog(@"%@",response);
+        //            [LoginStateManager loginUserId:nil withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+        //        [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[NSString stringWithFormat:@"%@",[response objectForKey:@"refresh_token"]]];
+        [hud hide:YES];
+    } failtureSucess:^(NSString *error) {
+        PopAlertView * alterView = [[[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+        [alterView show];
+    }];   
 }
+
 - (void)sinaLogin:(UIButton*)button
 {
 
@@ -232,8 +258,12 @@
     RegisterViewController *reg = [[[RegisterViewController alloc] init] autorelease];
     [self.navigationController pushViewController:reg animated:YES];
 }
-
-#pragma mark keyboard
+#pragma mark - MBProgress Delegate
+- (void)hudWasHidden:(MBProgressHUD *)hud
+{
+    [hud removeFromSuperview];
+}
+#pragma mark Keyboard lifeCircle
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     

@@ -49,7 +49,6 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
-    [_myTableView setScrollsToTop:YES];
     self.selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:_myTableView];
     [self readAlbum];
@@ -138,6 +137,7 @@
     NSLog(@"start end");
 
 }
+
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {
     NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];

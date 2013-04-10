@@ -13,7 +13,7 @@
 
 
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController<MBProgressHUDDelegate>
 
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIControl *backgroundControl;

@@ -213,6 +213,7 @@
 }
 - (void)doRegister
 {
+    
 }
 
 #pragma mark KeyBoardnotification

@@ -11,6 +11,9 @@
 #import "AppDelegate.h"
 #import "LimitCacheForImage.h"
 
+#import <ImageIO/ImageIO.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+
 #define OFFSETX 20
 
 @interface PhotoDetailController ()
@@ -207,6 +210,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
     [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
     [self.view addSubview:_cusBar];
+    
 //    _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
 //    [self.view addSubview:_tabBar];
 }
@@ -276,7 +280,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     if (_isInit || !_isHidingBar ||![self isSupportOrientation]) return;
     PreOrientation = [[UIDevice currentDevice] orientation];
-    NSLog(@"%d",PreOrientation);
     [self.view setUserInteractionEnabled:NO];
     _isAnimating = YES;
     CGFloat scale = 1.0;
@@ -380,7 +383,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - ScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
-    if (_isAnimating )  return;
+    if (_isAnimating)  return;
     if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];
@@ -440,15 +443,15 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     }
     [scrollView setContentOffset:point animated:NO];
 }
-#pragma mark - GetImageFromAsset
 
+#pragma mark - GetImageFromAsset
 - (void)setImageView:(UIImageView *)imageView WithAsset:(ALAsset *)asset
 {
     imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
 }
-- (UIImage *)getImageFromAsset:(ALAsset *)asset
+- (UIImage *)getImageFromAsset:(id )asset
 {
-    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
+    UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
     }
@@ -490,11 +493,60 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
         });
     }
     return image;
+}
+
+- (void)setImagePropertyWith:(ALAsset *)asset
+{
+    //get full imageData
+    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
+    Byte *buffer = (Byte*)malloc(defaultRep.size);
+    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+    
+    // compressData providerData 
+    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
+    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+    UIImage * image = [UIImage imageWithCGImage:imageRef];
+    NSData* finaldata = UIImageJPEGRepresentation(image, 0.5);
+    
+    //compressData with exif
+    finaldata =  [self writeExif:(NSDictionary *)[self getPropertyOfdata:data] intoImage:finaldata];
+    
+}
+- (CFDictionaryRef )getPropertyOfdata:(NSData *)data
+{
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+    if (imageSource == NULL) {
+        // Error loading image
+        return nil;
+    }
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
+                             nil];
+    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
+    NSLog(@"ori:%@",imageProperties);
+    return imageProperties;
+//    [self writeExif: (NSDictionary *)imageSource intoImageData:data];
+}
+
+- (NSData *)writeExif:(NSDictionary *)dic intoImage:(NSData *)myimageData
+{
+    [self getPropertyOfdata:myimageData];
+    NSMutableData * mydata = [[[NSMutableData alloc] initWithLength:0] autorelease];
+    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)myimageData);
+    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+    CGImageDestinationRef destination = CGImageDestinationCreateWithData((CFMutableDataRef)mydata, kUTTypeJPEG, 1, NULL);
+    CGImageDestinationAddImage(destination, imageRef, (CFDictionaryRef)dic);
+    CGImageDestinationFinalize(destination);
+    CFRelease(destination);
+    [self getPropertyOfdata:mydata];
+    return mydata;
 }
 - (UIImage *)getImageFromCacheWithKey:(id)aKey
 {
@@ -502,17 +554,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     return [UIImage imageWithData:imageData];
 }
 #pragma mark - Function
-- (void)resetAllImagesFrame
-{
-    //设置图片的大小
-    _fontScaleImage.zoomScale = 1.f;
-    _curScaleImage.zoomScale = 1.f;
-    _rearScaleImage.zoomScale = 1.f;
-
-    [self resetImageRect:_curScaleImage.imageView];
-    [self resetImageRect:_fontScaleImage.imageView];
-    [self resetImageRect:_rearScaleImage.imageView];
-}
 - (void)resetImageRect:(UIImageView *)imageView
 {
     CGSize size = [self getIdentifyImageSizeWithImageView:imageView isPortraitorientation:CGAffineTransformEqualToTransform(CGAffineTransformIdentity, [self getTransfrom])];
@@ -520,9 +561,20 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     if (imageView.image) {
         imageView.frame = (CGRect){0,0,size};
         imageView.center = CGPointMake(ratationSize.width / 2.f, ratationSize.height /2.f);
-        }else{
+    }else{
         imageView.frame = CGRectMake(0, 0, size.width,size.height);
     }
+}
+
+- (void)resetAllImagesFrame
+{
+    //设置图片的大小
+    _fontScaleImage.zoomScale = 1.f;
+    _curScaleImage.zoomScale = 1.f;
+    _rearScaleImage.zoomScale = 1.f;
+    [self resetImageRect:_curScaleImage.imageView];
+    [self resetImageRect:_fontScaleImage.imageView];
+    [self resetImageRect:_rearScaleImage.imageView];
 }
 
 - (NSArray *)getDisplayImagesWithCurpage:(int)page

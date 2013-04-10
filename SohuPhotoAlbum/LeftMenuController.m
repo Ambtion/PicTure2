@@ -8,10 +8,9 @@
 #import "AppDelegate.h"
 #import "LeftMenuController.h"
 #import "LocalALLPhotoesController.h" //本地相册
+#import "CloundPhotoController.h"
 #import "AccountCell.h"
 #import "MenuCell.h"
-
-#import "LocalAlbumsController.h" //测试用
 
 #define MENUMAXNUMBER 5
 
@@ -88,7 +87,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
             self.viewDeckController.centerController = la;
         }
         if (indexPath.row == 2) {
-            LocalAlbumsController * lp = [[[LocalAlbumsController alloc] init] autorelease];
+            CloundPhotoController * lp = [[[CloundPhotoController alloc] init] autorelease];
             self.viewDeckController.centerController = lp;
         }
         self.view.userInteractionEnabled = YES;
