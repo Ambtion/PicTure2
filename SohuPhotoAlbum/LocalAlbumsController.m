@@ -69,7 +69,6 @@
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
-    
     //界面出现,bar恢复normal状态
     [_cusBar switchBarStateToUpload:NomalState];
     [self.navigationItem setHidesBackButton:YES animated:NO];

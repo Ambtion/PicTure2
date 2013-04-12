@@ -122,6 +122,7 @@
 		C584D147170BC70100ACCD7C /* serviceitem.png in Resources */ = {isa = PBXBuildFile; fileRef = C584D146170BC70100ACCD7C /* serviceitem.png */; };
 		C585B8751705A3F100D54CDE /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C585B8731705A3F100D54CDE /* cancel.png */; };
 		C585B8761705A3F100D54CDE /* YES.png in Resources */ = {isa = PBXBuildFile; fileRef = C585B8741705A3F100D54CDE /* YES.png */; };
+		C5863CC817181266005D12ED /* UPLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5863CC717181266005D12ED /* UPLoadViewController.m */; };
 		C5870B64170AEB9A00CBDB23 /* IIViewDeckController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5870B63170AEB9A00CBDB23 /* IIViewDeckController.m */; };
 		C58773F6171658C300799730 /* LocalDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C58773F5171658C300799730 /* LocalDetailController.m */; };
 		C58773F9171669F600799730 /* OAuthorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C58773F8171669F600799730 /* OAuthorController.m */; };
@@ -406,6 +407,8 @@
 		C584D146170BC70100ACCD7C /* serviceitem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = serviceitem.png; sourceTree = "<group>"; };
 		C585B8731705A3F100D54CDE /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C585B8741705A3F100D54CDE /* YES.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YES.png; sourceTree = "<group>"; };
+		C5863CC617181266005D12ED /* UPLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPLoadViewController.h; sourceTree = "<group>"; };
+		C5863CC717181266005D12ED /* UPLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPLoadViewController.m; sourceTree = "<group>"; };
 		C5870B62170AEB9A00CBDB23 /* IIViewDeckController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIViewDeckController.h; sourceTree = "<group>"; };
 		C5870B63170AEB9A00CBDB23 /* IIViewDeckController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIViewDeckController.m; sourceTree = "<group>"; };
 		C58773F4171658C300799730 /* LocalDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalDetailController.h; sourceTree = "<group>"; };
@@ -890,6 +893,15 @@
 			path = login;
 			sourceTree = "<group>";
 		};
+		C5863CC517181216005D12ED /* UPLoadViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C5863CC617181266005D12ED /* UPLoadViewController.h */,
+				C5863CC717181266005D12ED /* UPLoadViewController.m */,
+			);
+			name = UPLoadViewController;
+			sourceTree = "<group>";
+		};
 		C58773FA1716AB3C00799730 /* CloudPicture */ = {
 			isa = PBXGroup;
 			children = (
@@ -937,6 +949,7 @@
 		C588B0AD17003032006BBC34 /* SohuPhotoAlbum */ = {
 			isa = PBXGroup;
 			children = (
+				C5863CC517181216005D12ED /* UPLoadViewController */,
 				C588B0B617003032006BBC34 /* AppDelegate.h */,
 				C588B0B717003032006BBC34 /* AppDelegate.m */,
 				C58A1EBA170A6ED600E61ED3 /* AppDelegateOauthor.h */,
@@ -1694,6 +1707,7 @@
 				C5841A0D17158ED800588CE5 /* SCPMoreTableFootView.m in Sources */,
 				C58773F6171658C300799730 /* LocalDetailController.m in Sources */,
 				C58773F9171669F600799730 /* OAuthorController.m in Sources */,
+				C5863CC817181266005D12ED /* UPLoadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
