@@ -63,6 +63,7 @@ static UploadTaskManager * sharedTaskManager = nil;
 - (void)go
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    [self albumTaskStart];
     AlbumTaskList * task = [_taskList objectAtIndex:0];
     if (self.curTask == task) {
 //        NSLog(@"There is Task going");
@@ -75,7 +76,6 @@ static UploadTaskManager * sharedTaskManager = nil;
     }
 }
 #pragma mark - AlbumInfo
-
 - (void)updataAlbumInfoWith:(AlbumTaskList *)taskList
 {
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
@@ -205,6 +205,10 @@ static UploadTaskManager * sharedTaskManager = nil;
     }
 }
 #pragma mark AlbumProgress
+- (void)albumTaskStart
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTUPLOADSTART object:nil];
+}
 - (void)albumTaskQueneFinished:(AlbumTaskList *)albumTaskList
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
@@ -216,14 +220,12 @@ static UploadTaskManager * sharedTaskManager = nil;
     if (_taskList.count) {
         [self gotoNext];
     }else{
-//        NSLog(@"All operation Over");
+        NSLog(@"All operation Over");
     }
-    
 }
 - (void)albumTask:(AlbumTaskList *)albumTaskList requsetFinish:(ASIHTTPRequest *)requset
 {
     [self finishOneRequsetWith:self.curTask];
-//    NSLog(@"%@",_taskDic);
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[_taskDic objectForKey:self.curTask.albumId]];
     if (requset && [requset responseString] && [[requset responseString] JSONValue])
         [dic setObject:[[requset responseString] JSONValue] forKey:@"RequsetInfo"];

@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+#import "AppDelegate.h"
+#import "LocalALLPhotoesController.h" //本地相册
+#import "PhotoWallController.h"
+#import "LoginStateManager.h"
+#import "LoginViewController.h"
+#import "AccountCell.h"
+#import "MenuCell.h"
+
+@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate>
 {
     UITableView * _tableView;
+    AccountCell * _accountCell;
 }
 @end

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "AlbumTaskList.h"
-
 #import "TaskNotification.h"
 #import "JSON.h"
 
@@ -36,4 +35,5 @@
 
 //管理照片列表下载进度
 - (AlbumTaskList *)getAlbumTaskWithAlbum:(NSString *)albumId;
+
 @end

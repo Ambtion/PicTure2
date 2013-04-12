@@ -10,9 +10,9 @@
 #import "AppDelegate.h"
 #import "PhotoAlbumCell.h"
 #import "CustomizationNavBar.h"
-#import "BaseController.h"
+#import "LocalBaseController.h"
 
-@interface LocalAlbumsController : BaseController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
+@interface LocalAlbumsController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;

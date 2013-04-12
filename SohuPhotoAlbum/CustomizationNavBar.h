@@ -12,9 +12,14 @@
 #define RIGHT1BUTTON    10001
 #define RIGHT2BUTTON    10002
 #define RIGHT3BUTTON    10003
+
 #define CANCELBUTTONTAG 10004
 #define ALLSELECTEDTAG  10005
-#define RIGHTSTATETAG   10006
+#define RIGHTSELECTEDTAG   10006
+
+@interface GIFButton : UIButton
+- (void)setButtoUploadState:(BOOL)isUploadStateButton;
+@end
 
 @class CustomizationNavBar;
 @protocol CusNavigationBarDelegate <NSObject>
@@ -28,19 +33,19 @@
 }
 
 @property(nonatomic,assign)id<CusNavigationBarDelegate> delegate;
-@property(nonatomic,retain)UIButton * nLeftButton;
+@property(nonatomic,retain)GIFButton * nLeftButton;
 @property(nonatomic,retain)UIImageView * nLabelImage;
 @property(nonatomic,retain)UILabel * nLabelText;
-@property(nonatomic,retain)UIButton * nRightButton1;
-@property(nonatomic,retain)UIButton * nRightButton2;
-@property(nonatomic,retain)UIButton * nRightButton3;
+@property(nonatomic,retain)GIFButton * nRightButton1;
+@property(nonatomic,retain)GIFButton * nRightButton2;
+@property(nonatomic,retain)GIFButton * nRightButton3;
 
 @property(nonatomic,retain)UILabel * sLabelText;
 @property(nonatomic,retain)UIButton * sLeftButton;
-@property(nonatomic,retain)UIButton * sAllSelectedbutton;
-@property(nonatomic,retain)UIButton * sRightStateButton;
+@property(nonatomic,retain)GIFButton * sAllSelectedbutton;
+@property(nonatomic,retain)GIFButton * sRightStateButton;
 
 - (id)initwithDelegate:(id<CusNavigationBarDelegate>)Adelegate;
-- (void)switchBarState;
+- (void)switchBarStateToUpload:(BOOL)isUploadState;
 - (void)setBackgroundImage:(UIImage *)image;
 @end

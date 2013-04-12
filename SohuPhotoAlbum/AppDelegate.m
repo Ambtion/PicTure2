@@ -12,6 +12,7 @@
 #import "LocalALLPhotoesController.h"
 #import "DataBaseManager.h"
 //#import "BaseNaviController.h"
+#import "Projectconfig.h"
 
 @implementation AppDelegate
 @synthesize window = _window;

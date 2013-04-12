@@ -11,6 +11,7 @@
 #import "TaskNotification.h"
 #import "LoginStateManager.h"
 #import "ToastAlertView.h"
+#import "DataBaseManager.h"
 
 #define UPTIMEOUT 30.f
 #define UPLOADIMAGESIZE 1024 * 1024 * 10  // 图片最大10MB
@@ -45,70 +46,57 @@
 
 - (void)goNextTask
 {
-    //    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     [self addTaskUnitToQuene];
 }
 - (void)addTaskUnitToQuene
 {
     if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
     self.currentTask.request = [self getUploadRequest:nil];
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.currentTask getImageSucess:^(NSData *imageData, TaskUnit * unit) {
-            if ([imageData length] > UPLOADIMAGESIZE) {                
-                    [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
-                    [self requestFailed:self.currentTask.request];
-                    return ;
-                
-            }else{
-                [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
-            }
-            if (unit.description && ![unit.description isEqualToString:@""])
-                [self.currentTask.request setPostValue:unit.description forKey:@"desc"];
-            if (!self.currentTask.request.isCancelled)
-                [self.currentTask.request startAsynchronous];
-        } failture:^(NSError *error, TaskUnit *unit) {
-            unit.taskState = UPLoadStatusFailedUpload;
-            [self goNextTask];
-            ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:@"图片上传失败"] autorelease];
-            [cus show];
-        }];
+    NSData * imageData = [self.currentTask imageDataFromAsset];
+    //        [self.currentTask getImageSucess:^(NSData *imageData, TaskUnit * unit) {
+    if ([imageData length] > UPLOADIMAGESIZE) {
+        [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
+        [self requestFailed:self.currentTask.request];
+        return ;
+        
+    }else{
+        [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
+        [self.currentTask.request startAsynchronous];
+    }
+//            if (self.currentTask.description && ![self.currentTask.description isEqualToString:@""])
+//                [self.currentTask.request setPostValue:unit.description forKey:@"desc"];
+//            if (!self.currentTask.request.isCancelled)
+//
+//        } failture:^(NSError *error, TaskUnit *unit) {
+//            unit.taskState = UPLoadStatusFailedUpload;
+//            [self goNextTask];
+//            ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:@"图片上传失败"] autorelease];
+//            [cus show];
+////        }];
     return;
 }
 - (void)startTaskUnit
 {
     if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
     self.currentTask.request = [self getUploadRequest:nil];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.currentTask getImageSucess:^(NSData *imageData, TaskUnit * unit) {
-            if ([imageData length] > UPLOADIMAGESIZE) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
-                    [self requestFailed:self.currentTask.request];
-                    return ;
-                });
-                
-            }else{
-                [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
-            }
-            if (unit.description && ![unit.description isEqualToString:@""])
-                [self.currentTask.request setPostValue:unit.description forKey:@"desc"];
-            if (!self.currentTask.request.isCancelled)
-                [self.currentTask.request startAsynchronous];
-        } failture:^(NSError *error, TaskUnit *unit) {
-            unit.taskState = UPLoadStatusFailedUpload;
-            [self goNextTask];
-            ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:@"图片上传失败"] autorelease];
-            [cus show];
-        }];
-    });
+    NSData * imageData = [self.currentTask imageDataFromAsset];
+    
+    if ([imageData length] > UPLOADIMAGESIZE) {
+        [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
+        [self requestFailed:self.currentTask.request];
+        return ;
+        
+    }else{
+        [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
+        [self.currentTask.request startAsynchronous];
+    }
     return;
 }
 - (void)go
 {
     [self startTaskUnit];
-    //    NSLog(@"%s",__FUNCTION__);
-//    [self addTaskUnitToQuene];
+     DLog(@"%s",__FUNCTION__);
 }
 - (void)cancelupLoadWithTag:(NSArray *)unitArray
 {
@@ -145,14 +133,18 @@
     NSDictionary * dic = [[request responseString] JSONValue];
     NSInteger code = [[dic objectForKey:@"code"] intValue];
     if (![self handleCode:code]) return;
-//    NSLog(@"%@",gi[request responseString]);
+    
+    //上传成功
     [request cancel];
     [request clearDelegatesAndCancel];
     if (self.taskList.count)
         [self.taskList removeObjectAtIndex:0];
+    [[DataBaseManager defaultDataBaseManager] insertPhotoURLIntoTable:[[self.currentTask.asset defaultRepresentation] url]];
     if ([_delegate respondsToSelector:@selector(albumTask:requsetFinish:)]) {
         [_delegate performSelector:@selector(albumTask:requsetFinish:) withObject:self withObject:request];
     }
+    
+    //开始下一任务
     self.currentTask = nil;
     if (self.taskList.count) {
         [self goNextTask];
@@ -233,7 +225,7 @@
 
 - (ASIFormDataRequest *)getUploadRequest:(NSData *)imageData
 {
-    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=%@&access_token=%@",BASICURL,self.albumId,[LoginStateManager currentToken]];
+    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=76505528204926976&access_token=%@",BASICURL,[LoginStateManager currentToken]];
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
     [request setStringEncoding:NSUTF8StringEncoding];

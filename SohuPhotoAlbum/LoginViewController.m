@@ -8,14 +8,6 @@
 
 #import "LoginViewController.h"
 
-#import "RegisterViewController.h"
-#import "AccountLoginBox.h"
-#import "LoginStateManager.h"
-#import "PopAlertView.h"
-//#import "SCPAlert_WaitView.h"
-//#import "SCPAlertView_LoginTip.h"
-
-
 #define EMAIL_ARRAY ([NSArray arrayWithObjects:\
 @"sohu.com", @"vip.sohu.com", @"chinaren.com", @"sogou.com", @"17173.com", @"focus.cn", @"game.sohu.com", @"37wanwan.com",\
 @"126.com", @"163.com", @"qq.com", @"gmail.com", @"sina.com.cn", @"sina.com", @"yahoo.com", @"yahoo.com.cn", @"yahoo.cn", nil])
@@ -25,9 +17,7 @@
 @synthesize backgroundControl = _backgroundControl;
 @synthesize usernameTextField = _usernameTextField;
 @synthesize passwordTextField = _passwordTextField;
-@synthesize registerButton = _registerButton;
-@synthesize loginButton = _loginButton;
-
+@synthesize delegate = _delegate;
 - (void)dealloc
 {
     [_backgroundImageView release];
@@ -87,14 +77,14 @@
     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     //注册
-    _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _registerButton.frame = CGRectMake(35, 239, 110, 35);
-    [_registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
-    [_registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
-    [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
-    [_registerButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-    _registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *  registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    registerButton.frame = CGRectMake(35, 239, 110, 35);
+    [registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
+    [registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
+    [registerButton setTitle:@"注册" forState:UIControlStateNormal];
+    [registerButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel * externalLabel = [[[UILabel alloc] initWithFrame:CGRectMake(35, 290, 150, 15)] autorelease];
     externalLabel.text = @"其他账号登录";
@@ -117,22 +107,22 @@
     [forget addSubview:forgetPassWord];
     
     //登录按钮
-    _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _loginButton.frame = CGRectMake(175, 239, 110, 35);
-    [_loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
-    [_loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
-    [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-    [_loginButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-    _loginButton.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton * loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    loginButton.frame = CGRectMake(175, 239, 110, 35);
+    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
+    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
+    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
+    loginButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:_backgroundImageView];
     [self.view addSubview:_backgroundControl];
     [self.view addSubview:_usernameTextField];
     [self.view addSubview:_passwordTextField];
     [self.view addSubview:externalLabel];
-    [self.view addSubview:_registerButton];
-    [self.view addSubview:_loginButton];
+    [self.view addSubview:registerButton];
+    [self.view addSubview:loginButton];
     [self.view addSubview:forget];
     
     //返回按钮
@@ -198,7 +188,14 @@
 #pragma mark  - ButtonClick
 - (void)cancelLogin:(UIButton *)button
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    if (self.presentingViewController) {
+        [self.presentingViewController dismissModalViewControllerAnimated:YES];
+    }
+    if ([_delegate respondsToSelector:@selector(loginViewController:cancleClick:)])
+        [_delegate loginViewController:self cancleClick:button];
 }
 - (void)loginButtonClicked:(UIButton*)button
 {
@@ -221,48 +218,83 @@
     hud.delegate = self;
     [self.view addSubview:hud];
     [hud show:YES];
-    [AccountLoginBox sohuLoginWithuseName:useName password:passWord sucessBlock:^(NSDictionary *response) {
-        NSLog(@"%@",response);
-        //            [LoginStateManager loginUserId:nil withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
-        //        [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[NSString stringWithFormat:@"%@",[response objectForKey:@"refresh_token"]]];
+    [AccountLoginResquest sohuLoginWithuseName:useName password:passWord sucessBlock:^(NSDictionary *response) {
         [hud hide:YES];
+        [self handleLoginInfo:response];
     } failtureSucess:^(NSString *error) {
-        PopAlertView * alterView = [[[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
-        [alterView show];
-    }];   
+        [hud hide:YES];
+        [self showError:error];
+    }];
 }
 
+#pragma mark Handle Login Result
+- (void)handleLoginInfo:(NSDictionary *)response
+{
+//    [LoginStateManager loginUserId:nil withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+    [LoginStateManager loginUserId:@"user_ID" withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+    if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
+        [_delegate loginViewController:self loginSucessWithinfo:response];
+}
+- (void)showError:(NSString *)error
+{
+    PopAlertView * alterView = [[[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+    [alterView show];
+    if ([_delegate respondsToSelector:@selector(loginViewController:loginFailtureWithinfo:)])
+        [_delegate loginViewController:self loginFailtureWithinfo:error];
+}
+
+#pragma mark OAuthor
 - (void)sinaLogin:(UIButton*)button
 {
-
+    [self presentWithControlleByLoginMode:LoginModelSina];
 }
 - (void)qqLogin:(UIButton *)button
 {
-
+    [self presentWithControlleByLoginMode:LoginModelQQ];
 }
 - (void)renrenLogin:(UIButton *)button
 {
-
+    [self presentWithControlleByLoginMode:LoginModelRenRen];
+}
+- (void)presentWithControlleByLoginMode:(LoginModel)model
+{
+    OAuthorController * atcq = [[[OAuthorController alloc] initWithMode:model] autorelease];
+    atcq.delegate = self;
+    UINavigationController * nav = [[[UINavigationController alloc] initWithRootViewController:atcq] autorelease];
+    [self presentModalViewController:nav animated:YES];
 }
 - (void)forgetPassWord:(id)sender
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://passport.sohu.com/web/recover.jsp"]];
 }
 
+#pragma mark Delgeate Oauthorize
+- (void)oauthorController:(OAuthorController *)controller loginSucessInfo:(NSDictionary *)dic
+{
+    [self dismissModalViewControllerAnimated:NO];
+    [self handleLoginInfo:dic];
+}
+- (void)oauthorController:(OAuthorController *)controlle loginFailture:(NSString *)error
+{
+    [self showError:error];
+}
 #pragma mark resiteruseinfo
 - (void)registerButtonClicked:(UIButton *)button
 {
     [_passwordTextField resignFirstResponder];
     [_usernameTextField resignFirstResponder];
-    
     RegisterViewController *reg = [[[RegisterViewController alloc] init] autorelease];
     [self.navigationController pushViewController:reg animated:YES];
 }
+
 #pragma mark - MBProgress Delegate
 - (void)hudWasHidden:(MBProgressHUD *)hud
 {
     [hud removeFromSuperview];
 }
+
+
+
 #pragma mark Keyboard lifeCircle
 - (void)keyboardWillShow:(NSNotification *)notification
 {

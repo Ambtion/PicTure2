@@ -37,7 +37,6 @@
     [userDefault setObject:userinfo forKey:[LoginStateManager currentUserId]];
     [userDefault synchronize];
 }
-
 + (NSString *)homeBackGroundImageName
 {
     

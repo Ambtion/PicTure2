@@ -5,12 +5,8 @@
 //  Created by sohu on 13-3-25.
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
-#import "AppDelegate.h"
 #import "LeftMenuController.h"
-#import "LocalALLPhotoesController.h" //本地相册
-#import "CloundPhotoController.h"
-#import "AccountCell.h"
-#import "MenuCell.h"
+
 
 #define MENUMAXNUMBER 5
 
@@ -59,11 +55,11 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     static NSString * str = @"CELL";
     static NSString * accout = @"AccountCELL";
     if (!indexPath.row) {
-        AccountCell * cell = [tableView dequeueReusableCellWithIdentifier:accout];
-        if (!cell)
-            cell = [[[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accout] autorelease];
-        cell.labelText.text = @"账号登陆";
-        return cell;
+        _accountCell = [tableView dequeueReusableCellWithIdentifier:accout];
+        if (!_accountCell)
+            _accountCell = [[[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accout] autorelease];
+        _accountCell.labelText.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
+        return _accountCell;
     }
     MenuCell * cell = [tableView dequeueReusableCellWithIdentifier:str];
     if (!cell) {
@@ -79,19 +75,42 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
 #pragma mark Selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 0) { //登陆
+        if ([LoginStateManager isLogin]) {
+            [LoginStateManager logout];
+            [_tableView reloadData];
+        }else{
+            LoginViewController * lv = [[[LoginViewController alloc] init] autorelease];
+            lv.delegate = self;
+            [self presentModalViewController:lv animated:YES];
+        }
+        return;
+    }
     self.view.userInteractionEnabled = NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
+        
         if (indexPath.row == 1) {
             LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];
             self.viewDeckController.centerController = la;
         }
-        if (indexPath.row == 2) {
-            CloundPhotoController * lp = [[[CloundPhotoController alloc] init] autorelease];
+        if (indexPath.row == 3) {
+            PhotoWallController * lp = [[[PhotoWallController alloc] init] autorelease];
             self.viewDeckController.centerController = lp;
         }
         self.view.userInteractionEnabled = YES;
     }];
 }
+#pragma mark - Delegate of LoginViewController
+- (void)loginViewController:(LoginViewController *)loginController cancleClick:(id)sender
+{
+    [self.viewDeckController toggleLeftViewAnimated:NO];
+}
+- (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo
+{
+    _accountCell.labelText.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
+    [self dismissModalViewControllerAnimated:YES];
+    [self.viewDeckController toggleLeftViewAnimated:NO];
 
+}
 @end

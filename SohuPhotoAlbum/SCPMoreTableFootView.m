@@ -21,11 +21,12 @@
         self.backgroundColor = [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1];
         UITapGestureRecognizer * gesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(realLoadingMore:)] autorelease];
         [self addGestureRecognizer:gesture];
-        UIImageView * imageview = [[[UIImageView alloc] initWithFrame:CGRectMake(110, 23, 18, 18)] autorelease];
+        
+        UIImageView * imageview = [[[UIImageView alloc] initWithFrame:CGRectMake(110, (self.bounds.size.height - 18)/2.f, 18, 18)] autorelease];
         imageview.image = lodingImage;
         [self addSubview:imageview];
         
-        UILabel * label = [[[UILabel alloc] initWithFrame:CGRectMake(66  + 10, 0, 320 - 142, 60)] autorelease];
+        UILabel * label = [[[UILabel alloc] initWithFrame:CGRectMake(66  + 10, 0, 320 - 142, self.bounds.size.height)] autorelease];
         label.tag = 100;
         label.textAlignment = UITextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:14];
@@ -36,18 +37,19 @@
         
         UIActivityIndicatorView * active = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
         active.tag = 200;
-        active.frame = CGRectMake(320 - 66 + 22,30, 0, 0);
+        active.center = CGPointMake(320 - 66, self.frame.size.height /2.f);
         active.color = [UIColor blackColor];
         active.hidesWhenStopped = YES;
         [active stopAnimating];
         [self addSubview:active];
-        UIImageView * bg_imageview = [[[UIImageView alloc] initWithFrame:CGRectMake((320 - 30)/2.f,15.f, 30.f, 30.f)]autorelease];
-//        bg_imageview.image =[UIImage imageNamed:@"end_bg.png"];
-        bg_imageview.image = endImage;
-        UIView * view = [[[UIView alloc] initWithFrame:self.bounds] autorelease];
-        view.backgroundColor = [UIColor colorWithRed:244/255.f green:244/255.f blue:244/255.f alpha:1];
-        [view addSubview:bg_imageview];
-        [view addSubview:self];
+
+//        UIImageView * bg_imageview = [[[UIImageView alloc] initWithFrame:CGRectMake((320 - 30)/2.f,15.f, 30.f, 30.f)]autorelease];
+////        bg_imageview.image =[UIImage imageNamed:@"end_bg.png"];
+//        bg_imageview.image = endImage;
+//        UIView * view = [[[UIView alloc] initWithFrame:self.bounds] autorelease];
+//        view.backgroundColor = [UIColor colorWithRed:244/255.f green:244/255.f blue:244/255.f alpha:1];
+//        [view addSubview:bg_imageview];
+//        [view addSubview:self];
     }
     return self;
 }

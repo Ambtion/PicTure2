@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "PhotoesCell.h"
-#import "BaseController.h"
+#import "LocalBaseController.h"
 
-@interface AlbumPhotoesController : BaseController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
+@interface AlbumPhotoesController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
 {
     ALAssetsGroup * _assetGroup;
     UITableView * _myTableView;

@@ -6,13 +6,13 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CloundPhotoController.h"
+#import "PhotoWallController.h"
 #import <ImageIO/ImageIO.h>
-@interface CloundPhotoController ()
+@interface PhotoWallController ()
 
 @end
 
-@implementation CloundPhotoController
+@implementation PhotoWallController
 
 - (void)dealloc
 {
@@ -60,6 +60,17 @@
         [_dataSourceArray addObject:arra];
     }
     [_myTableView reloadData];
+}
+#pragma mark View LifeCircle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
 #pragma mark - refresh
 

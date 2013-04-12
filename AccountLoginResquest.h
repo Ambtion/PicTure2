@@ -13,7 +13,7 @@
 #import "URLLibaray.h"
 
 
-@interface AccountLoginBox : NSObject
+@interface AccountLoginResquest : NSObject
 
 #pragma mark sohu Acount
 + (void)sohuLoginWithuseName:(NSString *)useName password:(NSString *)password sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture;

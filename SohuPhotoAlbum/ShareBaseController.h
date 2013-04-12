@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BaseController.h"
+#import "LocalBaseController.h"
 
 
 #define kSinaTag    1000
@@ -19,7 +19,7 @@
 
 @property(nonatomic,retain)UILabel * labelText;
 @end
-@interface ShareBaseController : BaseController
+@interface ShareBaseController : LocalBaseController
 
 @property(nonatomic,retain)AccountButton * sinaAcountBtn;
 @property(nonatomic,retain)AccountButton * renrenAcountBtn;

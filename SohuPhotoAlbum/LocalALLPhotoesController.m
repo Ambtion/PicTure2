@@ -8,9 +8,10 @@
 
 #import "LocalALLPhotoesController.h"
 #import "LocalAlbumsController.h"
-#import "PhotoDetailController.h"
+#import "LocalDetailController.h"
 #import "LoginStateManager.h"
 #import "LoginViewController.h"
+
 
 #define SLABELTEXT @"请选择照片"
 
@@ -20,12 +21,12 @@
 @property(nonatomic,retain)NSMutableArray *dataSourceArray;
 @property(nonatomic,retain)NSMutableArray *assetsSection;
 @property(nonatomic,retain)NSMutableArray *assetSectionisShow;
-@property(nonatomic,retain)NSMutableArray *selectedArray;
+//@property(nonatomic,retain)NSMutableArray *selectedArray;
 @end
 
 @implementation LocalALLPhotoesController
-@synthesize assetGroups,assetsArray,dataSourceArray,assetsSection,assetSectionisShow,selectedArray;
-
+@synthesize assetGroups,assetsArray,dataSourceArray,assetsSection,assetSectionisShow;
+//@synthesize selectedArray = _selectedArray;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -36,9 +37,8 @@
     [dataSourceArray release];
     [assetsSection release];
     [assetSectionisShow release];
-    [selectedArray release];
+    [_selectedArray release];
     [_cusBar release];
-    
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -49,7 +49,7 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
-    self.selectedArray = [NSMutableArray arrayWithCapacity:0];
+    _selectedArray = [[NSMutableArray arrayWithCapacity:0] retain];
     [self.view addSubview:_myTableView];
     [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -63,11 +63,16 @@
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
+        
+        //上传按钮
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setButtoUploadState:YES];
+        
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         [_cusBar.sLabelText setText:SLABELTEXT];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
     }
+    
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
@@ -106,13 +111,13 @@
     self.assetsArray = [[[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy] autorelease];
     //对asset分组
     [self divideAssettByDayTime];
-    NSLog(@"myTableView reload");
+    DLog(@"myTableView reload");
     [_myTableView reloadData];
     _isReading = NO;
 }
 - (void)divideAssettByDayTime
 {
-    NSLog(@"start divide");
+    DLog(@"start divide");
     self.assetsSection = [NSMutableArray arrayWithCapacity:0];
     self.assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
@@ -134,7 +139,7 @@
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (NSMutableArray * array in tempArray )
         [self.dataSourceArray addObject:[self coverAssertToDataSource:array]];
-    NSLog(@"start end");
+    DLog(@"start end");
 
 }
 
@@ -266,14 +271,13 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (_viewState != NomalState){
         [cell showCellSelectedStatus];
-        [cell isShow:[self.selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
-        [cell isShow:[self.selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
-        [cell isShow:[self.selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
-        [cell isShow:[self.selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
+        [cell isShow:[_selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
+        [cell isShow:[_selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
+        [cell isShow:[_selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
+        [cell isShow:[_selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
     }else{
         [cell hiddenCellSelectedStatus];
     }
-//    NSLog(@"cell : %@",indexPath);
     return cell;
 }
 
@@ -288,48 +292,70 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         if ([LoginStateManager isLogin]) {
-            [_cusBar switchBarState];
-            _viewState = UPloadState;
-            [_myTableView reloadData];
+//            [_cusBar switchBarState];
+//            _viewState = UPloadState;
+//            [_myTableView reloadData];
+            [self setViewState:UPloadState];
         }else{
             [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
         }
     }
     if (button.tag == CANCELBUTTONTAG) {
-        [_cusBar switchBarState];
-        [self.selectedArray removeAllObjects];
-        _viewState = NomalState;
-        [_myTableView reloadData];
+//        [_cusBar switchBarState];
+        [self setViewState:NomalState];
     }
-    if (button.tag == ALLSELECTEDTAG) {
-        if (self.selectedArray.count != self.assetsArray.count ){
-            [self.selectedArray removeAllObjects];
-            [self.selectedArray addObjectsFromArray:self.assetsArray];
+    //全选
+//    if (button.tag == ALLSELECTEDTAG) {
+//        if (_selectedArray.count != self.assetsArray.count ){
+//            [_selectedArray removeAllObjects];
+//            [_selectedArray addObjectsFromArray:self.assetsArray];
+//        }else{
+//            [_selectedArray removeAllObjects];
+//        }
+//        [_myTableView reloadData];
+//    }
+    if (button.tag == RIGHTSELECTEDTAG) {
+        if ([self canUpload]) {
+            [self uploadPicTureWithArray:_selectedArray];
+            [self setViewState:NomalState];
         }else{
-            [self.selectedArray removeAllObjects];
+            [self showPopAlerViewnotTotasView:YES WithMes:@"请选择上传图片"];
         }
-        [_myTableView reloadData];
     }
 }
-
+- (void)setViewState:(viewState)viewState
+{
+    if (viewState == _viewState) return;
+    _viewState = viewState;
+    [_cusBar switchBarStateToUpload:_viewState == UPloadState];
+    if (_viewState == UPloadState) {
+        self.viewDeckController.panningMode = IIViewDeckNoPanning;
+    }else{
+        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    }
+    if (_selectedArray.count)
+        [_selectedArray removeAllObjects];
+    [_myTableView reloadData];
+}
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
-    PhotoDetailController * ph = [[[PhotoDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:nil] autorelease];
+    LocalDetailController * ph = [[[LocalDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:nil] autorelease];
     [self.navigationController pushViewController:ph animated:YES];
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected
 {
     
     if (isSelected) {
-        [self.selectedArray addObject:asset];
-    }else if([self.selectedArray containsObject:asset]){
-        [self.selectedArray removeObject:asset];
+        [_selectedArray addObject:asset];
+    }else if([_selectedArray containsObject:asset]){
+        [_selectedArray removeObject:asset];
     }
-    if (self.selectedArray.count) {
-        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",selectedArray.count]];
+    if (_selectedArray.count) {
+        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
     }else{
         [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
+
 @end

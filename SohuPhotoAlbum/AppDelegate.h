@@ -12,9 +12,9 @@
 #import "LocalShareController.h"
 
 @class LocalShareController;
-
 @interface AppDelegate : AppDelegateOauthor
 
 @property (strong, nonatomic) UIWindow *window;
+
 
 @end

@@ -6,14 +6,14 @@
 //
 //
 
-#import "AccountLoginBox.h"
+#import "AccountLoginResquest.h"
 #import "ASIFormDataRequest.h"
 #import "LoginStateManager.h"
 #import "JSON.h"
 
 #define CLIENT_ID @"355d0ee5-d1dc-3cd3-bdc6-76d729f61655"
 
-@implementation AccountLoginBox
+@implementation AccountLoginResquest
 
 + (void)sohuLoginWithuseName:(NSString *)useName password:(NSString *)password sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {
@@ -46,7 +46,7 @@
         }
     }];
     [request setFailedBlock:^{
-//        NSLog(@"Failture::%@ %d",[request responseString],[request responseStatusCode]);
+        DLog(@"Failture::%@ %d",[request responseString],[request responseStatusCode]);
         faiture(@"当前网络不给力，请稍后重试");
     }];
     [request startAsynchronous];

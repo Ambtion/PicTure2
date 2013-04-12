@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "PhotoesCell.h"
-#import "BaseController.h"
+#import "LocalBaseController.h"
 
-@interface LocalALLPhotoesController : BaseController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
+@interface LocalALLPhotoesController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
 {
     ALAssetsLibrary *_library;
     UITableView * _myTableView;

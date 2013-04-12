@@ -13,7 +13,7 @@
 
 @implementation TaskUnit
 
-@synthesize asseetUrl = _asseetUrl;
+@synthesize asset = _asset;
 @synthesize description = _description;
 @synthesize taskState = _taskState;
 @synthesize thumbnail = _thumbnail;
@@ -22,7 +22,7 @@
 
 - (void)dealloc
 {
-    self.asseetUrl = nil;
+    self.asset = nil;
     self.thumbnail = nil;
     self.description = nil;
     self.request = nil;
@@ -40,57 +40,35 @@
 }
 - (NSURL *)asseetUrl
 {
-    //    NSLog(@"%s : AssetURL is Write property",__FUNCTION__);
     return nil;
 }
 
-- (void)getImageSucess:(void (^)(NSData * imageData,TaskUnit * unit))resultBlock failture:(void(^)(NSError * error,TaskUnit * unit))myfailtureBlock;
+- (NSData*)imageDataFromAsset
 {
-    
-    if (self.data) {
-        resultBlock(self.data,self);
-        return;
+    //确保登陆
+    NSNumber * isUploadJPEGImage = nil;
+    if ([LoginStateManager isLogin]){
+        isUploadJPEGImage = [PerfrenceSettingManager isUploadJPEGImage];
+    }else{
+        return nil;
     }
     
-    ALAssetsLibrary * lib = [[ALAssetsLibrary alloc] init];
-    [lib assetForURL:_asseetUrl resultBlock:^(ALAsset *asset) {
-        
-        ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
-        
-        Byte *buffer = (Byte*)malloc(defaultRep.size);
-        NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-        NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-        
-        NSNumber * isUploadJPEGImage = nil;
-        
-        if ([LoginStateManager isLogin]){
-            isUploadJPEGImage = [PerfrenceSettingManager isUploadJPEGImage];
-        }else{
-            resultBlock(nil,self);
-            return;
-        }
-        
-        if (!isUploadJPEGImage || ![isUploadJPEGImage boolValue]) {
-//            data = UIImageJPEGRepresentation(image, 1.f);
-//            NSLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
-            
-        }else{
-            CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
-            CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-            UIImage * image = [UIImage imageWithCGImage:imageRef];
-            data = UIImageJPEGRepresentation(image, 0.5);
-//            UIImage * image = [UIImage imageWithCGImage:[defaultRep fullResolutionImage]                                              scale:[defaultRep scale] orientation:(UIImageOrientation)[defaultRep orientation]];
-         //            image = [image fixOrientation];
-//            NSLog(@"cpmpre:when upload : %f",[data length]/(1024 * 1024.f));
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            resultBlock(data,self);
-            [lib release];
-        });
-        
-    } failureBlock:^(NSError *error) {
-        myfailtureBlock(error,self);
-        [lib release];
-    }];
+    ALAssetRepresentation * defaultRep = [self.asset defaultRepresentation];
+    Byte *buffer = (Byte*)malloc(defaultRep.size);
+    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+    
+    if (!isUploadJPEGImage || ![isUploadJPEGImage boolValue]) {
+        DLog(@"Original Image");
+        //            data = UIImageJPEGRepresentation(image, 1.f);
+        //            NSLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
+    }else{
+        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
+        CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+        UIImage * image = [UIImage imageWithCGImage:imageRef];
+        data = UIImageJPEGRepresentation(image, 0.5);
+        DLog(@"cpmpre:when upload : %f",[data length]/(1024 * 1024.f));
+    }
+    return data;
 }
 @end

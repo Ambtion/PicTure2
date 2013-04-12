@@ -48,7 +48,7 @@ static DataBaseManager * defaultDataBaseManager = nil;
     NSString * name = [self dataBasePath];
     
     if (sqlite3_open([name UTF8String], &_dataBase) !=SQLITE_OK) {
-        NSLog(@"error to init sqlite");
+        DLog(@"error to init sqlite");
         _dataBase = NULL;
     }
 }
@@ -59,7 +59,7 @@ static DataBaseManager * defaultDataBaseManager = nil;
                       "(ID INTEGER PRIMARY KEY AUTOINCREMENT,PhotoURL TEXT)",TABLENAME];
     char *errsql = NULL;
     if (sqlite3_exec(_dataBase, [sql UTF8String], NULL, NULL, &errsql)!= SQLITE_OK) {
-        NSLog(@"error to exec %s", errsql);
+        DLog(@"error to exec %s", errsql);
         free(errsql);
     }
 }
@@ -86,7 +86,7 @@ static DataBaseManager * defaultDataBaseManager = nil;
                            TABLENAME,photoURLS];
     char * error = NULL;
     if (sqlite3_exec(_dataBase, [insertSql UTF8String], NULL, NULL, &error)!= SQLITE_OK) {
-        NSLog(@"insert error::%s", error);
+        DLog(@"insert error::%s", error);
         free(error);
         return NO;
     }
@@ -100,7 +100,7 @@ static DataBaseManager * defaultDataBaseManager = nil;
     
     char* error = NULL;
     if (sqlite3_exec(_dataBase, [deletaSql UTF8String], NULL, NULL, &error)!=SQLITE_OK) {
-        NSLog(@"delete error:%s",error);
+        DLog(@"delete error:%s",error);
         free(error);
         return NO;
     }
@@ -114,7 +114,7 @@ static DataBaseManager * defaultDataBaseManager = nil;
     NSString * selectSql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE PhotoURL = '%@'",TABLENAME,photoURLS];
     sqlite3_stmt * statment = NULL;
     if (sqlite3_prepare_v2(_dataBase, [selectSql UTF8String], -1, &statment, NULL) == SQLITE_OK) {
-//        NSLog(@"%s",__FUNCTION__);
+//        DLog(@"%s",__FUNCTION__);
         while (sqlite3_step(statment) == SQLITE_ROW) {
             count++;
         }

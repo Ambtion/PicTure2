@@ -6,34 +6,24 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "PhotoDetailController.h"
+#import "PhotoDetailBaseController.h"
 #import "LocalShareController.h"
 #import "AppDelegate.h"
-#import "LimitCacheForImage.h"
 
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #define OFFSETX 20
 
-@interface PhotoDetailController ()
-@property(nonatomic,retain)NSMutableArray * assetsArray;
-@property(nonatomic,assign)NSInteger curPageNum;
-@property(nonatomic,retain)UIScrollView * scrollView;
-@property(nonatomic,retain)ImageScaleView * fontScaleImage;
-@property(nonatomic,retain)ImageScaleView * curScaleImage;
-@property(nonatomic,retain)ImageScaleView * rearScaleImage;
-@property(nonatomic,retain)CustomizationNavBar * cusBar;
-@property(nonatomic,retain)LimitCacheForImage * cache;
-@property(nonatomic,retain)ALAssetsGroup * group;
-@end
+
 
 static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 
-@implementation PhotoDetailController
+@implementation PhotoDetailBaseController
+
 @synthesize assetsArray = _assetsArray;
 @synthesize curPageNum = _curPageNum;
-@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar,cache = _cache,group = _group;
+@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -44,28 +34,26 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [_curScaleImage release];
     [_rearScaleImage release];
     [_cusBar release];
-    [_cache release];
 //    [_tabBar release];
     [_libiary release];
-    self.group = nil; //不一定创建
     [super dealloc];
 }
-- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
-{
-    self = [super init];
-    if (self) {
-        self.wantsFullScreenLayout = YES;
-        self.curPageNum = [array indexOfObject:asset];
-        self.assetsArray = [[array copy] autorelease];
-        self.cache = [[[LimitCacheForImage alloc] init] autorelease];
-        _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
-        _isHidingBar = NO;
-        _isInit = YES;
-        _isRotating = NO;
-        self.group = group;
-    }
-    return self;
-}
+//- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
+//{
+//    self = [super init];
+//    if (self) {
+//        self.wantsFullScreenLayout = YES;
+//        self.cache = [[[LimitCacheForImage alloc] init] autorelease];
+//        _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
+//        _isHidingBar = NO;
+//        _isInit = YES;
+//        _isRotating = NO;
+//        self.curPageNum = [array indexOfObject:asset];
+//        self.assetsArray = [[array copy] autorelease];
+//        self.group = group;
+//    }
+//    return self;
+//}
 
 #pragma mark - initSubView
 - (void)viewDidLoad
@@ -112,49 +100,44 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
 }
-#pragma mark  -  ReadData
-- (void)applicationDidBecomeActive:(NSNotification *)notification
-{
-    [self readPhotoes];
-}
-- (void)readPhotoes
-{
-    ALAsset * asset = [self.assetsArray objectAtIndex:_curPageNum];
-    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
-    if (!_libiary)
-        _libiary = [[ALAssetsLibrary alloc] init];
-    NSMutableArray * tempArry = [NSMutableArray arrayWithCapacity:0];
-    if (!self.group) {
-        [_libiary readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
-            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
-        } failture:^(NSError *error) {
-            
-        }];
-    }else{
-        [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
-            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
-        }];
-    }
-}
-- (NSMutableArray *)revertObjectArray:(NSMutableArray *)array
-{
-    NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = array.count - 1; i >= 0; i--)
-        [finalArray addObject:[array objectAtIndex:i]];
-    return finalArray;
-}
-- (void)resetCurNumWhenAssetArryChangeWithPreAsset:(ALAsset *)asset
-{
-    self.assetsArray = [self revertObjectArray:self.assetsArray]; //逆序排序
-    NSUInteger curnum = [self.assetsArray indexOfObject:asset];
-    if (curnum == NSNotFound) {
-        _curPageNum = [self validPageValue:_curPageNum];
-    }else{
-        _curPageNum =  curnum;
-    }
-    _canGetActualImage = YES;
-    [self refreshScrollView];
-}
+//- (void)readPhotoes
+//{
+//    ALAsset * asset = [self.assetsArray objectAtIndex:_curPageNum];
+//    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
+//    if (!_libiary)
+//        _libiary = [[ALAssetsLibrary alloc] init];
+//    NSMutableArray * tempArry = [NSMutableArray arrayWithCapacity:0];
+//    if (!self.group) {
+//        [_libiary readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
+//            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
+//        } failture:^(NSError *error) {
+//            
+//        }];
+//    }else{
+//        [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
+//            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
+//        }];
+//    }
+//}
+//- (NSMutableArray *)revertObjectArray:(NSMutableArray *)array
+//{
+//    NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
+//    for (int i = array.count - 1; i >= 0; i--)
+//        [finalArray addObject:[array objectAtIndex:i]];
+//    return finalArray;
+//}
+//- (void)resetCurNumWhenAssetArryChangeWithPreAsset:(ALAsset *)asset
+//{
+//    self.assetsArray = [self revertObjectArray:self.assetsArray]; //逆序排序
+//    NSUInteger curnum = [self.assetsArray indexOfObject:asset];
+//    if (curnum == NSNotFound) {
+//        _curPageNum = [self validPageValue:_curPageNum];
+//    }else{
+//        _curPageNum =  curnum;
+//    }
+//    _canGetActualImage = YES;
+//    [self refreshScrollView];
+//}
 #pragma mark - ReloadSubViews
 - (void)reloadAllSubViews
 {
@@ -234,22 +217,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         return CGAffineTransformRotate(CGAffineTransformIdentity, M_PI_2);
     return CGAffineTransformIdentity;
 }
-- (CGSize)getIdentifyImageSizeWithImageView:(UIImageView *)imageView isPortraitorientation:(BOOL)isPortrait
-{
-    CGFloat w = imageView.image.size.width;
-    CGFloat h = imageView.image.size.height;
-    CGRect frameRect = CGRectZero;
-    CGRect  screenFrame = [[UIScreen mainScreen] bounds];
-    if (isPortrait) {
-        frameRect = screenFrame;
-    }else{
-        frameRect = CGRectMake(0, 0, screenFrame.size.height, screenFrame.size.width);
-    }
-    CGRect rect = CGRectZero;
-    CGFloat scale = MIN(frameRect.size.width / w, frameRect.size.height / h);
-    rect = CGRectMake(0, 0, w * scale, h * scale);
-    return rect.size;
-}
+
 - (ImageScaleView *)getCurrentImageView
 {
     ImageScaleView * view = nil;
@@ -268,7 +236,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         &&(UIDeviceOrientationIsPortrait(orientation)
            || UIDeviceOrientationIsLandscape(orientation))) {
             //可以旋转方向
-            NSLog(@"can rotation %d",orientation);
+            DLog(@"can rotation %d",orientation);
             if (UIDeviceOrientationIsLandscape(PreOrientation))
                 return UIDeviceOrientationIsPortrait(orientation);
             if (UIDeviceOrientationIsPortrait(PreOrientation))
@@ -276,6 +244,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     }
     return NO;
 }
+
 - (void)listOrientationChanged:(NSNotification *)notification
 {
     if (_isInit || !_isHidingBar ||![self isSupportOrientation]) return;
@@ -289,7 +258,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         transform = CGAffineTransformInvert(self.view.transform);
         CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:YES];
         scale = MIN( identifySzie.width / [self getCurrentImageView].imageView.frame.size.width, identifySzie.height / [self getCurrentImageView].frame.size.height);
-
     }else{
         CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:NO];
         scale = MIN( identifySzie.width / [self getCurrentImageView].imageView.frame.size.width, identifySzie.height / [self getCurrentImageView].imageView.frame.size.height);
@@ -445,18 +413,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 
 #pragma mark - GetImageFromAsset
-- (void)setImageView:(UIImageView *)imageView WithAsset:(ALAsset *)asset
-{
-    imageView.image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
-}
-- (UIImage *)getImageFromAsset:(id )asset
-{
-    UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
-    if (!image) {
-        image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
-    }
-    return image;
-}
 - (void)setActureImage
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -488,71 +444,136 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         }
     });
 }
-- (UIImage *)getActualImage:(ALAsset *)asset andOrientation:(UIImageOrientation)orientation
+
+#pragma mark - Overload function
+- (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
-    if (!image) {
-        image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];
-        
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
-        });
-    }
-    return image;
+    //    [self readPhotoes];
+}
+- (UIImage *)getImageFromAsset:(id)asset
+{
+    DLog(@"%s",__FUNCTION__);
+//    UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
+//    if (!image) {
+//        image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+//    }
+//    return image;
+    return nil;
+}
+- (UIImage *)getActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
+{
+    DLog(@"%s",__FUNCTION__);
+//    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
+//    if (!image) {
+//        image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];
+//        
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+//            [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
+//        });
+//    }
+//    return image;
+    return nil;
 }
 
-- (void)setImagePropertyWith:(ALAsset *)asset
+- (CGSize)getIdentifyImageSizeWithImageView:(UIImageView *)imageView isPortraitorientation:(BOOL)isPortrait
 {
-    //get full imageData
-    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
-    Byte *buffer = (Byte*)malloc(defaultRep.size);
-    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-    
-    // compressData providerData 
-    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
-    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-    UIImage * image = [UIImage imageWithCGImage:imageRef];
-    NSData* finaldata = UIImageJPEGRepresentation(image, 0.5);
-    
-    //compressData with exif
-    finaldata =  [self writeExif:(NSDictionary *)[self getPropertyOfdata:data] intoImage:finaldata];
-    
+    DLog(@"%s",__FUNCTION__);
+//    CGFloat w = imageView.image.size.width;
+//    CGFloat h = imageView.image.size.height;
+//    CGRect frameRect = CGRectZero;
+//    CGRect  screenFrame = [[UIScreen mainScreen] bounds];
+//    if (isPortrait) {
+//        frameRect = screenFrame;
+//    }else{
+//        frameRect = CGRectMake(0, 0, screenFrame.size.height, screenFrame.size.width);
+//    }
+//    CGRect rect = CGRectZero;
+//    CGFloat scale = MIN(frameRect.size.width / w, frameRect.size.height / h);
+//    rect = CGRectMake(0, 0, w * scale, h * scale);
+//    return rect.size;
+    return CGSizeZero;
 }
-- (CFDictionaryRef )getPropertyOfdata:(NSData *)data
+#pragma mark - BarDelegate
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
-    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)data, NULL);
-    if (imageSource == NULL) {
-        // Error loading image
-        return nil;
-    }
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                             [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
-                             nil];
-    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
-    NSLog(@"ori:%@",imageProperties);
-    return imageProperties;
-//    [self writeExif: (NSDictionary *)imageSource intoImageData:data];
+    DLog(@"%s",__FUNCTION__);
+
+    //    if (button.tag == LEFTBUTTON)
+    //        [self.navigationController popViewControllerAnimated:YES];
+    //    if (button.tag == RIGHT1BUTTON)
+    //        return ;
+    //    if (button.tag == RIGHT2BUTTON)
+    //         [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
 }
 
-- (NSData *)writeExif:(NSDictionary *)dic intoImage:(NSData *)myimageData
-{
-    [self getPropertyOfdata:myimageData];
-    NSMutableData * mydata = [[[NSMutableData alloc] initWithLength:0] autorelease];
-    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)myimageData);
-    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-    CGImageDestinationRef destination = CGImageDestinationCreateWithData((CFMutableDataRef)mydata, kUTTypeJPEG, 1, NULL);
-    CGImageDestinationAddImage(destination, imageRef, (CFDictionaryRef)dic);
-    CGImageDestinationFinalize(destination);
-    CFRelease(destination);
-    [self getPropertyOfdata:mydata];
-    return mydata;
-}
-- (UIImage *)getImageFromCacheWithKey:(id)aKey
-{
-    NSData * imageData = [self.cache objectForKey:aKey];
-    return [UIImage imageWithData:imageData];
-}
+//- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
+//{
+//    if (button.tag == TABSHARETAG) {
+//        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
+//    }
+//    if (button.tag == TABDOWNLOADNTAG) {
+//
+//    }
+//    if (button.tag == TABEDITTAG) {
+//
+//    }
+//    if (button.tag == TABDELETETAG) {
+//        
+//    }
+//}
+//- (void)setImagePropertyWith:(ALAsset *)asset
+//{
+//    //get full imageData
+//    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
+//    Byte *buffer = (Byte*)malloc(defaultRep.size);
+//    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+//    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+//    
+//    // compressData providerData 
+//    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
+//    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+//    UIImage * image = [UIImage imageWithCGImage:imageRef];
+//    NSData* finaldata = UIImageJPEGRepresentation(image, 0.5);
+//    
+//    //compressData with exif
+//    finaldata =  [self writeExif:(NSDictionary *)[self getPropertyOfdata:data] intoImage:finaldata];
+//    
+//}
+//- (CFDictionaryRef )getPropertyOfdata:(NSData *)data
+//{
+//    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+//    if (imageSource == NULL) {
+//        // Error loading image
+//        return nil;
+//    }
+//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+//                             [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
+//                             nil];
+//    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
+//    DLog(@"ori:%@",imageProperties);
+//    return imageProperties;
+////    [self writeExif: (NSDictionary *)imageSource intoImageData:data];
+//}
+//
+//- (NSData *)writeExif:(NSDictionary *)dic intoImage:(NSData *)myimageData
+//{
+//    [self getPropertyOfdata:myimageData];
+//    NSMutableData * mydata = [[[NSMutableData alloc] initWithLength:0] autorelease];
+//    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)myimageData);
+//    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+//    CGImageDestinationRef destination = CGImageDestinationCreateWithData((CFMutableDataRef)mydata, kUTTypeJPEG, 1, NULL);
+//    CGImageDestinationAddImage(destination, imageRef, (CFDictionaryRef)dic);
+//    CGImageDestinationFinalize(destination);
+//    CFRelease(destination);
+//    [self getPropertyOfdata:mydata];
+//    return mydata;
+//}
+//- (UIImage *)getImageFromCacheWithKey:(id)aKey
+//{
+//    NSData * imageData = [self.cache objectForKey:aKey];
+//    return [UIImage imageWithData:imageData];
+//}
+
 #pragma mark - Function
 - (void)resetImageRect:(UIImageView *)imageView
 {
@@ -594,31 +615,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     if(value >= _assetsArray.count) value = _assetsArray.count - 1;
     return value;
 }
-#pragma mark - BarDelegate
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
-{
-    if (button.tag == LEFTBUTTON)
-        [self.navigationController popViewControllerAnimated:YES];
-    if (button.tag == RIGHT1BUTTON)
-        return ;
-    if (button.tag == RIGHT2BUTTON)
-         [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
-}
-//- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
-//{
-//    if (button.tag == TABSHARETAG) {
-//        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
-//    }
-//    if (button.tag == TABDOWNLOADNTAG) {
-//        
-//    }
-//    if (button.tag == TABEDITTAG) {
-//        
-//    }
-//    if (button.tag == TABDELETETAG) {
-//        
-//    }
-//}
 
 #pragma mark - handleGuesture
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
@@ -658,10 +654,5 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         _isHidingBar = YES;
     }];
 }
-#pragma mark didReceiveMemoryWarning
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    [self.cache clear];
-}
+
 @end

@@ -20,7 +20,7 @@ typedef enum {
 @interface TaskUnit : NSObject
 
 // 要上传的图片的路径
-@property (strong, nonatomic) NSURL * asseetUrl;
+@property (strong, nonatomic) ALAsset * asset;
 //缩略图
 @property (strong, nonatomic) UIImage * thumbnail;
 // 要上传的图片的文字描述
@@ -34,6 +34,5 @@ typedef enum {
 //保留request
 @property (retain, nonatomic) ASIFormDataRequest * request;
 
-- (void)getImageSucess:(void (^)(NSData * imageData,TaskUnit * unit))resultBlock failture:(void(^)(NSError * error,TaskUnit * unit))myfailtureBlock;
-
+- (NSData*)imageDataFromAsset;
 @end

@@ -9,6 +9,8 @@
 #import "LocalAlbumsController.h"
 #import "AlbumPhotoesController.h"
 #import "LocalALLPhotoesController.h"
+#import "LoginStateManager.h"
+
 //#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalAlbumsController ()
@@ -51,16 +53,25 @@
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
+        
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setButtoUploadState:YES];
+        
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         _cusBar.sLabelText.text = @"请选择专辑";
+        
         [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.sRightStateButton setButtoUploadState:YES];
+
         [_cusBar.sRightStateButton setHidden:YES];
         [_cusBar.sAllSelectedbutton setHidden:YES];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
+    
+    //界面出现,bar恢复normal状态
+    [_cusBar switchBarStateToUpload:NomalState];
     [self.navigationItem setHidesBackButton:YES animated:NO];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
@@ -78,14 +89,30 @@
     if (button.tag == RIGHT1BUTTON) {
         self.viewDeckController.centerController  = [[[LocalALLPhotoesController alloc] init] autorelease];
     }
-    if (button.tag == RIGHT2BUTTON) {
-        _viewState = UPloadState;
-        [_cusBar switchBarState];
+    if (button.tag == RIGHT2BUTTON) { //上传
+        if ([LoginStateManager isLogin]) {
+            [self setViewState:UPloadState];
+        }else{
+            [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
+        }
     }
     if (button.tag == CANCELBUTTONTAG) {
-        _viewState = NomalState;
-        [_cusBar switchBarState];
+        [self setViewState:NomalState];
     }
+}
+- (void)setViewState:(viewState)viewState
+{
+    if (viewState == _viewState) return;
+    _viewState = viewState;
+    [_cusBar switchBarStateToUpload:_viewState == UPloadState];
+    if (_viewState == UPloadState) {
+        self.viewDeckController.panningMode = IIViewDeckNoPanning;
+    }else{
+        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    }
+    if (_selectedArray.count)
+        [_selectedArray removeAllObjects];
+    [_myTableView reloadData];
 }
 #pragma mark - ReadData
 - (void)applicationDidBecomeActive:(NSNotification *)notification

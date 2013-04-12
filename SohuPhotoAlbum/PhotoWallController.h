@@ -10,7 +10,7 @@
 #import "EGORefreshTableHeaderView.h"
 #import "SCPMoreTableFootView.h"
 
-@interface CloundPhotoController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate>
+@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate>
 {
     UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;

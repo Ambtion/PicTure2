@@ -9,5 +9,6 @@
 
 #define PHOTOUPLOADFINISHED @"photoUpLoadFinished"
 
-#define ALBUMTASKCHANGE @"AlbumTaskChange"
-#define ALBUMUPLOADOVER @"AlbumuploadOver"
+#define ALBUMTUPLOADSTART   @"AlbumTaskChange"
+#define ALBUMTASKCHANGE     @"AlbumTaskChange"
+#define ALBUMUPLOADOVER     @"AlbumuploadOver"

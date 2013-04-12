@@ -7,19 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RegisterViewController.h"
+#import "AccountLoginResquest.h"
+#import "LoginStateManager.h"
+#import "OAuthorController.h"
 #import "EmailTextField.h"
 
 @class LoginViewController;
 
+@protocol LoginViewControllerDelegate <NSObject>
+@optional
+- (void)loginViewController:(LoginViewController *)loginController cancleClick:(id)sender;
+- (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo;
+- (void)loginViewController:(LoginViewController *)loginController loginFailtureWithinfo:(id)failtureinfo;
+@end
+@interface LoginViewController : UIViewController<MBProgressHUDDelegate,OAuthorControllerDelegate>
 
-
-@interface LoginViewController : UIViewController<MBProgressHUDDelegate>
-
+@property (strong, nonatomic) id<LoginViewControllerDelegate> delegate;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIControl *backgroundControl;
 @property (strong, nonatomic) EmailTextField *usernameTextField;
 @property (strong, nonatomic) UITextField *passwordTextField;
-@property (strong, nonatomic) UIButton *registerButton;
-@property (strong, nonatomic) UIButton *loginButton;
 
 @end
