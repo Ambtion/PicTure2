@@ -25,12 +25,8 @@
 @synthesize currentTask = _currentTask;
 - (void)dealloc
 {
-    self.taskList = nil;
-    self.albumId = nil;
     [self.currentTask.request cancel];
     [self.currentTask.request clearDelegatesAndCancel];
-    self.currentTask = nil;
-    [super dealloc];
 }
 
 -(id)initWithTaskList:(NSMutableArray *)taskList album_id:(NSString *)albumID
@@ -190,7 +186,7 @@
 {
     [self.taskList removeAllObjects];
     self.currentTask = nil;
-    ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:reason] autorelease];
+    ToastAlertView * cus = [[ToastAlertView alloc] initWithTitle:reason];
     [cus show];
     if ([_delegate respondsToSelector:@selector(albumTaskQueneFinished:)]) {
         [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
@@ -203,10 +199,10 @@
     [request clearDelegatesAndCancel];
     NSDictionary * dic = [request userInfo];
     if (dic) {
-        ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:[dic objectForKey:@"FAILTURE"]] autorelease];
+        ToastAlertView * cus = [[ToastAlertView alloc] initWithTitle:[dic objectForKey:@"FAILTURE"]];
         [cus show];
     }else{
-        ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:@"图片上传失败"] autorelease];
+        ToastAlertView * cus = [[ToastAlertView alloc] initWithTitle:@"图片上传失败"];
         [cus show];
     }
     if (self.taskList.count)

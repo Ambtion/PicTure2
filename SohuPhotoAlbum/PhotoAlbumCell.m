@@ -16,12 +16,6 @@
 
 @implementation PhotoAlbumCellDataSource
 @synthesize leftGroup,rightGroup;
-- (void)dealloc
-{
-    self.leftGroup = nil;
-    self.rightGroup = nil;
-    [super dealloc];
-}
 - (CGFloat)cellHight
 {
     return CELLHEIGTH;
@@ -35,13 +29,6 @@
 - (void)dealloc
 {
     self.dataSource = nil;
-    [_leftImage release];
-    [_leftLabel release];
-    [_leftCount release];
-    [_rightImgae release];
-    [_rigthLabel release];
-    [_rightCount release];
-    [super dealloc];
 }
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -49,7 +36,7 @@
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        UIImageView * imageView1 = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alume-pic.png"]] autorelease];
+        UIImageView * imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alume-pic.png"]];
         imageView1.frame = LEFTFRAME;
         [imageView1 setUserInteractionEnabled:YES];
         _leftImage = [[UIImageView alloc] initWithFrame:CGRectMake(12, 12, imageView1.frame.size.width - 24, imageView1.frame.size.height - 24)];
@@ -69,7 +56,7 @@
         [self setNameLabelProperty:_leftLabel];
         [self.contentView addSubview:_leftLabel];
         
-        UIImageView * imageView2 = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alume-pic.png"]] autorelease];
+        UIImageView * imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alume-pic.png"]];
         imageView2.frame = RIGHTFRAME;
         [imageView2 setUserInteractionEnabled:YES];
         _rightImgae = [[UIImageView alloc] initWithFrame:_leftImage.frame];
@@ -108,8 +95,7 @@
 - (void)setDataSource:(PhotoAlbumCellDataSource *)dataSource
 {
     if (_dataSource != dataSource) {
-        [_dataSource release];
-        _dataSource = [dataSource retain];
+        _dataSource = dataSource;
         [self updataViews];
     }
 }

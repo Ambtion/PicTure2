@@ -15,8 +15,8 @@
 
 @interface AlbumPhotoesController ()
 
-@property(nonatomic,retain)NSMutableArray * assetsArray;
-@property(nonatomic,retain)NSMutableArray * dataSourceArray;
+@property(nonatomic,strong)NSMutableArray * assetsArray;
+@property(nonatomic,strong)NSMutableArray * dataSourceArray;
 //@property(nonatomic,retain)NSMutableArray * selectedArray;
 @end
 
@@ -29,13 +29,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_assetGroup release];
-    [_myTableView release];
-    [_assetsArray release];
-    [_dataSourceArray release];
-    [_selectedArray release];
-    [_libiary release];
-    [super dealloc];
 }
 - (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state
 {
@@ -115,7 +108,7 @@
 {
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < self.assetsArray.count; i+=4) {
-        PhotoesCellDataSource * source = [[[PhotoesCellDataSource alloc] init] autorelease];
+        PhotoesCellDataSource * source = [[PhotoesCellDataSource alloc] init];
         source.firstAsset = [self.assetsArray objectAtIndex:i];
         if (i + 1 < self.assetsArray.count)
             source.secoundAsset = [self.assetsArray objectAtIndex:i+1];
@@ -162,7 +155,7 @@
     static NSString * cellId = @"photoCELLId";
     PhotoesCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[[PhotoesCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId] autorelease];
+        cell = [[PhotoesCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.delegate = self;
     }
     if (indexPath.row < self.dataSourceArray.count)
@@ -188,7 +181,7 @@
         if ([LoginStateManager isLogin]) {
             [self setViewState:UPloadState];
         }else{
-            [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
+            [self.navigationController pushViewController:[[LoginViewController alloc] init] animated:YES];
         }
     }
     if (button.tag == CANCELBUTTONTAG) {
@@ -232,7 +225,7 @@
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
-    LocalDetailController * ph = [[[LocalDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:self.assetGroup] autorelease];
+    LocalDetailController * ph = [[LocalDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:self.assetGroup];
     [self.navigationController pushViewController:ph animated:YES];
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected

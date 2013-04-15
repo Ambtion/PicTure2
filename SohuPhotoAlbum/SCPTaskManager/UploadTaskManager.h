@@ -17,8 +17,8 @@
     NSMutableDictionary * _taskDic;
 }
 
-@property (nonatomic,retain)AlbumTaskList * curTask;
-@property (nonatomic,retain)NSMutableArray * taskList;
+@property (nonatomic,strong)AlbumTaskList * curTask;
+@property (nonatomic,strong)NSMutableArray * taskList;
 + (UploadTaskManager *)currentManager; // 单例模式
 
 //增加队列上传任务

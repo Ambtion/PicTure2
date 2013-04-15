@@ -23,8 +23,8 @@ typedef enum OauthorState {
     id<WXApiDelegate> _tempDelegate;
 }
 @property(nonatomic,assign)AppOauthorState state;
-@property(nonatomic,retain)TencentOAuth * tencentOAuth;
-@property(nonatomic,retain)SinaWeibo * sinaweibo;
+@property(nonatomic,strong)TencentOAuth * tencentOAuth;
+@property(nonatomic,strong)SinaWeibo * sinaweibo;
 
 - (void)sinaLoginWithDelegate:(id<SinaWeiboDelegate>)delegate;
 - (void)renrenLoginWithDelegate:(id<RenrenDelegate>)delegate;

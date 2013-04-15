@@ -11,13 +11,6 @@
 @implementation StatusImageView
 @synthesize selected = _selected;
 @synthesize isShowStatus;
-- (void)dealloc
-{
-//    [_statuImage removeObserver:self forKeyPath:@"image"];
-    [_actualView release];
-    [_statuImage release];
-    [super dealloc];
-}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

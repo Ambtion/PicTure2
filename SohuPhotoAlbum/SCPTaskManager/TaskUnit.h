@@ -25,14 +25,14 @@ typedef enum {
 @property (strong, nonatomic) UIImage * thumbnail;
 // 要上传的图片的文字描述
 @property (strong, nonatomic) NSString * description;
-@property (nonatomic,strong ) NSData * data;
+@property (strong, nonatomic ) NSData * data;
 
 //任务状态
 @property (assign, nonatomic) UPloadStatus taskState;
 
 
 //保留request
-@property (retain, nonatomic) ASIFormDataRequest * request;
+@property (strong, nonatomic) ASIFormDataRequest * request;
 
 - (NSData*)imageDataFromAsset;
 @end

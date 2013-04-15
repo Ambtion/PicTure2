@@ -35,21 +35,16 @@ static natural_t get_free_memory(void)
     return mem_free;
 }
 @interface LimitCacheForImage()
-@property(nonatomic,retain)NSMutableDictionary * cacheContainer;
+@property(nonatomic,strong)NSMutableDictionary * cacheContainer;
 @end
 
 @implementation LimitCacheForImage
 @synthesize cacheContainer;
-- (void)dealloc
-{
-    [cacheContainer release];
-    [super dealloc];
-}
 - (id)init
 {
     self = [super init];
     if (self) {
-        cacheContainer = [[NSMutableDictionary dictionaryWithCapacity:0] retain];
+        cacheContainer = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     return self;
 }

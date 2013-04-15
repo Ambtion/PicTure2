@@ -17,7 +17,7 @@
 + (id)buttonWithType:(UIButtonType)buttonType
 {
     UIButton * button = [super buttonWithType:buttonType];
-    UIImageView * uploadImageView = [[[UIImageView alloc] initWithFrame:button.bounds] autorelease];
+    UIImageView * uploadImageView = [[UIImageView alloc] initWithFrame:button.bounds];
     uploadImageView.backgroundColor = [UIColor redColor];
     uploadImageView.tag = 100;
     uploadImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -28,7 +28,6 @@
 - (void)dealloc
 {
     [self removeObserverOnCenter];
-    [super dealloc];
 }
 #pragma mark Notification upload
 - (void)setButtoUploadState:(BOOL)isUploadStateButton
@@ -71,22 +70,6 @@
 @end
 @implementation CustomizationNavBar
 @synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
-- (void)dealloc
-{
-    [_normalBar release];
-    [nLeftButton release];
-    [nLabelImage release];
-    [nLabelText release];
-    [nRightButton1 release];
-    [nRightButton2 release];
-    [nRightButton3 release];
-    [_stateBar release];
-    [sLabelText release];
-    [sLeftButton release];
-    [sAllSelectedbutton release];
-    [sRightStateButton release];
-    [super dealloc];
-}
 - (id)initwithDelegate:(id<CusNavigationBarDelegate>)Adelegate
 {
     self.delegate = Adelegate;
@@ -105,9 +88,9 @@
         nLeftButton.tag = LEFTBUTTON;
         [self.nLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_normalBar addSubview:nLeftButton];
-        self.nLabelImage = [[[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)] autorelease];
+        self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
         [_normalBar addSubview:nLabelImage];
-        self.nLabelText = [[[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)] autorelease];
+        self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)];
         self.nLabelText.backgroundColor = [UIColor clearColor];
         self.nLabelText.textColor = [UIColor blackColor];
         [_normalBar addSubview:nLabelText];
@@ -123,7 +106,7 @@
     [_stateBar setUserInteractionEnabled:YES];
     _stateBar.image = [UIImage imageNamed:@"title-bar.png"];
     
-    self.sLabelText = [[[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)] autorelease];
+    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)];
     self.sLabelText.backgroundColor = [UIColor clearColor];
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];

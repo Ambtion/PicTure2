@@ -14,8 +14,8 @@
 //#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalAlbumsController ()
-@property(nonatomic,retain)NSMutableArray *assetGroups;
-@property(nonatomic,retain)NSMutableArray *dataSourceArray;
+@property(nonatomic,strong)NSMutableArray *assetGroups;
+@property(nonatomic,strong)NSMutableArray *dataSourceArray;
 @end
 
 @implementation LocalAlbumsController
@@ -24,12 +24,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_cusBar release];
-    [_myTableView release];
-    [_library release];
-    [_assetGroups release];
-    [_dataSourceArray release];
-    [super dealloc];
 }
 - (void)viewDidLoad
 {
@@ -86,13 +80,13 @@
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) {
-        self.viewDeckController.centerController  = [[[LocalALLPhotoesController alloc] init] autorelease];
+        self.viewDeckController.centerController  = [[LocalALLPhotoesController alloc] init];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         if ([LoginStateManager isLogin]) {
             [self setViewState:UPloadState];
         }else{
-            [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
+            [self.navigationController pushViewController:[[LoginViewController alloc] init] animated:YES];
         }
     }
     if (button.tag == CANCELBUTTONTAG) {
@@ -136,7 +130,7 @@
 {
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i< self.assetGroups.count ; i+=2) {
-        PhotoAlbumCellDataSource * dataSource = [[[PhotoAlbumCellDataSource alloc] init] autorelease];
+        PhotoAlbumCellDataSource * dataSource = [[PhotoAlbumCellDataSource alloc] init];
         dataSource.leftGroup = [self.assetGroups objectAtIndex:i];
         if (i+1 < self.assetGroups.count) {
             dataSource.rightGroup = [self.assetGroups objectAtIndex:i+1];
@@ -166,7 +160,7 @@
     static NSString * cellID = @"CELLID";
     PhotoAlbumCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
-        cell  = [[[PhotoAlbumCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID] autorelease];
+        cell  = [[PhotoAlbumCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         cell.delegate  = self;
     }
     if (indexPath.row < self.dataSourceArray.count)
@@ -181,6 +175,6 @@
 #pragma mark CellDelegate
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
 {
-    [self.navigationController pushViewController:[[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] autorelease] animated:YES];
+    [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] animated:YES];
 }
 @end

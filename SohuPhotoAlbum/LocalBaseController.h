@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomizationNavBar.h"
+#import "LoginViewController.h"
 
 #define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
@@ -16,14 +17,14 @@ typedef enum ViewState {
     UPloadState ,
 }viewState;
 
-@interface LocalBaseController : UIViewController<CusNavigationBarDelegate>
+@interface LocalBaseController : UIViewController<CusNavigationBarDelegate,LoginViewControllerDelegate>
 {
     CustomizationNavBar * _cusBar;
     NSMutableArray * _selectedArray;
     viewState _viewState;
 }
 @property(nonatomic,assign)viewState viewState;
-@property(nonatomic,retain)UITableView * myTableView;
+@property(nonatomic,strong)UITableView * myTableView;
 //@property(nonatomic,assign)NSMutableArray * selectedArray;
 - (CGRect)subTableViewRect;
 

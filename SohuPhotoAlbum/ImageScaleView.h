@@ -18,7 +18,7 @@
     UIImageView * _imageView;
 }
 
-@property(nonatomic,assign)id<ImageScaleViewDelegate> Adelegate;
-@property(nonatomic,retain)UIImageView * imageView;
+@property(nonatomic,weak)id<ImageScaleViewDelegate> Adelegate;
+@property(nonatomic,strong)UIImageView * imageView;
 @property(nonatomic,assign)BOOL tapEnabled;
 @end

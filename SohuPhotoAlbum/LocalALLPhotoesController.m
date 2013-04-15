@@ -10,36 +10,23 @@
 #import "LocalAlbumsController.h"
 #import "LocalDetailController.h"
 #import "LoginStateManager.h"
-#import "LoginViewController.h"
 
 
 #define SLABELTEXT @"请选择照片"
 
 @interface LocalALLPhotoesController ()
-@property(nonatomic,retain)NSMutableArray *assetGroups;
-@property(nonatomic,retain)NSMutableArray *assetsArray;
-@property(nonatomic,retain)NSMutableArray *dataSourceArray;
-@property(nonatomic,retain)NSMutableArray *assetsSection;
-@property(nonatomic,retain)NSMutableArray *assetSectionisShow;
-//@property(nonatomic,retain)NSMutableArray *selectedArray;
+@property(nonatomic,strong)NSMutableArray *assetGroups;
+@property(nonatomic,strong)NSMutableArray *assetsArray;
+@property(nonatomic,strong)NSMutableArray *dataSourceArray;
+@property(nonatomic,strong)NSMutableArray *assetsSection;
+@property(nonatomic,strong)NSMutableArray *assetSectionisShow;
 @end
 
 @implementation LocalALLPhotoesController
 @synthesize assetGroups,assetsArray,dataSourceArray,assetsSection,assetSectionisShow;
-//@synthesize selectedArray = _selectedArray;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_myTableView release];
-    [_library release];
-    [assetGroups release];
-    [assetsArray release];
-    [dataSourceArray release];
-    [assetsSection release];
-    [assetSectionisShow release];
-    [_selectedArray release];
-    [_cusBar release];
-    [super dealloc];
 }
 - (void)viewDidLoad
 {
@@ -49,7 +36,7 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
-    _selectedArray = [[NSMutableArray arrayWithCapacity:0] retain];
+    _selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:_myTableView];
     [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -108,7 +95,7 @@
 - (void)prepareDataWithTimeOrder
 {
     //asserts按日期大小排序;
-    self.assetsArray = [[[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy] autorelease];
+    self.assetsArray = [[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy];
     //对asset分组
     [self divideAssettByDayTime];
     DLog(@"myTableView reload");
@@ -163,7 +150,6 @@
             source.thridAsset = nil;
         }
         [finalArray addObject:source];
-        [source release];
     }
     return finalArray;
 }
@@ -182,7 +168,7 @@
 - (NSString *)stringFromdate:(NSDate *)date
 {
     //转化日期格式
-    NSDateFormatter * dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyy-MM-dd"];
     return [dateFormatter stringFromDate:date];
 }
@@ -227,11 +213,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIImageView * view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 24)] autorelease];
+    UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 24)];
     view.image = [UIImage imageNamed:@"index-bar.png"];
-    UILabel * label = [[[UILabel alloc] initWithFrame:CGRectMake(6, 0, 314, 24)] autorelease];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(6, 0, 314, 24)];
     [view setUserInteractionEnabled:YES];
-    UITapGestureRecognizer * tap  =[[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInSection:)    ] autorelease];
+    UITapGestureRecognizer * tap  =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInSection:)    ];
     [view addGestureRecognizer:tap];
     view.tag = section;
     label.textAlignment = UITextAlignmentLeft;
@@ -263,7 +249,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     static NSString * cellId = @"photoCELLId";
     PhotoesCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[[PhotoesCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId] autorelease];
+        cell = [[PhotoesCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.delegate = self;
     }
     if (indexPath.section < self.dataSourceArray.count
@@ -288,20 +274,18 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //切换页面
-        self.viewDeckController.centerController = [[[LocalAlbumsController alloc] init] autorelease];
+        self.viewDeckController.centerController = [[LocalAlbumsController alloc] init];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         if ([LoginStateManager isLogin]) {
-//            [_cusBar switchBarState];
-//            _viewState = UPloadState;
-//            [_myTableView reloadData];
             [self setViewState:UPloadState];
         }else{
-            [self.navigationController pushViewController:[[[LoginViewController alloc] init] autorelease] animated:YES];
+            LoginViewController * lvc  = [[LoginViewController alloc] init];
+            lvc.delegate = self;
+            [self.navigationController pushViewController:lvc animated:YES];
         }
     }
     if (button.tag == CANCELBUTTONTAG) {
-//        [_cusBar switchBarState];
         [self setViewState:NomalState];
     }
     //全选
@@ -340,7 +324,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
-    LocalDetailController * ph = [[[LocalDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:nil] autorelease];
+    LocalDetailController * ph = [[LocalDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:asset andAssetGroup:nil];
     [self.navigationController pushViewController:ph animated:YES];
 }
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset Select:(BOOL)isSelected

@@ -27,17 +27,11 @@ static UploadTaskManager * sharedTaskManager = nil;
     return sharedTaskManager;
 }
 #pragma mark -
-- (void)dealloc
-{
-    [_taskList release];
-    self.curTask = nil;
-    [super dealloc];
-}
 - (id)init
 {
     if (self = [super init]) {
         _taskList = [[NSMutableArray alloc] initWithCapacity:0];
-        _taskDic = [[NSMutableDictionary dictionaryWithCapacity:0] retain];
+        _taskDic = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     return self;
 }
@@ -85,7 +79,6 @@ static UploadTaskManager * sharedTaskManager = nil;
     [dic setObject:[NSNumber numberWithInt:total] forKey:@"Total"];
     [dic setObject:[NSNumber numberWithInt:finished] forKey:@"Finish"];
     [_taskDic setObject:dic forKey:taskList.albumId];
-    [dic release];
 }
 - (NSInteger)getTotalNumWith:(AlbumTaskList *)taskList
 {
@@ -116,7 +109,6 @@ static UploadTaskManager * sharedTaskManager = nil;
     [dic setObject:[NSNumber numberWithInt:total] forKey:@"Total"];
     [dic setObject:[NSNumber numberWithInt:finished] forKey:@"Finish"];
     [_taskDic setObject:dic forKey:taskList.albumId];
-    [dic release];
     
 }
 - (void)cancelOneRequestWith:(AlbumTaskList *)taskList
@@ -128,7 +120,6 @@ static UploadTaskManager * sharedTaskManager = nil;
     [dic setObject:[NSNumber numberWithInt:total] forKey:@"Total"];
     [dic setObject:[NSNumber numberWithInt:finished] forKey:@"Finish"];
     [_taskDic setObject:dic forKey:taskList.albumId];
-    [dic release];
 }
 - (void)removeAlbunInfo:(NSString  *)albumId
 {

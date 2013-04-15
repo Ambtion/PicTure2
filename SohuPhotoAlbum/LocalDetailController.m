@@ -15,24 +15,18 @@
 
 @implementation LocalDetailController
 @synthesize cache = _cache, group = _group;
-- (void)dealloc
-{
-    [_cache release];
-    [_group release];
-    [super dealloc];
-}
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
 {
     self = [super init];
     if (self) {
         self.wantsFullScreenLayout = YES;
-        _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
+        _curImageArray = [NSMutableArray arrayWithCapacity:0];
         _isHidingBar = NO;
         _isInit = YES;
         _isRotating = NO;
-        self.cache = [[[LimitCacheForImage alloc] init] autorelease];
+        self.cache = [[LimitCacheForImage alloc] init];
         self.curPageNum = [array indexOfObject:asset];
-        self.assetsArray = [[array copy] autorelease];
+        self.assetsArray = [array copy];
         self.group = group;
     }
     return self;
@@ -139,7 +133,7 @@
     if (button.tag == RIGHT1BUTTON)
         return ;
     if (button.tag == RIGHT2BUTTON)
-        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:self.curPageNum]] autorelease] animated:YES];
+        [self.navigationController pushViewController:[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:self.curPageNum]] animated:YES];
 }
 #pragma mark cache Manager
 - (void)didReceiveMemoryWarning

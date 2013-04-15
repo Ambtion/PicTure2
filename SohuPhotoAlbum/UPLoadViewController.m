@@ -13,7 +13,6 @@
 - (void)dealloc
 {
     [self removeObserverOnCenter];
-    [super dealloc];
 }
 - (void)viewDidLoad
 {

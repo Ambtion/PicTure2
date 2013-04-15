@@ -20,11 +20,6 @@ static NSString * provider = nil;
 @implementation OAuthorController
 @synthesize delegate = _delegate;
 
-- (void)dealloc
-{
-    [_alterView release];
-    [super dealloc];
-}
 
 - (id)initWithMode:(LoginModel)loginMode
 {
@@ -55,7 +50,7 @@ static NSString * provider = nil;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIBarButtonItem * cancelLogin = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(webviewCancelLogin:)] autorelease];
+    UIBarButtonItem * cancelLogin = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(webviewCancelLogin:)];
     self.navigationItem.leftBarButtonItem = cancelLogin;
     self.title = title;
     [self OAuth2authorize];
@@ -63,7 +58,7 @@ static NSString * provider = nil;
 
 - (void)OAuth2authorize
 {
-    UIWebView * webView = [[[UIWebView alloc] initWithFrame:self.view.bounds] autorelease];
+    UIWebView * webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url_string] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:20]];
     webView.backgroundColor = [UIColor colorWithRed:244/255.f green:244/255.f blue:244/255.f alpha:1];
     webView.scrollView.bounces = NO;
@@ -87,7 +82,7 @@ static NSString * provider = nil;
 {
     
     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
-    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setPostValue:@"third_party_code" forKey:@"grant_type"];
     [request setPostValue:CLIENT_ID forKey:@"client_id"];

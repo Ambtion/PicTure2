@@ -28,7 +28,7 @@ typedef enum{
     MBProgressHUD * _alterView;
     NSString * code;
 }
-@property(nonatomic,assign)id<OAuthorControllerDelegate> delegate;
+@property(nonatomic,weak)id<OAuthorControllerDelegate> delegate;
 
 - (id)initWithMode:(LoginModel)loginMode;
 @end

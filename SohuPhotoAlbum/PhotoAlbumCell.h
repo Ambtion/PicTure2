@@ -11,8 +11,8 @@
 
 @class PhotoAlbumCell;
 @interface  PhotoAlbumCellDataSource:NSObject
-@property(nonatomic,retain)ALAssetsGroup * leftGroup;
-@property(nonatomic,retain)ALAssetsGroup * rightGroup;
+@property(nonatomic,strong)ALAssetsGroup * leftGroup;
+@property(nonatomic,strong)ALAssetsGroup * rightGroup;
 - (CGFloat)cellHight;
 @end
 
@@ -29,6 +29,6 @@
     CountLabel * _leftCount;
     CountLabel * _rightCount;
 }
-@property(nonatomic,retain)PhotoAlbumCellDataSource * dataSource;
-@property(nonatomic,assign)id<PhotoAlbumCellDelegate> delegate;
+@property(nonatomic,strong)PhotoAlbumCellDataSource * dataSource;
+@property(nonatomic,weak)id<PhotoAlbumCellDelegate> delegate;
 @end

@@ -12,6 +12,6 @@
 
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group;
 
-@property(nonatomic,retain)ALAssetsGroup * group;
-@property(nonatomic,retain)LimitCacheForImage * cache;
+@property(nonatomic,strong)ALAssetsGroup * group;
+@property(nonatomic,strong)LimitCacheForImage * cache;
 @end

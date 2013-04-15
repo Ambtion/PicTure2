@@ -23,23 +23,14 @@
 
 - (void)dealloc
 {
-    [_backgroundImageView release];
-    [_backgroundControl release];
-    [_usernameTextField release];
-    [_passwordTextField release];
-    [_dealPassButton release];
-    [_readDealButton release];
-    [_registerButton release];
-    [_displayPasswordButton release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [super dealloc];
     
 }
 
 - (void)loadView
 {
     [super loadView];
-    UIScrollView *view = [[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)] autorelease];
+    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
     view.bounces = NO;
     view.contentSize = view.frame.size;
     self.view = view;
@@ -87,7 +78,7 @@
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.backgroundColor = [UIColor clearColor];
     
-    _displayPasswordButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _displayPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _displayPasswordButton.frame = CGRectMake(35, 258, 100, 22);
     _displayPasswordButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [_displayPasswordButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
@@ -99,7 +90,7 @@
     [_displayPasswordButton setBackgroundImage:_checked forState:UIControlStateHighlighted | UIControlStateSelected];
     [_displayPasswordButton addTarget:self action:@selector(checkBoxClicked) forControlEvents:UIControlEventTouchUpInside];
     
-    _dealPassButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _dealPassButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _dealPassButton.frame = CGRectMake(35, 291, 22, 22);
     _dealPassButton.selected = YES;
     [_dealPassButton setBackgroundImage:_noChecked forState:UIControlStateNormal];
@@ -109,7 +100,7 @@
     [_dealPassButton addTarget:self action:@selector(agreeDeal:) forControlEvents:UIControlEventTouchUpInside];
     _dealPassButton.backgroundColor = [UIColor clearColor];
     
-    _readDealButton  = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _readDealButton  = [UIButton buttonWithType:UIButtonTypeCustom];
     _readDealButton.frame = CGRectMake(57, 291, 230, 22);
     _readDealButton.backgroundColor = [UIColor clearColor];
     _readDealButton.titleLabel.textAlignment = UITextAlignmentLeft;
@@ -120,7 +111,7 @@
     [_readDealButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [_readDealButton addTarget:self action:@selector(readDeal:) forControlEvents:UIControlEventTouchUpInside];
     
-    _registerButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _registerButton.frame = CGRectMake(35, 332, 250, 35);
     [_registerButton setBackgroundImage:[UIImage imageNamed:@"signin_btn_normal"] forState:UIControlStateNormal];
     [_registerButton setBackgroundImage:[UIImage imageNamed:@"signin_btn_press"] forState:UIControlStateHighlighted];
@@ -148,7 +139,7 @@
     [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
     
-    UIImageView * sohu2003 = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]] autorelease];
+    UIImageView * sohu2003 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]];
     CGRect rect = CGRectMake(0, 0, 320, 10);
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     rect.origin.y = screenRect.size.height - 20;
@@ -187,7 +178,7 @@
 }
 - (void)readDeal:(UIButton *)button
 {
-    [self.navigationController pushViewController:[[[ReadSohuDealController alloc] init] autorelease] animated:YES];
+    [self.navigationController pushViewController:[[ReadSohuDealController alloc] init] animated:YES];
 }
 - (void)backButtonClick:(UIButton*)button
 {

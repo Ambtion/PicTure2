@@ -49,22 +49,11 @@
     if (self) {
         eTextField = textField;
         domains = eTextField.domains;
-		filtered_domains = [[NSMutableArray arrayWithCapacity:0] retain];
+		filtered_domains = [NSMutableArray arrayWithCapacity:0];
     }
     return self;
 }
 
-- (void)dealloc
-{
-	if (emailAccount) {
-		[emailAccount release];
-	}
-	if (filtered_domains) {
-		[filtered_domains release];
-	}
-	
-	[super dealloc];
-}
 
 #pragma mark methods for UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -149,7 +138,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:EmailCellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:EmailCellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:EmailCellIdentifier];
         cell.textLabel.font = [UIFont systemFontOfSize:15];
         cell.textLabel.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     }
@@ -186,7 +175,7 @@
         _dropDownListTable.layer.borderColor = [[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] CGColor];
         _isOn = NO;
         
-        _domains = [[NSArray arrayWithArray:domains] retain];
+        _domains = [NSArray arrayWithArray:domains];
         
         _manager = [[EmailTextFieldManager alloc] initWithEmailTextField:self];
         _dropDownListTable.delegate = _manager;
@@ -238,10 +227,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:_manager];
-    [_manager release];
-    [_domains release];
-    [_dropDownListTable release];
-    [super dealloc];
 }
 
 @end

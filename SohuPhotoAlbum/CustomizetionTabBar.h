@@ -19,6 +19,6 @@
 @end
 
 @interface CustomizetionTabBar : UIImageView
-@property(nonatomic,assign)id<CusTabBarDelegate> delegate;
+@property(nonatomic,weak)id<CusTabBarDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate;
 @end

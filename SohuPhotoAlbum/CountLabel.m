@@ -10,12 +10,6 @@
 
 @implementation CountLabel
 
-- (void)dealloc
-{
-    [_bgImageView release];
-    [_baseLabel release];
-    [super dealloc];
-}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

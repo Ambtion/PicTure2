@@ -13,11 +13,6 @@
 @synthesize Adelegate = _Adelegate;
 @synthesize imageView = _imageView;
 @synthesize tapEnabled = _tapEnabled;
-- (void)dealloc
-{
-    [_imageView release];
-    [super dealloc];
-}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -43,10 +38,10 @@
     _imageView.backgroundColor = [UIColor clearColor];
     [self addSubview:_imageView];
     [_imageView setUserInteractionEnabled:YES];
-    UITapGestureRecognizer * tapGesture1 = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)] autorelease];
+    UITapGestureRecognizer * tapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)];
     tapGesture1.delegate= self;
     tapGesture1.numberOfTapsRequired = 1;
-    UITapGestureRecognizer * tapGesture2 = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)] autorelease];
+    UITapGestureRecognizer * tapGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapgestureWithTap:)];
     tapGesture2.numberOfTapsRequired = 2;
     tapGesture2.delegate = self;
     [_imageView addGestureRecognizer:tapGesture1];

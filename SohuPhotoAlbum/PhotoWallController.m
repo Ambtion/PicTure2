@@ -14,14 +14,6 @@
 
 @implementation PhotoWallController
 
-- (void)dealloc
-{
-    [_myTableView release];
-    [_refresHeadView release];
-    [_dataSourceArray release];
-
-    [super dealloc];
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -40,7 +32,7 @@
     
     
     //测试用
-    UIBarButtonItem * bu = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(refeshOnce:)] autorelease];
+    UIBarButtonItem * bu = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(refeshOnce:)];
     self.navigationItem.leftBarButtonItem = bu;
     
     label = [[UILabel alloc] initWithFrame:CGRectMake(270, 10, 50, 20)];
@@ -50,7 +42,7 @@
     [self.view addSubview:label];
 
     
-    _dataSourceArray = [[NSMutableArray arrayWithCapacity:0] retain];
+    _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < 10; i++) {
         NSMutableArray * arra = [NSMutableArray arrayWithCapacity:0];
         for (int j = 0; j < 20; j++) {
@@ -193,7 +185,7 @@
 {
     UITableViewCell * cell = [tableView  dequeueReusableCellWithIdentifier:@"LL"];
     if (!cell) {
-        cell = [[[UITableViewCell alloc ] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LL"] autorelease];
+        cell = [[UITableViewCell alloc ] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LL"];
     }
     cell.textLabel.text = [[_dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     return cell;

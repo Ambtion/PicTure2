@@ -17,32 +17,25 @@
 @implementation AppDelegate
 @synthesize window = _window;
 
-- (void)dealloc
-{
-    [_window release];
-    [super dealloc];
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     //主视图
-    LocalALLPhotoesController * lp = [[[LocalALLPhotoesController alloc] init] autorelease];
+    LocalALLPhotoesController * lp = [[LocalALLPhotoesController alloc] init];
 
     //左菜单
-    LeftMenuController *leftVC = [[[LeftMenuController alloc] init] autorelease];
+    LeftMenuController *leftVC = [[LeftMenuController alloc] init];
     
-    IIViewDeckController *deckViewController = [[[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC] autorelease];
+    IIViewDeckController *deckViewController = [[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC];
     deckViewController.navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
     
-    UINavigationController * nav =[[[UINavigationController alloc] initWithRootViewController:deckViewController] autorelease];
+    UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
     
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     //INIT DATABASE
     [DataBaseManager defaultDataBaseManager];
-//    [application setStatusBarHidden:NO];
     return YES;
 }
 

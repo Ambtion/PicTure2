@@ -18,7 +18,7 @@
 {
     BOOL _willLodingMore;
 }
-@property(nonatomic,assign)id<SCPMoreTableFootViewDelegate> delegate;
+@property(nonatomic,weak)id<SCPMoreTableFootViewDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame WithLodingImage:(UIImage *)lodingImage endImage:(UIImage *)endImage;
 
 - (void)scpMoreScrollViewDidScroll:(UIScrollView *)scrollView;

@@ -12,7 +12,7 @@
 {
     UIImageView * _myHigtView;
 }
-@property(nonatomic,retain)UIImageView * leftImage;
-@property(nonatomic,retain)UILabel * labelText;
+@property(nonatomic,strong)UIImageView * leftImage;
+@property(nonatomic,strong)UILabel * labelText;
 
 @end

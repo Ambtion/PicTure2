@@ -15,11 +15,6 @@
 @implementation LocalShareController
 @synthesize uploadAsset = _uploadAsset;
 
-- (void)dealloc
-{
-    [_cusBar release];
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {
@@ -154,14 +149,12 @@
 							  
 													   delegate:self cancelButtonTitle:@"我知道啦" otherButtonTitles: nil];
 		[alert show];
-        [alert release];
 	}
 	else {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"操作失败" message:[NSString stringWithFormat:@"%@", response.errorMsg]
 							  
 													   delegate:self cancelButtonTitle:@"我知道啦" otherButtonTitles: nil];
 		[alert show];
-        [alert release];
 	}
 	
 }
@@ -170,7 +163,7 @@
 -(void)weixinUploadPic
 {
     if ([WXApi isWXAppInstalled]) {
-        UIActionSheet * act = [[[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil] autorelease];
+        UIActionSheet * act = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
         [act showInView:self.view];
     }else{
         [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
@@ -201,7 +194,7 @@
     WXImageObject *ext = [WXImageObject object];
     ext.imageData = [self getDataFromAsset:self.uploadAsset];
     message.mediaObject = ext;
-    SendMessageToWXReq* req = [[[SendMessageToWXReq alloc] init]autorelease];
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
     req.scene = scene;
@@ -226,14 +219,13 @@
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
-        [alert release];
     }
 }
 
 #pragma mark UpFailture
 - (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
 {
-    UIAlertView *alert = [[[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] autorelease];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 }
 @end

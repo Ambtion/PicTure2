@@ -11,13 +11,6 @@
 @implementation MenuCell
 @synthesize leftImage;
 @synthesize labelText;
-- (void)dealloc
-{
-    [labelText release];
-    [leftImage release];
-    [_myHigtView release];
-    [super dealloc];
-}
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -32,7 +25,7 @@
         labelText.textColor = [UIColor colorWithRed:171.f/255.f green:171.f/255.f blue:171.f/255.f alpha:1.f];
         [self.contentView addSubview:labelText];
         
-        UIImageView * lineimage = [[[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height - 1 , 320, 1)] autorelease];
+        UIImageView * lineimage = [[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height - 1 , 320, 1)];
         lineimage.image = [UIImage imageNamed:@"line.png"];
         [self.contentView addSubview:lineimage];
         

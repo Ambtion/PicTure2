@@ -13,5 +13,5 @@
     UIImageView * _bgView;
     UILabel * _labelText;
 }
-@property(nonatomic,retain)UILabel * labelText;
+@property(nonatomic,strong)UILabel * labelText;
 @end

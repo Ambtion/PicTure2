@@ -27,16 +27,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_assetsArray release];
-    [_curImageArray release];
-    [_scrollView release];
-    [_fontScaleImage release];
-    [_curScaleImage release];
-    [_rearScaleImage release];
-    [_cusBar release];
 //    [_tabBar release];
-    [_libiary release];
-    [super dealloc];
 }
 //- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
 //{
@@ -159,16 +150,16 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     CGRect rect = self.view.bounds;
     rect.size.width += OFFSETX * 2;
     rect.origin.x -= OFFSETX;
-    self.scrollView = [[[UIScrollView alloc] initWithFrame:rect] autorelease];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:rect];
     _scrollView.delegate = self;
     _scrollView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_scrollView];
     
-    self.fontScaleImage = [[[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX,0, self.view.bounds.size.width, self.view.bounds.size.height)] autorelease];
+    self.fontScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX,0, self.view.bounds.size.width, self.view.bounds.size.height)];
     self.fontScaleImage.Adelegate = self;
-    self.curScaleImage = [[[ImageScaleView alloc]initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height)] autorelease];
+    self.curScaleImage = [[ImageScaleView alloc]initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     self.curScaleImage.Adelegate = self;
-    self.rearScaleImage = [[[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width * 2, 0, self.view.bounds.size.width, self.view.bounds.size.height)] autorelease];
+    self.rearScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width * 2, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
      self.rearScaleImage.Adelegate = self;
     [_scrollView addSubview:_fontScaleImage];
     [_scrollView addSubview:_curScaleImage];
@@ -177,7 +168,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 - (void)addBar
 {
-    self.cusBar = [[[CustomizationNavBar alloc] initwithDelegate:self] autorelease];
+    self.cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
     if (_isHidingBar) {
         _cusBar.frame = CGRectMake(0, -44, 320, 44);
     }else{

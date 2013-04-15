@@ -68,7 +68,6 @@ static DataBaseManager * defaultDataBaseManager = nil;
 - (void)dealloc
 {
     [self closedatebase];
-    [super dealloc];
 }
 -(void)closedatebase
 {

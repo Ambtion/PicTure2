@@ -20,15 +20,6 @@
 @synthesize request = _request;
 @synthesize data = _data;
 
-- (void)dealloc
-{
-    self.asset = nil;
-    self.thumbnail = nil;
-    self.description = nil;
-    self.request = nil;
-    self.data = nil;
-    [super dealloc];
-}
 
 - (id)init
 {
@@ -63,7 +54,7 @@
         //            data = UIImageJPEGRepresentation(image, 1.f);
         //            NSLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
     }else{
-        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
+        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
         CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.5);

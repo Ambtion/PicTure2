@@ -14,7 +14,6 @@ static NSString * menuText[5] = {@"账号",@"本地相册",@"云备份",@"分享
 static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"setting.png"};
 
 @implementation LeftMenuController
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -28,12 +27,16 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.backgroundColor = [UIColor clearColor];
-    UIImageView * bgView = [[[UIImageView alloc] initWithFrame:_tableView.bounds] autorelease];
+    UIImageView * bgView = [[UIImageView alloc] initWithFrame:_tableView.bounds];
     bgView.image = [UIImage imageNamed:@"menuBackground.png"];
     [self.view addSubview:bgView];
     [self.view addSubview:_tableView];
 }
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [_tableView reloadData];
+}
 #pragma mark Delegate TableView
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -57,13 +60,13 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     if (!indexPath.row) {
         _accountCell = [tableView dequeueReusableCellWithIdentifier:accout];
         if (!_accountCell)
-            _accountCell = [[[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accout] autorelease];
+            _accountCell = [[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accout];
         _accountCell.labelText.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
         return _accountCell;
     }
     MenuCell * cell = [tableView dequeueReusableCellWithIdentifier:str];
     if (!cell) {
-        cell = [[[MenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str] autorelease];
+        cell = [[MenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str];
     }
     if (indexPath.row < MENUMAXNUMBER){
         cell.leftImage.image = [UIImage imageNamed:image[indexPath.row]];
@@ -80,7 +83,7 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
             [LoginStateManager logout];
             [_tableView reloadData];
         }else{
-            LoginViewController * lv = [[[LoginViewController alloc] init] autorelease];
+            LoginViewController * lv = [[LoginViewController alloc] init];
             lv.delegate = self;
             [self presentModalViewController:lv animated:YES];
         }
@@ -91,16 +94,17 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         
         if (indexPath.row == 1) {
-            LocalALLPhotoesController * la = [[[LocalALLPhotoesController alloc] init] autorelease];
+            LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
             self.viewDeckController.centerController = la;
         }
         if (indexPath.row == 3) {
-            PhotoWallController * lp = [[[PhotoWallController alloc] init] autorelease];
+            PhotoWallController * lp = [[PhotoWallController alloc] init];
             self.viewDeckController.centerController = lp;
         }
         self.view.userInteractionEnabled = YES;
     }];
 }
+
 #pragma mark - Delegate of LoginViewController
 - (void)loginViewController:(LoginViewController *)loginController cancleClick:(id)sender
 {

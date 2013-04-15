@@ -14,12 +14,12 @@
     if (self = [super init]) {
         
         CGRect rect = [[UIScreen mainScreen] bounds];
-        _alertboxImageView = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 240, 60)] autorelease];
+        _alertboxImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 240, 60)];
         _alertboxImageView.image = [UIImage imageNamed:@"popup_alert.png"];
         _alertboxImageView.center = CGPointMake(rect.size.width / 2.f, rect.size.height / 2.f);
         [self addSubview:_alertboxImageView];
         
-        _title = [[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 220, 40)] autorelease];
+        _title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 220, 40)];
         _title.textAlignment = UITextAlignmentCenter;
         _title.backgroundColor = [UIColor clearColor];
         _title.font = [UIFont systemFontOfSize:16];
@@ -28,10 +28,6 @@
         [_alertboxImageView addSubview:_title];
     }
     return self;
-}
-- (void)dealloc
-{
-    [super dealloc];
 }
 - (void)show
 {

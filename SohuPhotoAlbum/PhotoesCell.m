@@ -14,14 +14,6 @@
 
 @implementation PhotoesCellDataSource
 @synthesize firstAsset,secoundAsset,thridAsset,lastAsset;
-- (void)dealloc
-{
-    [firstAsset release];
-    [secoundAsset release];
-    [thridAsset release];
-    [lastAsset release];
-    [super dealloc];
-}
 - (CGFloat)cellHigth
 {
     return CELLHIGTH;
@@ -34,11 +26,6 @@
 @implementation PhotoesCell
 @synthesize delegate = _delegate;
 @synthesize dataSource = _dataSource;
-- (void)dealloc
-{
-    [_dataSource release];
-    [super dealloc];
-}
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -54,7 +41,7 @@
     StatusImageView * imageView;
     CGRect frame = CGRectMake(4, 5, 75, 75);
     for (int i = 0; i < 4; i++) {
-        imageView = [[[StatusImageView alloc] initWithFrame:frame] autorelease];
+        imageView = [[StatusImageView alloc] initWithFrame:frame];
         imageView.tag = 1000 + i;
         [self.contentView addSubview:imageView];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGustrure:)];
@@ -65,8 +52,7 @@
 - (void)setDataSource:(PhotoesCellDataSource *)dataSource
 {
     if (_dataSource != dataSource) {
-        [_dataSource release];
-        _dataSource = [dataSource retain];
+        _dataSource = dataSource;
         [self updataViews];
     }
 }

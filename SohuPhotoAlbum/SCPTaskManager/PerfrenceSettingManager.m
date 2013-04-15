@@ -83,8 +83,6 @@
     [archiver finishEncoding];
     [[NSUserDefaults standardUserDefaults] setValue:data forKey:key];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [data release];
-    [archiver release];    
 }
 
 + (id)unarchiveObjectWithDataWithKey:(NSString *)key
@@ -95,7 +93,6 @@
     NSMutableArray * arDataSource = nil;
     arDataSource = [unarchiver decodeObjectForKey:key];
     [unarchiver finishDecoding];
-    [unarchiver release];
     return arDataSource;
 }
 

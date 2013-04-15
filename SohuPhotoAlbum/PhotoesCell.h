@@ -11,10 +11,10 @@
 
 @class PhotoesCell;
 @interface PhotoesCellDataSource : NSObject
-@property(nonatomic,retain)ALAsset * firstAsset;
-@property(nonatomic,retain)ALAsset * secoundAsset;
-@property(nonatomic,retain)ALAsset * thridAsset;
-@property(nonatomic,retain)ALAsset * lastAsset;
+@property(nonatomic,strong)ALAsset * firstAsset;
+@property(nonatomic,strong)ALAsset * secoundAsset;
+@property(nonatomic,strong)ALAsset * thridAsset;
+@property(nonatomic,strong)ALAsset * lastAsset;
 - (CGFloat)cellHigth;
 - (CGFloat)cellLastHigth;
 @end
@@ -29,8 +29,8 @@
     PhotoesCellDataSource * _dataSource;
 }
 
-@property(nonatomic,assign)id<PhotoesCellDelegate> delegate;
-@property(nonatomic,retain)PhotoesCellDataSource * dataSource;
+@property(nonatomic,weak)id<PhotoesCellDelegate> delegate;
+@property(nonatomic,strong)PhotoesCellDataSource * dataSource;
 
 - (void)showCellSelectedStatus;
 - (void)hiddenCellSelectedStatus;

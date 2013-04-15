@@ -32,18 +32,18 @@
     UIImageView * _stateBar;
 }
 
-@property(nonatomic,assign)id<CusNavigationBarDelegate> delegate;
-@property(nonatomic,retain)GIFButton * nLeftButton;
-@property(nonatomic,retain)UIImageView * nLabelImage;
-@property(nonatomic,retain)UILabel * nLabelText;
-@property(nonatomic,retain)GIFButton * nRightButton1;
-@property(nonatomic,retain)GIFButton * nRightButton2;
-@property(nonatomic,retain)GIFButton * nRightButton3;
+@property(nonatomic,weak)id<CusNavigationBarDelegate> delegate;
+@property(nonatomic,strong)GIFButton * nLeftButton;
+@property(nonatomic,strong)UIImageView * nLabelImage;
+@property(nonatomic,strong)UILabel * nLabelText;
+@property(nonatomic,strong)GIFButton * nRightButton1;
+@property(nonatomic,strong)GIFButton * nRightButton2;
+@property(nonatomic,strong)GIFButton * nRightButton3;
 
-@property(nonatomic,retain)UILabel * sLabelText;
-@property(nonatomic,retain)UIButton * sLeftButton;
-@property(nonatomic,retain)GIFButton * sAllSelectedbutton;
-@property(nonatomic,retain)GIFButton * sRightStateButton;
+@property(nonatomic,strong)UILabel * sLabelText;
+@property(nonatomic,strong)UIButton * sLeftButton;
+@property(nonatomic,strong)GIFButton * sAllSelectedbutton;
+@property(nonatomic,strong)GIFButton * sRightStateButton;
 
 - (id)initwithDelegate:(id<CusNavigationBarDelegate>)Adelegate;
 - (void)switchBarStateToUpload:(BOOL)isUploadState;

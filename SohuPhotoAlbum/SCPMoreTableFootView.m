@@ -19,14 +19,14 @@
         //暂时写死了,以后更改
 //        self.frame = CGRectMake(0, 0, 320, 60) ;
         self.backgroundColor = [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1];
-        UITapGestureRecognizer * gesture = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(realLoadingMore:)] autorelease];
+        UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(realLoadingMore:)];
         [self addGestureRecognizer:gesture];
         
-        UIImageView * imageview = [[[UIImageView alloc] initWithFrame:CGRectMake(110, (self.bounds.size.height - 18)/2.f, 18, 18)] autorelease];
+        UIImageView * imageview = [[UIImageView alloc] initWithFrame:CGRectMake(110, (self.bounds.size.height - 18)/2.f, 18, 18)];
         imageview.image = lodingImage;
         [self addSubview:imageview];
         
-        UILabel * label = [[[UILabel alloc] initWithFrame:CGRectMake(66  + 10, 0, 320 - 142, self.bounds.size.height)] autorelease];
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(66  + 10, 0, 320 - 142, self.bounds.size.height)];
         label.tag = 100;
         label.textAlignment = UITextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:14];
@@ -35,7 +35,7 @@
         label.backgroundColor = [UIColor clearColor];
         [self addSubview:label];
         
-        UIActivityIndicatorView * active = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+        UIActivityIndicatorView * active = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         active.tag = 200;
         active.center = CGPointMake(320 - 66, self.frame.size.height /2.f);
         active.color = [UIColor blackColor];

@@ -17,15 +17,15 @@
 
 @interface AccountButton : UIButton
 
-@property(nonatomic,retain)UILabel * labelText;
+@property(nonatomic,strong)UILabel * labelText;
 @end
 @interface ShareBaseController : LocalBaseController
 
-@property(nonatomic,retain)AccountButton * sinaAcountBtn;
-@property(nonatomic,retain)AccountButton * renrenAcountBtn;
-@property(nonatomic,retain)AccountButton * weixinAcountBtn;
-@property(nonatomic,retain)AccountButton * qqAcountBtn;
-@property(nonatomic,retain)ALAsset * uploadAsset;
+@property(nonatomic,strong)AccountButton * sinaAcountBtn;
+@property(nonatomic,strong)AccountButton * renrenAcountBtn;
+@property(nonatomic,strong)AccountButton * weixinAcountBtn;
+@property(nonatomic,strong)AccountButton * qqAcountBtn;
+@property(nonatomic,strong)ALAsset * uploadAsset;
 
 - (id)initWithUpLoadAsset:(ALAsset *)aseet;
 @end

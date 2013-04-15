@@ -13,66 +13,66 @@
 #pragma mark - Read All photo From Album
 - (void)readPhotoIntoAssetsContainer:(NSMutableArray *)assetsArray fromGroup:(ALAssetsGroup *)assetGroups sucess:(void(^)(void))sucess
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [assetGroups setAssetsFilter:[ALAssetsFilter allPhotos]];
-    [assetGroups enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
-     {
-         if(result == nil){
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 sucess();
-             });
-             return;
-         }
-         [assetsArray addObject:result];
-     }];
-    [pool release];
+    @autoreleasepool {
+        [assetGroups setAssetsFilter:[ALAssetsFilter allPhotos]];
+        [assetGroups enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
+         {
+             if(result == nil){
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     sucess();
+                 });
+                 return;
+             }
+             [assetsArray addObject:result];
+         }];
+    }
 }
 
 #pragma mark - read All Album
 - (void)readAlbumsIntoGroupArray:(NSMutableArray *)assetGroups sucess:(void(^)(void))sucess failture:(void(^)(NSError * error))failture
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
     // Load Albums into assetGroups
-    [self enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        if (group == nil)
-        {
-            //finished
-            dispatch_async(dispatch_get_main_queue(), ^{
-                sucess();
-            });
-            return ;
-        }
-        if ([group numberOfAssets]){
-            [assetGroups addObject:group];
-        }
-        
-    } failureBlock:^(NSError *error) {
-        failture(error);
-    }];
-    [pool drain];
+        [self enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+            if (group == nil)
+            {
+                //finished
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    sucess();
+                });
+                return ;
+            }
+            if ([group numberOfAssets]){
+                [assetGroups addObject:group];
+            }
+            
+        } failureBlock:^(NSError *error) {
+            failture(error);
+        }];
+    }
 
 }
 #pragma mark read All photoes
 - (void) readAlbumIntoGroupContainer:(NSMutableArray *)assetGroups  assetsContainer:(NSMutableArray *)assetsArray sucess:(void(^)(void))sucess failture:(void(^)(NSError * error))failture;
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
     // Load Albums into assetGroups
-    [self enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        if (group == nil)
-        {
-            //finished
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //递归读取专辑的照片
-                [self readPhotoesWithAssetsGroup:[[assetGroups mutableCopy] autorelease] assetsContainer:assetsArray sucess:sucess failture:failture];
-            });
-            return ;
-        }
-        if ([group numberOfAssets])
-            [assetGroups addObject:group];
-    } failureBlock:^(NSError *error) {
-        failture(error);
-    }];
-    [pool drain];
+        [self enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+            if (group == nil)
+            {
+                //finished
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //递归读取专辑的照片
+                    [self readPhotoesWithAssetsGroup:[assetGroups mutableCopy] assetsContainer:assetsArray sucess:sucess failture:failture];
+                });
+                return ;
+            }
+            if ([group numberOfAssets])
+                [assetGroups addObject:group];
+        } failureBlock:^(NSError *error) {
+            failture(error);
+        }];
+    }
 }
 
 - (void)readPhotoesWithAssetsGroup:(NSMutableArray *)tempAssetGroups  assetsContainer:(NSMutableArray *)assetsArray sucess:(void(^)(void))sucess failture:(void(^)(NSError * error))failture
@@ -84,20 +84,20 @@
         });
         return;
     }
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [[tempAssetGroups lastObject] setAssetsFilter:[ALAssetsFilter allPhotos]];
-    [[tempAssetGroups lastObject] enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
-     {
-         if(result == nil){
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 [tempAssetGroups removeLastObject];
-                 [self readPhotoesWithAssetsGroup:tempAssetGroups assetsContainer:assetsArray sucess:sucess failture:failture];
-             });
-             return;
-         }
-         [assetsArray addObject:result];
-     }];
-    [pool release];
+    @autoreleasepool {
+        [[tempAssetGroups lastObject] setAssetsFilter:[ALAssetsFilter allPhotos]];
+        [[tempAssetGroups lastObject] enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
+         {
+             if(result == nil){
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     [tempAssetGroups removeLastObject];
+                     [self readPhotoesWithAssetsGroup:tempAssetGroups assetsContainer:assetsArray sucess:sucess failture:failture];
+                 });
+                 return;
+             }
+             [assetsArray addObject:result];
+         }];
+    }
 }
 
 @end

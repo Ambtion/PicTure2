@@ -10,12 +10,6 @@
 
 @implementation AccountCell
 @synthesize labelText = _labelText;
-- (void)dealloc
-{
-    [_bgView release];
-    [_labelText release];
-    [super dealloc];
-}
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -34,5 +28,4 @@
     }
     return self;
 }
-
 @end

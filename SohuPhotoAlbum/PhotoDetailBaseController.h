@@ -40,13 +40,13 @@ typedef enum _imageStatePosition
     ALAssetsLibrary * _libiary;
 //    ALAssetsGroup * _group;
 }
-@property(nonatomic,retain)NSMutableArray * assetsArray;
+@property(nonatomic,strong)NSMutableArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
-@property(nonatomic,retain)UIScrollView * scrollView;
-@property(nonatomic,retain)ImageScaleView * fontScaleImage;
-@property(nonatomic,retain)ImageScaleView * curScaleImage;
-@property(nonatomic,retain)ImageScaleView * rearScaleImage;
-@property(nonatomic,retain)CustomizationNavBar * cusBar;
+@property(nonatomic,strong)UIScrollView * scrollView;
+@property(nonatomic,strong)ImageScaleView * fontScaleImage;
+@property(nonatomic,strong)ImageScaleView * curScaleImage;
+@property(nonatomic,strong)ImageScaleView * rearScaleImage;
+@property(nonatomic,strong)CustomizationNavBar * cusBar;
 //@property(nonatomic,retain)LimitCacheForImage * cache;
 //@property(nonatomic,retain)ALAssetsGroup * group;
 

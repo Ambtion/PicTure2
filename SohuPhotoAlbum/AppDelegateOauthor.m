@@ -12,12 +12,6 @@
 @implementation AppDelegateOauthor
 @synthesize state = _state;
 @synthesize sinaweibo,tencentOAuth;
-- (void)dealloc
-{
-    [sinaweibo release];
-    [tencentOAuth release];
-    [super dealloc];
-}
 
 #pragma mark - SINA
 - (void)sinaLoginWithDelegate:(id<SinaWeiboDelegate>)delegate

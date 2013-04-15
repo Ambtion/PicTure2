@@ -20,20 +20,16 @@
 @synthesize delegate = _delegate;
 - (void)dealloc
 {
-    [_backgroundImageView release];
-    [_backgroundControl release];
-    [_usernameTextField release];
-    [_passwordTextField release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [super dealloc];
 }
 
 - (void)loadView
 {
     [super loadView];
     CGRect frame = [[UIScreen mainScreen] bounds];
-    UIScrollView *view = [[[UIScrollView alloc] initWithFrame:frame] autorelease];
+    UIScrollView * view = [[UIScrollView alloc] initWithFrame:frame];
     view.bounces = NO;
+    view.scrollEnabled = NO;
     view.contentSize = frame.size;
     self.view = view;
     self.view.backgroundColor = [UIColor colorWithRed:244.0f/255.f green:244.0f/255.f blue:244.0f/255.f alpha:1];
@@ -49,11 +45,11 @@
 
 -(void)addsubViews
 {
-    CGRect frame = CGRectMake(0, 0, 320, 480);
-    _backgroundImageView = [[UIImageView alloc] initWithFrame:frame];
+    CGRect bounds = self.view.bounds;
+    _backgroundImageView = [[UIImageView alloc] initWithFrame:bounds];
     _backgroundImageView.image = [UIImage imageNamed:@"login_bg.png"];
-    _backgroundControl = [[UIControl alloc] initWithFrame:frame];
-    [_backgroundControl addTarget:self action:@selector(allTextFieldsResignFirstResponder) forControlEvents:UIControlEventTouchDown];
+    _backgroundControl = [[UIControl alloc] initWithFrame:bounds];
+    [_backgroundControl addTarget:self action:@selector(allTextFieldsResignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
     
     //登录用户名
     _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 131, 200, 22) dropDownListFrame:CGRectMake(69, 160, 214, 200) domainsArray:EMAIL_ARRAY];
@@ -86,14 +82,14 @@
     registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel * externalLabel = [[[UILabel alloc] initWithFrame:CGRectMake(35, 290, 150, 15)] autorelease];
+    UILabel * externalLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 290, 150, 15)];
     externalLabel.text = @"其他账号登录";
     externalLabel.textAlignment = UITextAlignmentLeft;
     externalLabel.backgroundColor = [UIColor clearColor];
     externalLabel.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     externalLabel.font = [UIFont systemFontOfSize:15.f];
     
-    UILabel * forget = [[[UILabel alloc] initWithFrame:CGRectMake(320 - 35 - 150, 290, 150, 15)] autorelease];
+    UILabel * forget = [[UILabel alloc] initWithFrame:CGRectMake(320 - 35 - 150, 290, 150, 15)];
     forget.text = @"忘记密码";
     forget.textAlignment = UITextAlignmentRight;
     forget.backgroundColor = [UIColor clearColor];
@@ -152,7 +148,7 @@
     [renrenbutton addTarget:self action:@selector(renrenLogin:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:renrenbutton];
     
-    UIImageView * sohu2003 = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]] autorelease];
+    UIImageView * sohu2003 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]];
     CGRect rect = CGRectMake(0, 0, 320, 10);
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     rect.origin.y = screenRect.size.height - 20;
@@ -173,7 +169,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-#pragma mark - 
+#pragma mark -
 - (void)allTextFieldsResignFirstResponder
 {
     [_usernameTextField resignFirstResponder];
@@ -200,21 +196,21 @@
 - (void)loginButtonClicked:(UIButton*)button
 {
     if (!_usernameTextField.text|| [_usernameTextField.text isEqualToString:@""]) {
-        PopAlertView * alterview = [[[PopAlertView alloc] initWithTitle:@"您还没有填写用户名" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写用户名" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alterview show];
         return;
     }
     if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
-        PopAlertView * alterview = [[[PopAlertView alloc] initWithTitle:@"您还没有填写密码" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写密码" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alterview show];
         return;
     }
-    [_passwordTextField resignFirstResponder];
-    [_usernameTextField resignFirstResponder];
+//    [_passwordTextField resignFirstResponder];
+//    [_usernameTextField resignFirstResponder];
     
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
-    MBProgressHUD * hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
+    MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];
     hud.delegate = self;
     [self.view addSubview:hud];
     [hud show:YES];
@@ -230,14 +226,13 @@
 #pragma mark Handle Login Result
 - (void)handleLoginInfo:(NSDictionary *)response
 {
-//    [LoginStateManager loginUserId:nil withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
     [LoginStateManager loginUserId:@"user_ID" withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
 }
 - (void)showError:(NSString *)error
 {
-    PopAlertView * alterView = [[[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil] autorelease];
+    PopAlertView * alterView = [[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
     [alterView show];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginFailtureWithinfo:)])
         [_delegate loginViewController:self loginFailtureWithinfo:error];
@@ -258,9 +253,9 @@
 }
 - (void)presentWithControlleByLoginMode:(LoginModel)model
 {
-    OAuthorController * atcq = [[[OAuthorController alloc] initWithMode:model] autorelease];
+    OAuthorController * atcq = [[OAuthorController alloc] initWithMode:model];
     atcq.delegate = self;
-    UINavigationController * nav = [[[UINavigationController alloc] initWithRootViewController:atcq] autorelease];
+    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:atcq];
     [self presentModalViewController:nav animated:YES];
 }
 - (void)forgetPassWord:(id)sender
@@ -283,7 +278,7 @@
 {
     [_passwordTextField resignFirstResponder];
     [_usernameTextField resignFirstResponder];
-    RegisterViewController *reg = [[[RegisterViewController alloc] init] autorelease];
+    RegisterViewController *reg = [[RegisterViewController alloc] init];
     [self.navigationController pushViewController:reg animated:YES];
 }
 
@@ -293,13 +288,12 @@
     [hud removeFromSuperview];
 }
 
-
-
 #pragma mark Keyboard lifeCircle
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     
     UIScrollView * view = (UIScrollView *) self.view;
+    view.scrollEnabled = YES;
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     CGSize size = view.bounds.size;
     size.height += keyboardSize.height;
@@ -315,6 +309,9 @@
 }
 - (void)keyboardWillHide:(NSNotification *)notification
 {
+    DLog(@"%s",__FUNCTION__);
+    //视图消失时自动失去第一响应者,为了保持动画一致性.l
+    if ([LoginStateManager isLogin]) return;
     UIScrollView *view = (UIScrollView *) self.view;
     CGPoint point = view.contentOffset;
     point.y  =  0;
@@ -323,7 +320,7 @@
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.view cache:YES];
     view.contentOffset = point;
     [UIView commitAnimations];
-    
+    view.scrollEnabled = NO;
     CGSize size = view.bounds.size;
     view.contentSize = size;
 }

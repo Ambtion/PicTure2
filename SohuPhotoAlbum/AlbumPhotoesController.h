@@ -18,7 +18,7 @@
     BOOL _isInitUpload;
     BOOL _isReading;
 }
-@property(nonatomic,retain)ALAssetsGroup * assetGroup;
+@property(nonatomic,strong)ALAssetsGroup * assetGroup;
 
 - (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state;
 @end
