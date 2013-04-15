@@ -27,7 +27,7 @@
         [self addSubview:portraitImageView];
         
         
-        CGRect rect = CGRectMake(self.bounds.size.height, 0, 10g0, self.bounds.size.height/2.f);
+        CGRect rect = CGRectMake(self.bounds.size.height, 0, 100, self.bounds.size.height/2.f);
         nameLabel = [[UILabel alloc] initWithFrame:rect];
         [self addSubview:nameLabel];
         rect.origin.y += rect.size.height;
