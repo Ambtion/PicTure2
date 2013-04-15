@@ -45,7 +45,7 @@
 
 -(void)addsubViews
 {
-    CGRect bounds = self.view.bounds;
+    CGRect bounds = CGRectMake(0, 0, 320, 480);
     _backgroundImageView = [[UIImageView alloc] initWithFrame:bounds];
     _backgroundImageView.image = [UIImage imageNamed:@"login_bg.png"];
     _backgroundControl = [[UIControl alloc] initWithFrame:bounds];
@@ -70,7 +70,8 @@
     _passwordTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.placeholder = @"密码";
-    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
+//    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
+//     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEnd];
     
     //注册
     UIButton *  registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -96,6 +97,7 @@
     forget.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     forget.font = [UIFont systemFontOfSize:15.f];
     [forget setUserInteractionEnabled:YES];
+    
     UIButton * forgetPassWord = [UIButton buttonWithType:UIButtonTypeCustom];
     forgetPassWord.frame = forget.bounds;
     forgetPassWord.backgroundColor = [UIColor clearColor];
@@ -211,7 +213,7 @@
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];
-    hud.delegate = self;
+//    hud.delegate = self;
     [self.view addSubview:hud];
     [hud show:YES];
     [AccountLoginResquest sohuLoginWithuseName:useName password:passWord sucessBlock:^(NSDictionary *response) {
@@ -283,11 +285,10 @@
 }
 
 #pragma mark - MBProgress Delegate
-- (void)hudWasHidden:(MBProgressHUD *)hud
-{
-    [hud removeFromSuperview];
-}
-
+//- (void)hudWasHidden:(MBProgressHUD *)hud
+//{
+//    [hud removeFromSuperview];
+//}
 #pragma mark Keyboard lifeCircle
 - (void)keyboardWillShow:(NSNotification *)notification
 {
@@ -309,9 +310,11 @@
 }
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    DLog(@"%s",__FUNCTION__);
-    //视图消失时自动失去第一响应者,为了保持动画一致性.l
+    
+    //视图消失时自动失去第一响应者,为了保持动画一致性
     if ([LoginStateManager isLogin]) return;
+    DLog(@"%s",__FUNCTION__);
+
     UIScrollView *view = (UIScrollView *) self.view;
     CGPoint point = view.contentOffset;
     point.y  =  0;

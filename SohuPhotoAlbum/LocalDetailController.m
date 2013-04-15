@@ -9,9 +9,13 @@
 #import "LocalDetailController.h"
 #import "LocalShareController.h"
 
-@interface LocalDetailController ()
-
-@end
+static int flag = 0;
+typedef enum __shareModel {
+    SinaWeiboShare,
+    RenrenShare,
+    WeixinShare,
+    QQShare,
+}shareModel;
 
 @implementation LocalDetailController
 @synthesize cache = _cache, group = _group;
@@ -125,15 +129,286 @@
     return image;
 }
 
-#pragma mark - Action
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+#pragma mark - cusTabBarDelegate
+//- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+//{
+//    if (button.tag == LEFTBUTTON)
+//        [self.navigationController popViewControllerAnimated:YES];
+//    if (button.tag == RIGHT1BUTTON)
+//        return ;
+//    if (button.tag == RIGHT2BUTTON)
+//        [self.navigationController pushViewController:[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:self.curPageNum]] animated:YES];
+//}
+- (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
-    if (button.tag == LEFTBUTTON)
+    flag = button.tag;
+    if (button.tag == TABBARCANCEL){
         [self.navigationController popViewControllerAnimated:YES];
-    if (button.tag == RIGHT1BUTTON)
-        return ;
-    if (button.tag == RIGHT2BUTTON)
-        [self.navigationController pushViewController:[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:self.curPageNum]] animated:YES];
+        return;
+    }
+    if (![LoginStateManager isLogin]) {
+        [self showLoginView];
+        return;
+    }
+    if (button.tag == TABBARSHARETAG){        //分享图片
+        [self showShareView];
+    }
+    if (button.tag == TABBARLOADPIC){        //上传图片
+       
+    }
+  
+}
+- (void)showLoginView
+{
+    LoginViewController * loginView = [[LoginViewController alloc] init];
+    loginView.delegate = self;
+    [self.navigationController pushViewController:loginView animated:YES];
+}
+- (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+- (void)showShareView
+{
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"微信发送",@"腾讯QQ空间", nil];
+    [sheet showInView:self.view];
+    sheet.tag = 100;
+}
+#pragma mark - ActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag != 100){
+        switch (buttonIndex) {
+            case 0:
+                [self respImageContentToSence:WXSceneTimeline];
+                break;
+            case 1:
+                [self respImageContentToSence:WXSceneSession];
+                break;
+            default:
+                break;
+        }
+    }else{
+        [self upPicture:buttonIndex];
+    }
+}
+#pragma mark - ShareWithDes
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        [view removeFromSuperview];
+    }];
+    switch (model) {
+        case SinaModel:
+            [self sinaUploadPicWithDes:text];
+            break;
+        case RenrenModel:
+            [self renrenUPlaodPicWithDes:text];
+            break;
+        case QQModel:
+            [self qqUploadPicWithDes:text];
+            break;
+        default:
+            break;
+    }
+}
+#pragma mark Action
+- (AppDelegate *)Appdelegate
+{
+    return [[UIApplication sharedApplication] delegate];
+}
+- (void)upPicture:(shareModel)model
+{
+    switch (model) {
+        case SinaWeiboShare:
+            [[self Appdelegate] sinaLoginWithDelegate:self];
+            break;
+          case RenrenShare:
+            [[self Appdelegate] renrenLoginWithDelegate:self];
+            break;
+        case QQShare:
+            [[self Appdelegate] qqLoginWithDelegate:self];
+            break;
+        case WeixinShare:
+            [[self Appdelegate] weiXinregisterWithDelegate:self];
+            [self weixinUploadPic];
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - SINA UPloadPic
+- (void)sinaweiboDidLogIn:(SinaWeibo *)sinaweibo
+{
+    [self.view addSubview:[[LocalShareDesView alloc] initWithModel:SinaModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
+//    [self sinaUploadPic];
+}
+- (void)sinaweibo:(SinaWeibo *)sinaweibo logInDidFailWithError:(NSError *)error
+{
+    [self showInvalidTokenOrOpenIDMessageWithMes:[error description]];
+}
+- (void)sinaUploadPicWithDes:(NSString *)des
+{
+    //uplaod image
+    [[[self Appdelegate] sinaweibo] requestWithURL:@"statuses/upload.json"
+                                            params:[NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                    des, @"status",
+                                                    [UIImage imageWithCGImage:[[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] fullScreenImage]], @"pic", nil]
+                                        httpMethod:@"POST"
+                                          delegate:self];
+}
+- (void)request:(SinaWeiboRequest *)request didFinishLoadingWithResult:(id)result
+{
+    //发送
+    if ([request.url hasSuffix:@"statuses/upload.json"])
+    {
+        if ([(NSDictionary *)result objectForKey:@"error"]) {
+            [self showInvalidTokenOrOpenIDMessageWithMes:[(NSDictionary *)result objectForKey:@"error"]];
+            return;
+        }
+        [self showInvalidTokenOrOpenIDMessageWithMes:[result objectForKey:@"text"]];
+    }
+}
+- (void)request:(SinaWeiboRequest *)request didFailWithError:(NSError *)error
+{
+    [self showInvalidTokenOrOpenIDMessageWithMes:[error description]];
+}
+
+#pragma mark RenRen upload
+- (void)renrenDidLogin:(Renren *)renren
+{
+     [self.view addSubview:[[LocalShareDesView alloc] initWithModel:RenrenModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
+}
+- (void)renrenDidLogout:(Renren *)renren
+{
+
+}
+- (void)renren:(Renren *)renren loginFailWithError:(ROError *)error
+{
+    
+}
+- (void)renrenUPlaodPicWithDes:(NSString *)des
+{
+    ROPublishPhotoRequestParam * param = [[ROPublishPhotoRequestParam alloc] init];
+    param.imageFile = [UIImage imageWithCGImage:[[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] fullScreenImage]];
+    param.caption = des;
+    [[Renren sharedRenren] publishPhoto:param andDelegate:self];
+//    UIImage* image = [UIImage imageWithCGImage:[[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] fullScreenImage]];
+//    NSString *caption = @"这是一张测试图片";
+//    [[Renren sharedRenren] publishPhotoSimplyWithImage:image caption:caption];
+}
+
+- (void)renren:(Renren *)renren requestDidReturnResponse:(ROResponse *)response
+{
+    if (response.error) {
+        [self showInvalidTokenOrOpenIDMessageWithMes:[[response error] localizedDescription]];
+    }else{
+        [self showInvalidTokenOrOpenIDMessageWithMes:@"OK"];
+    }
+}
+#pragma mark - QQ UPloadPic
+- (void)tencentDidLogin
+{
+     [self.view addSubview:[[LocalShareDesView alloc] initWithModel:QQModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
+//    [self qqUploadPicWithDes:nil];
+}
+- (void)tencentDidNotLogin:(BOOL)cancelled
+{
+    
+}
+- (void)tencentDidNotNetWork
+{
+    //网络条件问题
+}
+- (void)qqUploadPicWithDes:(NSString *)des
+{
+	UIImage * img = [UIImage imageWithCGImage:[[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] fullScreenImage]];
+    TCUploadPicDic * params = [TCUploadPicDic dictionary];
+    params.paramPicture = img;
+    params.paramPhotodesc = des;
+    params.paramMobile = @"1";
+    params.paramNeedfeed = @"1";
+    
+	if(![[[self Appdelegate] tencentOAuth] uploadPicWithParams:params]){
+        [self showInvalidTokenOrOpenIDMessageWithMes:@"error"];
+    }
+}
+- (void)uploadPicResponse:(APIResponse*) response
+{
+	if (response.retCode == URLREQUEST_SUCCEED)
+	{
+		NSMutableString *str=[NSMutableString stringWithFormat:@""];
+		for (id key in response.jsonResponse) {
+			[str appendString: [NSString stringWithFormat:@"%@:%@\n",key,[response.jsonResponse objectForKey:key]]];
+		}
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"操作成功" message:[NSString stringWithFormat:@"%@",str]
+							  
+													   delegate:self cancelButtonTitle:@"我知道啦" otherButtonTitles: nil];
+		[alert show];
+	}
+	else {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"操作失败" message:[NSString stringWithFormat:@"%@", response.errorMsg]
+							  
+													   delegate:self cancelButtonTitle:@"我知道啦" otherButtonTitles: nil];
+		[alert show];
+	}
+	
+}
+
+#pragma mark - Weixin
+-(void)weixinUploadPic
+{
+    if ([WXApi isWXAppInstalled]) {
+        UIActionSheet * act = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
+        [act showInView:self.view];
+    }else{
+        [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
+    }
+}
+
+-(void) onReq:(BaseReq*)req
+{
+    
+}
+- (void) respImageContentToSence:(enum WXScene)scene
+{
+    //发送内容给微信
+    WXMediaMessage *message = [WXMediaMessage message];
+    [message setThumbImage:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] aspectRatioThumbnail]]];
+    WXImageObject *ext = [WXImageObject object];
+    ext.imageData = [self getDataFromAsset:[self.assetsArray objectAtIndex:self.curPageNum]];
+    message.mediaObject = ext;
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    [WXApi sendReq:req];
+}
+- (NSData *)getDataFromAsset:(ALAsset *)asset
+{
+    CGImageRef imageRef = [[asset defaultRepresentation] fullScreenImage];
+    UIImage * image = [UIImage imageWithCGImage:imageRef];
+    return UIImageJPEGRepresentation(image, 1.f);
+}
+-(void) onResp:(BaseResp*)resp
+{
+    if([resp isKindOfClass:[SendMessageToWXResp class]])
+    {
+        NSString *strTitle = [NSString stringWithFormat:@"发送结果"];
+        NSString *strMsg = [NSString stringWithFormat:@"发送媒体消息结果:%d %@", resp.errCode,resp.errStr];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+}
+
+#pragma mark UpFailture
+- (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
+{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
 }
 #pragma mark cache Manager
 - (void)didReceiveMemoryWarning

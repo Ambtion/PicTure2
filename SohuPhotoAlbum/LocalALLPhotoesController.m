@@ -35,12 +35,16 @@
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
+    _myTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+    _myTableView.tableHeaderView.backgroundColor = [UIColor redColor];
+    [_myTableView setContentOffset:CGPointMake(0, 20)];
     _myTableView.backgroundColor = BACKGORUNDCOLOR;
     _selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:_myTableView];
     [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
+
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -59,7 +63,6 @@
         [_cusBar.sLabelText setText:SLABELTEXT];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
     }
-    
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
@@ -127,9 +130,7 @@
     for (NSMutableArray * array in tempArray )
         [self.dataSourceArray addObject:[self coverAssertToDataSource:array]];
     DLog(@"start end");
-
 }
-
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {
     NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];

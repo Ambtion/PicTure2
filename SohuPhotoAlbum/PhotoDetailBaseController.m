@@ -23,28 +23,14 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 
 @synthesize assetsArray = _assetsArray;
 @synthesize curPageNum = _curPageNum;
-@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage,cusBar = _cusBar;
+@synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage;
+//@synthesize cusBar = _cusBar;
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    [_tabBar release];
 }
-//- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
-//{
-//    self = [super init];
-//    if (self) {
-//        self.wantsFullScreenLayout = YES;
-//        self.cache = [[[LimitCacheForImage alloc] init] autorelease];
-//        _curImageArray = [[NSMutableArray arrayWithCapacity:0] retain];
-//        _isHidingBar = NO;
-//        _isInit = YES;
-//        _isRotating = NO;
-//        self.curPageNum = [array indexOfObject:asset];
-//        self.assetsArray = [[array copy] autorelease];
-//        self.group = group;
-//    }
-//    return self;
-//}
+
 
 #pragma mark - initSubView
 - (void)viewDidLoad
@@ -89,46 +75,9 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 
 - (void)upCusTitle
 {
-    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
+//    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
 }
-//- (void)readPhotoes
-//{
-//    ALAsset * asset = [self.assetsArray objectAtIndex:_curPageNum];
-//    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
-//    if (!_libiary)
-//        _libiary = [[ALAssetsLibrary alloc] init];
-//    NSMutableArray * tempArry = [NSMutableArray arrayWithCapacity:0];
-//    if (!self.group) {
-//        [_libiary readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
-//            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
-//        } failture:^(NSError *error) {
-//            
-//        }];
-//    }else{
-//        [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
-//            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
-//        }];
-//    }
-//}
-//- (NSMutableArray *)revertObjectArray:(NSMutableArray *)array
-//{
-//    NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
-//    for (int i = array.count - 1; i >= 0; i--)
-//        [finalArray addObject:[array objectAtIndex:i]];
-//    return finalArray;
-//}
-//- (void)resetCurNumWhenAssetArryChangeWithPreAsset:(ALAsset *)asset
-//{
-//    self.assetsArray = [self revertObjectArray:self.assetsArray]; //逆序排序
-//    NSUInteger curnum = [self.assetsArray indexOfObject:asset];
-//    if (curnum == NSNotFound) {
-//        _curPageNum = [self validPageValue:_curPageNum];
-//    }else{
-//        _curPageNum =  curnum;
-//    }
-//    _canGetActualImage = YES;
-//    [self refreshScrollView];
-//}
+
 #pragma mark - ReloadSubViews
 - (void)reloadAllSubViews
 {
@@ -168,25 +117,25 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 - (void)addBar
 {
-    self.cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-    if (_isHidingBar) {
-        _cusBar.frame = CGRectMake(0, -44, 320, 44);
-    }else{
-        _cusBar.frame = CGRectMake(0, 20, 320, 44);
-    }
-    _cusBar.backgroundColor = [UIColor clearColor];
-    [_cusBar setBackgroundImage:[UIImage imageNamed:@"full_screen_title-bar.png"]];
-    [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"full_screen_back.png"] forState:UIControlStateNormal];
-    _cusBar.nLabelText.textColor = [UIColor whiteColor];
-    _cusBar.nLabelText.font = [UIFont systemFontOfSize:22];
-    [self upCusTitle];
-    [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"full_screen_download_icon.png"] forState:UIControlStateNormal];
-    [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
-    [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
-    [self.view addSubview:_cusBar];
+//    self.cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+//    if (_isHidingBar) {
+//        _cusBar.frame = CGRectMake(0, -44, 320, 44);
+//    }else{
+//        _cusBar.frame = CGRectMake(0, 20, 320, 44);
+//    }
+//    _cusBar.backgroundColor = [UIColor clearColor];
+//    [_cusBar setBackgroundImage:[UIImage imageNamed:@"full_screen_title-bar.png"]];
+//    [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"full_screen_back.png"] forState:UIControlStateNormal];
+//    _cusBar.nLabelText.textColor = [UIColor whiteColor];
+//    _cusBar.nLabelText.font = [UIFont systemFontOfSize:22];
+//    [self upCusTitle];
+//    [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"full_screen_download_icon.png"] forState:UIControlStateNormal];
+//    [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
+//    [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+//    [self.view addSubview:_cusBar];
     
-//    _tabBar  = [[CusTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
-//    [self.view addSubview:_tabBar];
+    _tabBar  = [[CustomizetionTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
+    [self.view addSubview:_tabBar];
 }
 - (void)setScrollViewProperty
 {
@@ -497,21 +446,11 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     //         [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
 }
 
-//- (void)cusTabBar:(CusTabBar *)bar buttonClick:(UIButton *)button
-//{
-//    if (button.tag == TABSHARETAG) {
-//        [self.navigationController pushViewController:[[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:_curPageNum]] autorelease] animated:YES];
-//    }
-//    if (button.tag == TABDOWNLOADNTAG) {
-//
-//    }
-//    if (button.tag == TABEDITTAG) {
-//
-//    }
-//    if (button.tag == TABDELETETAG) {
-//        
-//    }
-//}
+- (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
+{
+    DLog(@"%s",__FUNCTION__);
+}
+
 //- (void)setImagePropertyWith:(ALAsset *)asset
 //{
 //    //get full imageData
@@ -611,39 +550,41 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
 {
     if (_isHidingBar) {
-        [self showBar];
+//        [self showBar];
+        [_tabBar showBar];
     }else{
-        [self hideBar];
+        [_tabBar hideBar];
     }
+    _isHidingBar = !_isHidingBar;
 }
-- (void)showBar
-{
-    if (!CGAffineTransformEqualToTransform(CGAffineTransformIdentity, [self getTransfrom])) return;
-    [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
-        CGRect navBar = CGRectMake(0, 20, 320, 44);
+//- (void)showBar
+//{
+//    if (!CGAffineTransformEqualToTransform(CGAffineTransformIdentity, [self getTransfrom])) return;
+//    [self.view setUserInteractionEnabled:NO];
+//    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
+////        CGRect navBar = CGRectMake(0, 20, 320, 44);
 //        CGRect tabBar = CGRectMake(0, self.view.frame.size.height - 44, 320, 44);
-        _cusBar.frame = navBar;
+////        _cusBar.frame = navBar;
 //        _tabBar.frame = tabBar;
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    } completion:^(BOOL finished) {
-        [self.view setUserInteractionEnabled:YES];
-        _isHidingBar = NO;
-    }];
-}
-- (void)hideBar
-{
-    [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
-        CGRect navBar = CGRectMake(0, -44, 320, 44);
+//        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+//    } completion:^(BOOL finished) {
+//        [self.view setUserInteractionEnabled:YES];
+//        _isHidingBar = NO;
+//    }];
+//}
+//- (void)hideBar
+//{
+//    [self.view setUserInteractionEnabled:NO];
+//    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
+////        CGRect navBar = CGRectMake(0, -44, 320, 44);
 //        CGRect tabBar = CGRectMake(0, self.view.frame.size.height, 320, 44);
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        _cusBar.frame = navBar;
+//        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+////        _cusBar.frame = navBar;
 //        _tabBar.frame = tabBar;
-    } completion:^(BOOL finished) {
-        [self.view setUserInteractionEnabled:YES];
-        _isHidingBar = YES;
-    }];
-}
-
+//    } completion:^(BOOL finished) {
+//        [self.view setUserInteractionEnabled:YES];
+//        _isHidingBar = YES;
+//    }];
+//}
+//
 @end

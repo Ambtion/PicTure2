@@ -7,35 +7,46 @@
 //
 #import "LeftMenuController.h"
 
+#define MENUMAXNUMBER 4
 
-#define MENUMAXNUMBER 5
-
-static NSString * menuText[5] = {@"账号",@"本地相册",@"云备份",@"分享历史",@"设置"};
-static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"setting.png"};
+static NSString * menuText[4] = {@"本地相册",@"云备份",@"分享历史",@"设置"};
+static NSString * image[4]  ={@"LocalPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"setting.png"};
 
 @implementation LeftMenuController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     CGRect rect = [[UIScreen mainScreen] bounds];
+    //bgView
+    UIImageView * bgView = [[UIImageView alloc] initWithFrame:_tableView.bounds];
+    bgView.image = [UIImage imageNamed:@"menuBackground.png"];
+    
+    [self.view addSubview:bgView];
+    
+    //accoutView
+    _accountView = [[AccountView alloc] initWithFrame:CGRectMake(0, 0, 320, 48.f)];
+    _accountView.delegate = self;
+    [self.view addSubview:_accountView];
+    
     //控制statuBar
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.f, rect.size.width, rect.size.height)
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,48.f, rect.size.width, rect.size.height)
                                               style:UITableViewStylePlain];
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.scrollEnabled = YES;
-    _tableView.sectionHeaderHeight = 32;
+    _tableView.scrollEnabled = NO;
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.backgroundColor = [UIColor clearColor];
-    UIImageView * bgView = [[UIImageView alloc] initWithFrame:_tableView.bounds];
-    bgView.image = [UIImage imageNamed:@"menuBackground.png"];
-    [self.view addSubview:bgView];
     [self.view addSubview:_tableView];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [_tableView reloadData];
+}
+- (void)setAccountView
+{
+    //暂时写着
+    _accountView.desLabel.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
 }
 #pragma mark Delegate TableView
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -44,26 +55,16 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!indexPath.row) {
-        return 40.f;
-    }
     return 48.f;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 4;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * str = @"CELL";
-    static NSString * accout = @"AccountCELL";
-    if (!indexPath.row) {
-        _accountCell = [tableView dequeueReusableCellWithIdentifier:accout];
-        if (!_accountCell)
-            _accountCell = [[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accout];
-        _accountCell.labelText.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
-        return _accountCell;
-    }
+    
     MenuCell * cell = [tableView dequeueReusableCellWithIdentifier:str];
     if (!cell) {
         cell = [[MenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str];
@@ -115,6 +116,15 @@ static NSString * image[5]  ={@"",@"LocalPhoto.png",@"cloundPhoto.png",@"shareHi
     _accountCell.labelText.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
     [self dismissModalViewControllerAnimated:YES];
     [self.viewDeckController toggleLeftViewAnimated:NO];
-
+    
+}
+#pragma mark AccoutViewDelgate
+- (void)accountView:(AccountView *)acountView accessoryClick:(id)sender
+{
+    DLog(@"%s",__FUNCTION__);
+}
+- (void)accountView:(AccountView *)acountView setttingClick:(id)sender
+{
+    DLog(@"%s",__FUNCTION__);
 }
 @end

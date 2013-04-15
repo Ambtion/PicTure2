@@ -25,8 +25,8 @@
 - (void)renrenLoginWithDelegate:(id<RenrenDelegate>)delegate
 {
     self.state = RenrenUpload;
-//        NSArray *permissions = [NSArray arrayWithObjects:@"read_user_album",@"status_update",@"photo_upload",@"publish_feed",@"create_album",@"operate_like",nil];
-//       [[Renren sharedRenren] authorizationWithPermisson:permissions andDelegate:delegate];
+        NSArray *permissions = [NSArray arrayWithObjects:@"read_user_album",@"status_update",@"photo_upload",@"publish_feed",@"create_album",@"operate_like",nil];
+       [[Renren sharedRenren] authorizationWithPermisson:permissions andDelegate:delegate];
     //使用一键上传
 }
 

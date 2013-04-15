@@ -18,7 +18,8 @@
     if (self) {
         self.delegate = deletate;
         self.frame = CGRectMake(frame.origin.x,frame.origin.y, 320, 44);
-        self.image = [UIImage imageNamed:@"full_screen_buttom_bar.png"];
+        self.backgroundColor = [UIColor clearColor];
+//        self.image = [UIImage imageNamed:@"full_screen_buttom_bar.png"];
         [self setUserInteractionEnabled:YES];
         [self initSubViews];
     }
@@ -28,36 +29,29 @@
 {
     CGFloat offset = 28;
     CGRect rect = CGRectMake(30, 0, 44, 44);
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = rect;
-    button.tag = TABSHARETAG;
-    [button setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:button];
+    backButton= [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = rect;
+    backButton.tag = TABBARCANCEL;
+    [backButton setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:backButton];
     
     rect.origin.x += offset + rect.size.width;
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = rect;
-    button.tag = TABDOWNLOADNTAG;
-    [button setImage:[UIImage imageNamed:@"full_screen_download_icon.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:button];
+    rect.origin.x += offset + rect.size.width;
+    shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    shareButton.frame = rect;
+    shareButton.tag = TABBARSHARETAG;
+    [shareButton setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
+    [shareButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:shareButton];
     
     rect.origin.x += offset + rect.size.width;
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = rect;
-    button.tag = TABEDITTAG;
-    [button setImage:[UIImage imageNamed:@"full_screen_edit_icon.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:button];
-    
-    rect.origin.x += offset + rect.size.width;
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = rect;
-    button.tag = TABDELETETAG;
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:[UIImage imageNamed:@"full_screen_delete_icon.png"] forState:UIControlStateNormal];
-    [self addSubview:button];
+    loadButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    loadButton.frame = rect;
+    loadButton.tag = TABBARLOADPIC;
+    [loadButton setImage:[UIImage imageNamed:@"full_screen_download_icon.png"] forState:UIControlStateNormal];
+    [loadButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:loadButton];
 }
 - (void)buttonClick:(UIButton *)button
 {
@@ -65,5 +59,40 @@
         [_delegate cusTabBar:self buttonClick:button];
     }
 }
-
+- (void)hideBar
+{
+    CGRect backrect = backButton.frame;
+    backrect.origin.x = -44;
+    CGRect shareRect = shareButton.frame;
+    shareRect.origin.x = 320 + 44;
+    CGRect loadRect = loadButton.frame;
+    loadRect.origin.x = 320 + 88;
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        backButton.frame = backrect;
+        shareButton.frame = shareRect;
+        loadButton.frame = loadRect;
+    } completion:^(BOOL finished) {
+        [self setUserInteractionEnabled:NO];
+    }];
+}
+- (void)showBar
+{
+    CGRect backrect = backButton.frame;
+    backrect.origin.x = 0;
+    CGRect shareRect = shareButton.frame;
+    shareRect.origin.x = 320 - 88;
+    CGRect loadRect = loadButton.frame;
+    loadRect.origin.x = 320 - 44 ;
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        backButton.frame = backrect;
+        shareButton.frame = shareRect;
+        loadButton.frame = loadRect;
+    } completion:^(BOOL finished) {
+        [self setUserInteractionEnabled:YES];
+    }];
+}
+- (BOOL)isHiddenBar
+{
+    return backButton.frame.origin.x == -44;
+}
 @end

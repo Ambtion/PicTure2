@@ -29,4 +29,7 @@
 #import<AssetsLibrary/AssetsLibrary.h>
 #import "ALAssetsLibrary+Read.h"
 
+// account
+#import "LoginStateManager.h"
+#import "LoginViewController.h"
 #import "UploadTaskManager.h"

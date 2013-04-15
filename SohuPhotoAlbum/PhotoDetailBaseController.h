@@ -10,8 +10,7 @@
 #import "ImageScaleView.h"
 #import "CustomizationNavBar.h"
 #import "LimitCacheForImage.h"
-
-//#import "CusTabBar.h"
+#import "CustomizetionTabBar.h"
 
 typedef enum _imageStatePosition
 {
@@ -21,14 +20,16 @@ typedef enum _imageStatePosition
     
 }imageStatePosition;
 
-@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusNavigationBarDelegate>
+@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,
+                                                        CusNavigationBarDelegate,CusTabBarDelegate>
 {
     UIScrollView * _scrollView;
     ImageScaleView * _fontScaleImage;
     ImageScaleView * _curScaleImage;
     ImageScaleView * _rearScaleImage;
     NSMutableArray * _curImageArray;
-    CustomizationNavBar * _cusBar;
+//    CustomizationNavBar * _cusBar;
+    CustomizetionTabBar * _tabBar;
     imageStatePosition _imagestate;
     
     BOOL _canGetActualImage;
@@ -46,7 +47,7 @@ typedef enum _imageStatePosition
 @property(nonatomic,strong)ImageScaleView * fontScaleImage;
 @property(nonatomic,strong)ImageScaleView * curScaleImage;
 @property(nonatomic,strong)ImageScaleView * rearScaleImage;
-@property(nonatomic,strong)CustomizationNavBar * cusBar;
+//@property(nonatomic,strong)CustomizationNavBar * cusBar;
 //@property(nonatomic,retain)LimitCacheForImage * cache;
 //@property(nonatomic,retain)ALAssetsGroup * group;
 

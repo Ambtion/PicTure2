@@ -224,6 +224,9 @@
 		C58DC14D17052FFA00E97E8C /* higlight.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC14C17052FFA00E97E8C /* higlight.png */; };
 		C58DC1531705416A00E97E8C /* upload_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1501705416A00E97E8C /* upload_pic.png */; };
 		C58DC1541705416A00E97E8C /* check_box_select_image.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1511705416A00E97E8C /* check_box_select_image.png */; };
+		C591B4B1171BDA4C0047C496 /* LocalShareDesView.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4B0171BDA4C0047C496 /* LocalShareDesView.m */; };
+		C591B4B4171BE5820047C496 /* EmojiUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4B3171BE5810047C496 /* EmojiUnit.m */; };
+		C591B4E6171C20A10047C496 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4E5171C20A10047C496 /* AccountView.m */; };
 		C593AB98170BF97D004522C2 /* back_press.png in Resources */ = {isa = PBXBuildFile; fileRef = C593AB97170BF97D004522C2 /* back_press.png */; };
 		C5A32BA41706EFD60084B253 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C5A32BA21706EFD60084B253 /* TencentOpenApi_IOS_Bundle.bundle */; };
 		C5A32BA51706EFD60084B253 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5A32BA31706EFD60084B253 /* TencentOpenAPI.framework */; };
@@ -582,6 +585,12 @@
 		C58DC14C17052FFA00E97E8C /* higlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = higlight.png; sourceTree = "<group>"; };
 		C58DC1501705416A00E97E8C /* upload_pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_pic.png; sourceTree = "<group>"; };
 		C58DC1511705416A00E97E8C /* check_box_select_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_box_select_image.png; sourceTree = "<group>"; };
+		C591B4AF171BDA4C0047C496 /* LocalShareDesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalShareDesView.h; sourceTree = "<group>"; };
+		C591B4B0171BDA4C0047C496 /* LocalShareDesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalShareDesView.m; sourceTree = "<group>"; };
+		C591B4B2171BE5810047C496 /* EmojiUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiUnit.h; sourceTree = "<group>"; };
+		C591B4B3171BE5810047C496 /* EmojiUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiUnit.m; sourceTree = "<group>"; };
+		C591B4E4171C20A10047C496 /* AccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
+		C591B4E5171C20A10047C496 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		C593AB97170BF97D004522C2 /* back_press.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_press.png; sourceTree = "<group>"; };
 		C5A32BA21706EFD60084B253 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
 		C5A32BA31706EFD60084B253 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
@@ -649,6 +658,9 @@
 		C57ED935170287E100505ECF /* PhotoDetail */ = {
 			isa = PBXGroup;
 			children = (
+				C591B4B2171BE5810047C496 /* EmojiUnit.h */,
+				C591B4B3171BE5810047C496 /* EmojiUnit.m */,
+				C5A32BAD1706FC360084B253 /* LocalShareRef.h */,
 				C583CF3B1704503A00CD3485 /* CustomizetionTabBar.h */,
 				C583CF3C1704503A00CD3485 /* CustomizetionTabBar.m */,
 				C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */,
@@ -661,6 +673,8 @@
 				C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */,
 				C57ED93917028A1900505ECF /* ImageScaleView.h */,
 				C57ED93A17028A1900505ECF /* ImageScaleView.m */,
+				C591B4AF171BDA4C0047C496 /* LocalShareDesView.h */,
+				C591B4B0171BDA4C0047C496 /* LocalShareDesView.m */,
 			);
 			name = PhotoDetail;
 			sourceTree = "<group>";
@@ -774,6 +788,8 @@
 			children = (
 				C588B0D017003750006BBC34 /* LeftMenuController.h */,
 				C588B0D117003750006BBC34 /* LeftMenuController.m */,
+				C591B4E4171C20A10047C496 /* AccountView.h */,
+				C591B4E5171C20A10047C496 /* AccountView.m */,
 				C583CF191703ECAC00CD3485 /* AccountCell.h */,
 				C583CF1A1703ECAC00CD3485 /* AccountCell.m */,
 				C583CF1C1703F3ED00CD3485 /* MenuCell.h */,
@@ -1370,7 +1386,6 @@
 			children = (
 				C58B38D81709666E00A0BA07 /* ShareBaseController.h */,
 				C58B38D91709666E00A0BA07 /* ShareBaseController.m */,
-				C5A32BAD1706FC360084B253 /* LocalShareRef.h */,
 				C5A32BB01706FE6D0084B253 /* LocalShareController.h */,
 				C5A32BB11706FE6D0084B253 /* LocalShareController.m */,
 			);
@@ -1708,6 +1723,9 @@
 				C58773F6171658C300799730 /* LocalDetailController.m in Sources */,
 				C58773F9171669F600799730 /* OAuthorController.m in Sources */,
 				C5863CC817181266005D12ED /* UPLoadViewController.m in Sources */,
+				C591B4B1171BDA4C0047C496 /* LocalShareDesView.m in Sources */,
+				C591B4B4171BE5820047C496 /* EmojiUnit.m in Sources */,
+				C591B4E6171C20A10047C496 /* AccountView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

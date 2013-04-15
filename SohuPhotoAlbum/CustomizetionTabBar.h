@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-#define TABSHARETAG         11111
-#define TABDOWNLOADNTAG     11112
-#define TABEDITTAG          11113
-#define TABDELETETAG        11114
+#define TABBARCANCEL           11114
+#define TABBARSHARETAG         11111
+#define TABBARLOADPIC     11112
 
 @class CustomizetionTabBar;
 @protocol CusTabBarDelegate <NSObject>
@@ -19,6 +18,14 @@
 @end
 
 @interface CustomizetionTabBar : UIImageView
+{
+    UIButton * backButton;
+    UIButton * shareButton;
+    UIButton * loadButton;
+}
 @property(nonatomic,weak)id<CusTabBarDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate;
+- (void)hideBar;
+- (void)showBar;
+- (BOOL)isHiddenBar;
 @end

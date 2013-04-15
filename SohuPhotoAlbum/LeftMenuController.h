@@ -13,12 +13,14 @@
 #import "PhotoWallController.h"
 #import "LoginStateManager.h"
 #import "LoginViewController.h"
-#import "AccountCell.h"
 #import "MenuCell.h"
+#import "AccountView.h"
+#import "AccountCell.h"
 
-@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate>
+@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,AccountViewDelegate>
 {
     UITableView * _tableView;
     AccountCell * _accountCell;
+    AccountView * _accountView;
 }
 @end
