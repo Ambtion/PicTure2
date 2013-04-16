@@ -18,22 +18,20 @@
         self.backgroundColor = [UIColor clearColor];
         _actualView = [[UIImageView alloc] initWithFrame:self.bounds];
         [self addSubview:_actualView];
-        _actualView.layer.borderWidth = 0.5f;
         _actualView.layer.borderColor = [[UIColor colorWithRed:192.f/255.f green:192.f/255.f blue:192.f/255.f alpha:1.f]CGColor];
-        _actualView.layer.shouldRasterize = YES;
+        _actualView.layer.shadowPath = [[UIBezierPath bezierPathWithRect:_actualView.bounds] CGPath];
+        _actualView.layer.borderWidth = 0.5f;
+//        _actualView.layer.shouldRasterize = YES;
+        
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
-//        [_statuImage addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
         [self addSubview:_statuImage];
         self.backgroundColor = [UIColor clearColor];
         [self resetStatusImageToHidden];
     }
     return self;
 }
-//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-//{
-//    
-//}
+
 - (void)setSelected:(BOOL)selected
 {
     if (!isShowStatus)
@@ -48,7 +46,7 @@
         [self uploadStatus];
     }
 }
-- (void)showStatusWithOutUpload
+- (void)showStatusWithoutUpload
 {
     isShowStatus = YES;
     isUpload = NO;
@@ -99,7 +97,6 @@
 - (void)setImage:(UIImage *)image
 {
     if (!image) {
-//        NSLog(@"%s",__FUNCTION__);
         [self setUserInteractionEnabled:NO];
         _actualView.layer.borderWidth = 0.f;
     }else{

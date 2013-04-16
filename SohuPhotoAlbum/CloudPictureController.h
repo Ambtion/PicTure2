@@ -1,25 +1,25 @@
 //
-//  RootViewController.h
-//  test
+//  CloudPictureController.h
+//  SohuPhotoAlbum
 //
-//  Created by sohu on 13-4-2.
+//  Created by sohu on 13-4-16.
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 #import "SCPMoreTableFootView.h"
-#import "PhotoWallCell.h"
 #import "CustomizationNavBar.h"
+#import "CloudPictureCell.h"
 
-@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate>
+@interface CloudPictureController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,CusNavigationBarDelegate>
 {
     UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;
-    NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
-    UILabel * label;
+    BOOL _isSelectedState;
     BOOL _isLoading;
 }
+
 @end

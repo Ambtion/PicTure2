@@ -13,7 +13,7 @@
 @interface  PhotoAlbumCellDataSource:NSObject
 @property(nonatomic,strong)ALAssetsGroup * leftGroup;
 @property(nonatomic,strong)ALAssetsGroup * rightGroup;
-- (CGFloat)cellHight;
++ (CGFloat)cellHight;
 @end
 
 @protocol PhotoAlbumCellDelegate <NSObject>

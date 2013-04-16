@@ -18,7 +18,7 @@
 @property(nonatomic,getter=isSelected) BOOL selected;
 @property(nonatomic,readonly)BOOL isShowStatus;
 
-- (void)showStatusWithOutUpload;
+- (void)showStatusWithoutUpload;
 - (void)showStatusWithUpload;
 
 - (void)resetStatusImageToHidden;

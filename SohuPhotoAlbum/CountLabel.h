@@ -12,5 +12,9 @@
 {
     UIImageView * _bgImageView;
     UILabel * _baseLabel;
+    UIImageView * _iconImageView;
+    BOOL isIconModel;
 }
+@property(strong,nonatomic)UIImage * iconImage;
+- (id)initIconLabeWithFrame:(CGRect)frame;
 @end

@@ -9,7 +9,28 @@
 #import "CountLabel.h"
 
 @implementation CountLabel
-
+- (id)initIconLabeWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        _bgImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"album_nb.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(11.f, 11.f, 11.f, 11.f)]];
+        _bgImageView.backgroundColor = [UIColor clearColor];
+        _bgImageView.frame = self.bounds;
+        [self addSubview:_bgImageView];
+        
+        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _iconImageView.image = [UIImage imageNamed:@"LabelIcon.png"];
+        [self addSubview:_iconImageView];
+        
+        _baseLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        _baseLabel.backgroundColor = [UIColor clearColor];
+        _baseLabel.textAlignment = UITextAlignmentCenter;
+        [self addSubview:_baseLabel];
+        isIconModel = YES;
+    }
+    return self;
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -23,9 +44,11 @@
         _baseLabel.textAlignment = UITextAlignmentCenter;
         [self addSubview:_bgImageView];
         [self addSubview:_baseLabel];
+        isIconModel = NO;
     }
     return self;
 }
+
 #pragma mark
 - (void)setFrame:(CGRect)frame
 {
@@ -49,12 +72,21 @@
 }
 - (void)setText:(NSString *)text
 {
-    [_baseLabel setText:text];
+    if (isIconModel) {
+        
+    }else{
+        [_baseLabel setText:text];
+    }
 }
 - (void)sizeToFit
 {
-    [_baseLabel sizeToFit];
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, _baseLabel.frame.size.width, _baseLabel.frame.size.height);
+    if (isIconModel) {
+        
+    }else{
+        [_baseLabel sizeToFit];
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, _baseLabel.frame.size.width, _baseLabel.frame.size.height);
+    }
+    
 }
 
 @end

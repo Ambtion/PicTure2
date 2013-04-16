@@ -16,7 +16,7 @@
 
 @implementation PhotoAlbumCellDataSource
 @synthesize leftGroup,rightGroup;
-- (CGFloat)cellHight
++ (CGFloat)cellHight
 {
     return CELLHEIGTH;
 }

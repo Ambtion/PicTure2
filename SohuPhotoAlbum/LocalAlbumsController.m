@@ -28,13 +28,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
-    _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.backgroundColor = BACKGORUNDCOLOR;
-    [_myTableView setScrollsToTop:YES];
-    [self.view addSubview:_myTableView];
+    self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
+    self.myTableView.delegate = self;
+    self.myTableView.dataSource = self;
+    self.myTableView.separatorColor = [UIColor clearColor];
+    self.myTableView.backgroundColor = BACKGORUNDCOLOR;
+    [self.myTableView setScrollsToTop:YES];
+    [self.view addSubview:self.myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [self readAlbum];
 }
@@ -105,7 +105,7 @@
     }
     if (_selectedArray.count)
         [_selectedArray removeAllObjects];
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
 }
 #pragma mark - ReadData
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -139,7 +139,7 @@
         }
         [self.dataSourceArray addObject:dataSource];
     }
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
 }
 #pragma mark TableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -152,8 +152,8 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PhotoAlbumCellDataSource * dataSource = [self.dataSourceArray objectAtIndex:indexPath.row];
-    return [dataSource cellHight];
+    //性能
+    return [PhotoAlbumCellDataSource cellHight];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

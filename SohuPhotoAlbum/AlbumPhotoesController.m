@@ -48,13 +48,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
-    _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.backgroundColor = BACKGORUNDCOLOR;
-    [_myTableView setScrollsToTop:YES];
-    [self.view addSubview:_myTableView];
+    self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
+    self.myTableView.delegate = self;
+    self.myTableView.dataSource = self;
+    self.myTableView.separatorColor = [UIColor clearColor];
+    self.myTableView.backgroundColor = BACKGORUNDCOLOR;
+    [self.myTableView setScrollsToTop:YES];
+    [self.view addSubview:self.myTableView];
     [self readPhotoAssetes];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
@@ -118,7 +118,7 @@
             source.lastAsset = [self.assetsArray objectAtIndex:i+3];
         [self.dataSourceArray addObject:source];
     }
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
     _isReading = NO;
 }
 - (NSMutableArray *)revertObjectArray:(NSMutableArray *)array
@@ -144,11 +144,11 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PhotoesCellDataSource * source = [self.dataSourceArray objectAtIndex:indexPath.row];
+//    PhotoesCellDataSource * source = [self.dataSourceArray objectAtIndex:indexPath.row];
     if (indexPath.row == self.dataSourceArray.count - 1) {
-        return [source cellLastHigth];
+        return [PhotoesCellDataSource cellLastHigth];
     }
-    return [source cellHigth];
+    return [PhotoesCellDataSource cellHigth];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -198,7 +198,7 @@
 //        }else{
 //            [_selectedArray removeAllObjects];
 //        }
-//        [_myTableView reloadData];
+//        [self.myTableView reloadData];
 //    }
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
@@ -220,7 +220,7 @@
     [_cusBar switchBarStateToUpload:_viewState == UPloadState];
     if (_selectedArray.count)
         [_selectedArray removeAllObjects];
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
 }
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset

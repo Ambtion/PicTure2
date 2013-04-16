@@ -9,18 +9,18 @@
 #import <UIKit/UIKit.h>
 
 #import "AppDelegate.h"
-#import "LocalALLPhotoesController.h" //本地相册
-#import "PhotoWallController.h"
+#import "LocalALLPhotoesController.h"   //本地相册
+#import "CloudPictureController.h"      //云端相册
+#import "PhotoWallController.h"         //图片墙
 #import "LoginStateManager.h"
 #import "LoginViewController.h"
 #import "MenuCell.h"
 #import "AccountView.h"
-#import "AccountCell.h"
 
 @interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,AccountViewDelegate>
 {
     UITableView * _tableView;
-    AccountCell * _accountCell;
     AccountView * _accountView;
+    UIView * _oauthorBindView;
 }
 @end

@@ -12,6 +12,8 @@
 @protocol AccountViewDelegate <NSObject>
 - (void)accountView:(AccountView *)acountView accessoryClick:(id)sender;
 - (void)accountView:(AccountView *)acountView setttingClick:(id)sender;
+- (void)accountView:(AccountView *)acountView fullScreenClick:(id)sender;
+
 @end
 @interface AccountView : UIImageView<UIGestureRecognizerDelegate>
 {

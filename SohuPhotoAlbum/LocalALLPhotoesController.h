@@ -14,7 +14,6 @@
 @interface LocalALLPhotoesController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
 {
     ALAssetsLibrary *_library;
-    UITableView * _myTableView;
     BOOL _isReading; //for app bacome background
 }
 @end

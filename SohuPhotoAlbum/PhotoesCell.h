@@ -15,8 +15,9 @@
 @property(nonatomic,strong)ALAsset * secoundAsset;
 @property(nonatomic,strong)ALAsset * thridAsset;
 @property(nonatomic,strong)ALAsset * lastAsset;
-- (CGFloat)cellHigth;
-- (CGFloat)cellLastHigth;
+
++ (CGFloat)cellHigth;
++ (CGFloat)cellLastHigth;
 @end
 
 @protocol PhotoesCellDelegate <NSObject>
@@ -31,6 +32,7 @@
 
 @property(nonatomic,weak)id<PhotoesCellDelegate> delegate;
 @property(nonatomic,strong)PhotoesCellDataSource * dataSource;
+
 
 - (void)showCellSelectedStatus;
 - (void)hiddenCellSelectedStatus;

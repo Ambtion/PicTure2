@@ -31,16 +31,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
-    _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
-    _myTableView.tableHeaderView.backgroundColor = [UIColor redColor];
-    [_myTableView setContentOffset:CGPointMake(0, 20)];
-    _myTableView.backgroundColor = BACKGORUNDCOLOR;
+    self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
+    self.myTableView.delegate = self;
+    self.myTableView.dataSource = self;
+    self.myTableView.separatorColor = [UIColor clearColor];
+    self.myTableView.backgroundColor = BACKGORUNDCOLOR;
     _selectedArray = [NSMutableArray arrayWithCapacity:0];
-    [self.view addSubview:_myTableView];
+    [self.view addSubview:self.myTableView];
     [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
@@ -102,7 +99,7 @@
     //对asset分组
     [self divideAssettByDayTime];
     DLog(@"myTableView reload");
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
     _isReading = NO;
 }
 - (void)divideAssettByDayTime
@@ -203,7 +200,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     NSNumber * num = [self.assetSectionisShow objectAtIndex:[gesture view].tag];
     BOOL isShow = ![num boolValue];
     [self.assetSectionisShow replaceObjectAtIndex:[gesture view].tag withObject:[NSNumber numberWithBool:isShow]];
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
 }
 
 #pragma mark - TableDataSource
@@ -239,11 +236,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+//    PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (indexPath.row == [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
-        return [source cellLastHigth];
+        return [PhotoesCellDataSource cellLastHigth];
     }
-    return [source cellHigth];
+    return [PhotoesCellDataSource cellHigth];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -297,7 +294,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 //        }else{
 //            [_selectedArray removeAllObjects];
 //        }
-//        [_myTableView reloadData];
+//        [self.myTableView reloadData];
 //    }
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
@@ -320,7 +317,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     }
     if (_selectedArray.count)
         [_selectedArray removeAllObjects];
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
 }
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset

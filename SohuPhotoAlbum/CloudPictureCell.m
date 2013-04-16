@@ -1,20 +1,26 @@
 //
-//  PhotoesCell.m
+//  CloudPictureCell.m
 //  SohuPhotoAlbum
 //
-//  Created by sohu on 13-3-26.
+//  Created by sohu on 13-4-16.
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "PhotoesCell.h"
-#import "DataBaseManager.h"
+#import "CloudPictureCell.h"
 #import <QuartzCore/QuartzCore.h>
-
 #define CELLHIGTH  80.f
 
-@implementation PhotoesCellDataSource
-@synthesize firstAsset,secoundAsset,thridAsset,lastAsset;
+@implementation CloudPictureCellDataSource
+@synthesize firstDic,secoundDic,thridDic,lastDic;
 
+- (CGFloat)cellHigth
+{
+    return CELLHIGTH;
+}
+- (CGFloat)cellLastHigth
+{
+    return CELLHIGTH + 5;
+}
 + (CGFloat)cellHigth
 {
     return CELLHIGTH;
@@ -24,7 +30,9 @@
     return CELLHIGTH + 5;
 }
 @end
-@implementation PhotoesCell
+
+@implementation CloudPictureCell
+
 @synthesize delegate = _delegate;
 @synthesize dataSource = _dataSource;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -50,7 +58,7 @@
         frame.origin.x = frame.origin.x + frame.size.width + 4;
     }
 }
-- (void)setDataSource:(PhotoesCellDataSource *)dataSource
+- (void)setDataSource:(CloudPictureCellDataSource *)dataSource
 {
     if (_dataSource != dataSource) {
         _dataSource = dataSource;
@@ -59,47 +67,50 @@
 }
 - (void)updataViews
 {
-    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1000] With:_dataSource.firstAsset];
-    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1001] With:_dataSource.secoundAsset];
-    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1002] With:_dataSource.thridAsset];
-    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1003] With:_dataSource.lastAsset];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1000] With:_dataSource.firstDic];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1001] With:_dataSource.secoundDic];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1002] With:_dataSource.thridDic];
+    [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1003] With:_dataSource.lastDic];
 }
-- (void)setImageViews:(StatusImageView*)imageView With:(ALAsset *)asset
+#pragma mark - SetImage
+- (void)setImageViews:(StatusImageView*)imageView With:(NSDictionary *)dic  
 {
-    if (asset) {
-        imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
+    if (dic) {
+        //设置图片
+//        imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
     }else{
-        imageView.image = nil;
+        NSLog(@"%s",__FUNCTION__);
+        imageView.image = [UIImage imageNamed:@"1.jpg"];
     }
 }
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
 {
     StatusImageView * view = (StatusImageView *)[gesture view];
     [view setSelected:!view.isSelected];
-    ALAsset * asset = nil;
+    NSDictionary * dic = nil;
     switch (view.tag) {
         case 1000:
-            asset = self.dataSource.firstAsset;
+            dic = self.dataSource.firstDic;
             break;
         case 1001:
-            asset = self.dataSource.secoundAsset;
+            dic = self.dataSource.secoundDic;
             break;
         case 1002:
-            asset = self.dataSource.thridAsset;
+            dic = self.dataSource.thridDic;
             break;
         case 1003:
-            asset = self.dataSource.lastAsset;
+            dic = self.dataSource.lastDic;
             break;
         default:
             break;
     }
     if (view.isShowStatus) {
-        if ([_delegate respondsToSelector:@selector(photoesCell:clickAsset:Select:)]) {
-            [_delegate photoesCell:self clickAsset:asset Select:view.isSelected];
+        if ([_delegate respondsToSelector:@selector(cloudPictureCell:clickInfo:Select:)]) {
+            [_delegate cloudPictureCell:self clickInfo:dic Select:view.isSelected];
         }
     }else{
-        if ([_delegate respondsToSelector:@selector(photoesCell:clickAsset:)]){
-            [_delegate photoesCell:self clickAsset:asset];
+        if ([_delegate respondsToSelector:@selector(cloudPictureCell:clickInfo:)]){
+            [_delegate cloudPictureCell:self clickInfo:dic];
         }
     }
     
@@ -108,10 +119,10 @@
 
 - (void)showCellSelectedStatus
 {
-    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1000] byAsset:_dataSource.firstAsset];
-    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1001] byAsset:_dataSource.secoundAsset];
-    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1002] byAsset:_dataSource.thridAsset];
-    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1003] byAsset:_dataSource.lastAsset];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1000] byDic:_dataSource.firstDic];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1001] byDic:_dataSource.secoundDic];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1002] byDic:_dataSource.thridDic];
+    [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1003] byDic:_dataSource.lastDic];
 }
 
 - (void)hiddenCellSelectedStatus
@@ -121,40 +132,37 @@
     [(StatusImageView *)[self.contentView viewWithTag:1002] resetStatusImageToHidden];
     [(StatusImageView *)[self.contentView viewWithTag:1003] resetStatusImageToHidden];
 }
-- (BOOL)hasSelectedAsset:(ALAsset *)asset
+- (BOOL)hasSelectedDic:(NSDictionary *)dic
 {
-    if (_dataSource.firstAsset == asset ||
-        _dataSource.secoundAsset == asset ||
-        _dataSource.thridAsset == asset ||
-        _dataSource.lastAsset == asset)
+    if (_dataSource.firstDic == dic ||
+        _dataSource.secoundDic == dic ||
+        _dataSource.thridDic  == dic ||
+        _dataSource.lastDic == dic)
     {
         return YES;
     }
     return NO;
 }
-- (void)isShow:(BOOL)isShow SelectedAsset:(ALAsset *)asset
+- (void)cloudPictureCellisShow:(BOOL)isShow selectedDic:(NSDictionary *)dic
 {
     
-    if (_dataSource.firstAsset == asset ) {
+    if (_dataSource.firstDic == dic ) {
         [(StatusImageView *)[self.contentView viewWithTag:1000] setSelected:isShow];
     }
-    if ( _dataSource.secoundAsset == asset) {
+    if ( _dataSource.secoundDic == dic) {
         [(StatusImageView *)[self.contentView viewWithTag:1001] setSelected:isShow];
     }
-    if ( _dataSource.thridAsset == asset) {
+    if ( _dataSource.thridDic == dic) {
         [(StatusImageView *)[self.contentView viewWithTag:1002] setSelected:isShow];
     }
-    if (_dataSource.lastAsset == asset) {
+    if (_dataSource.lastDic == dic) {
         [(StatusImageView *)[self.contentView viewWithTag:1003] setSelected:isShow];
     }
 }
-- (void)showImageViewStatus:(StatusImageView *)imageView byAsset:(ALAsset *)asset
+- (void)showImageViewStatus:(StatusImageView *)imageView byDic:(NSDictionary *)dic
 {
-    if (!asset) return;
-    if ([[DataBaseManager defaultDataBaseManager] hasPhotoURL:[[asset defaultRepresentation] url]]) {
-        [imageView showStatusWithUpload];
-    }else{
-        [imageView showStatusWithoutUpload];
-    }
+    if (!dic) return;
+    [imageView showStatusWithoutUpload];
 }
+
 @end

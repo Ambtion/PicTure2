@@ -13,7 +13,6 @@
 @interface AlbumPhotoesController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
 {
     ALAssetsGroup * _assetGroup;
-    UITableView * _myTableView;
     ALAssetsLibrary * _libiary;
     BOOL _isInitUpload;
     BOOL _isReading;
