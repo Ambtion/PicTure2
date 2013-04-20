@@ -29,10 +29,11 @@
 
 + (NSString *)refreshToken;
 
-//+ (void)storeData:(NSString *)data forKey:(NSString *)username;
-//
-//+ (NSString*)dataForKey:(NSString *)username;
-//
-//+ (void)removeDataForKey:(NSString *)username;
++ (BOOL)isSinaBind;
+
++ (BOOL)isQQBing;
+
++ (BOOL)isRenrenBind;
+
 
 @end

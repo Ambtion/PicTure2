@@ -32,7 +32,7 @@
     view.scrollEnabled = NO;
     view.contentSize = frame.size;
     self.view = view;
-    self.view.backgroundColor = [UIColor colorWithRed:244.0f/255.f green:244.0f/255.f blue:244.0f/255.f alpha:1];
+    self.view.backgroundColor = BACKGORUNDCOLOR;
 }
 - (void)viewDidLoad
 {
@@ -45,23 +45,28 @@
 
 -(void)addsubViews
 {
+    //backGround
     CGRect bounds = CGRectMake(0, 0, 320, 480);
     _backgroundImageView = [[UIImageView alloc] initWithFrame:bounds];
     _backgroundImageView.image = [UIImage imageNamed:@"login_bg.png"];
     _backgroundControl = [[UIControl alloc] initWithFrame:bounds];
     [_backgroundControl addTarget:self action:@selector(allTextFieldsResignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_backgroundImageView];
+    //backButton/ ouathorzieButton
+    
     
     //登录用户名
-    _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 131, 200, 22) dropDownListFrame:CGRectMake(69, 160, 214, 200) domainsArray:EMAIL_ARRAY];
+    _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 186, 200, 22) dropDownListFrame:CGRectMake(69, 160, 214, 200) domainsArray:EMAIL_ARRAY];
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
     _usernameTextField.placeholder = @"通行证";
+    _usernameTextField.backgroundColor = [UIColor clearColor];
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     //输入密码
-    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(79, 189, 200, 22)];
+    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(79, 186 + 38, 200, 22)];
     _passwordTextField.font = [UIFont systemFontOfSize:15];
     _passwordTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _passwordTextField.returnKeyType = UIReturnKeyDone;
@@ -70,82 +75,77 @@
     _passwordTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.placeholder = @"密码";
+    _passwordTextField.backgroundColor = [UIColor clearColor];
 //    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
 //     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEnd];
     
     //注册
     UIButton *  registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.frame = CGRectMake(35, 239, 110, 35);
-    [registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
-    [registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
-    [registerButton setTitle:@"注册" forState:UIControlStateNormal];
-    [registerButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-    registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    registerButton.frame = CGRectMake(36, 280, 110, 35);
+    [registerButton setBackgroundImage:[UIImage imageNamed:@"register_btn_nomal.png"] forState:UIControlStateNormal];
+//    [registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
+//    [registerButton setTitle:@"注册" forState:UIControlStateNormal];
+//    [registerButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
+//    registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UILabel * externalLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 290, 150, 15)];
-    externalLabel.text = @"其他账号登录";
-    externalLabel.textAlignment = UITextAlignmentLeft;
-    externalLabel.backgroundColor = [UIColor clearColor];
-    externalLabel.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
-    externalLabel.font = [UIFont systemFontOfSize:15.f];
-    
-    UILabel * forget = [[UILabel alloc] initWithFrame:CGRectMake(320 - 35 - 150, 290, 150, 15)];
-    forget.text = @"忘记密码";
-    forget.textAlignment = UITextAlignmentRight;
-    forget.backgroundColor = [UIColor clearColor];
-    forget.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
-    forget.font = [UIFont systemFontOfSize:15.f];
-    [forget setUserInteractionEnabled:YES];
-    
-    UIButton * forgetPassWord = [UIButton buttonWithType:UIButtonTypeCustom];
-    forgetPassWord.frame = forget.bounds;
-    forgetPassWord.backgroundColor = [UIColor clearColor];
-    [forgetPassWord addTarget:self action:@selector(forgetPassWord:) forControlEvents:UIControlEventTouchUpInside];
-    [forget addSubview:forgetPassWord];
     
     //登录按钮
     UIButton * loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.frame = CGRectMake(175, 239, 110, 35);
+    loginButton.frame = CGRectMake(175, 280, 110, 35);
     [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
-    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
-    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
-    [loginButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-    loginButton.titleLabel.font = [UIFont systemFontOfSize:15];
+//    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
+//    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
+//    [loginButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
+//    loginButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:_backgroundImageView];
+//    UILabel * forget = [[UILabel alloc] initWithFrame:CGRectMake(39, 387, 150, 15)];
+//    forget.text = @"忘记密码";
+//    forget.textAlignment = UITextAlignmentRight;
+//    forget.backgroundColor = [UIColor clearColor];
+//    forget.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
+//    forget.font = [UIFont systemFontOfSize:15.f];
+//    [forget setUserInteractionEnabled:YES];
+    
+    UIButton * forgetPassWord = [UIButton buttonWithType:UIButtonTypeCustom];
+    forgetPassWord.frame = CGRectMake(39, 337, 62, 20);
+    [forgetPassWord setImage:[UIImage imageNamed:@"forgetPassWord.png"] forState:UIControlStateNormal];
+    forgetPassWord.backgroundColor = [UIColor clearColor];
+    [forgetPassWord addTarget:self action:@selector(forgetPassWord:) forControlEvents:UIControlEventTouchUpInside];
+    
+       
     [self.view addSubview:_backgroundControl];
     [self.view addSubview:_usernameTextField];
     [self.view addSubview:_passwordTextField];
-    [self.view addSubview:externalLabel];
     [self.view addSubview:registerButton];
     [self.view addSubview:loginButton];
-    [self.view addSubview:forget];
+    [self.view  addSubview:forgetPassWord];
     
     //返回按钮
     UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(5, 2, 44, 44);
+    backButton.frame = CGRectMake(0, 0, 44, 44);
     [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton setImage:[UIImage imageNamed:@"back_press.png"] forState:UIControlStateHighlighted];
     [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
     
     //第三方登录
+    CGFloat buttonY = 67;
+    CGFloat width = 84;
+    CGFloat heigth = 60;
     UIButton * qqbutton = [UIButton buttonWithType:UIButtonTypeCustom];
-    qqbutton.frame = CGRectMake(35, 319, 42, 42);
+    qqbutton.frame = CGRectMake(36,buttonY, width, heigth);
     [qqbutton setImage:[UIImage imageNamed:@"qqLogin.png"] forState:UIControlStateNormal];
     [qqbutton addTarget:self action:@selector(qqLogin:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:qqbutton];
     
     UIButton * sinabutton = [UIButton buttonWithType:UIButtonTypeCustom];
-    sinabutton.frame = CGRectMake(35 + 42 + 15, 319, 42, 42);
+    sinabutton.frame = CGRectMake(qqbutton.frame.origin.x + qqbutton.frame.size.width, buttonY, width, heigth);
     [sinabutton setImage:[UIImage imageNamed:@"sinaLogin.png"] forState:UIControlStateNormal];
     [sinabutton addTarget:self action:@selector(sinaLogin:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:sinabutton];
     
     UIButton * renrenbutton = [UIButton buttonWithType:UIButtonTypeCustom];
-    renrenbutton.frame = CGRectMake(35 + 42 + 15 + 42 + 15, 319, 42, 42);
+    renrenbutton.frame = CGRectMake(sinabutton.frame.size.width+sinabutton.frame.origin.x , buttonY,width,heigth);
     [renrenbutton setImage:[UIImage imageNamed:@"renrenLogin.png"] forState:UIControlStateNormal];
     [renrenbutton addTarget:self action:@selector(renrenLogin:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:renrenbutton];
@@ -213,7 +213,6 @@
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];
-//    hud.delegate = self;
     [self.view addSubview:hud];
     [hud show:YES];
     [AccountLoginResquest sohuLoginWithuseName:useName password:passWord sucessBlock:^(NSDictionary *response) {

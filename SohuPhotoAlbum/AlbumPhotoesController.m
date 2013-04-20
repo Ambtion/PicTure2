@@ -63,6 +63,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationItem setHidesBackButton:YES animated:NO];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
@@ -75,7 +76,7 @@
         if (_viewState == UPloadState) {
             [_cusBar.sLabelText setText:SLABELTEXT];
             [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"cancal.png"] forState:UIControlStateNormal];
-            [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
+            [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
         }else{
             [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
             [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
@@ -85,7 +86,6 @@
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
-    [self.navigationItem setHidesBackButton:YES animated:NO];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {

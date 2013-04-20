@@ -79,7 +79,7 @@
         //设置图片
 //        imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
     }else{
-        NSLog(@"%s",__FUNCTION__);
+        //temp
         imageView.image = [UIImage imageNamed:@"1.jpg"];
     }
 }
@@ -161,6 +161,7 @@
 }
 - (void)showImageViewStatus:(StatusImageView *)imageView byDic:(NSDictionary *)dic
 {
+    DLog(@"dic is empty ,so can not show willSelecte statue ");
     if (!dic) return;
     [imageView showStatusWithoutUpload];
 }

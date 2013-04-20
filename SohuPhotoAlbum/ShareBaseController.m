@@ -98,7 +98,6 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back_press.png"] forState:UIControlStateHighlighted];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton1 setUserInteractionEnabled:NO];

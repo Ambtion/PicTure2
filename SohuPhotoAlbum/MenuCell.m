@@ -11,11 +11,13 @@
 @implementation MenuCell
 @synthesize leftImage;
 @synthesize labelText;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-//        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         self.frame = CGRectMake(0, 0, 320, 48);
         leftImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, (self.bounds.size.height - 44)/2.f, 44, 44)];
         [self.contentView addSubview:leftImage];
@@ -23,15 +25,13 @@
         labelText.backgroundColor = [UIColor clearColor];
         labelText.font = [UIFont systemFontOfSize:19.f];
         labelText.textColor = [UIColor colorWithRed:171.f/255.f green:171.f/255.f blue:171.f/255.f alpha:1.f];
+        labelText.shadowColor = [UIColor colorWithRed:15.f/255 green:15.f/255 blue:15.f/255 alpha:1.0];
+        labelText.shadowOffset = CGSizeMake(0, 2);
         [self.contentView addSubview:labelText];
         
         UIImageView * lineimage = [[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height - 1 , 320, 1)];
         lineimage.image = [UIImage imageNamed:@"line.png"];
         [self.contentView addSubview:lineimage];
-        
-        _myHigtView = [[UIImageView alloc] initWithFrame:self.bounds];
-        _myHigtView.image = [UIImage imageNamed:@"higlight.png"];
-        self.selectedBackgroundView = _myHigtView;
     }
     return self;
 }

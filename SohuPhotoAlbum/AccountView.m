@@ -18,44 +18,63 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.image = [UIImage imageNamed:nil];
+        self.image = [UIImage imageNamed:@"menuBar.png"];
+        self.backgroundColor = [UIColor clearColor];
         [self setUserInteractionEnabled:YES];
-        UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureOnAllView:)];
-        gesture.delegate = self;
-        [self addGestureRecognizer:gesture];
-        self.backgroundColor = [UIColor redColor];
-        portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height, self.bounds.size.height)];
-        [self addSubview:portraitImageView];
+//        UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureOnAllView:)];
+//        gesture.delegate = self;
+//        [self addGestureRecognizer:gesture];
         
-        CGRect rect = CGRectMake(self.bounds.size.height, 0, 100, self.bounds.size.height/2.f);
+        //portrait
+        portraitImageView = [[PortraitView alloc] initWithFrame:CGRectMake(5, 7, 44, 44)];
+        [self addSubview:portraitImageView];        
+        CGRect rect = CGRectMake(55, 13, 95, 12.f);
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = portraitImageView.frame;
+        [self addSubview:button];
+        [button addTarget:self action:@selector(handleGestureOnAllView:) forControlEvents:UIControlEventTouchUpInside];
         nameLabel = [[UILabel alloc] initWithFrame:rect];
+        [self setNameLabelPorperty];
         [self addSubview:nameLabel];
-        rect.origin.y += rect.size.height;
+              
+        rect.origin.y += rect.size.height + 10;
+        rect.size.height = 12.f;
         desLabel = [[UILabel alloc] initWithFrame:rect];
+        [self setDesNameLabelPorperty];
         [self addSubview:desLabel];
         
         //箭头
         rect.origin.x += rect.size.width + 10;
-        rect.origin.y = 0;
-        rect.size.width = self.bounds.size.height;
-        rect.size.height = self.bounds.size.height;
-        accessory = [[UIImageView alloc] initWithFrame:rect];
-        [accessory setUserInteractionEnabled:YES];
+        rect.origin.y = 9.5;
+        rect.size.width = 44;
+        rect.size.height = 44;
+        accessory = [[UIButton alloc] initWithFrame:rect];
         accessory.backgroundColor = [UIColor clearColor];
-        accessory.image = [UIImage imageNamed:@"full_screen_upload_icon.png"];
-        UITapGestureRecognizer * gest = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleAccestoryTapGesture:)];
-        [accessory addGestureRecognizer:gest];
+        [accessory setImage:[UIImage imageNamed:@"accesstory.png"] forState:UIControlStateNormal];
+        [accessory addTarget:self action:@selector(handleAccestoryTapGesture:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:accessory];
+        
         //设置
-        rect.origin.x += rect.size.width + 10;
-        setting = [[UIImageView alloc] initWithFrame:rect];
-        setting.backgroundColor = [UIColor grayColor];
-        [setting setUserInteractionEnabled:YES];
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingGesture:)];
-        [setting addGestureRecognizer:tap];
+        rect.origin.x += rect.size.width + 15;
+        setting = [[UIButton alloc] initWithFrame:rect];
+        [setting setImage:[UIImage imageNamed:@"setting.png"] forState:UIControlStateNormal];
+        setting.center = CGPointMake(setting.center.x, self.bounds.size.height/2.f);
+        [setting addTarget:self action:@selector(handleSettingGesture:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setting];
     }
     return self;
+}
+- (void)setNameLabelPorperty
+{
+    self.nameLabel.backgroundColor = [UIColor clearColor];
+    self.nameLabel.font = [UIFont systemFontOfSize:12.f];
+    self.nameLabel.textColor = [UIColor whiteColor];
+}
+- (void)setDesNameLabelPorperty
+{
+    self.desLabel.backgroundColor = [UIColor clearColor];
+    self.desLabel.font = [UIFont systemFontOfSize:11.f];
+    self.desLabel.textColor = [UIColor grayColor];
 }
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
@@ -73,12 +92,14 @@
     CGAffineTransform transfrom1 = CGAffineTransformRotate(accessory.transform,M_PI);
     [UIView animateWithDuration:0.3 animations:^{
         accessory.transform = transfrom1;
-    } completion:^(BOOL finished) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([_delegate respondsToSelector:@selector(accountView:accessoryClick:)]) {
                 [_delegate accountView:self accessoryClick:sender];
             }
         });
+        
+    } completion:^(BOOL finished) {
+        
     }];
 }
 - (void)handleSettingGesture:(id)sender

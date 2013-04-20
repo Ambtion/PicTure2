@@ -7,6 +7,7 @@
 //
 
 #import "CountLabel.h"
+#define ICONWIDTH 22
 
 @implementation CountLabel
 - (id)initIconLabeWithFrame:(CGRect)frame
@@ -21,9 +22,10 @@
         
         _iconImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _iconImageView.image = [UIImage imageNamed:@"LabelIcon.png"];
+        _iconImageView.frame = CGRectMake(0, 0, ICONWIDTH, ICONWIDTH);
         [self addSubview:_iconImageView];
         
-        _baseLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        _baseLabel = [[UILabel alloc] initWithFrame:CGRectMake(ICONWIDTH, 0, self.bounds.size.width - ICONWIDTH, self.bounds.size.height)];
         _baseLabel.backgroundColor = [UIColor clearColor];
         _baseLabel.textAlignment = UITextAlignmentCenter;
         [self addSubview:_baseLabel];
@@ -72,21 +74,26 @@
 }
 - (void)setText:(NSString *)text
 {
-    if (isIconModel) {
-        
-    }else{
-        [_baseLabel setText:text];
-    }
+    [_baseLabel setText:text];
+    [self sizeToFit];
 }
 - (void)sizeToFit
 {
     if (isIconModel) {
-        
+        [_baseLabel sizeToFit];
+        CGRect rect = _baseLabel.frame;
+        self.frame = [self getRectwithWidth:_baseLabel.frame.size.width andHeigth:_baseLabel.frame.size.height];
+        _baseLabel.frame  = rect;
+
     }else{
         [_baseLabel sizeToFit];
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, _baseLabel.frame.size.width, _baseLabel.frame.size.height);
     }
     
 }
-
+- (CGRect)getRectwithWidth:(CGFloat)width andHeigth:(CGFloat)heigth
+{
+    CGPoint endPoint = CGPointMake(self.frame.origin.x + self.frame.size.width, self.frame.origin.y + self.frame.size.height);
+    return CGRectMake(endPoint.x - width -ICONWIDTH  - 5, endPoint.y - heigth, width + ICONWIDTH + 5, heigth);
+}
 @end

@@ -64,7 +64,7 @@
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     //界面出现,bar恢复normal状态
-    [_cusBar switchBarStateToUpload:NomalState];
+    [self setViewState:NomalState];
     [self.navigationItem setHidesBackButton:YES animated:NO];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
@@ -72,7 +72,6 @@
 {
     [super viewWillDisappear:animated];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
-
 }
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {

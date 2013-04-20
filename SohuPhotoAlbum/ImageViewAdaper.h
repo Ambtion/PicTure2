@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#define  KWallOffsetX    8
+#define  KWallWidth   312
 
 @interface ImageViewAdaper : NSObject
 

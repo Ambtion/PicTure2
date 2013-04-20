@@ -42,7 +42,6 @@
 
 + (void)loginUserId:(NSString *)uid withToken:(NSString *)token RefreshToken:(NSString *)refreshToken
 {
-    
     [self storeData:uid forKey:USER_ID];
     [self storeData:token forKey:USER_TOKEN];
     [self storeData:refreshToken forKey:REFRESH_TOKEN];
@@ -71,5 +70,19 @@
 + (NSString *)refreshToken
 {
     return [self dataForKey:REFRESH_TOKEN];
+}
++ (BOOL)isSinaBind
+{
+    return YES;
+}
++ (BOOL)isQQBing
+{
+    return NO;
+
+}
++ (BOOL)isRenrenBind
+{
+    return NO;
+
 }
 @end

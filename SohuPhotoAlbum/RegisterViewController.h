@@ -18,6 +18,7 @@
 @property (strong, nonatomic) UIControl * backgroundControl;
 @property (strong, nonatomic) UITextField *usernameTextField;
 @property (strong, nonatomic) UITextField *passwordTextField;
+@property (strong, nonatomic) UITextField *mailBindTextField;
 @property (strong, nonatomic) UIButton *displayPasswordButton;
 @property (strong, nonatomic) UIButton *dealPassButton;
 @property (strong, nonatomic) UIButton *readDealButton;

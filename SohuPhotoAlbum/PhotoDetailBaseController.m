@@ -15,15 +15,13 @@
 
 #define OFFSETX 20
 
-
-
 static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 
 @implementation PhotoDetailBaseController
-
 @synthesize assetsArray = _assetsArray;
 @synthesize curPageNum = _curPageNum;
 @synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage;
+@synthesize tabBar = _tabBar;
 //@synthesize cusBar = _cusBar;
 
 - (void)dealloc
@@ -133,9 +131,12 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 //    [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
 //    [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
 //    [self.view addSubview:_cusBar];
-    
-    _tabBar  = [[CustomizetionTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, 0, 0) delegate:self];
-    [self.view addSubview:_tabBar];
+    self.tabBar = [[CustomizetionTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 49, 320, 49) delegate:self];
+    if (CGAffineTransformEqualToTransform([self getTransfrom], CGAffineTransformIdentity) || !_isHidingBar)
+        [self.view addSubview:_tabBar];
+    if (_isHidingBar) {
+        [self.tabBar hideBarWithAnimation:NO];
+    }
 }
 - (void)setScrollViewProperty
 {
@@ -143,7 +144,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width * 3 , _scrollView.bounds.size.height);
     _scrollView.showsHorizontalScrollIndicator = NO;
 }
-
 #pragma mark - Ratation
 - (CGAffineTransform )getTransfrom
 {
@@ -550,10 +550,10 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
 {
     if (_isHidingBar) {
-//        [self showBar];
-        [_tabBar showBar];
+        
+        [self.tabBar showBarWithAnimation:YES];
     }else{
-        [_tabBar hideBar];
+        [self.tabBar hideBarWithAnimation:YES];
     }
     _isHidingBar = !_isHidingBar;
 }

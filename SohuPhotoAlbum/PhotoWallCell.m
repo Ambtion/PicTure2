@@ -8,15 +8,13 @@
 
 #import "PhotoWallCell.h"
 
-#define DESLABELFONT [UIFont systemFontOfSize:20]
-#define DESLABELMAXSIZE (CGSize){310,500}
-#define DESLABLELINEBREAK NSLineBreakByWordWrapping
 
 #define FOOTVIEWHEIGTH 40
-
 #define OFFSETY 5.F
+#define DESLABELFONT        [UIFont boldSystemFontOfSize:14]
+#define DESLABELMAXSIZE     (CGSize){298,1000}
+#define DESLABLELINEBREAK   NSLineBreakByWordWrapping
 
-//static CGFloat imageHeigth = 0.f;
 @implementation CellFootView
 @synthesize shareTimeLabel,likeCountbutton,talkCountbutton;
 @synthesize talkContLabel,likeCountLabel;
@@ -25,37 +23,53 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
         CGFloat heigth  = frame.size.height;
-        self.shareTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, 140, heigth)];
-        [self setLabelPerporty:shareTimeLabel];
-        [self addSubview:self.shareTimeLabel];
+        UIImageView * imagView = [[UIImageView alloc] initWithFrame:self.bounds];
+        imagView.image = [UIImage imageNamed:@"wallFoot_bg.png"];
         
-        self.talkCountbutton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        talkCountbutton.frame = CGRectMake(shareTimeLabel.frame.size.width, 0, 40, heigth);
-        [self addSubview:talkCountbutton];
-        self.talkContLabel = [[UILabel alloc]initWithFrame:CGRectMake(talkCountbutton.frame.size.width + talkCountbutton.frame.origin.x, 0, 50, heigth)];
+        [self addSubview:imagView];
+        imagView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+        self.shareTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, 0, 125, heigth)];
+        [self setLabelPerporty:shareTimeLabel];
+        [self setShareTimeLabelPerporty];
+        [self addSubview:shareTimeLabel];
+        
+        self.talkCountbutton = [UIButton buttonWithType:UIButtonTypeCustom];
+        talkCountbutton.frame = CGRectMake(150, -1, 44, 44);
+        [talkCountbutton setImage:[UIImage imageNamed:@"talkCountIcon.png"] forState:UIControlStateNormal];
+        self.talkContLabel = [[UILabel alloc]initWithFrame:CGRectMake(190, 0, 40, heigth)];
         [self setLabelPerporty:talkContLabel];
         [self addSubview:talkContLabel];
+        [self addSubview:talkCountbutton];
         
-        self.likeCountbutton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        likeCountbutton.frame = CGRectMake(talkContLabel.frame.origin.x + talkContLabel.frame.size.width, 0, 40, heigth);
-        [self addSubview:self.likeCountbutton];
+        self.likeCountbutton = [UIButton buttonWithType:UIButtonTypeCustom];
+        likeCountbutton.frame = CGRectMake(talkContLabel.frame.origin.x + talkContLabel.frame.size.width - 4, -1, 44, 44);
+        [likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
+        
         self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(likeCountbutton.frame.size.width + likeCountbutton.frame.origin.x,0, 50, heigth)];
         [self setLabelPerporty:likeCountLabel];
         [self addSubview:likeCountLabel];
-
+        [self addSubview:self.likeCountbutton];
+        
     }
     return self;
 }
+- (void)setShareTimeLabelPerporty
+{
+    shareTimeLabel.backgroundColor = [UIColor clearColor];
+    shareTimeLabel.font = [UIFont systemFontOfSize:11.f];
+    shareTimeLabel.textColor = [UIColor colorWithRed:121.f/255 green:121.f/255 blue:121.f/255 alpha:1.f];
+}
 - (void)setLabelPerporty:(UILabel *)label
 {
-    
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:11.f];
 }
 @end
 
 @implementation PhotoWallCellDataSource
-@synthesize imageWallInfo,wallDescription,shareTime,talkCount,likeCount;
+@synthesize imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount;
 - (CGFloat)getCellHeigth
 {
     if (imageWallInfo.count) {
@@ -84,21 +98,30 @@
 @synthesize dataSource = _dataSource;
 @synthesize delegate = _delegate;
 
+#define Width
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifierNum:(NSInteger)reuseIdentifiernum
 {
     if (reuseIdentifiernum > 6 || reuseIdentifiernum < 1) return nil;
     self = [super initWithStyle:style reuseIdentifier:identify[reuseIdentifiernum]];
     if (self) {
+        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        _backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _backImageView.image = [[UIImage imageNamed:@"new_paper_wall.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 160, 50, 50)];
+        
+        [_backImageView setUserInteractionEnabled:YES];
+        [self.contentView addSubview:_backImageView];
+        
         _framesArray = [NSMutableArray arrayWithCapacity:0];
         _imageViewArray = [NSMutableArray arrayWithCapacity:0];
         [self setFramesWithIndentify:reuseIdentifiernum];
-        _wallDesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+        
+        _wallDesLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [self setDesLabelPerporty];
-        _footView = [[CellFootView alloc] initWithFrame:CGRectMake(0, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y, 320, 40)];
+        _footView = [[CellFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 42)];
         [_footView.talkCountbutton addTarget:self action:@selector(talkButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_footView.likeCountbutton addTarget:self action:@selector(likeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_wallDesLabel];
+        [_backImageView addSubview:_wallDesLabel];
         [self.contentView addSubview:_footView];
     }
     return self;
@@ -109,6 +132,8 @@
     _wallDesLabel.font = DESLABELFONT;
     _wallDesLabel.lineBreakMode = DESLABLELINEBREAK;
     _wallDesLabel.numberOfLines = 0.f;
+    _wallDesLabel.textColor = [UIColor colorWithRed:102.f/255.f green:102.f/255.f blue:102.f/255.f alpha:1.f];
+    _wallDesLabel.backgroundColor = [UIColor clearColor];
 }
 - (void)setFramesWithIndentify:(NSInteger)identifyNum
 {
@@ -117,8 +142,24 @@
     for (NSValue * value in _framesArray) {
         UIImageView * imageView = [[UIImageView alloc] initWithFrame:[value CGRectValue]];
         [_imageViewArray addObject:imageView];
-        [self.contentView addSubview:imageView];
+        [_backImageView addSubview:imageView];
     }
+    //暂时测试
+    if (_imageViewArray.count) {
+        //        if (_imageViewArray.count == 6) {
+        UIView * view = [_imageViewArray lastObject];
+        _countLabel = [[CountLabel alloc] initIconLabeWithFrame:CGRectMake(view.frame.size.width - 30, view.frame.size.height - 30, 22, 22)];
+        [self setCountLabelProperty:_countLabel];
+        [view addSubview:_countLabel];
+    }
+    
+}
+- (void)setCountLabelProperty:(CountLabel *)label
+{
+    label.textAlignment = UITextAlignmentCenter;
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont fontWithName:@"Helvetica-Bold" size:16.f];
 }
 - (void)setDataSource:(PhotoWallCellDataSource *)dataSource
 {
@@ -134,15 +175,17 @@
         UIImageView * imageView = [_imageViewArray objectAtIndex:i];
         imageView.image = [UIImage imageNamed:[[_dataSource imageWallInfo] objectAtIndex:i]];
     }
-    
     _wallDesLabel.text = _dataSource.wallDescription;
     CGSize size = [_dataSource.wallDescription sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
-    _wallDesLabel.frame = CGRectMake(5, heigth + OFFSETY, size.width, size.height);
+    _wallDesLabel.frame = CGRectMake(KWallOffsetX + 2, heigth + OFFSETY, size.width, size.height);
     
-    _footView.frame = CGRectMake(0, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY, 320, 40);
+    _footView.frame = CGRectMake(0, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY, 320, 42);
     _footView.shareTimeLabel.text = [_dataSource shareTime];
     _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
     _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
+    _countLabel.text = [NSString stringWithFormat:@"%d",_dataSource.photoCount];
+    
+    _backImageView.frame = CGRectMake(0, 0, self.bounds.size.width, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY);
 }
 #pragma mark ActionFunction
 - (void)likeButtonClick:(UIButton *)button

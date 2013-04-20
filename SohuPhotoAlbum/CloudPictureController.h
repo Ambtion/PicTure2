@@ -11,14 +11,12 @@
 #import "SCPMoreTableFootView.h"
 #import "CustomizationNavBar.h"
 #import "CloudPictureCell.h"
+#import "LocalBaseController.h"
 
-@interface CloudPictureController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,CusNavigationBarDelegate>
+@interface CloudPictureController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,CusNavigationBarDelegate>
 {
-    UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;
-    CustomizationNavBar * _navBar;
-    BOOL _isSelectedState;
     BOOL _isLoading;
 }
 

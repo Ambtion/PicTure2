@@ -7,20 +7,21 @@
 //
 
 #import "PhotoWallController.h"
-#import <ImageIO/ImageIO.h>
-@interface PhotoWallController ()
-
-@end
+#import "PhotoStoryController.h"
 
 @implementation PhotoWallController
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
+    _myTableView.separatorColor = [UIColor clearColor];
+    _myTableView.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
+    _myTableView.showsVerticalScrollIndicator = NO;
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
@@ -33,11 +34,8 @@
     //测试用
 //    UIBarButtonItem * bu = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(refeshOnce:)];
 //    self.navigationItem.leftBarButtonItem = bu;
-    
-    label = [[UILabel alloc] initWithFrame:CGRectMake(200, 10, 120, 20)];
-    label.backgroundColor = [UIColor blackColor];
-    label.textColor = [UIColor whiteColor];
-    [self.view addSubview:label];
+    _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 10, 77, 20)];
+    [self.view addSubview:_timelabel];
 
     
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
@@ -53,6 +51,7 @@
         dataSource.shareTime = [NSString stringWithFormat:@"2013年12月%d日",i];
         dataSource.likeCount = 100;
         dataSource.talkCount = 200;
+        dataSource.photoCount = arc4random() % 100 + 1;
         [_dataSourceArray addObject:dataSource];
     }
     [self resetLabel];
@@ -67,12 +66,7 @@
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_navBar.nLabelText setText:@"图片墙"];
-        [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
-        
-//        //上传按钮
-//        [_navBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-//        [_navBar.nRightButton3 setUserInteractionEnabled:NO];
-//        [_navBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
+        [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
@@ -166,9 +160,11 @@
 - (void)resetLabel
 {
     if (_dataSourceArray.count) {
-        label.text = [[_dataSourceArray objectAtIndex:0] shareTime];
+        _timelabel.daysLabel.text = @"30";
+        _timelabel.yesDayLabel.text = @"2012年";
+        _timelabel.mouthsLabel.text = @"12月";
     }else{
-        label.text = nil;
+        _timelabel.daysLabel.text = nil;
     }
 }
 - (void)updataLabelWithScrollView:(UIScrollView *)aScrollView
@@ -180,18 +176,20 @@
 //        label.frame = rect;
 //        return;
 //    }
-    label.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
+    _timelabel.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
     for (UITableViewCell * cell in cells) {
         CGRect cellRect = [self.view convertRect:cell.frame fromView:cell.superview];
-        if (CGRectContainsRect(cellRect, label.frame)) {
-            label.text = [[(PhotoWallCell*)cell dataSource] shareTime];
+        if (CGRectContainsRect(cellRect, _timelabel.frame)) {
+            _timelabel.daysLabel.text = @"30";
+            _timelabel.yesDayLabel.text = @"2012年";
+            _timelabel.mouthsLabel.text = @"12月";
         }
     }
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
     CGFloat ratioInTableView = pointY / _myTableView.contentSize.height;
-    CGRect rect = label.frame;
+    CGRect rect = _timelabel.frame;
     rect.origin.y = _myTableView.frame.origin.y + rect.size.height / 2.f + ratioInTableView * (_myTableView.frame.size.height - rect.size.height - _myTableView.tableFooterView.frame.size.height - rect.size.height / 2.f);
     return rect;
 }
@@ -205,6 +203,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_dataSourceArray count];
+}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -239,7 +241,6 @@
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
     DLog(@"%s",__FUNCTION__);
-
 }
 - (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
 {
@@ -249,5 +250,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DLog(@"%s",__FUNCTION__);
+    [self.navigationController pushViewController:[[PhotoStoryController alloc] init] animated:YES];
 }
 @end

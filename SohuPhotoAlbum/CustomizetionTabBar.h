@@ -25,7 +25,7 @@
 }
 @property(nonatomic,weak)id<CusTabBarDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate;
-- (void)hideBar;
-- (void)showBar;
+- (void)hideBarWithAnimation:(BOOL)animation;
+- (void)showBarWithAnimation:(BOOL)animation;
 - (BOOL)isHiddenBar;
 @end

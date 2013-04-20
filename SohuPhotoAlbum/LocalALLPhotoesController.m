@@ -58,7 +58,7 @@
         
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         [_cusBar.sLabelText setText:SLABELTEXT];
-        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
@@ -211,19 +211,37 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 24)];
-    view.image = [UIImage imageNamed:@"index-bar.png"];
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(6, 0, 314, 24)];
+    return [self getSectionView:section ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue]];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 28.f;
+}
+- (UIView *)getSectionView:(NSInteger)section ByisShow:(BOOL)isShowRow
+{
+    UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
     [view setUserInteractionEnabled:YES];
     UITapGestureRecognizer * tap  =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInSection:)    ];
     [view addGestureRecognizer:tap];
     view.tag = section;
-    label.textAlignment = UITextAlignmentLeft;
-    label.font = [UIFont systemFontOfSize:13.f];
+    
+    UIImageView * iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(8, 3, 22, 22)];
+    [view addSubview:iconImage];
+    //label
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 200, 24)];
+    label.font = [UIFont boldSystemFontOfSize:12.f];
     label.backgroundColor = [UIColor clearColor];
-    label.textColor = [UIColor colorWithRed:98.f/255.f green:98.f/255.f blue:98.f/255.f alpha:1.f];
     label.text = [self.assetsSection objectAtIndex:section];
     [view addSubview:label];
+    if (isShowRow) {
+        label.textColor = [UIColor colorWithRed:189.f/255 green:189.f/255 blue:189.f/255 alpha:1.f];
+        iconImage.image = [UIImage imageNamed:@"sectionIcon.png"];
+        view.image = [UIImage imageNamed:@"section.png"];
+    }else{
+        label.textColor = [UIColor colorWithRed:100.f/255 green:100.f/255 blue:100.f/255 alpha:1.f];
+        iconImage.image = [UIImage imageNamed:@"sectionIconNo.png"];
+        view.image = [UIImage imageNamed:@"sectionNo.png"];
+    }
     return view;
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -286,16 +304,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     if (button.tag == CANCELBUTTONTAG) {
         [self setViewState:NomalState];
     }
-    //全选
-//    if (button.tag == ALLSELECTEDTAG) {
-//        if (_selectedArray.count != self.assetsArray.count ){
-//            [_selectedArray removeAllObjects];
-//            [_selectedArray addObjectsFromArray:self.assetsArray];
-//        }else{
-//            [_selectedArray removeAllObjects];
-//        }
-//        [self.myTableView reloadData];
-//    }
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
             [self uploadPicTureWithArray:_selectedArray];
@@ -339,5 +347,4 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
-
 @end

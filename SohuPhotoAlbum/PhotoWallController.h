@@ -11,6 +11,7 @@
 #import "SCPMoreTableFootView.h"
 #import "PhotoWallCell.h"
 #import "CustomizationNavBar.h"
+#import "TimeLabelView.h"
 
 @interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate>
 {
@@ -19,7 +20,7 @@
     SCPMoreTableFootView * _moreFootView;
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
-    UILabel * label;
+    TimeLabelView * _timelabel;
     BOOL _isLoading;
 }
 @end

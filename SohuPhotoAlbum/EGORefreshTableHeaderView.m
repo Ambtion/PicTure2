@@ -49,7 +49,7 @@
         shouldreFreshOnce = NO;
         isWillRefresh = NO;
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.backgroundColor = [UIColor colorWithRed:244/255.f green:244/255.f blue:244/255.f alpha:1];
+        self.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
         
 		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, frame.size.height - 30.0 + OFFSET_Y, self.frame.size.width, 20.0)];
 		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;

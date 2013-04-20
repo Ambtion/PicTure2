@@ -18,74 +18,75 @@
 
 static CGFloat strategy1(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(5, 0, 310, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, KWallWidth - KWallOffsetX, 200)];
     
-    return 200;
+    return 208;
 }
 
 static CGFloat strategy2(NSMutableArray * frames)
 {
-    [frames addRect:CGRectMake(5, 0, 200, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 200, 200)];
     
-    [frames addRect:CGRectMake(210, 0, 105, 200)];
+    [frames addRect:CGRectMake(210, KWallOffsetX, KWallWidth - 210, 200)];
         
-    return 200;
+    return 208;
 }
 
 static CGFloat strategy3(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(5, 0, 200, 205)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
     
-    [frames addRect:CGRectMake(215, 0, 100, 100)];
+    [frames addRect:CGRectMake(212, KWallOffsetX, 100, 100)];
     
-    [frames addRect:CGRectMake(215, 105, 100, 100)];
+    [frames addRect:CGRectMake(212, 110, 100, 100)];
     
-    return 205;
+    return 210;
 }
 
 static CGFloat strategy4(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(5, 0, 200, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
     
-    [frames addRect:CGRectMake(210, 0, 105, 200)];
+    [frames addRect:CGRectMake(212, KWallOffsetX, 100, 202)];
     
-    [frames addRect:CGRectMake(5, 210, 200, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX, 212, 202, 100)];
     
-    [frames addRect:CGRectMake(210, 210, 100, 100)];
+    [frames addRect:CGRectMake(212, 212, 100, 100)];
     
-    return 310;
+    return 312;
 }
 
 static CGFloat strategy5(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(5, 0, 200, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
     
-    [frames addRect:CGRectMake(210, 0, 105, 200)];
+    [frames addRect:CGRectMake(212, KWallOffsetX, 100, 202)];
     
-    [frames addRect:CGRectMake(5, 210, 100, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX, 212, 100, 100)];
     
-    [frames addRect:CGRectMake(110, 210, 100, 100)];
+    [frames addRect:CGRectMake(110, 212, 100, 100)];
     
-    [frames addRect:CGRectMake(215, 210, 100, 100)];
+    [frames addRect:CGRectMake(212, 212, 100, 100)];;
+
     
-    return 310;
+    return 312;
 }
 
 static CGFloat strategy6(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(5, 0, 200, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
     
-    [frames addRect:CGRectMake(210, 0, 105, 100)];
+    [frames addRect:CGRectMake(212, 8, 100, 100)];
     
-    [frames addRect:CGRectMake(210, 105, 105, 100)];
+    [frames addRect:CGRectMake(212, 110, 100, 100)];
     
-    [frames addRect:CGRectMake(5, 210, 100, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX, 212, 100, 100)];
     
-    [frames addRect:CGRectMake(110, 210, 100, 100)];
+    [frames addRect:CGRectMake(110, 212, 100, 100)];
     
-    [frames addRect:CGRectMake(215, 210, 100, 100)];;
+    [frames addRect:CGRectMake(212, 212, 100, 100)];;
     
-    return 310;
+    return 312;
     
 }
 

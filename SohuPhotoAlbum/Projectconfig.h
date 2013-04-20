@@ -5,6 +5,9 @@
 //  Created by sohu on 13-4-11.
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
+
+
+
 #define DEBUG 1
 
 #ifndef PROJECTCONFIG
@@ -19,7 +22,8 @@
 //#define CLog(fmt,...) NSLog((fmt),##__VA_ARGS__)
 #endif
 
-#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+//#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
+#define BACKGORUNDCOLOR [UIColor colorWithRed:255.f/255 green:255.f/255 blue:255.f/255 alpha:1.f]
 
 #import "IIViewDeckController.h"
 //alert

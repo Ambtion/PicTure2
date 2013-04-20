@@ -47,6 +47,7 @@ typedef enum _imageStatePosition
 @property(nonatomic,strong)ImageScaleView * fontScaleImage;
 @property(nonatomic,strong)ImageScaleView * curScaleImage;
 @property(nonatomic,strong)ImageScaleView * rearScaleImage;
+@property(nonatomic,strong)CustomizetionTabBar * tabBar;
 //@property(nonatomic,strong)CustomizationNavBar * cusBar;
 //@property(nonatomic,retain)LimitCacheForImage * cache;
 //@property(nonatomic,retain)ALAssetsGroup * group;

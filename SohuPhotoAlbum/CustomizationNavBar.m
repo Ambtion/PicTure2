@@ -80,9 +80,10 @@
     self = [super initWithFrame:CGRectMake(0, 0, 320, 44)];
     if (self) {
         [self setUserInteractionEnabled:YES];
+        
         _normalBar = [[UIImageView alloc] initWithFrame:self.bounds];
         [_normalBar setUserInteractionEnabled:YES];
-        _normalBar.image = [UIImage imageNamed:@"title-bar.png"];
+        _normalBar.image = [UIImage imageNamed:@"navbar.png"];
         self.nLeftButton = [GIFButton buttonWithType:UIButtonTypeCustom];
         nLeftButton.frame = CGRectMake(0, 0, 44, 44);
         nLeftButton.tag = LEFTBUTTON;
@@ -104,7 +105,7 @@
 {
     _stateBar = [[UIImageView alloc] initWithFrame:self.bounds];
     [_stateBar setUserInteractionEnabled:YES];
-    _stateBar.image = [UIImage imageNamed:@"title-bar.png"];
+    _stateBar.image = [UIImage imageNamed:@"navbar.png"];
     
     self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)];
     self.sLabelText.backgroundColor = [UIColor clearColor];
@@ -135,13 +136,13 @@
 {
     self.nRightButton1 = [GIFButton buttonWithType:UIButtonTypeCustom];
     [self.nRightButton1 addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    nRightButton1.frame = CGRectMake(320 - 50, 0, 44, 44);
+    nRightButton1.frame = CGRectMake(320 - 44, 0, 44, 44);
     nRightButton1.tag = RIGHT1BUTTON;
     [_normalBar addSubview:nRightButton1];
     
     self.nRightButton2 = [GIFButton buttonWithType:UIButtonTypeCustom];
     [self.nRightButton2 addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    nRightButton2.frame = CGRectMake(320 - 100, 0, 44, 44);
+    nRightButton2.frame = CGRectMake(320 - 88, 0, 44, 44);
     nRightButton2.tag = RIGHT2BUTTON;
     [_normalBar addSubview:nRightButton2];
     

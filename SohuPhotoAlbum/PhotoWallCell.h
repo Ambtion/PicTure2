@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "ImageViewAdaper.h"
+#import "CountLabel.h"
+
+static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5",@"__6"};
+
 
 @interface CellFootView:UIView
 @property (strong,nonatomic)UILabel * shareTimeLabel;
@@ -17,14 +21,13 @@
 @property (strong,nonatomic)UILabel * likeCountLabel;
 @end
 
-static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5",@"__6"};
-
 @interface PhotoWallCellDataSource : NSObject
 @property(strong,nonatomic)NSMutableArray * imageWallInfo;
 @property(strong,nonatomic)NSString * wallDescription;
 @property(strong,nonatomic)NSString * shareTime;
 @property(assign,nonatomic)NSInteger talkCount;
 @property(assign,nonatomic)NSInteger likeCount;
+@property(assign,nonatomic)NSInteger photoCount;
 - (CGFloat)getCellHeigth;
 - (NSInteger)numOfCellStragey;
 @end
@@ -36,11 +39,13 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 @end
 @interface PhotoWallCell : UITableViewCell
 {
+    UIImageView * _backImageView;
     NSMutableArray * _framesArray;
     NSMutableArray * _imageViewArray;
     UILabel * _wallDesLabel;
     CellFootView * _footView;
     PhotoWallCellDataSource * _dataSource;
+    CountLabel * _countLabel;
     CGFloat heigth;
 }
 @property(strong,nonatomic)PhotoWallCellDataSource * dataSource;

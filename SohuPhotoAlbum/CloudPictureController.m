@@ -10,65 +10,67 @@
 
 @interface CloudPictureController()
 @property(strong,nonatomic)NSMutableArray * dataSourceArray;
-@property(strong,nonatomic)NSMutableArray * selectedArray;
+@property(strong,nonatomic)NSMutableArray *assetsSection;
+@property(strong,nonatomic)NSMutableArray *assetSectionisShow;
 @end
 
 @implementation CloudPictureController
 @synthesize dataSourceArray = _dataSourceArray;
-@synthesize selectedArray = _selectedArray;
+@synthesize assetsSection = _assetsSection;
+@synthesize assetSectionisShow = _assetSectionisShow;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.view.backgroundColor = BACKGORUNDCOLOR;
-    _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
+    self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.myTableView.delegate = self;
+    self.myTableView.dataSource = self;
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor]];
     _refresHeadView.delegate = self;
-    [_myTableView addSubview:_refresHeadView];
-    [self.view addSubview:_myTableView];
+    [self.myTableView addSubview:_refresHeadView];
+    [self.view addSubview:self.myTableView];
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"]];
     _moreFootView.delegate = self;
-    _myTableView.tableFooterView = _moreFootView;
+    self.myTableView.tableFooterView = _moreFootView;
     _selectedArray = [NSMutableArray arrayWithCapacity:0];
-    
+    _assetsSection = [NSMutableArray arrayWithCapacity:0];
+    _assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
     //dataSource
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     
     for (int i = 0; i < 100; i++)
         [_dataSourceArray addObject:@"mmm"];
-    
-    [_myTableView reloadData];
+    [self.myTableView reloadData];
 }
 
 #pragma mark View LifeCircle
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (!_navBar){
-        _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-        [_navBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_navBar.nLabelText setText:@"云备份"];
-        [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"full_screen_share_icon.png"] forState:UIControlStateNormal];
+    if (!_cusBar){
+        _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+        [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
+        [_cusBar.nLabelText setText:@"云备份"];
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
         
         //上传按钮
-        [_navBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        [_navBar.nRightButton3 setUserInteractionEnabled:NO];
-        [_navBar.sRightStateButton setImage:[UIImage imageNamed:@"YES.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
-    if (!_navBar.superview)
-        [self.navigationController.navigationBar addSubview:_navBar];
+    if (!_cusBar.superview)
+        [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_navBar removeFromSuperview];
+    [_cusBar removeFromSuperview];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
 
@@ -85,7 +87,7 @@
 - (void)doneRefrshLoadingTableViewData
 {
     _isLoading = NO;
-    [_refresHeadView egoRefreshScrollViewDataSourceDidFinishedLoading:_myTableView];
+    [_refresHeadView egoRefreshScrollViewDataSourceDidFinishedLoading:self.myTableView];
 }
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view
 {
@@ -118,7 +120,7 @@
 - (void)doneMoreLoadingTableViewData
 {
     _isLoading = NO;
-    [_moreFootView scpMoreScrollViewDataSourceDidFinishedLoading:_myTableView];
+    [_moreFootView scpMoreScrollViewDataSourceDidFinishedLoading:self.myTableView];
 }
 
 #pragma mark refrshDataFromNetWork
@@ -146,7 +148,43 @@
         _isLoading = YES;
     }
 }
+
 #pragma mark DataSource
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 28.f;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getSectionView:section ByisShow:YES];
+}
+- (UIView *)getSectionView:(NSInteger)section ByisShow:(BOOL)isShowRow
+{
+    UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
+    [view setUserInteractionEnabled:YES];
+    UITapGestureRecognizer * tap  =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInSection:)    ];
+    [view addGestureRecognizer:tap];
+    view.tag = section;
+    UIImageView * iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(8, 3, 22, 22)];
+    [view addSubview:iconImage];
+    //label
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 200, 24)];
+    label.font = [UIFont boldSystemFontOfSize:12.f];
+    label.backgroundColor = [UIColor clearColor];
+//    label.text = [self.assetsSection objectAtIndex:section];
+    [view addSubview:label];
+    if (isShowRow) {
+        label.textColor = [UIColor colorWithRed:189.f/255 green:189.f/255 blue:189.f/255 alpha:1.f];
+        iconImage.image = [UIImage imageNamed:@"sectionIcon.png"];
+        view.image = [UIImage imageNamed:@"section.png"];
+    }else{
+        label.textColor = [UIColor colorWithRed:100.f/255 green:100.f/255 blue:100.f/255 alpha:1.f];
+        iconImage.image = [UIImage imageNamed:@"sectionIconNo.png"];
+        view.image = [UIImage imageNamed:@"sectionNo.png"];
+    }
+    return view;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -170,7 +208,7 @@
         cell = [[CloudPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.delegate = self;
     }
-    if (_isSelectedState){
+    if (_viewState == UPloadState){
         [cell showCellSelectedStatus];
         [cell cloudPictureCellisShow:[_selectedArray containsObject:cell.dataSource.firstDic] selectedDic:cell.dataSource.firstDic];
         [cell cloudPictureCellisShow:[_selectedArray containsObject:cell.dataSource.secoundDic] selectedDic:cell.dataSource.secoundDic];
@@ -184,38 +222,41 @@
     return cell;
 }
 #pragma mark Action
-- (void)setViewToSelectedState:(BOOL)selectedState
-{
-    if (_isSelectedState == selectedState) return;
-    _isSelectedState = selectedState;
-    [_navBar switchBarStateToUpload:_isSelectedState];
-    if (_isSelectedState) {
-        self.viewDeckController.panningMode = IIViewDeckNoPanning;
-    }else{
-        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
-    }
-    if (_selectedArray.count)
-        [_selectedArray removeAllObjects];
-    [_myTableView reloadData];
-}
+
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) {           //分享
-        [self setViewToSelectedState:YES];
+        [self setViewState:UPloadState];
     }
     if (button.tag == RIGHT2BUTTON) {           //删除
-        [self setViewToSelectedState:YES];
+        [self setViewState:UPloadState];
     }
     if (button.tag == CANCELBUTTONTAG) {        //取消
-        [self setViewToSelectedState:NO];
+        [self setViewState:NomalState];
     }
     if (button.tag == RIGHTSELECTEDTAG) {       //确认
 
     }
 }
+#pragma mark Selected ImageView
+- (void)setViewState:(viewState)viewState
+{
+    if (viewState == _viewState) return;
+    _viewState = viewState;
+    [_cusBar switchBarStateToUpload:_viewState == UPloadState];
+    if (_viewState == UPloadState) {
+        self.viewDeckController.panningMode = IIViewDeckNoPanning;
+    }else{
+        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    }
+    if (_selectedArray.count)
+        [_selectedArray removeAllObjects];
+    [self.myTableView reloadData];
+}
+
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
     DLog(@"%s",__FUNCTION__);
@@ -228,9 +269,9 @@
         [_selectedArray removeObject:dic];
     }
 //    if (_selectedArray.count) {
-//        [_navBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
+//        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
 //    }else{
-////        [_navBar.sLabelText setText:SLABELTEXT];
+////        [_cusBar.sLabelText setText:SLABELTEXT];
 //    }
 }
 
