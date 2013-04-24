@@ -9,6 +9,8 @@
 
 #define PHOTOUPLOADFINISHED @"photoUpLoadFinished"
 
-#define ALBUMTUPLOADSTART   @"AlbumTaskChange"
+#define ALBUMTUPLOADSTART   @"AlbumTaskStart"
 #define ALBUMTASKCHANGE     @"AlbumTaskChange"
 #define ALBUMUPLOADOVER     @"AlbumuploadOver"
+
+#define ALBUMID @"76505528204926976"

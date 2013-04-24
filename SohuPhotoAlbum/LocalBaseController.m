@@ -32,15 +32,16 @@
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if (_cusBar.superview){
-        [UIView animateWithDuration:0.0 animations:^{
-            [_cusBar removeFromSuperview];
-        }];
-    }
+    [_cusBar removeFromSuperview];
 }
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
-    //for overide
+    //for override
+}
+- (void)upLoadController:(UPLoadController *)upload didclickContinue:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    [self setViewState:UPloadState];
 }
 - (CGRect)subTableViewRect
 {
@@ -64,7 +65,7 @@
         [array addObject:unit];
     }
     [self showPopAlerViewnotTotasView:NO WithMes:@"图片已在后台上传"];
-    AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:array album_id:@"once"];
+    AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:array album_id:ALBUMID];
     [[UploadTaskManager currentManager] addTaskList:album];
 }
 
@@ -79,6 +80,7 @@
         [alertView show];
     }
 }
+
 
 #pragma mark LoginViewController Delegate
 - (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo

@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "CustomizationNavBar.h"
 #import "LoginViewController.h"
+#import "UPLoadController.h"
+
 
 typedef enum ViewState {
     NomalState  ,
     UPloadState ,
 }viewState;
 
-@interface LocalBaseController : UIViewController<CusNavigationBarDelegate,LoginViewControllerDelegate>
+@interface LocalBaseController : UIViewController<CusNavigationBarDelegate,LoginViewControllerDelegate,UPLoadControllerDelegate>
 {
     CustomizationNavBar * _cusBar;
     NSMutableArray * _selectedArray;

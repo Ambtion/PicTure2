@@ -48,11 +48,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
     self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
     self.myTableView.separatorColor = [UIColor clearColor];
-    self.myTableView.backgroundColor = BACKGORUNDCOLOR;
+    self.myTableView.backgroundColor = [UIColor clearColor];
     [self.myTableView setScrollsToTop:YES];
     [self.view addSubview:self.myTableView];
     [self readPhotoAssetes];
@@ -65,6 +66,7 @@
     [super viewWillAppear:animated];
     [self.navigationItem setHidesBackButton:YES animated:NO];
     if (!_cusBar){
+        
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
@@ -79,8 +81,8 @@
             [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
         }else{
             [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
-            [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
-            [_cusBar.sRightStateButton setButtoUploadState:YES];
+            [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
+//            [_cusBar.sRightStateButton setButtoUploadState:YES];
         }
         [_cusBar switchBarStateToUpload:_viewState == UPloadState];
     }
@@ -140,7 +142,7 @@
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    cell.backgroundColor = BACKGORUNDCOLOR;
+    cell.backgroundColor = LOCALBACKGORUNDCOLOR;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -172,8 +174,14 @@
     return cell;
 }
 #pragma mark - NavigationBarDelegate
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
+    if (isupload) {
+        UPLoadController * uploadView = [[UPLoadController alloc] init];
+        uploadView.delegate  = self;
+        [self.navigationController pushViewController:uploadView animated:YES];
+        return;
+    }
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];
     }

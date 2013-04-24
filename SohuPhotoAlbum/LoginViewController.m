@@ -32,7 +32,7 @@
     view.scrollEnabled = NO;
     view.contentSize = frame.size;
     self.view = view;
-    self.view.backgroundColor = BACKGORUNDCOLOR;
+    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
 }
 - (void)viewDidLoad
 {
@@ -42,7 +42,6 @@
     [center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
-
 -(void)addsubViews
 {
     //backGround
@@ -56,7 +55,7 @@
     
     
     //登录用户名
-    _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 186, 200, 22) dropDownListFrame:CGRectMake(69, 160, 214, 200) domainsArray:EMAIL_ARRAY];
+    _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 186, 200, 22) dropDownListFrame:CGRectMake(80, 208, 200, 100) domainsArray:EMAIL_ARRAY];
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;

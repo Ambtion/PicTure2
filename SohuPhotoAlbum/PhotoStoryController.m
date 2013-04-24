@@ -7,27 +7,26 @@
 //
 
 #import "PhotoStoryController.h"
-
 @implementation PhotoStoryController
 
 #pragma mark View LifeCircle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = BASEWALLCOLOR;
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
+    _myTableView.backgroundColor = [UIColor clearColor];
 
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];
     
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"]];
+    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     _myTableView.tableFooterView = _moreFootView;
     
@@ -39,7 +38,8 @@
         dataSource.imageID = @"1.jpg";
         dataSource.imageDes = @"我啦对法拉第飞啊记得发,你是挨打发对法拉飞.挨打放假的了";
         NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
-        for (int i = 0; i <3; i++) {
+        int n = arc4random() % 3;
+        for (int i = 0; i <= n; i++) {
             CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
             cds.userName = @"游客踩踩";
             cds.potraitImage = @"1.jpg";
@@ -162,7 +162,7 @@
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    cell.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
+    cell.backgroundColor = BASEWALLCOLOR;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -176,7 +176,7 @@
     return cell;
 }
 #pragma mark Action
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];

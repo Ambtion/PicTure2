@@ -31,11 +31,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
     self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
     self.myTableView.separatorColor = [UIColor clearColor];
-    self.myTableView.backgroundColor = BACKGORUNDCOLOR;
+    self.myTableView.backgroundColor = [UIColor clearColor];
     _selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:self.myTableView];
     [self readAlbum];
@@ -208,7 +209,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 {
     return self.dataSourceArray.count;
 }
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     return [self getSectionView:section ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue]];
@@ -244,17 +244,17 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     }
     return view;
 }
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = BACKGORUNDCOLOR;
-}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[self.assetSectionisShow objectAtIndex:section] boolValue] ? [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count]: 0;
 }
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = LOCALBACKGORUNDCOLOR;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    PhotoesCellDataSource * source = [[self.dataSourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (indexPath.row == [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
         return [PhotoesCellDataSource cellLastHigth];
     }
@@ -284,8 +284,14 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 
 #pragma mark - NavigationBarDelegate
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
+    if (isupload) {
+        UPLoadController * uploadView = [[UPLoadController alloc] init];
+        uploadView.delegate = self;
+        [self.navigationController pushViewController:uploadView animated:YES];
+        return;
+    }
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
@@ -313,6 +319,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         }
     }
 }
+
 - (void)setViewState:(viewState)viewState
 {
     if (viewState == _viewState) return;
@@ -327,6 +334,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [_selectedArray removeAllObjects];
     [self.myTableView reloadData];
 }
+
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
@@ -347,4 +355,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
+#pragma mark - 
+
 @end

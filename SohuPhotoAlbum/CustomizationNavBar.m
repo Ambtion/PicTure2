@@ -18,8 +18,12 @@
 {
     UIButton * button = [super buttonWithType:buttonType];
     UIImageView * uploadImageView = [[UIImageView alloc] initWithFrame:button.bounds];
-    uploadImageView.backgroundColor = [UIColor redColor];
+    uploadImageView.backgroundColor = [UIColor clearColor];
     uploadImageView.tag = 100;
+    uploadImageView.animationImages = [NSArray arrayWithObjects:[UIImage imageNamed:@"upload.png"],
+                                       [UIImage imageNamed:@"upload2.png"],[UIImage imageNamed:@"upload3.png"],nil];
+    uploadImageView.animationDuration = 1.f;
+    uploadImageView.animationRepeatCount = 0;
     uploadImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [uploadImageView setHidden:YES];
     [button addSubview:uploadImageView];
@@ -34,42 +38,45 @@
 {
     if (isUploadStateButton) {
         [self addObserVerOnCenter];
+        if ([[UploadTaskManager currentManager] isUploading]) {
+            [self albumTaskStart:nil];
+        }
     }
 }
 - (void)addObserVerOnCenter
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskStart:) name:ALBUMTUPLOADSTART object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumChange:) name:ALBUMTASKCHANGE object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumChange:) name:ALBUMTASKCHANGE object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskOver:) name:ALBUMUPLOADOVER object:nil];
 }
 - (void)removeObserverOnCenter
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTUPLOADSTART  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTASKCHANGE object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTASKCHANGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMUPLOADOVER  object:nil];
+}
 
+- (BOOL)isUploadStateButton
+{
+    return ![[self upLoadimageView] isHidden];
 }
 - (void)albumTaskStart:(NSNotification *)notification
 {
     DLog(@"albumstart");
     [[self upLoadimageView] setHidden:NO];
+    [[self upLoadimageView] startAnimating];
 }
 - (void)albumTaskOver:(NSNotification *)notification
 {
     DLog(@"Finished");
+    [[self upLoadimageView] stopAnimating];
     [[self upLoadimageView] setHidden:YES];
 }
-- (void)albumChange:(NSNotification *)notification
-{
-//    NSDictionary * dic = [notification userInfo];
-//    NSInteger total = [[dic objectForKey:@"Total"] intValue];
-//    NSInteger finish = [[dic objectForKey:@"Finish"] intValue];
-//    CGFloat pro = (CGFloat)((CGFloat)finish / (CGFloat)total);
-//    DLog(@"%f", pro);
-}
+
 @end
 @implementation CustomizationNavBar
 @synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
+@synthesize normalBar = _normalBar;
 - (id)initwithDelegate:(id<CusNavigationBarDelegate>)Adelegate
 {
     self.delegate = Adelegate;
@@ -84,11 +91,13 @@
         _normalBar = [[UIImageView alloc] initWithFrame:self.bounds];
         [_normalBar setUserInteractionEnabled:YES];
         _normalBar.image = [UIImage imageNamed:@"navbar.png"];
-        self.nLeftButton = [GIFButton buttonWithType:UIButtonTypeCustom];
+        
+        self.nLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
         nLeftButton.frame = CGRectMake(0, 0, 44, 44);
         nLeftButton.tag = LEFTBUTTON;
-        [self.nLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [nLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_normalBar addSubview:nLeftButton];
+        
         self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
         [_normalBar addSubview:nLabelImage];
         self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)];
@@ -112,20 +121,14 @@
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];
 
-    self.sLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sLeftButton.frame = CGRectMake(0, 0, 44, 44);
     sLeftButton.tag = CANCELBUTTONTAG;
     [sLeftButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
     [sLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_stateBar addSubview:sLeftButton];
     
-    //全选按钮
-//    self.sAllSelectedbutton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    sAllSelectedbutton.frame = CGRectMake(200, 0, 44, 44);
-//    sAllSelectedbutton.tag = ALLSELECTEDTAG;
-//    [sAllSelectedbutton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [_stateBar addSubview:sAllSelectedbutton];
-    self.sRightStateButton = [GIFButton buttonWithType:UIButtonTypeCustom];
+    self.sRightStateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sRightStateButton.frame = CGRectMake(320 - 50, 0, 44, 44);
     sRightStateButton.tag = RIGHTSELECTEDTAG;
     [sRightStateButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -135,22 +138,17 @@
 - (void)addRightButtonsOnNormalBar
 {
     self.nRightButton1 = [GIFButton buttonWithType:UIButtonTypeCustom];
-    [self.nRightButton1 addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.nRightButton1 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     nRightButton1.frame = CGRectMake(320 - 44, 0, 44, 44);
     nRightButton1.tag = RIGHT1BUTTON;
     [_normalBar addSubview:nRightButton1];
     
     self.nRightButton2 = [GIFButton buttonWithType:UIButtonTypeCustom];
-    [self.nRightButton2 addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.nRightButton2 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     nRightButton2.frame = CGRectMake(320 - 88, 0, 44, 44);
     nRightButton2.tag = RIGHT2BUTTON;
     [_normalBar addSubview:nRightButton2];
     
-//    self.nRightButton3 = [GIFButton buttonWithType:UIButtonTypeCustom];
-//    [self.nRightButton3 addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-//    nRightButton3.frame = CGRectMake(320 - 150, 0, 44, 44);
-//    nRightButton3.tag = RIGHT3BUTTON;
-//    [_normalBar addSubview:nRightButton3];
 }
 
 #pragma mark - 
@@ -162,10 +160,16 @@
         [_stateBar removeFromSuperview];
     }
 }
-- (void)buttonClick:(UIButton *)button
+- (void)buttonClick:(GIFButton *)button
 {
-    if ([_delegate respondsToSelector:@selector(cusNavigationBar:buttonClick:)]) {
-        [_delegate cusNavigationBar:self buttonClick:button];
+    if ([_delegate respondsToSelector:@selector(cusNavigationBar:buttonClick: isUPLoadState:)]) {
+        [_delegate cusNavigationBar:self buttonClick:button isUPLoadState:NO];
+    }
+}
+- (void)gifButtonClick:(GIFButton *)button
+{
+    if ([_delegate respondsToSelector:@selector(cusNavigationBar:buttonClick: isUPLoadState:)]) {
+        [_delegate cusNavigationBar:self buttonClick:button isUPLoadState:[button isUploadStateButton]];
     }
 }
 - (void)setBackgroundImage:(UIImage *)image

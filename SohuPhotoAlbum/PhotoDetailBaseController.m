@@ -434,7 +434,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     return CGSizeZero;
 }
 #pragma mark - BarDelegate
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     DLog(@"%s",__FUNCTION__);
 

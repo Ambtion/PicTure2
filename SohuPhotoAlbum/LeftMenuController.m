@@ -52,6 +52,7 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setAccountView];
     [_tableView reloadData];
 }
 - (void)setAccountView
@@ -98,7 +99,6 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
     self.view.userInteractionEnabled = NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
-        
         if (indexPath.row == 0) {
             LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
             self.viewDeckController.centerController = la;
@@ -112,12 +112,12 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
             self.viewDeckController.centerController = lp;
         }
         if (indexPath.row == 3) {
-            
+            HostUserController * hs = [[HostUserController alloc] init];
+            self.viewDeckController.centerController = hs;
         }
         self.view.userInteractionEnabled = YES;
     }];
 }
-
 
 #pragma mark - Delegate of LoginViewController
 - (void)loginViewController:(LoginViewController *)loginController cancleClick:(id)sender
@@ -130,7 +130,12 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
     [self dismissModalViewControllerAnimated:YES];
     [self.viewDeckController toggleLeftViewAnimated:NO];
 }
-#pragma mark AccoutViewDelgate
+#pragma mark - Delegate of SetttingControlelr
+- (void)settingControllerDidDisappear:(SettingController *)controller
+{
+    [self.viewDeckController toggleLeftViewAnimated:NO];
+}
+#pragma mark -  AccoutViewDelgate
 - (void)accountView:(AccountView *)acountView fullScreenClick:(id)sender
 {
     if ([LoginStateManager isLogin]) {
@@ -154,12 +159,16 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
 }
 - (void)accountView:(AccountView *)acountView setttingClick:(id)sender
 {
-    DLog(@"%s",__FUNCTION__);
+    SettingController * sc = [[SettingController alloc] init];
+    sc.delegate = self;
+    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:sc];
+    [self presentModalViewController:nav animated:YES];
 }
 #pragma mark oauthorize Action
 - (void)oauthorizeButtonClick:(UIButton *)button
 {
     DLog(@"%d",button.tag);
+    
 }
 #pragma mark OauthorViews
 - (void)showOAuthorView

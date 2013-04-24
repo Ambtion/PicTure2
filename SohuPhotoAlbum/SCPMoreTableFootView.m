@@ -11,14 +11,14 @@
 @implementation SCPMoreTableFootView
 @synthesize delegate = _delegate;
 
-- (id)initWithFrame:(CGRect)frame WithLodingImage:(UIImage *)lodingImage endImage:(UIImage *)endImage;
+- (id)initWithFrame:(CGRect)frame WithLodingImage:(UIImage *)lodingImage endImage:(UIImage *)endImage WithBackGroud:(UIColor *)color
 {
     self = [super initWithFrame:frame];
     if (self) {
         
         //暂时写死了,以后更改
 //        self.frame = CGRectMake(0, 0, 320, 60) ;
-        self.backgroundColor = [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1];
+        self.backgroundColor = color;
         UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(realLoadingMore:)];
         [self addGestureRecognizer:gesture];
         

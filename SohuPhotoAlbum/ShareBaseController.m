@@ -54,7 +54,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = BACKGORUNDCOLOR;
+    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
     CGFloat offset = 20.f;
     
     UIImageView * bgIVw = [[UIImageView alloc] initWithFrame:CGRectMake((320 - 144)/2.f, 8 + offset, 144, 144)];

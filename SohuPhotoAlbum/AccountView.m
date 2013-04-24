@@ -21,12 +21,14 @@
         self.image = [UIImage imageNamed:@"menuBar.png"];
         self.backgroundColor = [UIColor clearColor];
         [self setUserInteractionEnabled:YES];
-//        UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureOnAllView:)];
-//        gesture.delegate = self;
-//        [self addGestureRecognizer:gesture];
         
         //portrait
         portraitImageView = [[PortraitView alloc] initWithFrame:CGRectMake(5, 7, 44, 44)];
+        portraitImageView.clipsToBounds = YES;
+        portraitImageView.layer.cornerRadius = 5.f;
+        portraitImageView.layer.borderWidth = 1.f;
+        portraitImageView.layer.borderColor = [[UIColor blackColor] CGColor];
+        portraitImageView.backgroundColor = [UIColor clearColor];
         [self addSubview:portraitImageView];        
         CGRect rect = CGRectMake(55, 13, 95, 12.f);
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];

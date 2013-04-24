@@ -42,15 +42,15 @@
 @synthesize shouldreFreshOnce;
 @synthesize delegate=_delegate;
 
-- (id)initWithFrame:(CGRect)frame arrowImageName:(NSString *)arrow textColor:(UIColor *)textColor
+- (id)initWithFrame:(CGRect)frame arrowImageName:(NSString *)arrow textColor:(UIColor *)textColor backGroundColor:(UIColor *)color
 {
     self = [super initWithFrame:frame];
     if (self) {
         shouldreFreshOnce = NO;
         isWillRefresh = NO;
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
-        
+//        self.backgroundColor = [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f];
+        self.backgroundColor = color;
 		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, frame.size.height - 30.0 + OFFSET_Y, self.frame.size.width, 20.0)];
 		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		label.font = [UIFont systemFontOfSize:12.0];
@@ -102,7 +102,7 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    return [self initWithFrame:frame arrowImageName:@"blueArrow.png" textColor:TEXT_COLOR];
+    return [self initWithFrame:frame arrowImageName:@"blueArrow.png" textColor:TEXT_COLOR backGroundColor:[UIColor whiteColor]];
 }
 
 

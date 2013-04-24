@@ -19,11 +19,12 @@
 
 @interface GIFButton : UIButton
 - (void)setButtoUploadState:(BOOL)isUploadStateButton;
+- (BOOL)isUploadStateButton;
 @end
 
 @class CustomizationNavBar;
 @protocol CusNavigationBarDelegate <NSObject>
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button;
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload;
 @end
 
 @interface CustomizationNavBar : UIView
@@ -33,7 +34,8 @@
 }
 
 @property(nonatomic,weak)id<CusNavigationBarDelegate> delegate;
-@property(nonatomic,strong)GIFButton * nLeftButton;
+@property(nonatomic,strong)UIImageView * normalBar;
+@property(nonatomic,strong)UIButton * nLeftButton;
 @property(nonatomic,strong)UIImageView * nLabelImage;
 @property(nonatomic,strong)UILabel * nLabelText;
 @property(nonatomic,strong)GIFButton * nRightButton1;
@@ -42,8 +44,8 @@
 
 @property(nonatomic,strong)UILabel * sLabelText;
 @property(nonatomic,strong)UIButton * sLeftButton;
-@property(nonatomic,strong)GIFButton * sAllSelectedbutton;
-@property(nonatomic,strong)GIFButton * sRightStateButton;
+@property(nonatomic,strong)UIButton * sAllSelectedbutton;
+@property(nonatomic,strong)UIButton * sRightStateButton;
 
 - (id)initwithDelegate:(id<CusNavigationBarDelegate>)Adelegate;
 - (void)switchBarStateToUpload:(BOOL)isUploadState;

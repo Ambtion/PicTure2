@@ -221,7 +221,7 @@
 
 - (ASIFormDataRequest *)getUploadRequest:(NSData *)imageData
 {
-    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=76505528204926976&access_token=%@",BASICURL,[LoginStateManager currentToken]];
+    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=%@&access_token=%@",BASICURL,ALBUMID,[LoginStateManager currentToken]];
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
     [request setStringEncoding:NSUTF8StringEncoding];

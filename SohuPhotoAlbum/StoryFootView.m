@@ -33,7 +33,7 @@ static NSString * const higthedimage[4] = {};
     CGFloat offset = 6;
     CGFloat width = (self.bounds.size.width  - 2 * offset)/ 4.f;
     for (int i = 0; i < 4; i++) {
-        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustomg];
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(offset + width * i, 0, width, self.bounds.size.height);
         [button setImage:[UIImage imageNamed:normalImage[i]] forState:UIControlStateNormal];
         button.autoresizingMask = UIViewAutoresizingFlexibleHeight;

@@ -19,11 +19,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.clipsToBounds = YES;
-        self.layer.cornerRadius = 5.f;
-        self.layer.borderWidth = 1.f;
-        self.layer.borderColor = [[UIColor blackColor] CGColor];
+//        self.layer.cornerRadius = 5.f;
+//        self.layer.borderWidth = 1.f;
+//        self.layer.borderColor = [[UIColor blackColor] CGColor];
+        
         self.backgroundColor = [UIColor clearColor];
-      
         self.imageView = [[UIImageView alloc] initWithFrame:self.bounds];
         UIView * lineView  = [[UIView alloc] initWithFrame:CGRectMake(0, 1, self.bounds.size.width, 1.f)];
         lineView.backgroundColor = [UIColor colorWithRed:1.f green:1.f blue:1.f alpha:.2f];

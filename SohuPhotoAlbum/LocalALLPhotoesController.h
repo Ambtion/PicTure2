@@ -10,7 +10,6 @@
 #import "AppDelegate.h"
 #import "PhotoesCell.h"
 #import "LocalBaseController.h"
-
 @interface LocalALLPhotoesController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
 {
     ALAssetsLibrary *_library;

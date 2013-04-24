@@ -9,9 +9,8 @@
 #import "PerfrenceSettingManager.h"
 #import "LoginStateManager.h"
 
-#define HOMEBACKGROUND  @"__HOMEBACKGROUND__"
 #define ISUPLOADJPEGIMAGE @"__ISUPLOADJPEGIMAGE__"
-#define ISSHOWINGGRIDVIEW @"__ISSHOWINGGRIDVIEW__"
+#define ISAUTOUPLOAD @"__ISAUTOUPLOAD__"
 
 @implementation PerfrenceSettingManager
 
@@ -37,18 +36,7 @@
     [userDefault setObject:userinfo forKey:[LoginStateManager currentUserId]];
     [userDefault synchronize];
 }
-+ (NSString *)homeBackGroundImageName
-{
-    
-    NSDictionary * userinfo = [self valueForUserinfo];
-    return [self valueForKey:HOMEBACKGROUND inUserinfo:userinfo];
-}
 
-+ (void)resetHomeBackGroudImageName:(NSString *)newName
-{
-    if (![LoginStateManager isLogin]) return;
-    [self userDefoultStoreValue:newName forKey:HOMEBACKGROUND];
-}
 
 + (NSNumber *)isUploadJPEGImage
 {
@@ -62,21 +50,19 @@
     [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISUPLOADJPEGIMAGE];
 }
 
-+ (NSNumber *)isShowingGridView
++ (NSNumber *)isAutoUpload
 {
     NSDictionary * userinfo = [self valueForUserinfo];
-    return [self valueForKey:ISSHOWINGGRIDVIEW inUserinfo:userinfo];
+    return [self valueForKey:ISAUTOUPLOAD inUserinfo:userinfo];
 }
-
-+ (void)setIsShowingGridView:(BOOL)ture
++(void)setIsAutoUpload:(BOOL)ture
 {
     if (![LoginStateManager isLogin]) return;
-    [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISSHOWINGGRIDVIEW];
+    [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISAUTOUPLOAD];
 }
 
 + (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key
 {
-//    NSString * key = [NSString stringWithFormat:@"%@",Aclass];
     NSMutableData * data = [[NSMutableData alloc] init];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:object forKey:key];
@@ -87,7 +73,6 @@
 
 + (id)unarchiveObjectWithDataWithKey:(NSString *)key
 {
-//    NSString * key = [NSString stringWithFormat:@"%@",Aclass];
     NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     NSMutableArray * arDataSource = nil;

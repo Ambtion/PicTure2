@@ -22,18 +22,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.view.backgroundColor = BACKGORUNDCOLOR;
+    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
     self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
     
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"]];
+    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     self.myTableView.tableFooterView = _moreFootView;
     _selectedArray = [NSMutableArray arrayWithCapacity:0];
@@ -48,6 +47,7 @@
 }
 
 #pragma mark View LifeCircle
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -200,6 +200,10 @@
     }
     return [CloudPictureCellDataSource cellHigth];
 }
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = LOCALBACKGORUNDCOLOR;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * cellId = @"photoCELLId";
@@ -223,8 +227,9 @@
 }
 #pragma mark Action
 
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
+    
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
@@ -268,11 +273,6 @@
     }else if([_selectedArray containsObject:dic]){
         [_selectedArray removeObject:dic];
     }
-//    if (_selectedArray.count) {
-//        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
-//    }else{
-////        [_cusBar.sLabelText setText:SLABELTEXT];
-//    }
 }
 
 @end

@@ -23,15 +23,22 @@
     CGSize size = [imageDes sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
     heigth += OFFSETY + 5;
     heigth += size.height; //des
-    heigth += 5.f;
+    heigth += 5.f; // desview->commnetView
     for (int i = 0; i < MIN(3, commentInfoArray.count); i++) {
         CommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
         heigth += [dataSoure commetViewheigth];
     }
-    heigth += 30;
-    heigth += 40; //footView
-    heigth += OFFSETY; //offset
-    return heigth;
+    if (!MIN(3, commentInfoArray.count)){
+        heigth += OFFSETY;
+        heigth += 40;
+        return heigth;
+    }else{
+        heigth += 30;
+        heigth += 40; //footView
+        heigth += OFFSETY - 5.f; //offset
+        return heigth;
+    }
+    return 0.f;
 }
 @end
 
@@ -66,7 +73,6 @@
     _commentCount.lineBreakMode = DESLABLELINEBREAK;
     _commentCount.backgroundColor = [UIColor clearColor];
     _commentCount.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1.f];
-    
 }
 #pragma mark - InitSubViews
 - (void)initAllSubViews
@@ -129,10 +135,9 @@
     
     _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + OFFSETY + 5, size.width, size.height);
     
-    _bgImageView.frame = CGRectMake(0, OFFSETY, _bgImageView.frame.size.width, _photoView.frame.size.height + 100 + 20);
-
+    _bgImageView.frame = CGRectMake(0, OFFSETY, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 20);
     //commentSize
-    if (_dataSource.commentInfoArray) {
+    if (_dataSource.commentInfoArray && _dataSource.commentInfoArray.count) {
         
         CommentView * view = [_commentArray objectAtIndex:0];
         view.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:0]; //计算view.frame
@@ -143,7 +148,7 @@
             view1.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:1];
             view1.frame = CGRectMake(view1.frame.origin.x, view.frame.size.height + view.frame.origin.y, view1.frame.size.width, view1.frame.size.height);
             [self setFootViewWithView:view1];
-            
+
             if (_dataSource.commentInfoArray.count > 2){
                 CommentView * view2 = [_commentArray objectAtIndex:2];
                 view2.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:2];
@@ -151,6 +156,8 @@
                 [self setFootViewWithView:view2];
             }
         }
+    }else{
+        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y + OFFSETY  ,320, 40);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
 }

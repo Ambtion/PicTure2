@@ -26,7 +26,12 @@ static UploadTaskManager * sharedTaskManager = nil;
     }
     return sharedTaskManager;
 }
-#pragma mark -
+//#pragma mark AutonUploadPic
+//- (void)autoUploadPic
+//{
+//    
+//}
+#pragma mark - init
 - (id)init
 {
     if (self = [super init]) {
@@ -57,18 +62,33 @@ static UploadTaskManager * sharedTaskManager = nil;
 - (void)go
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    [self albumTaskStart];
+   
     AlbumTaskList * task = [_taskList objectAtIndex:0];
     if (self.curTask == task) {
-//        NSLog(@"There is Task going");
+        DLog(@"There is Task going");
         return;
     }else{
         self.curTask = task;
     }
     if (!task.isUpLoading) {
+        [self setAlbumInfoWith:self.curTask];
+        [self albumTaskStart];
         [task go];
     }
 }
+- (BOOL)isUploading
+{
+    if (self.curTask.currentTask) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+- (NSDictionary *)currentTaskInfo
+{
+    return [[_taskDic objectForKey:self.curTask.albumId] copy];
+}
+
 #pragma mark - AlbumInfo
 - (void)updataAlbumInfoWith:(AlbumTaskList *)taskList
 {
@@ -82,9 +102,7 @@ static UploadTaskManager * sharedTaskManager = nil;
 }
 - (NSInteger)getTotalNumWith:(AlbumTaskList *)taskList
 {
-    
     NSMutableDictionary * albumInfo = [_taskDic objectForKey:taskList.albumId];
-//    NSLog(@"%s",__FUNCTION__);
     if (!albumInfo || ![albumInfo objectForKey:@"Total"]) {
         return 0;
     }else{
@@ -99,6 +117,16 @@ static UploadTaskManager * sharedTaskManager = nil;
     }else{
         return [[albumInfo objectForKey:@"Finish"] intValue];
     }
+}
+- (void)setAlbumInfoWith:(AlbumTaskList *)taskList
+{
+    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+    NSInteger total = [self getTotalNumWith:taskList];
+    NSInteger finished = [self getFinisheNumWith:taskList];
+    [dic setObject:[NSNumber numberWithInt:total] forKey:@"Total"];
+    [dic setObject:[NSNumber numberWithInt:finished] forKey:@"Finish"];
+    [_taskDic setObject:dic forKey:taskList.albumId];
+
 }
 - (void)finishOneRequsetWith:(AlbumTaskList *)taskList
 {
@@ -198,16 +226,16 @@ static UploadTaskManager * sharedTaskManager = nil;
 #pragma mark AlbumProgress
 - (void)albumTaskStart
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTUPLOADSTART object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTUPLOADSTART object:[_taskDic objectForKey:self.curTask.albumId]];
 }
 - (void)albumTaskQueneFinished:(AlbumTaskList *)albumTaskList
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMUPLOADOVER object:nil userInfo:[_taskDic objectForKey:self.curTask.albumId]];
     if (!albumTaskList) return;
     [_taskList removeObjectAtIndex:0];
     [self removeAlbunInfo:self.curTask.albumId];
     self.curTask = nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMUPLOADOVER object:nil userInfo:[_taskDic objectForKey:self.curTask.albumId]];
     if (_taskList.count) {
         [self gotoNext];
     }else{

@@ -36,4 +36,9 @@
 //管理照片列表下载进度
 - (AlbumTaskList *)getAlbumTaskWithAlbum:(NSString *)albumId;
 
+//获取当前队列状态
+- (NSDictionary *)currentTaskInfo;
+
+- (BOOL)isUploading;
+
 @end
