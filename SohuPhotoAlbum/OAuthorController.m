@@ -89,7 +89,7 @@ static NSString * provider = nil;
     [request setPostValue:provider forKey:@"provider"];
     [request setPostValue:code forKey:@"code"];
     [request setCompletionBlock:^{
-        
+        DLog(@"%d %@",[request responseStatusCode],[request responseString]);
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
             if ([_delegate respondsToSelector:@selector(oauthorController:loginSucessInfo:)])
                 [_delegate oauthorController:self loginSucessInfo:[[request responseString] JSONValue]];
@@ -110,12 +110,12 @@ static NSString * provider = nil;
         }
     }];
     [request startAsynchronous];
-    
 }
-#pragma mark webViewDelegate
 
+#pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    
     NSString * str = [request.URL absoluteString];
     if ([str rangeOfString:@"http://pp.sohu.com"].length && ![str rangeOfString:@"client_id"].length) {
         NSRange rang = [str rangeOfString:@"code="];
@@ -127,10 +127,6 @@ static NSString * provider = nil;
         return NO;
     }
     return YES;
-}
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-//    [self waitForMomentsWithTitle:@"加载中..."];
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {

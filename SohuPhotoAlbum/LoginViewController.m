@@ -12,6 +12,7 @@
 @"sohu.com", @"vip.sohu.com", @"chinaren.com", @"sogou.com", @"17173.com", @"focus.cn", @"game.sohu.com", @"37wanwan.com",\
 @"126.com", @"163.com", @"qq.com", @"gmail.com", @"sina.com.cn", @"sina.com", @"yahoo.com", @"yahoo.com.cn", @"yahoo.cn", nil])
 
+#define BACKGROUDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 @implementation LoginViewController
 @synthesize backgroundImageView = _backgroundImageView;
 @synthesize backgroundControl = _backgroundControl;
@@ -23,29 +24,26 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)loadView
-{
-    [super loadView];
-    CGRect frame = [[UIScreen mainScreen] bounds];
-    UIScrollView * view = [[UIScrollView alloc] initWithFrame:frame];
-    view.bounces = NO;
-    view.scrollEnabled = NO;
-    view.contentSize = frame.size;
-    self.view = view;
-    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIScrollView * view = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    view.bounces = NO;
+    view.scrollEnabled = NO;
+    view.contentSize = view.frame.size;
+    self.view = view;
+    self.view.backgroundColor = BACKGROUDCOLOR;
     [self addsubViews];
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
+
 -(void)addsubViews
 {
+    CGFloat offsetY = 44; //BAR
     //backGround
-    CGRect bounds = CGRectMake(0, 0, 320, 480);
+    CGRect bounds = CGRectMake(0, 0, 320, 480 - offsetY);
     _backgroundImageView = [[UIImageView alloc] initWithFrame:bounds];
     _backgroundImageView.image = [UIImage imageNamed:@"login_bg.png"];
     _backgroundControl = [[UIControl alloc] initWithFrame:bounds];
@@ -53,9 +51,8 @@
     [self.view addSubview:_backgroundImageView];
     //backButton/ ouathorzieButton
     
-    
     //登录用户名
-    _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 186, 200, 22) dropDownListFrame:CGRectMake(80, 208, 200, 100) domainsArray:EMAIL_ARRAY];
+    _usernameTextField = [[EmailTextField alloc] initWithFrame:CGRectMake(79, 186 - offsetY, 200, 22) dropDownListFrame:CGRectMake(80, 208 - offsetY , 200, 100) domainsArray:EMAIL_ARRAY andBackGround:[UIColor whiteColor]];
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
@@ -65,7 +62,7 @@
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     //输入密码
-    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(79, 186 + 38, 200, 22)];
+    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(79, 186 + 38 - offsetY, 200, 22)];
     _passwordTextField.font = [UIFont systemFontOfSize:15];
     _passwordTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _passwordTextField.returnKeyType = UIReturnKeyDone;
@@ -80,34 +77,18 @@
     
     //注册
     UIButton *  registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.frame = CGRectMake(36, 280, 110, 35);
+    registerButton.frame = CGRectMake(36, 280  - offsetY, 110, 35);
     [registerButton setBackgroundImage:[UIImage imageNamed:@"register_btn_nomal.png"] forState:UIControlStateNormal];
-//    [registerButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
-//    [registerButton setTitle:@"注册" forState:UIControlStateNormal];
-//    [registerButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-//    registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     //登录按钮
     UIButton * loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.frame = CGRectMake(175, 280, 110, 35);
+    loginButton.frame = CGRectMake(175, 280 - offsetY, 110, 35);
     [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_normal"] forState:UIControlStateNormal];
-//    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_btn_press"] forState:UIControlStateHighlighted];
-//    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
-//    [loginButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-//    loginButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
-//    UILabel * forget = [[UILabel alloc] initWithFrame:CGRectMake(39, 387, 150, 15)];
-//    forget.text = @"忘记密码";
-//    forget.textAlignment = UITextAlignmentRight;
-//    forget.backgroundColor = [UIColor clearColor];
-//    forget.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
-//    forget.font = [UIFont systemFontOfSize:15.f];
-//    [forget setUserInteractionEnabled:YES];
-    
     UIButton * forgetPassWord = [UIButton buttonWithType:UIButtonTypeCustom];
-    forgetPassWord.frame = CGRectMake(39, 337, 62, 20);
+    forgetPassWord.frame = CGRectMake(39, 337 - offsetY , 62, 20);
     [forgetPassWord setImage:[UIImage imageNamed:@"forgetPassWord.png"] forState:UIControlStateNormal];
     forgetPassWord.backgroundColor = [UIColor clearColor];
     [forgetPassWord addTarget:self action:@selector(forgetPassWord:) forControlEvents:UIControlEventTouchUpInside];
@@ -120,15 +101,15 @@
     [self.view addSubview:loginButton];
     [self.view  addSubview:forgetPassWord];
     
-    //返回按钮
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
+//    //返回按钮
+//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    backButton.frame = CGRectMake(0, 0, 44, 44);
+//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:backButton];
     
     //第三方登录
-    CGFloat buttonY = 67;
+    CGFloat buttonY = 67 - offsetY;
     CGFloat width = 84;
     CGFloat heigth = 60;
     UIButton * qqbutton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -151,25 +132,35 @@
     
     UIImageView * sohu2003 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]];
     CGRect rect = CGRectMake(0, 0, 320, 10);
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    rect.origin.y = screenRect.size.height - 20;
+    sohu2003.backgroundColor = [UIColor clearColor];
+    CGRect screenRect = self.view.bounds;
+    rect.origin.y = screenRect.size.height - 60;
     sohu2003.frame = rect;
     [self.view addSubview:sohu2003];
-    
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_navBar removeFromSuperview];
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationItem setHidesBackButton:YES];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    if (!_navBar) {
+        _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+        _navBar.normalBar.image = [UIImage imageNamed:@"Login_Bar.png"];
+        [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    }
+    [self.navigationController.navigationBar addSubview:_navBar];
 }
 
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    if(button.tag == LEFTBUTTON)
+        [self cancelLogin:nil];
+}
 #pragma mark -
 - (void)allTextFieldsResignFirstResponder
 {
@@ -226,7 +217,9 @@
 #pragma mark Handle Login Result
 - (void)handleLoginInfo:(NSDictionary *)response
 {
-    [LoginStateManager loginUserId:@"user_ID" withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+    DLog(@"%@",response);
+    [LoginStateManager loginUserId:[response objectForKey:@"user_id"] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+    
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
 }
@@ -271,6 +264,7 @@
 }
 - (void)oauthorController:(OAuthorController *)controlle loginFailture:(NSString *)error
 {
+    DLog();
     [self showError:error];
 }
 #pragma mark resiteruseinfo
@@ -282,15 +276,9 @@
     [self.navigationController pushViewController:reg animated:YES];
 }
 
-#pragma mark - MBProgress Delegate
-//- (void)hudWasHidden:(MBProgressHUD *)hud
-//{
-//    [hud removeFromSuperview];
-//}
 #pragma mark Keyboard lifeCircle
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    
     UIScrollView * view = (UIScrollView *) self.view;
     view.scrollEnabled = YES;
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
@@ -312,7 +300,6 @@
     //视图消失时自动失去第一响应者,为了保持动画一致性
     if ([LoginStateManager isLogin]) return;
     DLog(@"%s",__FUNCTION__);
-
     UIScrollView *view = (UIScrollView *) self.view;
     CGPoint point = view.contentOffset;
     point.y  =  0;

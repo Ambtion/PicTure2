@@ -345,9 +345,10 @@ static Renren *sharedRenren = nil;
 	
 	for (NSHTTPCookie* cookie in graphCookies) {
 		[cookies deleteCookie:cookie];
+        DLog(@"%@",cookie);
 	}
+    
 	NSArray* widgetCookies = [cookies cookiesForURL:[NSURL URLWithString:@"http://widget.renren.com"]];
-	
 	for (NSHTTPCookie* cookie in widgetCookies) {
 		[cookies deleteCookie:cookie];
 	}

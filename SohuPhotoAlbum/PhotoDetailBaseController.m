@@ -10,9 +10,6 @@
 #import "LocalShareController.h"
 #import "AppDelegate.h"
 
-#import <ImageIO/ImageIO.h>
-#import <MobileCoreServices/MobileCoreServices.h>
-
 #define OFFSETX 20
 
 static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
@@ -451,59 +448,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     DLog(@"%s",__FUNCTION__);
 }
 
-//- (void)setImagePropertyWith:(ALAsset *)asset
-//{
-//    //get full imageData
-//    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
-//    Byte *buffer = (Byte*)malloc(defaultRep.size);
-//    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-//    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-//    
-//    // compressData providerData 
-//    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)data);
-//    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-//    UIImage * image = [UIImage imageWithCGImage:imageRef];
-//    NSData* finaldata = UIImageJPEGRepresentation(image, 0.5);
-//    
-//    //compressData with exif
-//    finaldata =  [self writeExif:(NSDictionary *)[self getPropertyOfdata:data] intoImage:finaldata];
-//    
-//}
-//- (CFDictionaryRef )getPropertyOfdata:(NSData *)data
-//{
-//    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)data, NULL);
-//    if (imageSource == NULL) {
-//        // Error loading image
-//        return nil;
-//    }
-//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-//                             [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
-//                             nil];
-//    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
-//    DLog(@"ori:%@",imageProperties);
-//    return imageProperties;
-////    [self writeExif: (NSDictionary *)imageSource intoImageData:data];
-//}
-//
-//- (NSData *)writeExif:(NSDictionary *)dic intoImage:(NSData *)myimageData
-//{
-//    [self getPropertyOfdata:myimageData];
-//    NSMutableData * mydata = [[[NSMutableData alloc] initWithLength:0] autorelease];
-//    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((CFDataRef)myimageData);
-//    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-//    CGImageDestinationRef destination = CGImageDestinationCreateWithData((CFMutableDataRef)mydata, kUTTypeJPEG, 1, NULL);
-//    CGImageDestinationAddImage(destination, imageRef, (CFDictionaryRef)dic);
-//    CGImageDestinationFinalize(destination);
-//    CFRelease(destination);
-//    [self getPropertyOfdata:mydata];
-//    return mydata;
-//}
-//- (UIImage *)getImageFromCacheWithKey:(id)aKey
-//{
-//    NSData * imageData = [self.cache objectForKey:aKey];
-//    return [UIImage imageWithData:imageData];
-//}
-
 #pragma mark - Function
 - (void)resetImageRect:(UIImageView *)imageView
 {
@@ -527,7 +471,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [self resetImageRect:_fontScaleImage.imageView];
     [self resetImageRect:_rearScaleImage.imageView];
 }
-
 - (NSArray *)getDisplayImagesWithCurpage:(int)page
 {    
     int pre = [self validPageValue:_curPageNum -1];
@@ -538,7 +481,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [_curImageArray addObject:[_assetsArray objectAtIndex:last]];
     return _curImageArray;
 }
-
 - (int)validPageValue:(NSInteger)value
 {
     if(value <= 0) value = 0;                   // value＝1为第一张，value = 0为前面一张
@@ -557,34 +499,5 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     }
     _isHidingBar = !_isHidingBar;
 }
-//- (void)showBar
-//{
-//    if (!CGAffineTransformEqualToTransform(CGAffineTransformIdentity, [self getTransfrom])) return;
-//    [self.view setUserInteractionEnabled:NO];
-//    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
-////        CGRect navBar = CGRectMake(0, 20, 320, 44);
-//        CGRect tabBar = CGRectMake(0, self.view.frame.size.height - 44, 320, 44);
-////        _cusBar.frame = navBar;
-//        _tabBar.frame = tabBar;
-//        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-//    } completion:^(BOOL finished) {
-//        [self.view setUserInteractionEnabled:YES];
-//        _isHidingBar = NO;
-//    }];
-//}
-//- (void)hideBar
-//{
-//    [self.view setUserInteractionEnabled:NO];
-//    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut  animations:^{
-////        CGRect navBar = CGRectMake(0, -44, 320, 44);
-//        CGRect tabBar = CGRectMake(0, self.view.frame.size.height, 320, 44);
-//        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-////        _cusBar.frame = navBar;
-//        _tabBar.frame = tabBar;
-//    } completion:^(BOOL finished) {
-//        [self.view setUserInteractionEnabled:YES];
-//        _isHidingBar = YES;
-//    }];
-//}
-//
+
 @end

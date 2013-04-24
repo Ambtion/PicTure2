@@ -12,10 +12,8 @@
 #import "FeedBackController.h"
 
 #define maxRow 7
-static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清楚缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};
-
+static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清楚缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};\
 @implementation SettingController
-
 
 - (void)viewDidLoad
 {

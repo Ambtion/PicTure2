@@ -9,10 +9,11 @@
 
 #define MENUMAXNUMBER 4
 
-static NSString * menuText[4] = {@"本地相册",@"云备份",@"分享历史",@"星用户"};
-static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png"};
+static NSString *   menuText[4] =   {@"本地相册",@"云备份",@"分享历史",@"星用户"};
+static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png"};
 
 @implementation LeftMenuController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -47,7 +48,6 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
     _accountView.delegate = self;
     [self setAccountView];
     [self.view addSubview:_accountView];
-    
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -55,6 +55,8 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
     [self setAccountView];
     [_tableView reloadData];
 }
+
+#pragma mark AccoutView
 - (void)setAccountView
 {
     //暂时写着
@@ -130,11 +132,13 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
     [self dismissModalViewControllerAnimated:YES];
     [self.viewDeckController toggleLeftViewAnimated:NO];
 }
+
 #pragma mark - Delegate of SetttingControlelr
 - (void)settingControllerDidDisappear:(SettingController *)controller
 {
     [self.viewDeckController toggleLeftViewAnimated:NO];
 }
+
 #pragma mark -  AccoutViewDelgate
 - (void)accountView:(AccountView *)acountView fullScreenClick:(id)sender
 {
@@ -145,7 +149,6 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
         LoginViewController * lv = [[LoginViewController alloc] init];
         lv.delegate = self;
         UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:lv];
-        [nav.navigationBar setHidden:YES];
         [self presentModalViewController:nav animated:YES];
     }
 }
@@ -168,7 +171,6 @@ static NSString * image[4]  ={@"localPhoto.png",@"cloundPhoto.png",@"shareHistor
 - (void)oauthorizeButtonClick:(UIButton *)button
 {
     DLog(@"%d",button.tag);
-    
 }
 #pragma mark OauthorViews
 - (void)showOAuthorView

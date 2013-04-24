@@ -21,7 +21,7 @@
 
 @property (nonatomic, readonly) NSArray *domains;
 
-- (id)initWithFrame:(CGRect)frame dropDownListFrame:(CGRect)dFrame domainsArray:(NSArray *)domains;
+- (id)initWithFrame:(CGRect)frame dropDownListFrame:(CGRect)dFrame domainsArray:(NSArray *)domains andBackGround:(UIColor*)color;
 
 - (BOOL)isDropDownListOn;
 - (void)showDropDownList;

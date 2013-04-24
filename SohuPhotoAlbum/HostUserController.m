@@ -54,7 +54,6 @@
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         _cusBar.normalBar.image = [UIImage imageNamed:@"nav_bar_host.png"];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-//        _cusBar.nLabelText.text = @"星用户";
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
@@ -164,7 +163,6 @@
     HostUserCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[HostUserCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-//        cell.delegate = self;
     }
     cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
     return cell;

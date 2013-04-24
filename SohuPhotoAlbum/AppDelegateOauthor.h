@@ -8,21 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum OauthorState {
-    SinaUPload ,
-    RenrenUpload,
-    WeinxinUpload,
-    QQUpload
-}AppOauthorState;
 
 @interface AppDelegateOauthor : UIResponder<UIApplicationDelegate>
 {
-    AppOauthorState _state;
     SinaWeibo * sinaweibo;
     TencentOAuth * tencentOAuth;
     id<WXApiDelegate> _tempDelegate;
 }
-@property(nonatomic,assign)AppOauthorState state;
 @property(nonatomic,strong)TencentOAuth * tencentOAuth;
 @property(nonatomic,strong)SinaWeibo * sinaweibo;
 

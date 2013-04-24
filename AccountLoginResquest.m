@@ -28,16 +28,6 @@
     
     [request setCompletionBlock:^{
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] < 300 &&[[request responseString] JSONValue]) {
-//            NSString * str = [NSString stringWithFormat:@"%@/api/v1/user?access_token=%@",BASICURL,[[[request responseString] JSONValue] objectForKey:@"access_token"]];
-//            NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[[request responseString] JSONValue]];
-//            ASIHTTPRequest * user_id = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:str]];
-//            [user_id startSynchronous];
-//            if ([user_id responseStatusCode]>= 200 && [user_id responseStatusCode] < 300 && [user_id responseString]) {
-//                [dic setObject:[[[user_id responseString] JSONValue] objectForKey:@"user_id"] forKey:@"user_id"];
-//                success(dic);
-//            }else{
-//                faiture(@"当前网络不给力，请稍后重试");
-//            }
             success([[request responseString] JSONValue]);
         }else if([request responseStatusCode] == 403){
             faiture(@"您的用户名与密码不匹配");

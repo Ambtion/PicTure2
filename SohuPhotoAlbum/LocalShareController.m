@@ -11,7 +11,6 @@
 
 //#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
-
 @implementation LocalShareController
 @synthesize uploadAsset = _uploadAsset;
 

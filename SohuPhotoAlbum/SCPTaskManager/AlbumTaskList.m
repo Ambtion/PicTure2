@@ -50,49 +50,33 @@
     if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
     self.currentTask.request = [self getUploadRequest:nil];
     NSData * imageData = [self.currentTask imageDataFromAsset];
-    //        [self.currentTask getImageSucess:^(NSData *imageData, TaskUnit * unit) {
     if ([imageData length] > UPLOADIMAGESIZE) {
         [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
         [self requestFailed:self.currentTask.request];
         return ;
-        
     }else{
         [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
         [self.currentTask.request startAsynchronous];
     }
-//            if (self.currentTask.description && ![self.currentTask.description isEqualToString:@""])
-//                [self.currentTask.request setPostValue:unit.description forKey:@"desc"];
-//            if (!self.currentTask.request.isCancelled)
-//
-//        } failture:^(NSError *error, TaskUnit *unit) {
-//            unit.taskState = UPLoadStatusFailedUpload;
-//            [self goNextTask];
-//            ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:@"图片上传失败"] autorelease];
-//            [cus show];
-////        }];
     return;
 }
+
+- (NSString *)getUUID
+{
+    CFUUIDRef theUUID = CFUUIDCreate(NULL);
+    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+    CFBridgingRelease(theUUID);
+    return (__bridge  NSString *)string;
+}
+
 - (void)startTaskUnit
 {
-    if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
-    self.currentTask.request = [self getUploadRequest:nil];
-    NSData * imageData = [self.currentTask imageDataFromAsset];
-    
-    if ([imageData length] > UPLOADIMAGESIZE) {
-        [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
-        [self requestFailed:self.currentTask.request];
-        return ;
-        
-    }else{
-        [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
-        [self.currentTask.request startAsynchronous];
-    }
-    return;
+    [self addTaskUnitToQuene];
 }
 - (void)go
 {
     [self startTaskUnit];
-     DLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
 }
 - (void)cancelupLoadWithTag:(NSArray *)unitArray
 {
@@ -118,7 +102,6 @@
 }
 
 #pragma mark - Requsetdelgate
-
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     
@@ -145,7 +128,7 @@
     if (self.taskList.count) {
         [self goNextTask];
     }else{
-    //        NSLog(@"Task Finished");
+        //        NSLog(@"Task Finished");
         if ([_delegate respondsToSelector:@selector(albumTaskQueneFinished:)]) {
             [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
         }
@@ -194,7 +177,7 @@
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-//    NSLog(@"requestFailed:NNNN::%s, %d, %@",__FUNCTION__,[request responseStatusCode],[request error]);
+    //    NSLog(@"requestFailed:NNNN::%s, %d, %@",__FUNCTION__,[request responseStatusCode],[request error]);
     [request cancel];
     [request clearDelegatesAndCancel];
     NSDictionary * dic = [request userInfo];
@@ -221,7 +204,9 @@
 
 - (ASIFormDataRequest *)getUploadRequest:(NSData *)imageData
 {
-    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=%@&access_token=%@",BASICURL,ALBUMID,[LoginStateManager currentToken]];
+    //    http://pp.sohu.com/upload/api/sync
+    //    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=%@&access_token=%@",BASICURL,ALBUMID,[LoginStateManager currentToken]];
+    NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync",BASICURL];
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
     [request setStringEncoding:NSUTF8StringEncoding];
@@ -231,6 +216,8 @@
     [request setShowAccurateProgress:YES];
     [request setShouldAttemptPersistentConnection:NO];
     [request setNumberOfTimesToRetryOnTimeout:5];
+    [request setPostValue:[self getUUID] forKey:@"device"];
+    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
     [request setShouldContinueWhenAppEntersBackground:YES];
 #endif

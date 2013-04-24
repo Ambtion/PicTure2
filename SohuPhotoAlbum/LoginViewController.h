@@ -12,6 +12,7 @@
 #import "LoginStateManager.h"
 #import "OAuthorController.h"
 #import "EmailTextField.h"
+#import "CustomizationNavBar.h"
 
 @class LoginViewController;
 
@@ -21,8 +22,11 @@
 - (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo;
 - (void)loginViewController:(LoginViewController *)loginController loginFailtureWithinfo:(id)failtureinfo;
 @end
-@interface LoginViewController : UIViewController<MBProgressHUDDelegate,OAuthorControllerDelegate>
 
+@interface LoginViewController : UIViewController<MBProgressHUDDelegate,OAuthorControllerDelegate,CusNavigationBarDelegate>
+{
+    CustomizationNavBar * _navBar;
+}
 @property (strong, nonatomic) id<LoginViewControllerDelegate> delegate;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIControl *backgroundControl;

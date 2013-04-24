@@ -131,7 +131,10 @@
 {
 	return filtered_domains.count;
 }
-
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = [UIColor clearColor];
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *EmailCellIdentifier = @"EmailCell";
@@ -158,9 +161,9 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    return [self initWithFrame:frame dropDownListFrame:CGRectZero domainsArray:nil];
+    return [self initWithFrame:frame dropDownListFrame:CGRectZero domainsArray:nil andBackGround:[UIColor whiteColor]];
 }
-- (id)initWithFrame:(CGRect)frame dropDownListFrame:(CGRect)dFrame domainsArray:(NSArray *)domains
+- (id)initWithFrame:(CGRect)frame dropDownListFrame:(CGRect)dFrame domainsArray:(NSArray *)domains andBackGround:(UIColor*)color
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -170,6 +173,7 @@
         
         _dropDownListTable = [[UITableView alloc] initWithFrame:dFrame style:UITableViewStylePlain];
         _dropDownListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _dropDownListTable.backgroundColor = color;
         _dropDownListTable.layer.cornerRadius = 6.0;
         _dropDownListTable.layer.borderWidth = 0.6;
         _dropDownListTable.layer.borderColor = [[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] CGColor];

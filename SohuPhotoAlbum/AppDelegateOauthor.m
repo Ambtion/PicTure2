@@ -10,30 +10,25 @@
 
 
 @implementation AppDelegateOauthor
-@synthesize state = _state;
 @synthesize sinaweibo,tencentOAuth;
 
 #pragma mark - SINA
 - (void)sinaLoginWithDelegate:(id<SinaWeiboDelegate>)delegate
 {
     //init Sina
-    self.state = SinaUPload;
     sinaweibo = [[SinaWeibo alloc] initWithAppKey:kAppKey appSecret:kAppSecret appRedirectURI:kAppRedirectURI andDelegate:delegate];
     [sinaweibo logIn];
 }
 #pragma mark renren
 - (void)renrenLoginWithDelegate:(id<RenrenDelegate>)delegate
 {
-    self.state = RenrenUpload;
-        NSArray *permissions = [NSArray arrayWithObjects:@"read_user_album",@"status_update",@"photo_upload",@"publish_feed",@"create_album",@"operate_like",nil];
-       [[Renren sharedRenren] authorizationWithPermisson:permissions andDelegate:delegate];
-    //使用一键上传
+    NSArray *permissions = [NSArray arrayWithObjects:@"read_user_album",@"status_update",@"photo_upload",@"publish_feed",@"create_album",@"operate_like",nil];
+    [[Renren sharedRenren] authorizationWithPermisson:permissions andDelegate:delegate];
 }
 
 #pragma mark Weixin
 - (void)weiXinregisterWithDelegate:(id<WXApiDelegate>)delegate;
 {
-    self.state = WeinxinUpload;
     [WXApi registerApp:kWeiXinApp_ID];
     _tempDelegate = delegate;
 }
@@ -41,7 +36,6 @@
 #pragma mark - qq
 - (void)qqLoginWithDelegate:(id<TencentSessionDelegate>)delegate
 {
-    self.state = QQUpload;
     tencentOAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:delegate];
 //    tencentOAuth.localAppId = kURLSCHEMES;
     NSArray * qqPermissions = [NSArray arrayWithObjects:
@@ -78,16 +72,7 @@
     if ([[url absoluteString] rangeOfString:@"sinaweibosso"].location != NSNotFound) {
         return [self.sinaweibo handleOpenURL:url];
     }
-    if (self.state == WeinxinUpload) {
-        return  [WXApi handleOpenURL:url delegate:_tempDelegate];
-    }
-    if (self.state == QQUpload) {
-        return [TencentOAuth HandleOpenURL:url];
-    }
-    if (self.state == SinaUPload) {
-        return [self.sinaweibo handleOpenURL:url];
-    }
     return YES;
-    
+
 }
 @end

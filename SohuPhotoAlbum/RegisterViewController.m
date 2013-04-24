@@ -31,10 +31,11 @@
 - (void)loadView
 {
     [super loadView];
-    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
+    UIScrollView * view = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     view.bounces = NO;
     view.contentSize = view.frame.size;
     self.view = view;
+    self.view.backgroundColor = [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f];
 }
 
 - (void)viewDidLoad
@@ -45,17 +46,37 @@
     [center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_navBar removeFromSuperview];
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationItem setHidesBackButton:YES];
+    if (!_navBar) {
+        _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+        _navBar.normalBar.image = [UIImage imageNamed:@"Login_Bar.png"];
+        [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    }
+    [self.navigationController.navigationBar addSubview:_navBar];
+}
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)addViews
 {
-    
+    CGFloat offset = 44.f;
     _checked = [[UIImage imageNamed:@"check_box_select.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 22, 0, 0)];
     _noChecked = [[UIImage imageNamed:@"check_box_no_select.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 22, 0, 0)];
-    _backgroundImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
+    _backgroundImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480 - offset)];
     _backgroundImageView.image = [UIImage imageNamed:@"registerBg.png"];
     _backgroundControl = [[UIControl alloc] initWithFrame:_backgroundImageView.bounds];
     [_backgroundControl addTarget:self action:@selector(allTextFieldsResignFirstResponder:) forControlEvents:UIControlEventTouchDown];
     
-	_usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 74, 190, 22) ];
+	_usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 74-offset, 190, 22) ];
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
@@ -65,7 +86,7 @@
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110, 190, 22) ];
+    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110-offset, 190, 22) ];
     _mailBindTextField.font = [UIFont systemFontOfSize:15];
     _mailBindTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _mailBindTextField.returnKeyType = UIReturnKeyNext;
@@ -76,7 +97,7 @@
     [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
 
     
-    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 146, 190, 22)];
+    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 146-offset, 190, 22)];
     _passwordTextField.font = [UIFont systemFontOfSize:15];
     _passwordTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _passwordTextField.returnKeyType = UIReturnKeyDone;
@@ -88,20 +109,8 @@
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.backgroundColor = [UIColor clearColor];
     
-//    _displayPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    _displayPasswordButton.frame = CGRectMake(35, 258, 100, 22);
-//    _displayPasswordButton.titleLabel.font = [UIFont systemFontOfSize:15];
-//    [_displayPasswordButton setTitleColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1] forState:UIControlStateNormal];
-//    [_displayPasswordButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
-//    [_displayPasswordButton setTitle:@"显示密码" forState:UIControlStateNormal];
-//    [_displayPasswordButton setBackgroundImage:_noChecked forState:UIControlStateNormal];
-//    [_displayPasswordButton setBackgroundImage:_checked forState:UIControlStateSelected];
-//    [_displayPasswordButton setBackgroundImage:_checked forState:UIControlStateHighlighted];
-//    [_displayPasswordButton setBackgroundImage:_checked forState:UIControlStateHighlighted | UIControlStateSelected];
-//    [_displayPasswordButton addTarget:self action:@selector(checkBoxClicked) forControlEvents:UIControlEventTouchUpInside];
-    
     _dealPassButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _dealPassButton.frame = CGRectMake(38, 210, 22, 22);
+    _dealPassButton.frame = CGRectMake(38, 210 - offset , 22, 22);
     _dealPassButton.selected = YES;
     [_dealPassButton setBackgroundImage:_noChecked forState:UIControlStateNormal];
     [_dealPassButton setBackgroundImage:_checked forState:UIControlStateSelected];
@@ -111,7 +120,7 @@
     _dealPassButton.backgroundColor = [UIColor clearColor];
     
     _readDealButton  = [UIButton buttonWithType:UIButtonTypeCustom];
-    _readDealButton.frame = CGRectMake(50, 208, 160, 25);
+    _readDealButton.frame = CGRectMake(50, 208 - offset, 160, 25);
     _readDealButton.backgroundColor = [UIColor clearColor];
     [_readDealButton setImage:[UIImage imageNamed:@"readDeal.png"] forState:UIControlStateNormal];
     [_readDealButton addTarget:self action:@selector(readDeal:) forControlEvents:UIControlEventTouchUpInside];
@@ -132,32 +141,19 @@
     [self.view addSubview:_readDealButton];
     [self.view addSubview:_registerButton];
     
-    //后退按钮
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
+//    //后退按钮
+//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    backButton.frame = CGRectMake(0, 0, 44, 44);
+//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:backButton];
     
     UIImageView * sohu2003 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]];
     CGRect rect = CGRectMake(0, 0, 320, 10);
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    rect.origin.y = screenRect.size.height - 20;
+    rect.origin.y = screenRect.size.height - 40 - offset;
     sohu2003.frame = rect;
     [self.view addSubview:sohu2003];
-    
-}
-#pragma mark View Appear
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.navigationItem setHidesBackButton:YES];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 #pragma mark - TextFiledDelegate
@@ -188,7 +184,7 @@
 {
     [_usernameTextField resignFirstResponder];
     [_passwordTextField resignFirstResponder];
-    [_mailBindTextField becomeFirstResponder];
+    [_mailBindTextField resignFirstResponder];
 }
 - (void)mailBindDidEndOnExit
 {
@@ -209,6 +205,59 @@
 }
 - (void)doRegister
 {
+    if (!_usernameTextField.text || [_usernameTextField.text isEqualToString:@""]) {
+        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写用户名" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alterview show];
+        return;
+    }
+    if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
+        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写密码" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alterview show];
+        return;
+    }
+    [self allTextFieldsResignFirstResponder:nil];
+    [self waitForMomentsWithTitle:@"注册中"];
+    NSString * username = [NSString stringWithFormat:@"%@@sohu.com",_usernameTextField.text];
+    NSString * password = [NSString stringWithFormat:@"%@",_passwordTextField.text];
+    [AccountLoginResquest resigiterWithuseName:username password:password nickName:nil sucessBlock:^(NSDictionary *response) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [AccountLoginResquest sohuLoginWithuseName:username password:password sucessBlock:^(NSDictionary * response) {
+                 [LoginStateManager loginUserId:[response objectForKey:@"user_id"] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+                [self backhome];
+            } failtureSucess:^(NSString *error) {
+                [self stopWait];
+                PopAlertView * tip = [[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [tip  show];
+            }];
+        });
+    }failtureSucess:^(NSString *error) {
+        [self stopWait];
+        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [tip  show];
+    }];
+}
+-(void)waitForMomentsWithTitle:(NSString*)str
+{
+    //    if (_alterView.superview) return;
+    if (!_alterView) {
+        _alterView = [[MBProgressHUD alloc] initWithView:self.view];
+        _alterView.animationType = MBProgressHUDAnimationZoomOut;
+        _alterView.labelText = str;
+        [self.view addSubview:_alterView];
+    }
+    [_alterView show:YES];
+}
+-(void)stopWait
+{
+    DLog(@"%s",__FUNCTION__);
+    [_alterView hide:YES];
+}
+- (void)backhome
+{
+    [self stopWait];
+    LoginViewController * vc = [[self.navigationController childViewControllers] objectAtIndex:0];
+    if ([vc.delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
+        [vc.delegate loginViewController:vc loginSucessWithinfo:nil];
     
 }
 #pragma mark KeyBoardnotification

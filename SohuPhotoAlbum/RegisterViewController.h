@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "EmailTextField.h"
+#import "MBProgressHUD.h"
+#import "CustomizationNavBar.h"
 
-@interface RegisterViewController : UIViewController<UITextFieldDelegate>
+@interface RegisterViewController : UIViewController<UITextFieldDelegate,CusNavigationBarDelegate>
 {
     UIImage *_checked, *_noChecked;
+    MBProgressHUD * _alterView;
+    CustomizationNavBar * _navBar;
 }
 
 @property (strong, nonatomic) UIImageView *backgroundImageView;

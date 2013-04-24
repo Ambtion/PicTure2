@@ -130,15 +130,7 @@ typedef enum __shareModel {
 }
 
 #pragma mark - cusTabBarDelegate
-//- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button
-//{
-//    if (button.tag == LEFTBUTTON)
-//        [self.navigationController popViewControllerAnimated:YES];
-//    if (button.tag == RIGHT1BUTTON)
-//        return ;
-//    if (button.tag == RIGHT2BUTTON)
-//        [self.navigationController pushViewController:[[LocalShareController alloc] initWithUpLoadAsset:[self.assetsArray objectAtIndex:self.curPageNum]] animated:YES];
-//}
+
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
     flag = button.tag;
@@ -295,9 +287,6 @@ typedef enum __shareModel {
     param.imageFile = [UIImage imageWithCGImage:[[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] fullScreenImage]];
     param.caption = des;
     [[Renren sharedRenren] publishPhoto:param andDelegate:self];
-//    UIImage* image = [UIImage imageWithCGImage:[[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] fullScreenImage]];
-//    NSString *caption = @"这是一张测试图片";
-//    [[Renren sharedRenren] publishPhotoSimplyWithImage:image caption:caption];
 }
 
 - (void)renren:(Renren *)renren requestDidReturnResponse:(ROResponse *)response
