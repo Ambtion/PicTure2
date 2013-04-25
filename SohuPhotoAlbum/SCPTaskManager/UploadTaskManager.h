@@ -15,6 +15,7 @@
 {
     NSMutableArray * _taskList;
     NSMutableDictionary * _taskDic;
+    BOOL isAutoUploading;
 }
 
 @property (nonatomic,strong)AlbumTaskList * curTask;
@@ -41,4 +42,7 @@
 
 - (BOOL)isUploading;
 
+- (BOOL)isAutoUploading;
+//自动批量上传
+- (void)startAutoUpload;
 @end

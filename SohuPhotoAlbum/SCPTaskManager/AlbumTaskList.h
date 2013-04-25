@@ -11,7 +11,7 @@
 #import "ASINetworkQueue.h"
 #import "ASIFormDataRequest.h"
 #import "TaskUnit.h"
-
+#import "DataBaseManager.h"
 #import "URLLibaray.h"
 
 @class AlbumTaskList;

@@ -55,8 +55,10 @@
         CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.5);
+        DLog(@"cpmpre:when upload MMM: %f",[data length]/(1024 * 1024.f));
         data = [self writeExif:dic intoImage:data];
-        DLog(@"cpmpre:when upload : %f",[data length]/(1024 * 1024.f));
+        DLog(@"%@", [self getPropertyOfdata:data]);
+        DLog(@"cpmpre:when upload: %f",[data length]/(1024 * 1024.f));
     }
     return data;
 }

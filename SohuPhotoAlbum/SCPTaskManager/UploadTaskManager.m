@@ -26,12 +26,44 @@ static UploadTaskManager * sharedTaskManager = nil;
     }
     return sharedTaskManager;
 }
-//#pragma mark AutonUploadPic
-//- (void)autoUploadPic
-//{
-//    
-//}
-#pragma mark - init
+#pragma mark - AutonUploadPic
+- (BOOL)isAutoUploading
+{
+    return isAutoUploading;
+}
+- (void)startAutoUpload
+{
+    isAutoUploading = YES;
+    ALAssetsLibrary * _lib = [[ALAssetsLibrary alloc] init];
+    NSMutableArray * groupaArray = [NSMutableArray arrayWithCapacity:0];
+    NSMutableArray * assetContainer = [NSMutableArray arrayWithCapacity:0];
+    [_lib readAlbumIntoGroupContainer:groupaArray assetsContainer:assetContainer sucess:^{
+        [self addAssets:assetContainer ToTaskExceptIsUPloadAlready:YES];
+    } failture:^(NSError *error) {
+        DLog(@"自动上传失败");
+    }];
+}
+- (void)addAssets:(NSMutableArray *)array ToTaskExceptIsUPloadAlready:(BOOL)isExceptAlready
+{
+    NSMutableArray * taskArray = [NSMutableArray arrayWithCapacity:0];
+    for (ALAsset * asset in array) {
+        if (isExceptAlready) {
+            if ([[DataBaseManager defaultDataBaseManager] hasPhotoURL:[[asset defaultRepresentation] url]]) {
+                continue;
+            }
+        }
+        TaskUnit * unit = [[TaskUnit alloc] init];
+        unit.asset = asset;
+        unit.description = nil;
+        [taskArray addObject:unit];
+    }
+    DLog(@"%d %d",array.count,taskArray.count);
+    ToastAlertView * cus = [[ToastAlertView alloc] initWithTitle:@"照片开始备份"];
+    [cus show];
+    AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:taskArray album_id:ALBUMID];
+    [[UploadTaskManager currentManager] addTaskList:album];
+}
+#pragma mark - Init
 - (id)init
 {
     if (self = [super init]) {
@@ -239,6 +271,7 @@ static UploadTaskManager * sharedTaskManager = nil;
     if (_taskList.count) {
         [self gotoNext];
     }else{
+        isAutoUploading = NO;
         NSLog(@"All operation Over");
     }
 }

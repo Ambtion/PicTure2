@@ -11,8 +11,8 @@
 #import "LocalAlbumsController.h"
 #import "LocalALLPhotoesController.h"
 #import "DataBaseManager.h"
-//#import "BaseNaviController.h"
 #import "Projectconfig.h"
+#import "UploadTaskManager.h"
 
 @implementation AppDelegate
 @synthesize window = _window;

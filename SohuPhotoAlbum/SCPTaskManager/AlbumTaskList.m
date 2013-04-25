@@ -11,7 +11,6 @@
 #import "TaskNotification.h"
 #import "LoginStateManager.h"
 #import "ToastAlertView.h"
-#import "DataBaseManager.h"
 
 #define UPTIMEOUT 30.f
 #define UPLOADIMAGESIZE 1024 * 1024 * 10  // 图片最大10MB
