@@ -38,5 +38,4 @@
     [DataBaseManager defaultDataBaseManager];
     return YES;
 }
-
 @end

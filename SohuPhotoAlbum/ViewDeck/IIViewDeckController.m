@@ -287,7 +287,11 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         self.panners = [NSMutableArray array];
         self.enabled = YES;
         _offset = 0;
-        _bounceDurationFactor = 0.3;
+        
+        //bouceTime 
+        _bounceDurationFactor = 0.8f;          //默认是1s
+        _bounceOpenSideDurationFactor = 0.8f;
+
         _openSlideAnimationDuration = 0.3;
         _closeSlideAnimationDuration = 0.3;
         _offsetOrientation = IIViewDeckHorizontalOrientation;

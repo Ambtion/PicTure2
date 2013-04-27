@@ -33,10 +33,9 @@
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     self.myTableView.tableFooterView = _moreFootView;
-    _selectedArray = [NSMutableArray arrayWithCapacity:0];
+    selectedArray = [NSMutableArray arrayWithCapacity:0];
     //dataSource
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    
     for (int i = 0; i < 20; i++){
         HostUserCellDataSource * dataSource = [[HostUserCellDataSource alloc] init];
         dataSource.userName = @"afdkadfa";

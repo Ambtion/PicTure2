@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegateOauthor.h"
 #import "IIViewDeckController.h"
-#import "LocalShareController.h"
 
 @class LocalShareController;
 @interface AppDelegate : AppDelegateOauthor

@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
 #import "PhotoAlbumCell.h"
-#import "CustomizationNavBar.h"
 #import "LocalBaseController.h"
 
 @interface LocalAlbumsController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>

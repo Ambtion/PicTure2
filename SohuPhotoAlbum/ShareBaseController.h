@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "LocalBaseController.h"
 
-
 #define kSinaTag    1000
 #define kRenrenTag  1001
 #define kWeixinTag 1002

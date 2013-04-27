@@ -8,7 +8,8 @@
 
 #import "LocalBaseController.h"
 #import "AppDelegate.h"
-//#import "BaseNaviController.h"
+
+
 @interface LocalBaseController ()
 
 @end
@@ -16,7 +17,6 @@
 @implementation LocalBaseController
 @synthesize viewState = _viewState;
 @synthesize myTableView = _myTableView;
-
 - (id)init
 {
     self = [super init];
@@ -25,10 +25,11 @@
     }
     return self;
 }
-- (void)viewWillAppear:(BOOL)animated
+#pragma mark Life Circle
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-    self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    [super viewWillDisappear:animated];
+    self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -53,20 +54,12 @@
 #pragma mark - Uplaod
 - (BOOL)canUpload
 {
-    return _selectedArray.count;
+    return selectedArray.count;
 }
+
 - (void)uploadPicTureWithArray:(NSMutableArray *)assetArray
 {
-    NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
-    for (ALAsset * asset in assetArray) {
-        TaskUnit * unit = [[TaskUnit alloc] init];
-        unit.asset = asset;
-        unit.description = nil;
-        [array addObject:unit];
-    }
-    [self showPopAlerViewnotTotasView:NO WithMes:@"图片已在后台上传"];
-    AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:array album_id:ALBUMID];
-    [[UploadTaskManager currentManager] addTaskList:album];
+    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray];
 }
 
 #pragma mark ShowAlert
@@ -92,4 +85,20 @@
         [self.presentingViewController dismissModalViewControllerAnimated:YES];
     }
 }
+#pragma mark SetViewState
+- (void)setViewState:(viewState)viewState
+{
+    if (viewState == _viewState) return;
+    _viewState = viewState;
+    [_cusBar switchBarStateToUpload:_viewState != NomalState];
+    if (_viewState != NomalState) {
+        self.viewDeckController.panningMode = IIViewDeckNoPanning;
+    }else{
+        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    }
+    if (selectedArray.count)
+        [selectedArray removeAllObjects];
+    [self.myTableView reloadData];
+}
+
 @end

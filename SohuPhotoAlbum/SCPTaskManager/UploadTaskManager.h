@@ -10,6 +10,7 @@
 #import "AlbumTaskList.h"
 #import "TaskNotification.h"
 #import "JSON.h"
+#import "PerfrenceSettingManager.h"
 
 @interface UploadTaskManager : NSObject<AlbumTaskListDelegate>
 {
@@ -23,6 +24,7 @@
 + (UploadTaskManager *)currentManager; // 单例模式
 
 //增加队列上传任务
+
 - (void)addTaskList:(AlbumTaskList *)taskList; // 将任务列表加入到队列中
 
 - (void)cancelOperationWithAlbumID:(NSString *)albumID;
@@ -30,6 +32,10 @@
 - (void)cancelupLoadWithAlbumID:(NSString *)albumId WithUnit:(NSArray *)unitArray;
 
 - (void)cancelAllOperation;
+
+//上传接口
+- (void)uploadPicTureWithALasset:(ALAsset *)asset;
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray;
 
 #pragma mark view
 //管理相册列表上传进度
@@ -44,5 +50,5 @@
 
 - (BOOL)isAutoUploading;
 //自动批量上传
-- (void)startAutoUpload;
+- (void)autoUploadAssets:(NSMutableArray *)array ToTaskExceptIsUPloadAlready:(BOOL)isExceptAlready;
 @end

@@ -8,6 +8,7 @@
 
 #import "LocalShareDesView.h"
 #import "EmojiUnit.h"
+#import "PortraitView.h"
 
 #define DESC_COUNT_LIMIT 140
 
@@ -38,17 +39,22 @@
 - (void)addheadView
 {
     UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 320, 44)];
+    headView.backgroundColor = [UIColor clearColor];
+    headView.image = [UIImage imageNamed:@"desViewBar.png"];
+    
     [headView setUserInteractionEnabled:YES];
-    UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     backBtn.frame = CGRectMake(0, 0, 44, 44);
+    [backBtn setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     backBtn.tag = 100;
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(44, 0, 320 - 88, 44)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(44 + 10, 0, 320 - 88, 44)];
     [self setLabelProperty:label];
     [headView addSubview:label];
     [backBtn addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [headView addSubview:backBtn];
-    _shareButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _shareButton.frame = CGRectMake(320 - 44, 0, 44, 44);
+    [_shareButton setImage:[UIImage imageNamed:@"desShareBtn.png"] forState:UIControlStateNormal];
     _shareButton.tag = 200;
     [_shareButton addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [headView addSubview:_shareButton];
@@ -59,20 +65,31 @@
 {
     _contentView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 84, 300, self.bounds.size.height - 100)];
     [_contentView setUserInteractionEnabled:YES];
-    _contentView.backgroundColor = [UIColor greenColor];
+    _contentView.image = [[UIImage imageNamed:@"contentBgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    _contentView.backgroundColor = [UIColor clearColor];
     _contentTextView = [[UITextView alloc] initWithFrame:CGRectMake(10, 10, _contentView.frame.size.width - 20, _contentView.frame.size.height - 60)];
+    _contentTextView.backgroundColor  = [UIColor clearColor];
+    _contentTextView.font = [UIFont boldSystemFontOfSize:14.f];
     _contentTextView.autoresizingMask =  UIViewAutoresizingFlexibleHeight;
     _contentTextView.delegate = self;
-    [_contentView addSubview:_contentTextView];
     
+    [_contentView addSubview:_contentTextView];
     _textcount = [[UILabel alloc] initWithFrame:CGRectMake(_contentView.frame.size.width - 100, _contentView.frame.size.height - 45, 100, 40)];
-    DLog(@"%@",NSStringFromCGRect(_textcount.frame));
-    _textcount.backgroundColor = [UIColor redColor];
+    
+    _textcount.backgroundColor = [UIColor clearColor];
     _textcount.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    _textcount.textAlignment = UITextAlignmentCenter;
     _textcount.text = @"0/140";
     [_contentView addSubview:_textcount];
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, _contentView.frame.size.height - 45, 40, 40)];
-    imageView.image = thumbnail;
+    
+    
+    PortraitView * imageView = [[PortraitView alloc] initWithFrame:CGRectMake(10, _contentView.frame.size.height - 45, 40, 40)];
+    imageView.imageView.image = thumbnail;
+    imageView.clipsToBounds = YES;
+    imageView.layer.cornerRadius = 5.f;
+    imageView.layer.borderWidth = 1.f;
+    imageView.layer.borderColor = [[UIColor blackColor] CGColor];
+    imageView.backgroundColor = [UIColor clearColor];
     imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [_contentView addSubview:imageView];
     [self addSubview:_contentView];
@@ -81,7 +98,8 @@
 
 - (void)setLabelProperty:(UILabel *)label
 {
-    label.backgroundColor = [UIColor whiteColor];
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor whiteColor];
     switch (_model) {
         case QQModel:
             label.text = @"腾讯QQ空间上传";
@@ -96,6 +114,7 @@
             break;
     }
 }
+
 - (void)sharebuttonClick:(UIButton *)button
 {
     switch (button.tag) {
@@ -112,6 +131,7 @@
             break;
     }
 }
+
 #pragma mark keyBoard show/hide
 - (void)keyboardWillShow:(NSNotification *)notification
 {
@@ -123,13 +143,6 @@
         _contentView.frame = rect;
     }];
 }
-//- (void)keyboardWillHide:(NSNotification *)notification
-//{
-//    [UIView animateWithDuration:0.3 animations:^{
-//        _contentView.frame = CGRectMake(8, 122, 304, 134);
-////        _textView.frame = CGRectMake(2, 2, _textView_bg.frame.size.width - 4, _textView_bg.frame.size.height - 4);
-//    }];
-//}
 
 #pragma mark TextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text

@@ -8,6 +8,8 @@
 
 #import "CloudPictureCell.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImageView+WebCache.h"
+
 #define CELLHIGTH  80.f
 
 @implementation CloudPictureCellDataSource
@@ -77,10 +79,19 @@
 {
     if (dic) {
         //设置图片
-//        imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
+        NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
+        __weak StatusImageView* weakSelf = imageView;
+        [imageView.statueImage setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:nil success:^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf setImage:image];
+            });
+           
+        } failure:^(NSError *error) {
+            
+        }];
     }else{
         //temp
-        imageView.image = [UIImage imageNamed:@"1.jpg"];
+        imageView.image = nil;
     }
 }
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
@@ -161,7 +172,6 @@
 }
 - (void)showImageViewStatus:(StatusImageView *)imageView byDic:(NSDictionary *)dic
 {
-    DLog(@"dic is empty ,so can not show willSelecte statue ");
     if (!dic) return;
     [imageView showStatusWithoutUpload];
 }

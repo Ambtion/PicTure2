@@ -58,9 +58,6 @@
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-//    if (![[UploadTaskManager currentManager] isAutoUploading]) {
-//        [[UploadTaskManager currentManager] startAutoUpload];
-//    }
     return [self.sinaweibo applicationDidBecomeActive];
 }
 - (BOOL)ssoReturn:(NSURL *)url

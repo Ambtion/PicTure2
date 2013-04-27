@@ -9,8 +9,6 @@
 #import "LocalALLPhotoesController.h"
 #import "LocalAlbumsController.h"
 #import "LocalDetailController.h"
-#import "LoginStateManager.h"
-
 
 #define SLABELTEXT @"请选择照片"
 
@@ -32,15 +30,25 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
+    
     self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
     self.myTableView.separatorColor = [UIColor clearColor];
     self.myTableView.backgroundColor = [UIColor clearColor];
-    _selectedArray = [NSMutableArray arrayWithCapacity:0];
     [self.view addSubview:self.myTableView];
+    
+    [self initDataContainer];
     [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+- (void)initDataContainer
+{
+    selectedArray = [NSMutableArray arrayWithCapacity:0];
+    assetsSection = [NSMutableArray arrayWithCapacity:0];
+    assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
+    assetsArray  = [NSMutableArray arrayWithCapacity:0];
+    dataSourceArray = [NSMutableArray arrayWithCapacity:0];
 }
 
 #pragma mark - CusNavigatinBar
@@ -52,7 +60,6 @@
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
-        
         //上传按钮
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton2 setButtoUploadState:YES];
@@ -65,12 +72,13 @@
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.viewDeckController.panningMode = IIViewDeckNoPanning;
-}
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    if (self.assetsArray.count) {
+        [self autoUplaodPic];
+    }
+}
 #pragma mark - ReadData
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -86,115 +94,32 @@
 	self.assetGroups = [NSMutableArray arrayWithCapacity:0];
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
     [_library readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+        [self autoUplaodPic];
         [self prepareDataWithTimeOrder];
     } failture:^(NSError *error) {
         
     }];
 }
-
+- (void)autoUplaodPic
+{
+    //自动上传
+    if ([LoginStateManager isLogin] && [PerfrenceSettingManager isAutoUpload]) {
+        if (![[UploadTaskManager currentManager] isAutoUploading]) {
+            [[UploadTaskManager currentManager] autoUploadAssets:self.assetsArray ToTaskExceptIsUPloadAlready:YES];
+        }
+    }
+}
 #pragma mark -  DataSort
 - (void)prepareDataWithTimeOrder
 {
     //asserts按日期大小排序;
-    self.assetsArray = [[self.assetsArray sortedArrayUsingFunction:sort context:nil] mutableCopy];
+    self.assetsArray = [self sortArrayByTime:self.assetsArray];
     //对asset分组
-    [self divideAssettByDayTime];
-    DLog(@"myTableView reload");
+    [self localDivideAssettByDayTimeWithAssetArray:self.assetsArray exportToassestionArray:self.assetsSection assetSectionisShow:self.assetSectionisShow dataScource:self.dataSourceArray];
     [self.myTableView reloadData];
     _isReading = NO;
 }
-- (void)divideAssettByDayTime
-{
-    DLog(@"start divide");
-    self.assetsSection = [NSMutableArray arrayWithCapacity:0];
-    self.assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
-    NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i < self.assetsArray.count; i++) {
-        ALAsset * asset = [self.assetsArray objectAtIndex:i];
-        NSDate * date = [asset valueForProperty:ALAssetPropertyDate];
-        NSString * dateString = [self stringFromdate:date];
-        if (![self array:self.assetsSection hasTimeString:dateString]){
-            [self.assetsSection addObject:dateString];
-            NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
-            [array addObject:asset];
-            [tempArray addObject:array];
-            [assetSectionisShow addObject:[NSNumber numberWithBool:YES]];
-        }else{
-            NSMutableArray * array = [tempArray objectAtIndex:[self.assetsSection indexOfObject:dateString]];
-            [array addObject:asset];
-        }
-    }
-    self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    for (NSMutableArray * array in tempArray )
-        [self.dataSourceArray addObject:[self coverAssertToDataSource:array]];
-    DLog(@"start end");
-}
-- (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
-{
-    NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i < array.count; i+=4) {
-        PhotoesCellDataSource * source = [[PhotoesCellDataSource alloc] init];
-        source.firstAsset = [array objectAtIndex:i];
-        if (i + 3 < array.count) {
-            source.secoundAsset = [array objectAtIndex:i+1];
-            source.thridAsset = [array objectAtIndex:i+2];
-            source.lastAsset = [array objectAtIndex:i+3];
-        }else if (i + 2 < array.count){
-            source.secoundAsset = [array objectAtIndex:i+1];
-            source.thridAsset = [array objectAtIndex:i+2];
-            source.lastAsset = nil;
-        }else if (i + 1 < array.count){
-            source.secoundAsset = [array objectAtIndex:i+1];
-            source.lastAsset = nil;
-            source.thridAsset = nil;
-        }
-        [finalArray addObject:source];
-    }
-    return finalArray;
-}
-- (void)setSectionTimeofAssertsIntoArray
-{
-    //获取不同天数的日期(string)
-    self.assetsSection = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i < self.assetsArray.count; i++) {
-        NSDate * date = [[self.assetsArray objectAtIndex:i] valueForProperty:ALAssetPropertyDate];
-        NSString * dateString = [self stringFromdate:date];
-        if (![self array:self.assetsSection hasTimeString:dateString])
-            [self.assetsSection addObject:dateString];
-    }
-    
-}
-- (NSString *)stringFromdate:(NSDate *)date
-{
-    //转化日期格式
-    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyy-MM-dd"];
-    return [dateFormatter stringFromDate:date];
-}
-- (BOOL)array:(NSMutableArray *)array hasTimeString:(NSString *)date
-{
-    //获得的string time是否有重复;
-    for (NSString * str in array) {
-        if ([str isEqualToString:date])
-            return YES;
-    }
-    return NO;
-}
-NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
-{
-    //日期由近到远排序
-    double key1 = [[asset1 valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
-    double key2 = [[asset2 valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
-    if (key1 < key2 ) {
-        //key1大于key2
-        return NSOrderedDescending;
-    }else if (key1 == key2) {
-        //相同
-        return NSOrderedSame;
-    }else {
-        return NSOrderedAscending;
-    }
-}
+
 #pragma mark - SectionClick
 - (void)handleTapInSection:(UITapGestureRecognizer *)gesture
 {
@@ -205,53 +130,22 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 
 #pragma mark - TableDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return self.dataSourceArray.count;
-}
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    return [self getSectionView:section ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue]];
-}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 28.f;
 }
-- (UIView *)getSectionView:(NSInteger)section ByisShow:(BOOL)isShowRow
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
-    [view setUserInteractionEnabled:YES];
-    UITapGestureRecognizer * tap  =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInSection:)    ];
-    [view addGestureRecognizer:tap];
-    view.tag = section;
-    
-    UIImageView * iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(8, 3, 22, 22)];
-    [view addSubview:iconImage];
-    //label
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 200, 24)];
-    label.font = [UIFont boldSystemFontOfSize:12.f];
-    label.backgroundColor = [UIColor clearColor];
-    label.text = [self.assetsSection objectAtIndex:section];
-    [view addSubview:label];
-    if (isShowRow) {
-        label.textColor = [UIColor colorWithRed:189.f/255 green:189.f/255 blue:189.f/255 alpha:1.f];
-        iconImage.image = [UIImage imageNamed:@"sectionIcon.png"];
-        view.image = [UIImage imageNamed:@"section.png"];
-    }else{
-        label.textColor = [UIColor colorWithRed:100.f/255 green:100.f/255 blue:100.f/255 alpha:1.f];
-        iconImage.image = [UIImage imageNamed:@"sectionIconNo.png"];
-        view.image = [UIImage imageNamed:@"sectionNo.png"];
-    }
-    return view;
+    return [self getSectionView:section ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
 }
-
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.dataSourceArray.count;
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (!self.assetSectionisShow.count) return 0;
     return [[self.assetSectionisShow objectAtIndex:section] boolValue] ? [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count]: 0;
-}
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = LOCALBACKGORUNDCOLOR;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -259,6 +153,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         return [PhotoesCellDataSource cellLastHigth];
     }
     return [PhotoesCellDataSource cellHigth];
+}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = LOCALBACKGORUNDCOLOR;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -273,10 +171,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (_viewState != NomalState){
         [cell showCellSelectedStatus];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
     }else{
         [cell hiddenCellSelectedStatus];
     }
@@ -312,27 +210,12 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     }
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
-            [self uploadPicTureWithArray:_selectedArray];
+            [self uploadPicTureWithArray:selectedArray];
             [self setViewState:NomalState];
         }else{
             [self showPopAlerViewnotTotasView:YES WithMes:@"请选择上传图片"];
         }
     }
-}
-
-- (void)setViewState:(viewState)viewState
-{
-    if (viewState == _viewState) return;
-    _viewState = viewState;
-    [_cusBar switchBarStateToUpload:_viewState == UPloadState];
-    if (_viewState == UPloadState) {
-        self.viewDeckController.panningMode = IIViewDeckNoPanning;
-    }else{
-        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
-    }
-    if (_selectedArray.count)
-        [_selectedArray removeAllObjects];
-    [self.myTableView reloadData];
 }
 
 #pragma mark photoClick
@@ -345,16 +228,15 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 {
     
     if (isSelected) {
-        [_selectedArray addObject:asset];
-    }else if([_selectedArray containsObject:asset]){
-        [_selectedArray removeObject:asset];
+        [selectedArray addObject:asset];
+    }else if([selectedArray containsObject:asset]){
+        [selectedArray removeObject:asset];
     }
-    if (_selectedArray.count) {
-        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
+    if (selectedArray.count) {
+        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",selectedArray.count]];
     }else{
         [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
-#pragma mark - 
 
 @end

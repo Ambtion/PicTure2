@@ -11,6 +11,11 @@
 @implementation StatusImageView
 @synthesize selected = _selected;
 @synthesize isShowStatus;
+@synthesize statueImage = _statuImage;
+- (void)dealloc
+{
+    [_statuImage removeObserver:self forKeyPath:@"image"];
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -22,16 +27,19 @@
         _actualView.layer.shadowPath = [[UIBezierPath bezierPathWithRect:_actualView.bounds] CGPath];
         _actualView.layer.borderWidth = 0.5f;
 //        _actualView.layer.shouldRasterize = YES;
-        
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
         [self addSubview:_statuImage];
         self.backgroundColor = [UIColor clearColor];
         [self resetStatusImageToHidden];
+//        [_statuImage addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionOld context:NULL];
     }
     return self;
 }
-
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    DLog(@"%@",change);
+}
 - (void)setSelected:(BOOL)selected
 {
     if (!isShowStatus)
@@ -96,6 +104,7 @@
 #pragma mark - Reloadfunctions
 - (void)setImage:(UIImage *)image
 {
+    
     if (!image) {
         [self setUserInteractionEnabled:NO];
         _actualView.layer.borderWidth = 0.f;

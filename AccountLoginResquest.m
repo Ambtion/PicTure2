@@ -15,9 +15,35 @@
 
 @implementation AccountLoginResquest
 
++ (NSString *)getUUID
+{
+    CFUUIDRef theUUID = CFUUIDCreate(NULL);
+    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+    CFBridgingRelease(theUUID);
+    return (NSString *)string;
+}
+
++ (BOOL)resigiterDevice
+{
+    NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/devices",BASICURL];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    [request addRequestHeader:@"accept" value:@"application/json"];
+    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
+    [request setPostValue:[[UIDevice currentDevice] name] forKey:@"device_name"];
+    [request setPostValue:@"123123" forKey:@"device_type"];
+    [request setPostValue:[[UIDevice currentDevice] model] forKey:@"model"];
+    [request setPostValue:[self getUUID] forKey:@"device_serial_number"];
+    [request startSynchronous];
+    if (request.responseStatusCode == 200) {
+        NSNumber * num = [[[request responseString] JSONValue] objectForKey:@"device_id"];
+        [LoginStateManager storeDeviceID:num];
+        return YES;
+    }
+    return NO;
+}
+
 + (void)sohuLoginWithuseName:(NSString *)useName password:(NSString *)password sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {
-    
     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request setPostValue:useName forKey:@"username"];
@@ -25,7 +51,6 @@
     [request setPostValue:@"password" forKey:@"grant_type"];
     [request setPostValue:CLIENT_ID forKey:@"client_id"];
     [request addRequestHeader:@"accept" value:@"application/json"];
-    
     [request setCompletionBlock:^{
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] < 300 &&[[request responseString] JSONValue]) {
             success([[request responseString] JSONValue]);

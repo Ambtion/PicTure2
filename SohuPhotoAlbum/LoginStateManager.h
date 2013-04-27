@@ -9,31 +9,31 @@
 #import <Foundation/Foundation.h>
 #import "LoginViewController.h"
 
-#define USER_ID         @"__USER_ID__"
-#define USER_TOKEN      @"__USER_TOKEN__"
-#define REFRESH_TOKEN    @"__REFRESH_TOKEN__"
+
+
 
 @interface LoginStateManager : NSObject
 
 + (BOOL)isLogin;
-
 + (void)loginUserId:(NSString *)uid withToken:(NSString *)token RefreshToken:(NSString *)refreshToken;
-
 + (void)refreshToken:(NSString *)token RefreshToken:(NSString *)refreshToken;
-
 + (void)logout;
 
 + (NSString *)currentUserId;
-
 + (NSString *)currentToken;
-
 + (NSString *)refreshToken;
 
+
 + (BOOL)isSinaBind;
++ (NSString *)sinaToken;
 
 + (BOOL)isQQBing;
++ (NSString *)qqToken;
 
 + (BOOL)isRenrenBind;
++ (NSString *)renrenToken;
 
++ (void)storeDeviceID:(NSNumber *)deviceId;
++ (long long)deviceId;
 
 @end

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 #import "SCPMoreTableFootView.h"
-#import "CustomizationNavBar.h"
 #import "CloudPictureCell.h"
 #import "LocalBaseController.h"
 
@@ -18,6 +17,7 @@
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;
     BOOL _isLoading;
+    BOOL _isLoadingMax;
 }
 
 @end

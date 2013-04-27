@@ -17,6 +17,8 @@
 @interface SCPMoreTableFootView : UIView
 {
     BOOL _willLodingMore;
+    UIView * closeView;
+    UIView * openView;
 }
 @property(nonatomic,weak)id<SCPMoreTableFootViewDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame WithLodingImage:(UIImage *)lodingImage endImage:(UIImage *)endImage WithBackGroud:(UIColor *)color;
@@ -24,5 +26,7 @@
 - (void)scpMoreScrollViewDidEndDragging:(UIScrollView *)scrollView;
 - (void)scpMoreScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
 
+- (BOOL)canLoadingMore;
 - (void)moreImmediately;
+- (void)setMoreFunctionOff:(BOOL)isOFF;
 @end

@@ -14,12 +14,12 @@
 
 @implementation PerfrenceSettingManager
 
+#pragma mark - CommonFunction
 + (NSDictionary *)valueForUserinfo
 {
     if (![LoginStateManager isLogin]) return nil;
     return [[NSUserDefaults standardUserDefaults] objectForKey:[LoginStateManager currentUserId]];
 }
-
 + (id)valueForKey:(NSString *)key inUserinfo:(NSDictionary *)userinfo
 {
     
@@ -37,23 +37,25 @@
     [userDefault synchronize];
 }
 
-
-+ (NSNumber *)isUploadJPEGImage
+#pragma mark - compressImage
++ (BOOL)isUploadJPEGImage;
 {
     NSDictionary * userinfo = [self valueForUserinfo];
-    return [self valueForKey:ISUPLOADJPEGIMAGE inUserinfo:userinfo];
+    NSNumber * num = [self valueForKey:ISUPLOADJPEGIMAGE inUserinfo:userinfo];
+    return !num || ![num  boolValue];
 }
-
-+ (void)setIsUploadJPEGImage:(BOOL)ture
++(void)setIsUploadJPEGImage:(BOOL)ture
 {
     if (![LoginStateManager isLogin]) return;
     [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISUPLOADJPEGIMAGE];
 }
 
-+ (NSNumber *)isAutoUpload
+#pragma mark - AutoLoad
++ (BOOL)isAutoUpload
 {
     NSDictionary * userinfo = [self valueForUserinfo];
-    return [self valueForKey:ISAUTOUPLOAD inUserinfo:userinfo];
+    NSNumber * number = [self valueForKey:ISAUTOUPLOAD inUserinfo:userinfo];
+    return (number && [number boolValue]);
 }
 +(void)setIsAutoUpload:(BOOL)ture
 {
@@ -61,6 +63,7 @@
     [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISAUTOUPLOAD];
 }
 
+#pragma mark -
 + (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key
 {
     NSMutableData * data = [[NSMutableData alloc] init];
@@ -70,7 +73,6 @@
     [[NSUserDefaults standardUserDefaults] setValue:data forKey:key];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-
 + (id)unarchiveObjectWithDataWithKey:(NSString *)key
 {
     NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
@@ -80,5 +82,4 @@
     [unarchiver finishDecoding];
     return arDataSource;
 }
-
 @end

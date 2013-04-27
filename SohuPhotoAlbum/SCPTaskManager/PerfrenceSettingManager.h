@@ -11,10 +11,10 @@
 @interface PerfrenceSettingManager : NSObject
 
 
-+ (NSNumber *)isUploadJPEGImage;
++ (BOOL)isUploadJPEGImage;
 + (void)setIsUploadJPEGImage:(BOOL)ture;
 
-+(NSNumber *)isAutoUpload;
++ (BOOL)isAutoUpload;
 +(void)setIsAutoUpload:(BOOL)ture;
 
 + (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key;

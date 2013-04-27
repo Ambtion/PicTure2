@@ -8,8 +8,6 @@
 
 #import "AlbumPhotoesController.h"
 #import "LocalDetailController.h"
-#import "AppDelegate.h"
-#import "LoginStateManager.h"
 
 #define SLABELTEXT @"请选择照片"
 
@@ -24,7 +22,7 @@
 @synthesize assetGroup = _assetGroup;
 @synthesize assetsArray = _assetsArray;
 @synthesize dataSourceArray = _dataSourceArray;
-//@synthesize selectedArray = _selectedArray;
+//@synthesize selectedArray = selectedArray;
 
 - (void)dealloc
 {
@@ -34,7 +32,7 @@
 {
     if (self = [super init]) {
         self.assetGroup = AnAssetGroup;
-        _selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
+        selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
         _viewState = state;
         
         if (state == UPloadState) {
@@ -146,7 +144,6 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    PhotoesCellDataSource * source = [self.dataSourceArray objectAtIndex:indexPath.row];
     if (indexPath.row == self.dataSourceArray.count - 1) {
         return [PhotoesCellDataSource cellLastHigth];
     }
@@ -164,10 +161,10 @@
         cell.dataSource = [[self dataSourceArray] objectAtIndex:indexPath.row];
     if (_viewState != NomalState){
         [cell showCellSelectedStatus];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
-        [cell isShow:[_selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.firstAsset] SelectedAsset:cell.dataSource.firstAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.secoundAsset] SelectedAsset:cell.dataSource.secoundAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.thridAsset] SelectedAsset:cell.dataSource.thridAsset];
+        [cell isShow:[selectedArray containsObject:cell.dataSource.lastAsset] SelectedAsset:cell.dataSource.lastAsset];
     }else{
         [cell hiddenCellSelectedStatus];
     }
@@ -199,18 +196,10 @@
         }
         [self setViewState:NomalState];
     }
-//    if (button.tag == ALLSELECTEDTAG) {
-//        if (_selectedArray.count != self.assetsArray.count ){
-//            [_selectedArray removeAllObjects];
-//            [_selectedArray addObjectsFromArray:self.assetsArray];
-//        }else{
-//            [_selectedArray removeAllObjects];
-//        }
-//        [self.myTableView reloadData];
-//    }
+    
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
-            [self uploadPicTureWithArray:_selectedArray];
+            [self uploadPicTureWithArray:selectedArray];
             if (_isInitUpload) {
                 [self.navigationController popViewControllerAnimated:YES];
             }else{
@@ -221,15 +210,7 @@
         }
     }
 }
-- (void)setViewState:(viewState)viewState
-{
-    if (viewState == _viewState) return;
-    _viewState = viewState;
-    [_cusBar switchBarStateToUpload:_viewState == UPloadState];
-    if (_selectedArray.count)
-        [_selectedArray removeAllObjects];
-    [self.myTableView reloadData];
-}
+
 #pragma mark photoClick
 - (void)photoesCell:(PhotoesCell *)cell clickAsset:(ALAsset *)asset
 {
@@ -240,12 +221,12 @@
 {
     
     if (isSelected) {
-        [_selectedArray addObject:asset];
-    }else if([_selectedArray containsObject:asset]){
-        [_selectedArray removeObject:asset];
+        [selectedArray addObject:asset];
+    }else if([selectedArray containsObject:asset]){
+        [selectedArray removeObject:asset];
     }
-    if (_selectedArray.count) {
-        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",_selectedArray.count]];
+    if (selectedArray.count) {
+        [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",selectedArray.count]];
     }else{
         [_cusBar.sLabelText setText:SLABELTEXT];
     }

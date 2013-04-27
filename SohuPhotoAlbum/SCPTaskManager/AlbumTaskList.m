@@ -54,18 +54,13 @@
         [self requestFailed:self.currentTask.request];
         return ;
     }else{
-        [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
+//        [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
+//        [self.currentTask.request setData:imageData forKey:@"file"];
+//        [self.currentTask.request appendPostData:imageData];
+        [self.currentTask.request setPostBody:[imageData mutableCopy]];
         [self.currentTask.request startAsynchronous];
     }
     return;
-}
-
-- (NSString *)getUUID
-{
-    CFUUIDRef theUUID = CFUUIDCreate(NULL);
-    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-    CFBridgingRelease(theUUID);
-    return (__bridge  NSString *)string;
 }
 
 - (void)startTaskUnit
@@ -108,6 +103,7 @@
         [self requestFailed:request];
         return;
     }
+    //等于200时候上传出错.....
     NSDictionary * dic = [[request responseString] JSONValue];
     NSInteger code = [[dic objectForKey:@"code"] intValue];
     if (![self handleCode:code]) return;
@@ -176,7 +172,7 @@
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //    NSLog(@"requestFailed:NNNN::%s, %d, %@",__FUNCTION__,[request responseStatusCode],[request error]);
+    NSLog(@"requestFailed:NNNN::%s, %d, %@",__FUNCTION__,[request responseStatusCode],[request error]);
     [request cancel];
     [request clearDelegatesAndCancel];
     NSDictionary * dic = [request userInfo];
@@ -187,11 +183,12 @@
         ToastAlertView * cus = [[ToastAlertView alloc] initWithTitle:@"图片上传失败"];
         [cus show];
     }
-    if (self.taskList.count)
-        [self.taskList removeObjectAtIndex:0];
     if ([_delegate respondsToSelector:@selector(albumTask:requsetFailed:)]) {
         [_delegate performSelector:@selector(albumTask:requsetFailed:) withObject:self withObject:request];
     }
+    //开始下一任务
+    if (self.taskList.count)
+        [self.taskList removeObjectAtIndex:0];
     if (self.taskList.count) {
         [self goNextTask];
     }else{
@@ -205,7 +202,7 @@
 {
     //    http://pp.sohu.com/upload/api/sync
     //    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=%@&access_token=%@",BASICURL,ALBUMID,[LoginStateManager currentToken]];
-    NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync",BASICURL];
+    NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync?device=%lld&access_token=%@&filename=1.png",BASICURL,[LoginStateManager deviceId],[LoginStateManager  currentToken]];
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
     [request setStringEncoding:NSUTF8StringEncoding];
@@ -215,8 +212,8 @@
     [request setShowAccurateProgress:YES];
     [request setShouldAttemptPersistentConnection:NO];
     [request setNumberOfTimesToRetryOnTimeout:5];
-    [request setPostValue:[self getUUID] forKey:@"device"];
-    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
+//    [request setPostValue:[self getUUID] forKey:@"device"];
+//    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
     [request setShouldContinueWhenAppEntersBackground:YES];
 #endif

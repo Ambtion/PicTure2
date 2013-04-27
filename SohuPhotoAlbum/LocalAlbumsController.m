@@ -9,9 +9,7 @@
 #import "LocalAlbumsController.h"
 #import "AlbumPhotoesController.h"
 #import "LocalALLPhotoesController.h"
-#import "LoginStateManager.h"
 
-//#define BACKGORUNDCOLOR [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f]
 
 @interface LocalAlbumsController ()
 @property(nonatomic,strong)NSMutableArray *assetGroups;
@@ -65,11 +63,7 @@
     [self.navigationItem setHidesBackButton:YES animated:NO];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.viewDeckController.panningMode = IIViewDeckNoPanning;
-}
+
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     if (isupload) {
@@ -95,20 +89,7 @@
         [self setViewState:NomalState];
     }
 }
-- (void)setViewState:(viewState)viewState
-{
-    if (viewState == _viewState) return;
-    _viewState = viewState;
-    [_cusBar switchBarStateToUpload:_viewState == UPloadState];
-    if (_viewState == UPloadState) {
-        self.viewDeckController.panningMode = IIViewDeckNoPanning;
-    }else{
-        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
-    }
-    if (_selectedArray.count)
-        [_selectedArray removeAllObjects];
-    [self.myTableView reloadData];
-}
+
 #pragma mark - ReadData
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {

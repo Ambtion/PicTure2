@@ -72,6 +72,7 @@
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.placeholder = @"密码";
     _passwordTextField.backgroundColor = [UIColor clearColor];
+    
 //    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
 //     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEnd];
     
@@ -217,9 +218,9 @@
 #pragma mark Handle Login Result
 - (void)handleLoginInfo:(NSDictionary *)response
 {
-    DLog(@"%@",response);
-    [LoginStateManager loginUserId:[response objectForKey:@"user_id"] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
-    
+    [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+    [AccountLoginResquest resigiterDevice];
+    DLog(@"%lld",[LoginStateManager deviceId]);
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
 }

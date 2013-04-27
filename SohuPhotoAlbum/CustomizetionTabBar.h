@@ -24,6 +24,7 @@
     UIButton * loadButton;
 }
 @property(nonatomic,weak)id<CusTabBarDelegate> delegate;
+@property(strong,nonatomic)UIButton * loadButton;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate;
 - (void)hideBarWithAnimation:(BOOL)animation;
 - (void)showBarWithAnimation:(BOOL)animation;

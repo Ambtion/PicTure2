@@ -10,7 +10,7 @@
 
 @implementation CustomizetionTabBar
 @synthesize delegate = _delegate;
-
+@synthesize loadButton;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate
 
 {

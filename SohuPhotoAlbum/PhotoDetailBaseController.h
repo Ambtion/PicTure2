@@ -28,7 +28,6 @@ typedef enum _imageStatePosition
     ImageScaleView * _curScaleImage;
     ImageScaleView * _rearScaleImage;
     NSMutableArray * _curImageArray;
-//    CustomizationNavBar * _cusBar;
     CustomizetionTabBar * _tabBar;
     imageStatePosition _imagestate;
     
@@ -39,7 +38,6 @@ typedef enum _imageStatePosition
     BOOL _isAnimating;
     
     ALAssetsLibrary * _libiary;
-//    ALAssetsGroup * _group;
 }
 @property(nonatomic,strong)NSMutableArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
@@ -48,11 +46,7 @@ typedef enum _imageStatePosition
 @property(nonatomic,strong)ImageScaleView * curScaleImage;
 @property(nonatomic,strong)ImageScaleView * rearScaleImage;
 @property(nonatomic,strong)CustomizetionTabBar * tabBar;
-//@property(nonatomic,strong)CustomizationNavBar * cusBar;
-//@property(nonatomic,retain)LimitCacheForImage * cache;
-//@property(nonatomic,retain)ALAssetsGroup * group;
 
-//- (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group;
 - (int)validPageValue:(NSInteger)value;
 - (void)refreshScrollView;
 @end

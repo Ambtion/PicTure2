@@ -9,7 +9,6 @@
 #import "LocalDetailController.h"
 #import "LocalShareController.h"
 
-static int flag = 0;
 typedef enum __shareModel {
     SinaWeiboShare,
     RenrenShare,
@@ -19,6 +18,7 @@ typedef enum __shareModel {
 
 @implementation LocalDetailController
 @synthesize cache = _cache, group = _group;
+
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group
 {
     self = [super init];
@@ -32,11 +32,18 @@ typedef enum __shareModel {
         self.curPageNum = [array indexOfObject:asset];
         self.assetsArray = [array copy];
         self.group = group;
+
     }
     return self;
 }
 
 #pragma mark Overide applicationDidBecomeActive
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    //fix tabBar
+    [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
+}
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readPhotoes];
@@ -84,6 +91,7 @@ typedef enum __shareModel {
 #pragma mark - GetIdentifyImageSizeWithImageView
 - (CGSize)getIdentifyImageSizeWithImageView:(UIImageView *)imageView isPortraitorientation:(BOOL)isPortrait
 {
+    if (!imageView.image) return CGSizeZero;
     CGFloat w = imageView.image.size.width;
     CGFloat h = imageView.image.size.height;
     CGRect frameRect = CGRectZero;
@@ -100,16 +108,14 @@ typedef enum __shareModel {
 }
 
 #pragma mark -  GetImageFromAsset
-- (UIImage *)getImageFromAsset:(id)asset
+- (void)setImageView:(UIImageView *)imageView imageFromAsset:(id)asset
 {
-    
     UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
     }
-    return image;
+    imageView.image = image;
 }
-
 - (UIImage *)getImageFromCacheWithKey:(id)aKey
 {
     NSData * imageData = [self.cache objectForKey:aKey];
@@ -117,7 +123,7 @@ typedef enum __shareModel {
 }
 
 #pragma mark - GetActualImage
-- (UIImage *)getActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
+- (void)setImageView:(UIImageView *)imageView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
     UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
     if (!image) {
@@ -126,14 +132,12 @@ typedef enum __shareModel {
             [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
         });
     }
-    return image;
+    imageView.image = image;
 }
 
 #pragma mark - cusTabBarDelegate
-
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
-    flag = button.tag;
     if (button.tag == TABBARCANCEL){
         [self.navigationController popViewControllerAnimated:YES];
         return;
@@ -146,9 +150,9 @@ typedef enum __shareModel {
         [self showShareView];
     }
     if (button.tag == TABBARLOADPIC){        //上传图片
-       
+        ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
+        [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset];
     }
-  
 }
 - (void)showLoginView
 {
@@ -159,7 +163,6 @@ typedef enum __shareModel {
 - (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo
 {
     [self.navigationController popViewControllerAnimated:YES];
-    
 }
 - (void)showShareView
 {
@@ -301,7 +304,6 @@ typedef enum __shareModel {
 - (void)tencentDidLogin
 {
      [self.view addSubview:[[LocalShareDesView alloc] initWithModel:QQModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
-//    [self qqUploadPicWithDes:nil];
 }
 - (void)tencentDidNotLogin:(BOOL)cancelled
 {
@@ -375,6 +377,7 @@ typedef enum __shareModel {
     req.scene = scene;
     [WXApi sendReq:req];
 }
+
 - (NSData *)getDataFromAsset:(ALAsset *)asset
 {
     CGImageRef imageRef = [[asset defaultRepresentation] fullScreenImage];

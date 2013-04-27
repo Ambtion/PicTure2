@@ -131,10 +131,10 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     BOOL isTure = NO;
     switch (row) {
         case 1:
-            isTure  = [[PerfrenceSettingManager isAutoUpload] boolValue];
+            isTure  = [PerfrenceSettingManager isAutoUpload];
             break;
         case 2:
-            isTure  = [[PerfrenceSettingManager isUploadJPEGImage] boolValue];
+            isTure  = [PerfrenceSettingManager isUploadJPEGImage];
             break;
         default:
             break;
