@@ -7,7 +7,6 @@
 //
 
 
-
 #define DEBUG 1
 
 #ifndef PROJECTCONFIG
@@ -27,9 +26,7 @@
 
 #import "IIViewDeckController.h"
 //alert
-#import "PopAlertView.h"
-#import "ToastAlertView.h"
-#import "MBProgressHUD.h"
+#import "UIViewController+extension.h"
 
 #import<AssetsLibrary/AssetsLibrary.h>
 #import "ALAssetsLibrary+Read.h"
@@ -38,3 +35,4 @@
 #import "LoginStateManager.h"
 #import "LoginViewController.h"
 #import "UploadTaskManager.h"
+

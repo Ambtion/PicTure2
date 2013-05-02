@@ -53,22 +53,9 @@
     return NO;
 }
 
-@end
-
-@implementation RequestManager
-
-//时间轴获取
-+ (void)getTimePhtotWithAccessToken:(NSString *)token beforeTime:(long long)time count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getSourceWithStringUrl:(NSString * )strUrl success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    
-    NSString *  str = nil;
-    if (time) {
-        str =  [NSString stringWithFormat:@"%@/api/v1/sync_photos?access_token=%@&before_taken_id=%lld&count=%d",BASICURL,token,time,count];
-    }else{
-        str =  [NSString stringWithFormat:@"%@/api/v1/sync_photos?access_token=%@&count=%d",BASICURL,token,count];
-    }
-
-    __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:str]];
+    __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:@"GET"];
     [request setCompletionBlock:^{
@@ -84,16 +71,13 @@
     }];
     [request startAsynchronous];
 }
-
-+ (void)deletePhotosWithaccessToken:(NSString *)token	photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)postWithURL:(NSString *)strUrl body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * strUrl =  [NSString stringWithFormat:@"%@/api/v1/sync_photos/destroy",BASICURL];
     __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [request addRequestHeader:@"accept" value:@"application/json"];
-    [request setPostValue:token forKey:@"access_token"];
     [request setStringEncoding:NSUTF8StringEncoding];
-    NSString * iDsStr = [photo_ids componentsJoinedByString:@","];
-    [request setPostValue:iDsStr forKey:@"photo_ids"];
+    for (id key in [body allKeys])
+        [request setPostValue:[body objectForKey:key] forKey:key];
     [request setCompletionBlock:^{
         DLog(@"%@",[request responseString]);
         NSInteger code = [request responseStatusCode];
@@ -105,5 +89,47 @@
         if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
         failure(REQUSETFAILERROR);
     }];
-    [request startAsynchronous];}
+    [request startAsynchronous];
+}
+@end
+
+@implementation RequestManager
+
+//时间轴获取
++ (void)getTimePhtotWithAccessToken:(NSString *)token beforeTime:(long long)time count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    
+    NSString *  str = nil;
+    if (time) {
+        str =  [NSString stringWithFormat:@"%@/api/v1/sync_photos?access_token=%@&before_taken_id=%lld&count=%d",BASICURL,token,time,count];
+    }else{
+        str =  [NSString stringWithFormat:@"%@/api/v1/sync_photos?access_token=%@&count=%d",BASICURL,token,count];
+    }
+    [self getSourceWithStringUrl:str success:success failure:failure];
+    
+}
+
++ (void)deletePhotosWithaccessToken:(NSString *)token	photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * strUrl =  [NSString stringWithFormat:@"%@/api/v1/sync_photos/destroy",BASICURL];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithCapacity:0];
+    [dic setValue:token forKey:@"access_token"];
+    NSString * iDsStr = nil;
+    if (photo_ids.count > 1){
+        iDsStr = [photo_ids componentsJoinedByString:@","];
+    }else{
+        iDsStr = [photo_ids lastObject];
+    }
+    [dic setValue:iDsStr forKey:@"photo_ids"];
+    [self postWithURL:strUrl body:dic success:success failure:failure];
+
+}
+
+
++ (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/portfolios?owner_id=%@&start=%d&count=%d",BASICURL,@"4",start,count];
+    DLog(@"%@",str);
+    [self getSourceWithStringUrl:str success:success failure:failure];
+}
 @end

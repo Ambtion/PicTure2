@@ -62,19 +62,6 @@
     [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray];
 }
 
-#pragma mark ShowAlert
-- (void)showPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage
-{
-    if (isPopView) {
-        PopAlertView * popA = [[PopAlertView alloc] initWithTitle:mesage message:nil delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:nil];
-        [popA show];
-    }else{
-        ToastAlertView * alertView = [[ToastAlertView alloc] initWithTitle:mesage];
-        [alertView show];
-    }
-}
-
-
 #pragma mark LoginViewController Delegate
 - (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo
 {

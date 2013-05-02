@@ -117,10 +117,10 @@
     NSDictionary * dic = nil;
     if (self.assetsArray.count)
         dic =  [self.assetsArray lastObject];
-
+    
     long long time = dic ? [[dic objectForKey:@"taken_id"] longLongValue] : 0;
+    DLog(@"%lld",time);
     _isLoading = YES;
-//    DLog(@"%lld %@",time, dic);
     [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:time count:100 success:^(NSString *response) {
         NSArray * photos = [[response JSONValue] objectForKey:@"photos"];
         if (photos  && photos.count){
@@ -132,7 +132,7 @@
         }
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
-//        [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:0.f];
+        //        [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:0.f];
     }];
 }
 - (void)reloadTableViewWithAssetsSource:(NSMutableArray *)assetArray
@@ -141,7 +141,7 @@
     [self.assetsArray addObjectsFromArray:assetArray];
     [self cloundDivideAssettByDayTimeWithAssetArray:self.assetsArray exportToassestionArray:self.assetsSection assetSectionisShow:self.assetSectionisShow dataScource:self.dataSourceArray];
     [self.myTableView reloadData];
-
+    
 }
 #pragma mark - SectionClick
 - (void)handleTapInSection:(UITapGestureRecognizer *)gesture
@@ -238,9 +238,7 @@
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
-    
 }
-
 
 #pragma mark Action
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
@@ -280,8 +278,7 @@
 - (void)handleEnsureClick
 {
     if (!selectedArray.count) {
-        PopAlertView * pop = [[PopAlertView alloc] initWithTitle:nil message:@"请选择图片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [pop show];
+        [self showPopAlerViewnotTotasView:YES WithMes:@"请选择图片"];
         return;
     }
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
@@ -289,19 +286,15 @@
         [array addObject:[dic objectForKey:@"id"]];
     }
     if (_viewState == DeleteState) {
-       [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:array success:^(NSString *response) {
-           [self.assetsArray removeObjectsInArray:selectedArray];
-           [self reloadTableViewWithAssetsSource:self.assetsArray];
-           [self showToastViewWith:@"删除成功"];
-       } failure:^(NSString *error) {
-           [self showToastViewWith:error];
-       }];
+        [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:array success:^(NSString *response) {
+            [self.assetsArray removeObjectsInArray:selectedArray];
+            [self reloadTableViewWithAssetsSource:self.assetsArray];
+            [self showPopAlerViewnotTotasView:NO WithMes:@"删除成功"];
+            [self setViewState:NomalState];
+        } failure:^(NSString *error) {
+            [self showPopAlerViewnotTotasView:NO WithMes:error];
+            [self setViewState:NomalState];
+        }];
     }
-    [self setViewState:NomalState];
-}
-- (void)showToastViewWith:(NSString *)mes
-{
-    ToastAlertView * view = [[ToastAlertView alloc] initWithTitle:mes];
-    [view show];
 }
 @end

@@ -189,13 +189,11 @@
 - (void)loginButtonClicked:(UIButton*)button
 {
     if (!_usernameTextField.text|| [_usernameTextField.text isEqualToString:@""]) {
-        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写用户名" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alterview show];
+        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写用户名"];
         return;
     }
     if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
-        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写密码" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alterview show];
+        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
 //    [_passwordTextField resignFirstResponder];
@@ -226,8 +224,7 @@
 }
 - (void)showError:(NSString *)error
 {
-    PopAlertView * alterView = [[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-    [alterView show];
+    [self showPopAlerViewnotTotasView:YES WithMes:error];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginFailtureWithinfo:)])
         [_delegate loginViewController:self loginFailtureWithinfo:error];
 }

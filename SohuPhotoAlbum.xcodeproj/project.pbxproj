@@ -19,6 +19,8 @@
 		C54DBC79172BD98D00925B82 /* contentBgView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54DBC78172BD98D00925B82 /* contentBgView@2x.png */; };
 		C54DBC7B172BDEE200925B82 /* TabBarUpLoad.png in Resources */ = {isa = PBXBuildFile; fileRef = C54DBC7A172BDEE200925B82 /* TabBarUpLoad.png */; };
 		C54DBC7E172BE15300925B82 /* CloundDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DBC7D172BE15300925B82 /* CloundDetailController.m */; };
+		C550E93E172CC6AF0042F419 /* UIViewController+extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C550E93D172CC6AF0042F419 /* UIViewController+extension.m */; };
+		C550E940172CCF400042F419 /* TabBardelete.png in Resources */ = {isa = PBXBuildFile; fileRef = C550E93F172CCF400042F419 /* TabBardelete.png */; };
 		C57ED93B17028A1900505ECF /* ImageScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageScaleView.m */; };
 		C57ED93E17028C9B00505ECF /* PhotoDetailBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93D17028C9B00505ECF /* PhotoDetailBaseController.m */; };
 		C58353A91724E25300099E6E /* uploadBgView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58353A81724E25300099E6E /* uploadBgView@2x.png */; };
@@ -336,6 +338,9 @@
 		C54DBC7A172BDEE200925B82 /* TabBarUpLoad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarUpLoad.png; sourceTree = "<group>"; };
 		C54DBC7C172BE15200925B82 /* CloundDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundDetailController.h; sourceTree = "<group>"; };
 		C54DBC7D172BE15300925B82 /* CloundDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundDetailController.m; sourceTree = "<group>"; };
+		C550E93C172CC6AF0042F419 /* UIViewController+extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+extension.h"; sourceTree = "<group>"; };
+		C550E93D172CC6AF0042F419 /* UIViewController+extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+extension.m"; sourceTree = "<group>"; };
+		C550E93F172CCF400042F419 /* TabBardelete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBardelete.png; sourceTree = "<group>"; };
 		C57ED93917028A1900505ECF /* ImageScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageScaleView.h; sourceTree = "<group>"; };
 		C57ED93A17028A1900505ECF /* ImageScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScaleView.m; sourceTree = "<group>"; };
 		C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailBaseController.h; sourceTree = "<group>"; };
@@ -847,9 +852,9 @@
 		C57ED935170287E100505ECF /* PhotoDetail */ = {
 			isa = PBXGroup;
 			children = (
+				C5A32BAD1706FC360084B253 /* LocalShareRef.h */,
 				C591B4B2171BE5810047C496 /* EmojiUnit.h */,
 				C591B4B3171BE5810047C496 /* EmojiUnit.m */,
-				C5A32BAD1706FC360084B253 /* LocalShareRef.h */,
 				C583CF3B1704503A00CD3485 /* CustomizetionTabBar.h */,
 				C583CF3C1704503A00CD3485 /* CustomizetionTabBar.m */,
 				C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */,
@@ -1299,6 +1304,8 @@
 			isa = PBXGroup;
 			children = (
 				C58773FB1716AC7000799730 /* Projectconfig.h */,
+				C550E93C172CC6AF0042F419 /* UIViewController+extension.h */,
+				C550E93D172CC6AF0042F419 /* UIViewController+extension.m */,
 				C588B0AF17003032006BBC34 /* SohuPhotoAlbum-Info.plist */,
 				C588B0B017003032006BBC34 /* InfoPlist.strings */,
 				C588B0B317003032006BBC34 /* main.m */,
@@ -1341,15 +1348,15 @@
 		C588B0D817003A1B006BBC34 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				C54DBC75172BD6AE00925B82 /* desView */,
 				C58354001726B43C00099E6E /* nav_bar_host.png */,
+				C583CF26170434F000CD3485 /* album_nb@2x.png */,
+				C58353C417250CB700099E6E /* album_nb.png */,
+				C583CF2117042D5300CD3485 /* alume-pic.png */,
+				C54DBC75172BD6AE00925B82 /* desView */,
 				C58353D4172545B900099E6E /* SettingView */,
 				C58353AA1724E87500099E6E /* uploadView */,
 				C58517E91722854D00175A64 /* photoStory */,
 				C58CB467171FF29E00DB85B3 /* Bar */,
-				C583CF26170434F000CD3485 /* album_nb@2x.png */,
-				C58353C417250CB700099E6E /* album_nb.png */,
-				C583CF2117042D5300CD3485 /* alume-pic.png */,
 				C586DCFA171D723B000A4014 /* WallPhoto */,
 				C5841A0F17158F7D00588CE5 /* MoreLoding */,
 				C583A8B717142CF600DAC141 /* Alert */,
@@ -1702,6 +1709,7 @@
 				C58353D017253E8600099E6E /* navBar_signalLine.png */,
 				C58A0B541720F94800521715 /* shareBtn_nomal.png */,
 				C58A0B2C1720E12500521715 /* TabBack.png */,
+				C550E93F172CCF400042F419 /* TabBardelete.png */,
 				C58A0B2D1720E12500521715 /* TabBarShare.png */,
 				C58A0B2E1720E12500521715 /* TabBarLoad.png */,
 				C54DBC7A172BDEE200925B82 /* TabBarUpLoad.png */,
@@ -1999,6 +2007,7 @@
 				C54DBC77172BD6C000925B82 /* desShareBtn.png in Resources */,
 				C54DBC79172BD98D00925B82 /* contentBgView@2x.png in Resources */,
 				C54DBC7B172BDEE200925B82 /* TabBarUpLoad.png in Resources */,
+				C550E940172CCF400042F419 /* TabBardelete.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2146,6 +2155,7 @@
 				C591AAFE172A2A04003A2079 /* RequestManager.m in Sources */,
 				C535D93B172BAC2E00A2FBAA /* UIViewController+DivideAsset.m in Sources */,
 				C54DBC7E172BE15300925B82 /* CloundDetailController.m in Sources */,
+				C550E93E172CC6AF0042F419 /* UIViewController+extension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

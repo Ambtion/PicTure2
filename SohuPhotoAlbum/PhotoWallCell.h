@@ -22,7 +22,7 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 @end
 
 @interface PhotoWallCellDataSource : NSObject
-@property(strong,nonatomic)NSMutableArray * imageWallInfo;
+@property(strong,nonatomic)NSArray * imageWallInfo;
 @property(strong,nonatomic)NSString * wallDescription;
 @property(strong,nonatomic)NSString * shareTime;
 @property(assign,nonatomic)NSInteger talkCount;

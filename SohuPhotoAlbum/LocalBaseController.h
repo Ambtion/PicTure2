@@ -34,5 +34,4 @@ typedef enum ViewState {
 #pragma mark Uplaod Function
 - (BOOL)canUpload;
 - (void)uploadPicTureWithArray:(NSMutableArray *)assetArray;
-- (void)showPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage;
 @end

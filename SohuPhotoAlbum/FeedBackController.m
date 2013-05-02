@@ -7,7 +7,6 @@
 //
 
 #import "FeedBackController.h"
-#import "ToastAlertView.h"
 #import "PopAlertView.h"
 #import "EmojiUnit.h"
 
@@ -55,19 +54,6 @@
    //
 }
 #pragma mark -
-#pragma mark RequsetDelegate
-//- (void)requestFinished:(SCPRequestManager *)mangeger output:(NSDictionary *)info
-//{
-//    ToastAlertView * cus = [[[ToastAlertView alloc] initWithTitle:@"成功提交,感谢您的反馈"] autorelease];
-//    [cus show];
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
-//- (void)requestFailed:(NSString *)error
-//{
-//    SCPAlert_CustomeView * cus = [[[SCPAlert_CustomeView alloc] initWithTitle:error] autorelease];
-//    [cus show];
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
 - (void)addSubviews
 {
     

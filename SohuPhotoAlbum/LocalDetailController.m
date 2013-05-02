@@ -9,12 +9,6 @@
 #import "LocalDetailController.h"
 #import "LocalShareController.h"
 
-typedef enum __shareModel {
-    SinaWeiboShare,
-    RenrenShare,
-    WeixinShare,
-    QQShare,
-}shareModel;
 
 @implementation LocalDetailController
 @synthesize cache = _cache, group = _group;
@@ -43,6 +37,7 @@ typedef enum __shareModel {
     [super viewDidLoad];
     //fix tabBar
     [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
+    [self.tabBar.deleteButton setHidden:YES];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -89,8 +84,9 @@ typedef enum __shareModel {
 }
 
 #pragma mark - GetIdentifyImageSizeWithImageView
-- (CGSize)getIdentifyImageSizeWithImageView:(UIImageView *)imageView isPortraitorientation:(BOOL)isPortrait
+- (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait
 {
+    UIImageView * imageView  = scaleView.imageView;
     if (!imageView.image) return CGSizeZero;
     CGFloat w = imageView.image.size.width;
     CGFloat h = imageView.image.size.height;
@@ -108,8 +104,10 @@ typedef enum __shareModel {
 }
 
 #pragma mark -  GetImageFromAsset
-- (void)setImageView:(UIImageView *)imageView imageFromAsset:(id)asset
+- (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset
 {
+    [super setImageView:scaleView imageFromAsset:asset];
+    UIImageView * imageView = scaleView.imageView;
     UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
@@ -123,8 +121,9 @@ typedef enum __shareModel {
 }
 
 #pragma mark - GetActualImage
-- (void)setImageView:(UIImageView *)imageView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
+- (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
+    UIImageView * imageView = scaleView.imageView;
     UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];

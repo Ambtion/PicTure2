@@ -11,6 +11,7 @@
 @implementation CustomizetionTabBar
 @synthesize delegate = _delegate;
 @synthesize loadButton;
+@synthesize deleteButton;
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate
 
 {
@@ -35,6 +36,14 @@
     [backButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backButton];
     
+    rect.origin.x = 320 - 49 * 3;
+    deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    deleteButton.frame = rect;
+    deleteButton.tag = TABBARDELETE;
+    [deleteButton setImage:[UIImage imageNamed:@"TabBardelete.png"] forState:UIControlStateNormal];
+    [deleteButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:deleteButton];
+    
     rect.origin.x = 320 - 49 * 2;
     shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
     shareButton.frame = rect;
@@ -50,6 +59,8 @@
     [loadButton setImage:[UIImage imageNamed:@"TabBarLoad.png"] forState:UIControlStateNormal];
     [loadButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:loadButton];
+    
+    
 }
 - (void)buttonClick:(UIButton *)button
 {
@@ -61,15 +72,20 @@
 {
     CGRect backrect = backButton.frame;
     backrect.origin.x = - 49;
+    CGRect deleteRect = deleteButton.frame;
+    deleteRect.origin.x = 320 + 49;
+    
     CGRect shareRect = shareButton.frame;
-    shareRect.origin.x = 320 + 49;
+    shareRect.origin.x = 320 + 49 * 2;
     CGRect loadRect = loadButton.frame;
-    loadRect.origin.x = 320 + 98;
+    loadRect.origin.x = 320 + 49 * 3;
+    
     if (animation) {
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             backButton.frame = backrect;
             shareButton.frame = shareRect;
             loadButton.frame = loadRect;
+            deleteButton.frame = deleteRect;
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
         } completion:^(BOOL finished) {
             [self setUserInteractionEnabled:NO];
@@ -78,9 +94,9 @@
         backButton.frame = backrect;
         shareButton.frame = shareRect;
         loadButton.frame = loadRect;
+        deleteButton.frame = deleteRect;
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
     }
-   
 }
 - (void)showBarWithAnimation:(BOOL)animation
 {
@@ -90,11 +106,14 @@
     shareRect.origin.x = 320 - 98;
     CGRect loadRect = loadButton.frame;
     loadRect.origin.x = 320 - 49 ;
+    CGRect deleteRect = deleteButton.frame;
+    deleteRect.origin.x = 320 - 3 * 49;
     if (animation) {
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             backButton.frame = backrect;
             shareButton.frame = shareRect;
             loadButton.frame = loadRect;
+            deleteButton.frame = deleteRect;
             [[UIApplication sharedApplication] setStatusBarHidden:NO];
         } completion:^(BOOL finished) {
             [self setUserInteractionEnabled:YES];
@@ -103,10 +122,11 @@
         backButton.frame = backrect;
         shareButton.frame = shareRect;
         loadButton.frame = loadRect;
+        deleteButton.frame = deleteRect;
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self setUserInteractionEnabled:YES];
     }
-   
+    
 }
 - (BOOL)isHiddenBar
 {

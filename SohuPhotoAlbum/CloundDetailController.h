@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "PhotoDetailBaseController.h"
 
-@interface CloundDetailController : PhotoDetailBaseController
+@interface CloundDetailController : PhotoDetailBaseController<UIActionSheetDelegate>
 {
-    BOOL _isLoading;
+    BOOL _hasMoreAssets;
 }
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(NSDictionary *)asset;
 @end

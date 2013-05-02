@@ -177,10 +177,10 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [self getCurrentImageView].tapEnabled = NO;
     if (CGAffineTransformEqualToTransform([self getTransfrom], CGAffineTransformIdentity)) {
         transform = CGAffineTransformInvert(self.view.transform);
-        CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:YES];
+        CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView]isPortraitorientation:YES];
         scale = MIN( identifySzie.width / [self getCurrentImageView].imageView.frame.size.width, identifySzie.height / [self getCurrentImageView].frame.size.height);
     }else{
-        CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView].imageView isPortraitorientation:NO];
+        CGSize identifySzie = [self getIdentifyImageSizeWithImageView:[self getCurrentImageView] isPortraitorientation:NO];
         scale = MIN( identifySzie.width / [self getCurrentImageView].imageView.frame.size.width, identifySzie.height / [self getCurrentImageView].imageView.frame.size.height);
         transform = [self getTransfrom];
     }
@@ -220,41 +220,31 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 - (void)refreshScrollViewOnMinBounds
 {
-    //    _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:0]];
-    //    _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
-    //    _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:2]];
-    [self setImageView:_fontScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:0]];
-    [self setImageView:_curScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:1]];
-    [self setImageView:_rearScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:2]];
+    [self setImageView:_fontScaleImage imageFromAsset:[_assetsArray objectAtIndex:0]];
+    [self setImageView:_curScaleImage imageFromAsset:[_assetsArray objectAtIndex:1]];
+    [self setImageView:_rearScaleImage imageFromAsset:[_assetsArray objectAtIndex:2]];
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointZero];
     _imagestate = AtLess;
 }
 - (void)refreshScrollViewOnMaxBounds
 {
-//    _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
-//    _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
-//    _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
-    [self setImageView:_fontScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
-    [self setImageView:_curScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
-    [self setImageView:_rearScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
+    [self setImageView:_fontScaleImage imageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 3]];
+    [self setImageView:_curScaleImage imageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 2]];
+    [self setImageView:_rearScaleImage imageFromAsset:[_assetsArray objectAtIndex:_assetsArray.count - 1]];
     [self resetAllImagesFrame];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * 2,0)];
     _imagestate = AtMore;
 }
 - (void)refreshScrollViewWhenPhotonumLessThree
 {
-//    _fontScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:0]];
-    [self setImageView:_fontScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:0]];
+    [self setImageView:_fontScaleImage imageFromAsset:[_assetsArray objectAtIndex:0]];
     if (_assetsArray.count == 2) {
-//        _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
-        [self setImageView:_curScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:1]];
+        [self setImageView:_curScaleImage imageFromAsset:[_assetsArray objectAtIndex:1]];
 
     }else if(_assetsArray.count == 3){
-//        _curScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:1]];
-//        _rearScaleImage.imageView.image = [self getImageFromAsset:[_assetsArray objectAtIndex:2]];
-        [self setImageView:_curScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:1]];
-        [self setImageView:_rearScaleImage.imageView imageFromAsset:[_assetsArray objectAtIndex:2]];
+        [self setImageView:_curScaleImage imageFromAsset:[_assetsArray objectAtIndex:1]];
+        [self setImageView:_rearScaleImage imageFromAsset:[_assetsArray objectAtIndex:2]];
     }else{
         _curScaleImage.imageView.image = nil;
         _rearScaleImage.imageView.image = nil;
@@ -267,12 +257,9 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     if ([self getDisplayImagesWithCurpage:_curPageNum])
     {
         //read images into curImages
-//        _fontScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:0]];
-//        _curScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:1]];
-//        _rearScaleImage.imageView.image = [self getImageFromAsset:[_curImageArray objectAtIndex:2]];
-        [self setImageView:_fontScaleImage.imageView imageFromAsset:[_curImageArray objectAtIndex:0]];
-        [self setImageView:_curScaleImage.imageView imageFromAsset:[_curImageArray objectAtIndex:1]];
-        [self setImageView:_rearScaleImage.imageView imageFromAsset:[_curImageArray objectAtIndex:2]];
+        [self setImageView:_fontScaleImage imageFromAsset:[_curImageArray objectAtIndex:0]];
+        [self setImageView:_curScaleImage imageFromAsset:[_curImageArray objectAtIndex:1]];
+        [self setImageView:_rearScaleImage imageFromAsset:[_curImageArray objectAtIndex:2]];
         [self resetAllImagesFrame];
         [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
     }
@@ -282,7 +269,9 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - ScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
-    if (_isAnimating)  return;
+    if (_isAnimating || !_assetsArray.count)  return;
+    if (self.curPageNum == _assetsArray.count - 2)
+            [self getMoreAssets];
     if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];
@@ -298,6 +287,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         }
         return;
     }
+    //right
     if(x >= (aScrollView.frame.size.width * 2) && _curPageNum <= _assetsArray.count - 2) {
         _curPageNum = [self validPageValue:_curPageNum + 1];
         [self refreshScrollView];
@@ -308,6 +298,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         [self refreshScrollView];
         return;
     }
+    //left
     if(x <= 0 && _curPageNum >= 1) {
         _curPageNum = [self validPageValue:_curPageNum - 1];
         [self refreshScrollView];
@@ -349,24 +340,18 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         if (_assetsArray.count <= 3) {
             switch (_assetsArray.count) {
                 case 1:
-//                    _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-                    [self setImageView:_fontScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+                    [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
 
                     break;
                 case 2:
-//                    _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-//                    _curScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
-                    [self setImageView:_fontScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-                    [self setImageView:_curScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
+                    [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+                    [self setImageView:_curScaleImage ActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
 
                     break;
                 case 3:
-//                    _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-//                    _curScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
-//                    _rearScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:2] andOrientation:0];
-                    [self setImageView:_fontScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-                    [self setImageView:_curScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
-                    [self setImageView:_rearScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:2] andOrientation:0];
+                    [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+                    [self setImageView:_curScaleImage ActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
+                    [self setImageView:_rearScaleImage ActualImage:[_assetsArray objectAtIndex:2] andOrientation:0];
 
                     break;
                 default:
@@ -375,14 +360,11 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
             return ;
         }
         if (_imagestate == AtLess) {
-//            _fontScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-            [self setImageView:_fontScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
+            [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
         }else if (_imagestate == AtMore) {
-//            _rearScaleImage.imageView.image = [self getActualImage:[_assetsArray lastObject] andOrientation:0];
-            [self setImageView:_rearScaleImage.imageView ActualImage:[_assetsArray lastObject] andOrientation:0];
+            [self setImageView:_rearScaleImage ActualImage:[_assetsArray lastObject] andOrientation:0];
         }else{
-//            _curScaleImage.imageView.image = [self getActualImage:[_assetsArray objectAtIndex:_curPageNum] andOrientation:0];
-            [self setImageView:_curScaleImage.imageView ActualImage:[_assetsArray objectAtIndex:_curPageNum] andOrientation:0];
+            [self setImageView:_curScaleImage ActualImage:[_assetsArray objectAtIndex:_curPageNum] andOrientation:0];
         }
     });
 }
@@ -392,26 +374,25 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     //    [self readPhotoes];
 }
-- (void)setImageView:(UIImageView *)imageView imageFromAsset:(id)asset
+- (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset
 {
-    DLog(@"%s",__FUNCTION__);
+    scaleView.asset = asset;
 }
 
-- (void)setImageView:(UIImageView *)imageView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
+- (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
-    DLog(@"%s",__FUNCTION__);
+//    DLog(@"%s",__FUNCTION__);
 }
 
-- (CGSize)getIdentifyImageSizeWithImageView:(UIImageView *)imageView isPortraitorientation:(BOOL)isPortrait
+- (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait
 {
-    DLog(@"%s",__FUNCTION__);
     return CGSizeZero;
 }
-#pragma mark - BarDelegate
-- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+- (void)getMoreAssets
 {
-    DLog(@"%s",__FUNCTION__);
+    // for more Assets
 }
+#pragma mark - BarDelegate
 
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
@@ -419,9 +400,10 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 
 #pragma mark - Function
-- (void)resetImageRect:(UIImageView *)imageView
+- (void)resetImageRect:(ImageScaleView *)scaleImage
 {
-    CGSize size = [self getIdentifyImageSizeWithImageView:imageView isPortraitorientation:CGAffineTransformEqualToTransform(CGAffineTransformIdentity, [self getTransfrom])];
+    UIImageView * imageView = scaleImage.imageView;
+    CGSize size = [self getIdentifyImageSizeWithImageView:scaleImage isPortraitorientation:CGAffineTransformEqualToTransform(CGAffineTransformIdentity, [self getTransfrom])];
     CGSize ratationSize = [self.view bounds].size;
     if (imageView.image) {
         imageView.frame = (CGRect){0,0,size};
@@ -437,9 +419,9 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     _fontScaleImage.zoomScale = 1.f;
     _curScaleImage.zoomScale = 1.f;
     _rearScaleImage.zoomScale = 1.f;
-    [self resetImageRect:_curScaleImage.imageView];
-    [self resetImageRect:_fontScaleImage.imageView];
-    [self resetImageRect:_rearScaleImage.imageView];
+    [self resetImageRect:_curScaleImage];
+    [self resetImageRect:_fontScaleImage];
+    [self resetImageRect:_rearScaleImage];
 }
 - (NSArray *)getDisplayImagesWithCurpage:(int)page
 {    
@@ -454,7 +436,9 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (int)validPageValue:(NSInteger)value
 {
     if(value <= 0) value = 0;                   // value＝1为第一张，value = 0为前面一张
-    if(value >= _assetsArray.count) value = _assetsArray.count - 1;
+    if(value >= _assetsArray.count){
+      value = _assetsArray.count - 1;
+    }
     return value;
 }
 

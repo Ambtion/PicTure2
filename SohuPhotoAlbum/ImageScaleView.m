@@ -12,6 +12,7 @@
 @implementation ImageScaleView
 @synthesize Adelegate = _Adelegate;
 @synthesize imageView = _imageView;
+@synthesize asset;
 @synthesize tapEnabled = _tapEnabled;
 - (id)initWithFrame:(CGRect)frame
 {

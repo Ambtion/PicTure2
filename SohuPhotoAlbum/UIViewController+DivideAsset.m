@@ -33,7 +33,6 @@
     }
     for (NSMutableArray * array in tempArray )
         [dataSourceArray addObject:[self cloundCoverAssertToDataSource:array]];
-    DLog(@"start end");
 
 }
 - (NSMutableArray *)cloundCoverAssertToDataSource:(NSMutableArray *)array
@@ -79,7 +78,6 @@
 #pragma mark Local
 - (void)localDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray
 {
-    DLog(@"start divide");
     NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < assetsArray.count; i++) {
         ALAsset * asset = [assetsArray objectAtIndex:i];
@@ -98,7 +96,6 @@
     }
     for (NSMutableArray * array in tempArray )
         [dataSourceArray addObject:[self coverAssertToDataSource:array]];
-    DLog(@"start end");
 }
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {

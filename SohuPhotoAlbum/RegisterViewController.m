@@ -206,13 +206,11 @@
 - (void)doRegister
 {
     if (!_usernameTextField.text || [_usernameTextField.text isEqualToString:@""]) {
-        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写用户名" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alterview show];
+        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写用户名"];
         return;
     }
     if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
-        PopAlertView * alterview = [[PopAlertView alloc] initWithTitle:@"您还没有填写密码" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alterview show];
+        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
     [self allTextFieldsResignFirstResponder:nil];
@@ -226,14 +224,12 @@
                 [self backhome];
             } failtureSucess:^(NSString *error) {
                 [self stopWait];
-                PopAlertView * tip = [[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                [tip  show];
+                [self showPopAlerViewnotTotasView:YES WithMes:error];
             }];
         });
     }failtureSucess:^(NSString *error) {
         [self stopWait];
-        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:error message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [tip  show];
+        [self showPopAlerViewnotTotasView:YES WithMes:error];
     }];
 }
 -(void)waitForMomentsWithTitle:(NSString*)str

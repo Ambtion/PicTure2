@@ -20,5 +20,6 @@
 
 @property(nonatomic,weak)id<ImageScaleViewDelegate> Adelegate;
 @property(nonatomic,strong)UIImageView * imageView;
+@property(nonatomic,strong)id asset;
 @property(nonatomic,assign)BOOL tapEnabled;
 @end

@@ -14,6 +14,5 @@
 {
     ALAssetsLibrary *_library;
     BOOL _isReading; //for app bacome background
-    
 }
 @end

@@ -20,8 +20,15 @@ typedef enum _imageStatePosition
     
 }imageStatePosition;
 
-@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,
-                                                        CusNavigationBarDelegate,CusTabBarDelegate>
+typedef enum __shareModel {
+    SinaWeiboShare,
+    RenrenShare,
+    WeixinShare,
+    QQShare,
+}shareModel;
+
+
+@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate>
 {
     UIScrollView * _scrollView;
     ImageScaleView * _fontScaleImage;
@@ -49,4 +56,12 @@ typedef enum _imageStatePosition
 
 - (int)validPageValue:(NSInteger)value;
 - (void)refreshScrollView;
+
+//for overLoad
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset;
+- (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation;
+- (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait;
+- (void)getMoreAssets;
+- (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button;
 @end

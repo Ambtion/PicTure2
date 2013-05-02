@@ -8,6 +8,7 @@
 
 #import "PhotoWallController.h"
 #import "PhotoStoryController.h"
+#import "RequestManager.h"
 
 @implementation PhotoWallController
 
@@ -30,34 +31,44 @@
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     _myTableView.tableFooterView = _moreFootView;
-    
-    //测试用
-//    UIBarButtonItem * bu = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(refeshOnce:)];
-//    self.navigationItem.leftBarButtonItem = bu;
     _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 10, 77, 20)];
     [self.view addSubview:_timelabel];
-
     
+    [self initContainer];
+    [self refrshDataFromNetWork];
+  
+}
+- (void)initContainer
+{
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i < 20; i++) {
-        PhotoWallCellDataSource * dataSource = [[PhotoWallCellDataSource alloc] init];
-        int n = arc4random() % 6 + 1;
-        NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
-        for (int j = 1; j <= n; j++) {
-            [tempArray addObject:@"1.jpg"];
-        }
-        dataSource.imageWallInfo = tempArray;
-        dataSource.wallDescription = @"我啦对法拉第飞啊记得发,你是挨打发对法拉飞.挨打放假的了";
-        dataSource.shareTime = [NSString stringWithFormat:@"2013年12月%d日",i];
-        dataSource.likeCount = 100;
-        dataSource.talkCount = 200;
-        dataSource.photoCount = arc4random() % 100 + 1;
-        [_dataSourceArray addObject:dataSource];
+}
+- (void)addDataSourceWith:(NSArray *)array
+{
+    for (int i = 0; i < array.count; i++) {
+        [_dataSourceArray addObject:[self getCellDataSourceFromDic:[array objectAtIndex:i]]];
     }
     [self resetLabel];
     [_myTableView reloadData];
 }
-
+- (PhotoWallCellDataSource *)getCellDataSourceFromDic:(NSDictionary *)dic
+{
+    PhotoWallCellDataSource * dataSource = [[PhotoWallCellDataSource alloc] init];
+    NSArray * phtotArray = [dic objectForKey:@"photos"];
+    dataSource.imageWallInfo = phtotArray;
+    dataSource.wallDescription = nil;
+    dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
+    dataSource.likeCount = 100;
+    dataSource.talkCount = 200;
+    dataSource.photoCount = [[dic objectForKey:@"photo_num"] intValue];
+    return dataSource;
+}
+- (NSString *)stringFromdate:(NSDate *)date
+{
+    //转化日期格式
+    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyy-MM-dd-hh:mma"];
+    return [dateFormatter stringFromDate:date];
+}
 #pragma mark View LifeCircle
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -103,6 +114,7 @@
 {
     return _isLoading;
 }
+
 - (void)refeshOnce:(id)sender
 {
     [_refresHeadView refreshImmediately];
@@ -134,7 +146,12 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
+    [RequestManager getTimePhtotWallStorysWithOwnerId:[LoginStateManager currentUserId] start:0 count:20 success:^(NSString *response) {
+        [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
+        [self doneRefrshLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self doneRefrshLoadingTableViewData];
+    }];
 }
 - (void)getMoreFromNetWork
 {
@@ -160,31 +177,32 @@
 - (void)resetLabel
 {
     if (_dataSourceArray.count) {
-        _timelabel.daysLabel.text = @"30";
-        _timelabel.yesDayLabel.text = @"2012年";
-        _timelabel.mouthsLabel.text = @"12月";
+        [self setLabelTimeWithTime:[[_dataSourceArray objectAtIndex:0] shareTime]];
     }else{
         _timelabel.daysLabel.text = nil;
+        _timelabel.mouthsLabel.text = nil;
+        _timelabel.yesDayLabel.text = nil;
     }
 }
 - (void)updataLabelWithScrollView:(UIScrollView *)aScrollView
 {
     NSArray * cells = _myTableView.visibleCells;
-//    if (aScrollView.contentOffset.y <= 0) {
-//        CGRect rect = label.frame;
-//        rect.origin.y = ([(UITableViewCell *)[cells objectAtIndex:0] frame].size.height - rect.size.height)/2.f - aScrollView.contentOffset.y;
-//        label.frame = rect;
-//        return;
-//    }
     _timelabel.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
-    for (UITableViewCell * cell in cells) {
+    for (PhotoWallCell * cell in cells) {
         CGRect cellRect = [self.view convertRect:cell.frame fromView:cell.superview];
         if (CGRectContainsRect(cellRect, _timelabel.frame)) {
-            _timelabel.daysLabel.text = @"30";
-            _timelabel.yesDayLabel.text = @"2012年";
-            _timelabel.mouthsLabel.text = @"12月";
+            NSString * shareTime = [[cell dataSource] shareTime];
+            [self setLabelTimeWithTime:shareTime];
         }
     }
+}
+
+- (void)setLabelTimeWithTime:(NSString *)time
+{
+    NSArray * array = [time componentsSeparatedByString:@"-"];
+    _timelabel.daysLabel.text = [array objectAtIndex:2];
+    _timelabel.yesDayLabel.text = [NSString stringWithFormat:@"%@年",[array objectAtIndex:0]];
+    _timelabel.mouthsLabel.text = [NSString stringWithFormat:@"%@月",[array objectAtIndex:1]];
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
