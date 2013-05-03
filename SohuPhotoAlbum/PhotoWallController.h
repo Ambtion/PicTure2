@@ -22,6 +22,7 @@
     CustomizationNavBar * _navBar;
     TimeLabelView * _timelabel;
     BOOL _isLoading;
+    
 }
 @property(nonatomic,strong)NSString * ownerID;
 - (id)initWithOwnerID:(NSString *)ownID;

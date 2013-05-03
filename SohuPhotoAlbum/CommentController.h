@@ -11,16 +11,21 @@
 #import "SCPMoreTableFootView.h"
 #import "CustomizationNavBar.h"
 #import "CommentCell.h"
+#import "RequestManager.h"
 
 @interface CommentController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
 SCPMoreTableFootViewDelegate,CusNavigationBarDelegate>
 {
     UITableView * _myTableView;
+    UIImageView * _myBgView;
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
     BOOL _isLoading;
+    source_type type;
 }
-
+@property(nonatomic,strong)NSString * sourceId;
+@property(nonatomic,strong)NSString * imageUrl;
+- (id)initWithSourceId:(NSString *)AsourceId andSoruceType:(source_type)Atype withBgImageURL:(NSString * )bgUrl;
 @end

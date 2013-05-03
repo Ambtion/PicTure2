@@ -142,7 +142,7 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getAllPhototInStroyWithOwnerId:self.ownerID stroyId:self.storyID start:0 count:20 success:^(NSString *response) {
+    [RequestManager getAllPhototInStoryWithOwnerId:self.ownerID stroyId:self.storyID start:0 count:20 success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
         [self doneRefrshLoadingTableViewData];
@@ -158,7 +158,7 @@
         return;
     }
     [_moreFootView setMoreFunctionOff:NO];
-    [RequestManager getAllPhototInStroyWithOwnerId:self.ownerID stroyId:self.storyID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
+    [RequestManager getAllPhototInStoryWithOwnerId:self.ownerID stroyId:self.storyID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {

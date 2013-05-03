@@ -7,30 +7,54 @@
 //
 
 #import "CommentController.h"
+#import "UIImageView+WebCache.h"
 
 @interface CommentController ()
 
 @end
 
 @implementation CommentController
+@synthesize sourceId;
+@synthesize imageUrl;
 
+- (id)initWithSourceId:(NSString *)AsourceId andSoruceType:(source_type)Atype withBgImageURL:(NSString * )bgUrl
+{
+    self = [super init];
+    if (self) {
+        self.sourceId = AsourceId;
+        type = Atype;
+        self.imageUrl = bgUrl;
+    }
+    return self;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.view.backgroundColor = BASEWALLCOLOR;
-    
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = [UIColor clearColor];
-    UIImageView * image = [[UIImageView alloc] initWithFrame:_myTableView.bounds];
-    image.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    image.image = [UIImage imageNamed:@"1.jpg"];
-    _myTableView.backgroundView = image;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
+    _myBgView  = [[UIImageView alloc] initWithFrame:_myTableView.bounds];
+    _myBgView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_myBgView];
+    self.view.clipsToBounds = YES;
+    DLog(@"MMM %@",[NSString stringWithFormat:@"%@w640",self.imageUrl]);
+    __weak UIImageView * bgViewSelf = _myBgView;
+    __weak UITableView * tableViewSelf = _myTableView;
+    __weak CommentController * weakSelf = self;
+    [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.imageUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
+        CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
+        bgViewSelf.frame = (CGRect ){0,0,size};
+        bgViewSelf.center = CGPointMake(tableViewSelf.bounds.size.width /2.f, tableViewSelf.bounds.size.height /2.f);
+    } failure:^(NSError *error) {
+        
+    }];
+    
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];
@@ -39,13 +63,25 @@
     _moreFootView.delegate = self;
     _myTableView.tableFooterView = _moreFootView;
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    [self refrshDataFromNetWork];
+    [self getMoreFromNetWork];
 }
-
+- (CGSize)getIdentifyImageSizeWithImageView:(UIImage *)image
+{
+    if (!image) return CGSizeZero;
+    CGFloat w = image.size.width;
+    CGFloat h = image.size.height;
+    CGRect frameRect = self.view.bounds;
+    CGRect rect = CGRectZero;
+    CGFloat scale = MAX(frameRect.size.width / w, frameRect.size.height / h);
+    rect = CGRectMake(0, 0, w * scale, h * scale);
+    DLog(@"%@ %f,%f",NSStringFromCGRect(rect),w,h );
+    return rect.size;
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationItem setHidesBackButton:YES];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         _navBar.normalBar.image = [UIImage imageNamed:@"full_screen_title-bar.png"];
@@ -60,6 +96,7 @@
 {
     [super viewWillDisappear:animated];
     [_navBar removeFromSuperview];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
 }
 #pragma mark - refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
@@ -119,6 +156,7 @@
     }
     [self doneRefrshLoadingTableViewData];
     //    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
+    
 }
 - (CommentCellDeteSource *)getCellDataSourceFromInfo:(NSDictionary *)info
 {
@@ -129,7 +167,12 @@
 }
 - (void)getMoreFromNetWork
 {
-    [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
+//    [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
+    [RequestManager getCommentWithSourceType:type andSourceID:sourceId success:^(NSString *response) {
+        DLog(@"%@",response);
+    } failure:^(NSString *error) {
+        
+    }];
 }
 
 #pragma mark TableView Delegate

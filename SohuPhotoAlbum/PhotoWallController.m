@@ -175,6 +175,7 @@
     [_moreFootView setMoreFunctionOff:NO];
     [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
+        
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
         [self doneMoreLoadingTableViewData];
@@ -283,12 +284,14 @@
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
 //    DLog(@"%s",__FUNCTION__);
-    [self.navigationController pushViewController:[[CommentController alloc] init] animated:YES];
+    NSString * urlStr = [[[[cell dataSource] imageWallInfo] objectAtIndex:0] objectForKey:@"photo_url"];
+    [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] wallId] andSoruceType:KSourcePortfolios withBgImageURL:urlStr] animated:YES];
 }
 - (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
 {
     DLog(@"%s",__FUNCTION__);
 }
+
 - (void)photoWallCell:(PhotoWallCell *)cell photosClick:(id)sender
 {    
     PhotoWallCellDataSource * source = cell.dataSource;

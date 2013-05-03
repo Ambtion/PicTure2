@@ -52,38 +52,16 @@
     }
     return NO;
 }
-
-+ (void)getSourceWithStringUrl:(NSString * )strUrl success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [request addRequestHeader:@"accept" value:@"application/json"];
-    [request setRequestMethod:@"GET"];
-    [request setCompletionBlock:^{
-        DLog(@"%d",[request responseStatusCode]);
-        NSInteger code = [request responseStatusCode];
-        if ([self handlerequsetStatucode:code withblock:failure]) {
-            success([request responseString]);
-        }else{
-            [self objectPopAlerViewnotTotasView:NO WithMes:REQUSETFAILERROR];
-            failure(REQUSETFAILERROR);
-        }
-    }];
-    [request setFailedBlock:^{
-        if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
-        [self objectPopAlerViewnotTotasView:NO WithMes:REQUSETFAILERROR];
-        failure(REQUSETFAILERROR);
-    }];
-    [request startAsynchronous];
-}
-+ (void)postWithURL:(NSString *)strUrl body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
-{
-    __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
-    [request addRequestHeader:@"accept" value:@"application/json"];
+    [request setRequestMethod:method];
     [request setStringEncoding:NSUTF8StringEncoding];
     for (id key in [body allKeys])
         [request setPostValue:[body objectForKey:key] forKey:key];
     [request setCompletionBlock:^{
-        DLog(@"%@",[request responseString]);
+        DLog(@"url :%@ :%d",request.url,[request responseStatusCode]);
         NSInteger code = [request responseStatusCode];
         if ([self handlerequsetStatucode:code withblock:failure]) {
             success([request responseString]);
@@ -98,8 +76,26 @@
         failure(REQUSETFAILERROR);
     }];
     [request startAsynchronous];
+    
+}
+#pragma mark GET
++ (void)getSourceWithStringUrl:(NSString * )strUrl success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    [self getWithUrlStr:strUrl andMethod:@"GET" body:nil success:success failure:failure];
+}
+#pragma mark POST
++ (void)postWithURL:(NSString *)strUrl body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    [self getWithUrlStr:strUrl andMethod:@"POST" body:body success:success failure:failure];
+}
+
+#pragma mark DELETE
++ (void)deleteSoruce:(NSString * )strUrl success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    [self getWithUrlStr:strUrl andMethod:@"DELETE" body:nil success:success failure:failure];
 }
 @end
+
 
 @implementation RequestManager
 
@@ -115,7 +111,7 @@
     }
     DLog(@"%@",str);
     [self getSourceWithStringUrl:str success:success failure:failure];
-    
+
 }
 
 + (void)deletePhotosWithaccessToken:(NSString *)token	photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
@@ -133,6 +129,7 @@
     [self postWithURL:strUrl body:dic success:success failure:failure];
 }
 
+#pragma mark - TimePhotos
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * mmm;
@@ -140,17 +137,35 @@
     [self getSourceWithStringUrl:str success:success failure:failure];
 }
 
-+ (void)getAllPhototInStroyWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+#pragma mark - Wall
++ (void)getStorysOffWallWithAccessToken:(NSString *)token andStoryId:(NSString *)storyID success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * str =  [NSString stringWithFormat:@"%@/api/v1/portfolios/%@?access_token=%@",BASICURL,storyID,token];
+    [self deleteSoruce:str success:success failure:failure];
+}
+
+#pragma mark Story
++ (void)getAllPhototInStoryWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * mmm;
     NSString * str = [NSString stringWithFormat:@"%@/api/v1/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
                       BASICURL,storyId,@"4",start,count];
-    DLog(@"%@",str);
     [self getSourceWithStringUrl:str success:success failure:failure];
 }
 
-+ (void)getStroyOffWallWithAccessToken:(NSString *)token andStoryId:(NSString *)storyID success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+#pragma mark - comment
++ (void)getCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 {
-//    NSString * str=  [NSString stringWithFormat:@"%@"]
+    NSString * soure = (type == KSourcePhotos ? @"photos":@"portfolios");
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/comments/%@/%@",BASICURL,soure,srouceId];
+    [self getSourceWithStringUrl:str success:success failure:failure];
 }
++ (void)postCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId onwerID:(NSString *)ownerId andAccessToken:(NSString *)token comment:(NSString *)comment success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * soure = (type == KSourcePhotos ? @"photos":@"portfolios");
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/comments/%@/%@",BASICURL,soure,srouceId];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:ownerId,@"owner_id",token,@"access_token",comment,@"content", nil];
+    [self postWithURL:str body:dic success:success failure:failure];
+}
+
 @end
