@@ -11,11 +11,11 @@
 #import "StoryFootView.h"
 
 @interface PhotoStoryCellDataSource : NSObject
-@property(strong,nonatomic)NSString * imageID;
+@property(strong,nonatomic)NSString * photoId;
+@property(strong,nonatomic)NSString * imageUrl;
 @property(strong,nonatomic)NSString * imageDes;
 @property(strong,nonatomic)NSArray * commentInfoArray;
 @property(assign,nonatomic)NSInteger allCommentCount;
-@property(assign,nonatomic)NSInteger likeCount;
 - (CGFloat)cellHeigth;
 @end
 

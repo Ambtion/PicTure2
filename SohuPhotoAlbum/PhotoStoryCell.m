@@ -7,6 +7,8 @@
 //
 
 #import "PhotoStoryCell.h"
+#import "UIImageView+WebCache.h"
+
 #define OFFSETX 12
 #define OFFSETY 10
 #define DESLABELFONT        [UIFont boldSystemFontOfSize:14]
@@ -14,12 +16,14 @@
 #define DESLABLELINEBREAK   NSLineBreakByWordWrapping
 
 @implementation PhotoStoryCellDataSource
-@synthesize imageID,imageDes,commentInfoArray,allCommentCount;
+@synthesize photoId,imageUrl,imageDes,commentInfoArray,allCommentCount;
 - (CGFloat)cellHeigth
 {
     CGFloat heigth = OFFSETY;
     heigth += 300; //图片
     heigth += OFFSETY;
+    if (!imageDes || [imageDes isEqualToString:@""])
+        imageDes = @"用户暂无描述";
     CGSize size = [imageDes sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
     heigth += OFFSETY + 5;
     heigth += size.height; //des
@@ -29,7 +33,7 @@
         heigth += [dataSoure commetViewheigth];
     }
     if (!MIN(3, commentInfoArray.count)){
-        heigth += OFFSETY;
+        heigth += OFFSETY/2.f;
         heigth += 40;
         return heigth;
     }else{
@@ -126,38 +130,46 @@
 
 - (void)updaAllSubViewsFrames
 {
-    _photoView.image = [UIImage imageNamed:[_dataSource imageID]];
+    
+    NSString * str = [NSString stringWithFormat:@"%@_c640",[_dataSource imageUrl]];
+    [_photoView setImageWithURL:[NSURL URLWithString:str]];
     _photoView.frame = CGRectMake((_photoView.superview.frame.size.width - 320)/2.f, 0, 320, 320);
-
+    
     //_desLabel Size
     _desLabel.text = [_dataSource imageDes];
     CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
     
     _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + OFFSETY + 5, size.width, size.height);
     
-    _bgImageView.frame = CGRectMake(0, OFFSETY, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 20);
+    _bgImageView.frame = CGRectMake(0, OFFSETY, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 10);
     //commentSize
+    for (CommentView * view in _commentArray){
+        [view setHidden:YES];
+    }
     if (_dataSource.commentInfoArray && _dataSource.commentInfoArray.count) {
         
         CommentView * view = [_commentArray objectAtIndex:0];
         view.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:0]; //计算view.frame
         view.frame = CGRectMake(view.frame.origin.x, _desLabel.frame.size.height + _desLabel.frame.origin.y + 5, view.frame.size.width, view.frame.size.height);
+        [view setHidden:NO];
         [self setFootViewWithView:view];
         if (_dataSource.commentInfoArray.count > 1){
             CommentView * view1 = [_commentArray objectAtIndex:1];
             view1.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:1];
             view1.frame = CGRectMake(view1.frame.origin.x, view.frame.size.height + view.frame.origin.y, view1.frame.size.width, view1.frame.size.height);
+            [view1 setHidden:NO];
             [self setFootViewWithView:view1];
 
             if (_dataSource.commentInfoArray.count > 2){
                 CommentView * view2 = [_commentArray objectAtIndex:2];
                 view2.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:2];
                 view2.frame = CGRectMake(view2.frame.origin.x, view1.frame.size.height + view1.frame.origin.y, view2.frame.size.width, view2.frame.size.height);
+                [view2 setHidden:NO];
                 [self setFootViewWithView:view2];
             }
         }
     }else{
-        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y + OFFSETY  ,320, 40);
+        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y+ OFFSETY /2.f ,320, 40);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
 }

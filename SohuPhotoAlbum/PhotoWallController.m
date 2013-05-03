@@ -9,9 +9,18 @@
 #import "PhotoWallController.h"
 #import "PhotoStoryController.h"
 #import "RequestManager.h"
+#import "CommentController.h"
 
 @implementation PhotoWallController
-
+@synthesize ownerID;
+- (id)initWithOwnerID:(NSString *)ownID
+{
+    self = [super init];
+    if (self) {
+        self.ownerID = ownID;
+    }
+    return self;
+}
 - (void)viewDidLoad
 {
     
@@ -27,15 +36,16 @@
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];
-    
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     _myTableView.tableFooterView = _moreFootView;
+    
     _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 10, 77, 20)];
+    [_timelabel setHidden:YES];
     [self.view addSubview:_timelabel];
     
     [self initContainer];
-    [self refrshDataFromNetWork];
+    [self getMoreFromNetWork];
   
 }
 - (void)initContainer
@@ -53,6 +63,7 @@
 - (PhotoWallCellDataSource *)getCellDataSourceFromDic:(NSDictionary *)dic
 {
     PhotoWallCellDataSource * dataSource = [[PhotoWallCellDataSource alloc] init];
+    dataSource.wallId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
     NSArray * phtotArray = [dic objectForKey:@"photos"];
     dataSource.imageWallInfo = phtotArray;
     dataSource.wallDescription = nil;
@@ -146,7 +157,8 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getTimePhtotWallStorysWithOwnerId:[LoginStateManager currentUserId] start:0 count:20 success:^(NSString *response) {
+    [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID start:0 count:20 success:^(NSString *response) {
+        [_dataSourceArray removeAllObjects];
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
         [self doneRefrshLoadingTableViewData];
     } failure:^(NSString *error) {
@@ -155,7 +167,18 @@
 }
 - (void)getMoreFromNetWork
 {
-    [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
+    if (_dataSourceArray.count % 20 != 0) {
+        [_moreFootView setMoreFunctionOff:YES];
+        [self doneMoreLoadingTableViewData];
+        return;
+    }
+    [_moreFootView setMoreFunctionOff:NO];
+    [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
+        [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
+        [self doneMoreLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self doneMoreLoadingTableViewData];
+    }];
 }
 
 #pragma mark TableView Delegate
@@ -177,6 +200,7 @@
 - (void)resetLabel
 {
     if (_dataSourceArray.count) {
+        [_timelabel setHidden:NO];
         [self setLabelTimeWithTime:[[_dataSourceArray objectAtIndex:0] shareTime]];
     }else{
         _timelabel.daysLabel.text = nil;
@@ -258,16 +282,17 @@
 }
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
-    DLog(@"%s",__FUNCTION__);
+//    DLog(@"%s",__FUNCTION__);
+    [self.navigationController pushViewController:[[CommentController alloc] init] animated:YES];
 }
 - (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
 {
     DLog(@"%s",__FUNCTION__);
+}
+- (void)photoWallCell:(PhotoWallCell *)cell photosClick:(id)sender
+{    
+    PhotoWallCellDataSource * source = cell.dataSource;
+    [self.navigationController pushViewController:[[PhotoStoryController alloc] initWithStoryId:source.wallId ownerID:self.ownerID] animated:YES];
+}
 
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    DLog(@"%s",__FUNCTION__);
-    [self.navigationController pushViewController:[[PhotoStoryController alloc] init] animated:YES];
-}
 @end

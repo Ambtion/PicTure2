@@ -100,6 +100,13 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 {
     self.view.userInteractionEnabled = NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row) {
+        if (![LoginStateManager isLogin]) {
+            [self accountView:nil fullScreenClick:nil];
+            self.view.userInteractionEnabled = YES;
+            return;
+        }
+    }
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         if (indexPath.row == 0) {
             LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
@@ -110,7 +117,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
             self.viewDeckController.centerController = cp;
         }
         if (indexPath.row == 2) {
-            PhotoWallController * lp = [[PhotoWallController alloc] init];
+            PhotoWallController * lp = [[PhotoWallController alloc] initWithOwnerID:[LoginStateManager currentUserId]];
             self.viewDeckController.centerController = lp;
         }
         if (indexPath.row == 3) {

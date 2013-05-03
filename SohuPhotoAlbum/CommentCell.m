@@ -1,0 +1,89 @@
+//
+//  CommentCell.m
+//  SohuPhotoAlbum
+//
+//  Created by sohu on 13-5-2.
+//  Copyright (c) 2013年 Qu. All rights reserved.
+//
+
+#import "CommentCell.h"
+
+#define TEXTCOLOR  [UIColor colorWithRed:75.f/255 green:75.f/255 blue:75.f/255 alpha:1.f]
+#define TEXTFONT  [UIFont systemFontOfSize:12]
+@implementation CommentCellDeteSource
+@synthesize portraitUrl,userName,commentStr;
+
+- (CGFloat)cellHeigth
+{
+    CGSize size = [self.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
+    return size.height + 43 + 10;
+}
+
+@end
+@implementation CommentCell
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = [UIColor blackColor];
+        [self initSubViews];
+    }
+    return self;
+}
+- (void)initSubViews
+{
+    porViews = [[PortraitView alloc] initWithFrame:CGRectMake(6, 6, 38, 38)];
+    porViews.clipsToBounds = YES;
+    porViews.layer.cornerRadius = 5.f;
+    porViews.layer.borderWidth = 1.f;
+    porViews.layer.borderColor = [[UIColor blackColor] CGColor];
+    porViews.backgroundColor = [UIColor clearColor];
+    [self.contentView addSubview:porViews];
+    
+    commentbgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"commentbgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 25, 5, 25)]];
+    [self.contentView addSubview:commentbgView];
+    nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 12, 200, 20)];
+    [self setusernameLabel];
+    [self.contentView addSubview:nameLabel];
+    commentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    [self setCommentLabel];
+    [self.contentView addSubview:commentLabel];
+}
+- (void)setusernameLabel
+{
+    nameLabel.textColor = [UIColor colorWithRed:75.f/255 green:75.f/255 blue:75.f/255 alpha:1.f];
+    nameLabel.backgroundColor = [UIColor clearColor];
+    nameLabel.font = [UIFont boldSystemFontOfSize:14];
+}
+- (void)setCommentLabel
+{
+    commentLabel.backgroundColor = [UIColor clearColor];
+    commentLabel.textColor = TEXTCOLOR;
+    commentLabel.font = TEXTFONT;
+    commentLabel.numberOfLines = 0;
+}
+- (CommentCellDeteSource *)dataSource
+{
+    return _dataSource;
+}
+- (void)setDataSource:(CommentCellDeteSource *)dataSource
+{
+    if (_dataSource != dataSource) {
+        _dataSource = dataSource;
+        [self updateViews];
+    }
+}
+- (void)updateViews
+{
+    porViews.imageView.image = [UIImage imageNamed:@"1.jpg"];
+    
+    nameLabel.text = _dataSource.userName;
+    CGSize size = [_dataSource.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
+    CGRect rect = CGRectMake(68, 35, size.width, size.height);
+    commentLabel.frame = rect;
+    commentLabel.text = _dataSource.commentStr;
+    commentbgView.frame = CGRectMake(50, 6, 240, rect.origin.y + rect.size.height);
+}
+@end

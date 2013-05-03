@@ -76,6 +76,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - ReloadSubViews
 - (void)reloadAllSubViews
 {
+
     [self initSubViews];
     [self setScrollViewProperty];
     [self refreshScrollView];
@@ -105,9 +106,10 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     self.curScaleImage.Adelegate = self;
     self.rearScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width * 2, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
      self.rearScaleImage.Adelegate = self;
+    
     [_scrollView addSubview:_fontScaleImage];
-    [_scrollView addSubview:_curScaleImage];
     [_scrollView addSubview:_rearScaleImage];
+    [_scrollView addSubview:_curScaleImage];
     [self addBar];
 }
 - (void)addBar

@@ -10,6 +10,7 @@
 #import "PopAlertView.h"
 #import "ToastAlertView.h"
 #import "MBProgressHUD.h"
-@interface UIViewController (extension)
+@interface NSObject (extension)
 - (void)showPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage;
++ (void)objectPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage;
 @end

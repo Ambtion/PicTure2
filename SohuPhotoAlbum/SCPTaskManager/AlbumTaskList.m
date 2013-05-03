@@ -103,11 +103,11 @@
         [self requestFailed:request];
         return;
     }
-    //等于200时候上传出错.....
+    //不等于200时候上传出错.....
     NSDictionary * dic = [[request responseString] JSONValue];
     NSInteger code = [[dic objectForKey:@"code"] intValue];
     if (![self handleCode:code]) return;
-    
+    DLog(@"%@",dic);
     //上传成功
     [request cancel];
     [request clearDelegatesAndCancel];

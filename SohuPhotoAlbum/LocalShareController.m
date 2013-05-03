@@ -20,19 +20,19 @@
     [super viewDidLoad];
     [self.sinaAcountBtn setImage:[UIImage imageNamed:@"share_sina.png"] forState:UIControlStateNormal];
     [self.sinaAcountBtn setImage:[UIImage imageNamed:@"share_sina_press.png"] forState:UIControlStateHighlighted];
-    self.sinaAcountBtn.labelText.text =@"新浪分享";
+    self.sinaAcountBtn.labelText.text = @"新浪分享";
     
     [self.renrenAcountBtn setImage:[UIImage imageNamed:@"share_renren.png"] forState:UIControlStateNormal];
     [self.renrenAcountBtn setImage:[UIImage imageNamed:@"share_renren_press.png"] forState:UIControlStateHighlighted];
-    self.renrenAcountBtn.labelText.text =@"人人";
+    self.renrenAcountBtn.labelText.text = @"人人";
     
     [self.weixinAcountBtn setImage:[UIImage imageNamed:@"share_weixin.png"] forState:UIControlStateNormal];
     [self.weixinAcountBtn setImage:[UIImage imageNamed:@"share_weixin_press.png"] forState:UIControlStateHighlighted];
-    self.weixinAcountBtn.labelText.text =@"微信";
+    self.weixinAcountBtn.labelText.text = @"微信";
     
     [self.qqAcountBtn setImage:[UIImage imageNamed:@"share_Q_zone.png"] forState:UIControlStateNormal];
     [self.qqAcountBtn setImage:[UIImage imageNamed:@"share_Q_zone_press.png"] forState:UIControlStateHighlighted];
-    self.qqAcountBtn.labelText.text =@"QQ空间";
+    self.qqAcountBtn.labelText.text = @"QQ空间";
 }
 #pragma mark Action
 - (AppDelegate *)Appdelegate

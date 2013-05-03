@@ -47,7 +47,6 @@
         _fulldata = [self fullData];
     NSData * data = _fulldata;
     if (!isUploadJPEGImage) {
-//            data = UIImageJPEGRepresentation(image, 1.f);
         DLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
     }else{
         NSDictionary * dic = [self infoDic];
@@ -55,10 +54,9 @@
         CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.5);
-//        DLog(@"cpmpre:when upload MMM: %f",[data length]/(1024 * 1024.f));
         data = [self writeExif:dic intoImage:data];
-//        DLog(@"%@", [self getPropertyOfdata:data]);
         DLog(@"cpmpre:when upload: %f",[data length]/(1024 * 1024.f));
+//        NSLog(@"%@",[self getPropertyOfdata:data]);
     }
     return data;
 }

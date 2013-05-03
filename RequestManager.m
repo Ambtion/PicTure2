@@ -59,14 +59,18 @@
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:@"GET"];
     [request setCompletionBlock:^{
-        
+        DLog(@"%d",[request responseStatusCode]);
         NSInteger code = [request responseStatusCode];
         if ([self handlerequsetStatucode:code withblock:failure]) {
             success([request responseString]);
+        }else{
+            [self objectPopAlerViewnotTotasView:NO WithMes:REQUSETFAILERROR];
+            failure(REQUSETFAILERROR);
         }
     }];
     [request setFailedBlock:^{
         if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
+        [self objectPopAlerViewnotTotasView:NO WithMes:REQUSETFAILERROR];
         failure(REQUSETFAILERROR);
     }];
     [request startAsynchronous];
@@ -83,10 +87,14 @@
         NSInteger code = [request responseStatusCode];
         if ([self handlerequsetStatucode:code withblock:failure]) {
             success([request responseString]);
+        }else{
+            [self objectPopAlerViewnotTotasView:NO WithMes:REQUSETFAILERROR];
+            failure(REQUSETFAILERROR);
         }
     }];
     [request setFailedBlock:^{
         if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
+        [self objectPopAlerViewnotTotasView:NO WithMes:REQUSETFAILERROR];
         failure(REQUSETFAILERROR);
     }];
     [request startAsynchronous];
@@ -105,6 +113,7 @@
     }else{
         str =  [NSString stringWithFormat:@"%@/api/v1/sync_photos?access_token=%@&count=%d",BASICURL,token,count];
     }
+    DLog(@"%@",str);
     [self getSourceWithStringUrl:str success:success failure:failure];
     
 }
@@ -122,14 +131,26 @@
     }
     [dic setValue:iDsStr forKey:@"photo_ids"];
     [self postWithURL:strUrl body:dic success:success failure:failure];
-
 }
-
 
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
+    NSString * mmm;
     NSString * str = [NSString stringWithFormat:@"%@/api/v1/portfolios?owner_id=%@&start=%d&count=%d",BASICURL,@"4",start,count];
+    [self getSourceWithStringUrl:str success:success failure:failure];
+}
+
++ (void)getAllPhototInStroyWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * mmm;
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
+                      BASICURL,storyId,@"4",start,count];
     DLog(@"%@",str);
     [self getSourceWithStringUrl:str success:success failure:failure];
+}
+
++ (void)getStroyOffWallWithAccessToken:(NSString *)token andStoryId:(NSString *)storyID success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+//    NSString * str=  [NSString stringWithFormat:@"%@"]
 }
 @end

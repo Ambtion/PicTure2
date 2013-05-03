@@ -167,6 +167,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
         [PerfrenceSettingManager setIsAutoUpload:[Aswitch isTure]];
     }
     if (path.row == 2) {
+        DLog(@"%d",[Aswitch isTure]);
         [PerfrenceSettingManager setIsUploadJPEGImage:[Aswitch isTure]];
     }
 }

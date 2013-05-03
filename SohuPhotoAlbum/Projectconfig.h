@@ -26,7 +26,7 @@
 
 #import "IIViewDeckController.h"
 //alert
-#import "UIViewController+extension.h"
+#import "NSObject+extension.h"
 
 #import<AssetsLibrary/AssetsLibrary.h>
 #import "ALAssetsLibrary+Read.h"

@@ -12,10 +12,7 @@
 @synthesize selected = _selected;
 @synthesize isShowStatus;
 @synthesize statueImage = _statuImage;
-- (void)dealloc
-{
-    [_statuImage removeObserver:self forKeyPath:@"image"];
-}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -36,10 +33,7 @@
     }
     return self;
 }
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    DLog(@"%@",change);
-}
+
 - (void)setSelected:(BOOL)selected
 {
     if (!isShowStatus)

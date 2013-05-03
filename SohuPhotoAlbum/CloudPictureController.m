@@ -41,7 +41,7 @@
     self.myTableView.tableFooterView = _moreFootView;
     
     [self initDataContainer];
-    [self refrshDataFromNetWork];
+    [self getMoreFromNetWork];
 }
 - (void)initDataContainer
 {
@@ -112,6 +112,7 @@
         [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:0.f];
     }];
 }
+
 - (void)getMoreFromNetWork
 {
     NSDictionary * dic = nil;
@@ -119,7 +120,6 @@
         dic =  [self.assetsArray lastObject];
     
     long long time = dic ? [[dic objectForKey:@"taken_id"] longLongValue] : 0;
-    DLog(@"%lld",time);
     _isLoading = YES;
     [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:time count:100 success:^(NSString *response) {
         NSArray * photos = [[response JSONValue] objectForKey:@"photos"];
@@ -263,7 +263,6 @@
 
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
-    DLog(@"%s",__FUNCTION__);
     CloundDetailController * cd = [[CloundDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:dic];
     [self.navigationController pushViewController:cd animated:YES];
 }
@@ -286,7 +285,8 @@
         [array addObject:[dic objectForKey:@"id"]];
     }
     if (_viewState == DeleteState) {
-        [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:array success:^(NSString *response) {
+        [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:array success:^(NSString *response)
+        {
             [self.assetsArray removeObjectsInArray:selectedArray];
             [self reloadTableViewWithAssetsSource:self.assetsArray];
             [self showPopAlerViewnotTotasView:NO WithMes:@"删除成功"];

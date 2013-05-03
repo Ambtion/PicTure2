@@ -17,7 +17,7 @@
 
 
 @implementation CommentViewDataSource
-@synthesize potraitImage,userName,shareTime,comment;
+@synthesize userId,potraitImage,userName,shareTime,comment;
 - (CGFloat)commetViewheigth
 {
     CGFloat heigth = OFFSETY;

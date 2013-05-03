@@ -22,4 +22,7 @@
     CustomizationNavBar * _navBar;
     BOOL _isLoading;
 }
+@property(strong,nonatomic)NSString * ownerID;
+@property(strong,nonatomic)NSString * storyID;
+- (id)initWithStoryId:(NSString *)AstoryID ownerID:(NSString *)AownerID;
 @end

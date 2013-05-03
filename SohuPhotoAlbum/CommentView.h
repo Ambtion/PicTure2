@@ -11,6 +11,7 @@
 
 
 @interface CommentViewDataSource : NSObject
+@property(strong,nonatomic)NSString * userId;
 @property(strong,nonatomic)NSString * potraitImage;
 @property(strong,nonatomic)NSString * userName;
 @property(strong,nonatomic)NSString * shareTime;

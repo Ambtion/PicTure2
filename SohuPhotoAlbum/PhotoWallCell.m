@@ -70,7 +70,7 @@
 @end
 
 @implementation PhotoWallCellDataSource
-@synthesize imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount;
+@synthesize wallId,imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount;
 - (CGFloat)getCellHeigth
 {
     if (imageWallInfo.count) {
@@ -105,7 +105,6 @@
     if (reuseIdentifiernum > 6 || reuseIdentifiernum < 1) return nil;
     self = [super initWithStyle:style reuseIdentifier:identify[reuseIdentifiernum]];
     if (self) {
-        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         _backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
         _backImageView.image = [[UIImage imageNamed:@"new_paper_wall.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 160, 50, 50)];
@@ -142,6 +141,9 @@
     heigth = [ImageViewAdaper setFramesinToArray:_framesArray byImageCount:identifyNum];
     for (NSValue * value in _framesArray) {
         UIImageView * imageView = [[UIImageView alloc] initWithFrame:[value CGRectValue]];
+        [imageView setUserInteractionEnabled:YES];
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        [imageView addGestureRecognizer:tap];
         [_imageViewArray addObject:imageView];
         [_backImageView addSubview:imageView];
     }
@@ -191,6 +193,11 @@
     _backImageView.frame = CGRectMake(0, 0, self.bounds.size.width, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY);
 }
 #pragma mark ActionFunction
+- (void)handleGesture:(id)sender
+{
+    if ([_delegate respondsToSelector:@selector(photoWallCell:photosClick:)])
+        [_delegate photoWallCell:self photosClick:nil];
+}
 - (void)likeButtonClick:(UIButton *)button
 {
     if ([_delegate respondsToSelector:@selector(photoWallCell:likeClick:)])

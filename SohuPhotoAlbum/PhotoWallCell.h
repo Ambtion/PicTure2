@@ -22,7 +22,8 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 @end
 
 @interface PhotoWallCellDataSource : NSObject
-@property(strong,nonatomic)NSArray * imageWallInfo;
+@property(strong,nonatomic)NSString * wallId;
+@property(strong,nonatomic)NSArray  * imageWallInfo;
 @property(strong,nonatomic)NSString * wallDescription;
 @property(strong,nonatomic)NSString * shareTime;
 @property(assign,nonatomic)NSInteger talkCount;
@@ -34,6 +35,7 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 
 @class PhotoWallCell;
 @protocol PhotoWallCellDelegate <NSObject>
+- (void)photoWallCell:(PhotoWallCell *)cell photosClick:(id)sender;
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button;
 - (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button;
 @end

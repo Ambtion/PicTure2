@@ -42,11 +42,11 @@
 {
     NSDictionary * userinfo = [self valueForUserinfo];
     NSNumber * num = [self valueForKey:ISUPLOADJPEGIMAGE inUserinfo:userinfo];
-    return !num || ![num  boolValue];
+    DLog(@"%@",num);
+    return !num || [num  boolValue];
 }
 +(void)setIsUploadJPEGImage:(BOOL)ture
 {
-    if (![LoginStateManager isLogin]) return;
     [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISUPLOADJPEGIMAGE];
 }
 

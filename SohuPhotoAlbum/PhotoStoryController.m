@@ -7,12 +7,26 @@
 //
 
 #import "PhotoStoryController.h"
+#import "RequestManager.h"
+#import "CommentController.h"
+
 @implementation PhotoStoryController
+@synthesize storyID,ownerID;
+
+- (id)initWithStoryId:(NSString *)AstoryID ownerID:(NSString *)AownerID
+{
+    if (self = [super init]) {
+        self.storyID = AstoryID;
+        self.ownerID = AownerID;
+    }
+    return self;
+}
 
 #pragma mark View LifeCircle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.view.backgroundColor = BASEWALLCOLOR;
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -20,7 +34,6 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = [UIColor clearColor];
-
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
@@ -29,29 +42,30 @@
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     _myTableView.tableFooterView = _moreFootView;
-    
-    //测试用
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i < 20; i++) {
-        PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
-        
-        dataSource.imageID = @"1.jpg";
-        dataSource.imageDes = @"我啦对法拉第飞啊记得发,你是挨打发对法拉飞.挨打放假的了";
-        NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
-        int n = arc4random() % 3;
-        for (int i = 0; i <= n; i++) {
-            CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
-            cds.userName = @"游客踩踩";
-            cds.potraitImage = @"1.jpg";
-            cds.shareTime = @"6个小时前";
-            cds.comment = @"ASDFA,adf就啊了的控件飞,加啊克里斯蒂法律人阿的江";
-            [array addObject:cds];
-        }
-        dataSource.commentInfoArray = array;
-        dataSource.likeCount = 100;
-        [_dataSourceArray addObject:dataSource];
-    }
-    [_myTableView reloadData];
+    
+    [self refrshDataFromNetWork];
+    //    //测试用
+    //    for (int i = 0; i < 20; i++) {
+    //        PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
+    //
+    //        dataSource.imageID = @"1.jpg";
+    //        dataSource.imageDes = @"我啦对法拉第飞啊记得发,你是挨打发对法拉飞.挨打放假的了";
+    //        NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
+    //        int n = arc4random() % 3;
+    //        for (int i = 0; i <= n; i++) {
+    //            CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
+    //            cds.userName = @"游客踩踩";
+    //            cds.potraitImage = @"1.jpg";
+    //            cds.shareTime = @"6个小时前";
+    //            cds.comment = @"ASDFA,adf就啊了的控件飞,加啊克里斯蒂法律人阿的江";
+    //            [array addObject:cds];
+    //        }
+    //        dataSource.commentInfoArray = array;
+    //        dataSource.likeCount = 100;
+    //        [_dataSourceArray addObject:dataSource];
+    //    }
+    //    [_myTableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -102,7 +116,7 @@
 - (void)refeshOnce:(id)sender
 {
     [_refresHeadView refreshImmediately];
-    [self reloadTableViewDataSource];    
+    [self reloadTableViewDataSource];
 }
 
 #pragma mark - more
@@ -128,13 +142,55 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
+    [RequestManager getAllPhototInStroyWithOwnerId:self.ownerID stroyId:self.storyID start:0 count:20 success:^(NSString *response) {
+        [_dataSourceArray removeAllObjects];
+        [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
+        [self doneRefrshLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self doneRefrshLoadingTableViewData];
+    }];
 }
 - (void)getMoreFromNetWork
 {
-    [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
+    if (_dataSourceArray.count % 20) {
+        [_moreFootView setMoreFunctionOff:YES];
+        [self doneMoreLoadingTableViewData];
+        return;
+    }
+    [_moreFootView setMoreFunctionOff:NO];
+    [RequestManager getAllPhototInStroyWithOwnerId:self.ownerID stroyId:self.storyID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
+        [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
+        [self doneMoreLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self doneMoreLoadingTableViewData];
+    }];}
+- (void)addSoruceFromArray:(NSArray *)array
+{
+    DLog(@"%@",[array lastObject]);
+    for (NSDictionary * info in array)
+        [_dataSourceArray addObject:[self getCellSourceFromInfo:info]];
+    [_myTableView reloadData];
 }
-
+- (PhotoStoryCellDataSource *)getCellSourceFromInfo:(NSDictionary *)info
+{
+    PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
+    dataSource.photoId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
+    dataSource.imageUrl = [info objectForKey:@"photo_url"];
+    dataSource.imageDes = [info objectForKey:@"description"];
+    NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
+    int n = arc4random() % 3;
+    for (int i = 0; i <= n; i++) {
+        CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
+        cds.userName = @"游客踩踩";
+        cds.potraitImage = @"1.jpg";
+        cds.shareTime = @"6个小时前";
+        cds.comment = @"ASDFA,adf就啊了的控件飞,加啊克里斯蒂法律人阿的江";
+        [array addObject:cds];
+    }
+    dataSource.commentInfoArray = array;
+    dataSource.allCommentCount = [[info objectForKey:@"comment_num"] integerValue];
+    return dataSource;
+}
 #pragma mark TableView Delegate
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
@@ -188,6 +244,22 @@
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
 {
     DLog(@"photoStoryCell %d",index);
+    switch (index) {
+        case 0: //评论
+            [self.navigationController pushViewController:[[CommentController alloc] init] animated:YES];
+            break;
+        case 1: //喜欢
+            break;
+        case 2:
+            break;
+                //分享
+        case 3:
+            break;
+                //删除
+        default:
+            break;
+    }
+    
 }
 -(void)photoStoryCell:(PhotoStoryCell *)cell commentClickAtIndex:(NSInteger)index
 {
