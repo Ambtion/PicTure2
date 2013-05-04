@@ -132,11 +132,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView];
-    if (scrollView.contentSize.height - scrollView.frame.size.height -  scrollView.contentOffset.y < 100) {
-        [_moreFootView moreImmediately];
-        _isLoading = YES;
-    }
+    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 
 #pragma mark - tableViewdelgate

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 #import "LeftMenuController.h"
+#import "RequestManager.h"
+#import "UIImageView+WebCache.h"
 
 #define MENUMAXNUMBER 4
 
@@ -16,8 +18,8 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
     
+    [super viewDidLoad];
     CGRect rect = [[UIScreen mainScreen] bounds];
     //bgView
     self.view.backgroundColor = [UIColor whiteColor];
@@ -49,6 +51,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     [self setAccountView];
     [self.view addSubview:_accountView];
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -60,9 +63,21 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 - (void)setAccountView
 {
     //暂时写着
-    _accountView.portraitImageView.imageView.image = [UIImage imageNamed:@"1.jpg"];
-    _accountView.desLabel.text = [LoginStateManager isLogin] ? @"账号已经登陆" : @"请登录账号";
-    _accountView.nameLabel.text = @"我真的是故意的";
+    if (![LoginStateManager isLogin]) {
+        _accountView.portraitImageView.imageView.image = [UIImage imageNamed:@"1.jpg"];
+        _accountView.desLabel.text =  @"请登录账号";
+        _accountView.nameLabel.text = nil;
+    }else{
+        [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
+        NSDictionary * dic = [response JSONValue];
+            DLog(@"%@",dic);
+            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+            _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
+            _accountView.nameLabel.text = [dic objectForKey:@"user_nick"];
+        } failure:^(NSString *error) {
+            
+        }];
+    }
 }
 
 #pragma mark Delegate TableView
@@ -152,6 +167,11 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     if ([LoginStateManager isLogin]) {
         [LoginStateManager logout];
         [self setAccountView];
+        [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
+            LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
+            self.viewDeckController.centerController = la;
+            self.view.userInteractionEnabled = YES;
+        }];
     }else{
         LoginViewController * lv = [[LoginViewController alloc] init];
         lv.delegate = self;

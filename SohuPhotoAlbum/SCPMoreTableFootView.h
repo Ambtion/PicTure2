@@ -22,11 +22,10 @@
 }
 @property(nonatomic,weak)id<SCPMoreTableFootViewDelegate> delegate;
 - (id)initWithFrame:(CGRect)frame WithLodingImage:(UIImage *)lodingImage endImage:(UIImage *)endImage WithBackGroud:(UIColor *)color;
-- (void)scpMoreScrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)scpMoreScrollViewDidScroll:(UIScrollView *)scrollView isAutoLoadMore:(BOOL)isAuto WithIsLoadingPoint:(BOOL *)isload;
 - (void)scpMoreScrollViewDidEndDragging:(UIScrollView *)scrollView;
 - (void)scpMoreScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
 
 - (BOOL)canLoadingMore;
-- (void)moreImmediately;
 - (void)setMoreFunctionOff:(BOOL)isOFF;
 @end

@@ -192,11 +192,7 @@
 {
     [self updataLabelWithScrollView:scrollView];
     [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView];
-    if (scrollView.contentSize.height - scrollView.frame.size.height -  scrollView.contentOffset.y < 100) {
-        [_moreFootView moreImmediately];
-        _isLoading = YES;
-    }
+    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 - (void)resetLabel
 {
@@ -284,8 +280,10 @@
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
 //    DLog(@"%s",__FUNCTION__);
-    NSString * urlStr = [[[[cell dataSource] imageWallInfo] objectAtIndex:0] objectForKey:@"photo_url"];
-    [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] wallId] andSoruceType:KSourcePortfolios withBgImageURL:urlStr] animated:YES];
+    NSDictionary * dic = [[[cell dataSource] imageWallInfo] objectAtIndex:0];
+    NSString * urlStr = [dic objectForKey:@"photo_url"];
+//    NSString * sourceOwnId = []
+    [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] wallId] andSoruceType:KSourcePortfolios withBgImageURL:urlStr WithOwnerID:self.ownerID] animated:YES];
 }
 - (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
 {

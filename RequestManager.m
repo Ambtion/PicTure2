@@ -18,6 +18,11 @@
 
 @implementation RequestManager(private)
 
++ (NSString *)sourceToString:(source_type)type
+{
+    return (type == KSourcePhotos ? @"photos":@"portfolios");
+}
+
 + (void)refreshToken:(NSInteger)requsetStatusCode withblock:(void (^) (NSString * error))failure
 {
     NSString * str = [NSString stringWithFormat:@"%@/oauth2/access_token?grant_type=refresh_token",BASICURL];
@@ -162,10 +167,32 @@
 }
 + (void)postCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId onwerID:(NSString *)ownerId andAccessToken:(NSString *)token comment:(NSString *)comment success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * soure = (type == KSourcePhotos ? @"photos":@"portfolios");
+    NSString * soure = [self sourceToString:type];
     NSString * str = [NSString stringWithFormat:@"%@/api/v1/comments/%@/%@",BASICURL,soure,srouceId];
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:ownerId,@"owner_id",token,@"access_token",comment,@"content", nil];
     [self postWithURL:str body:dic success:success failure:failure];
 }
 
+#pragma mark - userInfo
++ (void)getUserInfoWithToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/user?access_token=%@",BASICURL,token];
+    [self getSourceWithStringUrl:str success:success failure:nil];
+}
+
+#pragma mark like
++ (void)likeWithSourceId:(NSString *)sourceID source:(source_type)type OwnerID:(NSString *)ownId Accesstoken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
+{
+    NSString * soure = [self sourceToString:type];
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/like/%@/%@",BASICURL,soure,sourceID];
+    NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:token,@"access_token",ownId,@"owner_id", nil];
+    [self postWithURL:str body:dic success:success failure:failure];
+}
++ (void)unlikeWithSourceId:(NSString *)sourceID source:(source_type)type Accesstoken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * soure = [self sourceToString:type];
+    NSString * str = [NSString stringWithFormat:@"%@/api/v1/like/destroy/%@/%@",BASICURL,soure,sourceID];
+    NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:token,@"access_token", nil];
+    [self postWithURL:str body:dic success:success failure:failure];
+}
 @end

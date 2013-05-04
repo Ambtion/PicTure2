@@ -298,6 +298,11 @@
 		C58CB466171FF1DE00DB85B3 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CB465171FF1DE00DB85B3 /* delete.png */; };
 		C58DC1531705416A00E97E8C /* upload_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1501705416A00E97E8C /* upload_pic.png */; };
 		C58DC1541705416A00E97E8C /* check_box_select_image.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1511705416A00E97E8C /* check_box_select_image.png */; };
+		C58DD1331734A5C5006FF7BB /* ComentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C58DD1321734A5C5006FF7BB /* ComentView.m */; };
+		C58DD1381734A626006FF7BB /* commentBar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DD1351734A626006FF7BB /* commentBar_bg@2x.png */; };
+		C58DD1391734A626006FF7BB /* commentBar_Button.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DD1361734A626006FF7BB /* commentBar_Button.png */; };
+		C58DD13A1734A626006FF7BB /* commentBar_textBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DD1371734A626006FF7BB /* commentBar_textBg@2x.png */; };
+		C58DD13C1734B019006FF7BB /* commentBar_textBg.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DD13B1734B019006FF7BB /* commentBar_textBg.png */; };
 		C591AAFE172A2A04003A2079 /* RequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C591AAFD172A2A04003A2079 /* RequestManager.m */; };
 		C591B4B1171BDA4C0047C496 /* LocalShareDesView.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4B0171BDA4C0047C496 /* LocalShareDesView.m */; };
 		C591B4B4171BE5820047C496 /* EmojiUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4B3171BE5810047C496 /* EmojiUnit.m */; };
@@ -761,6 +766,12 @@
 		C58CB465171FF1DE00DB85B3 /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
 		C58DC1501705416A00E97E8C /* upload_pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_pic.png; sourceTree = "<group>"; };
 		C58DC1511705416A00E97E8C /* check_box_select_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_box_select_image.png; sourceTree = "<group>"; };
+		C58DD1311734A5C5006FF7BB /* ComentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComentView.h; sourceTree = "<group>"; };
+		C58DD1321734A5C5006FF7BB /* ComentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComentView.m; sourceTree = "<group>"; };
+		C58DD1351734A626006FF7BB /* commentBar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "commentBar_bg@2x.png"; sourceTree = "<group>"; };
+		C58DD1361734A626006FF7BB /* commentBar_Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentBar_Button.png; sourceTree = "<group>"; };
+		C58DD1371734A626006FF7BB /* commentBar_textBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "commentBar_textBg@2x.png"; sourceTree = "<group>"; };
+		C58DD13B1734B019006FF7BB /* commentBar_textBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentBar_textBg.png; sourceTree = "<group>"; };
 		C591AAFC172A2A04003A2079 /* RequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestManager.h; sourceTree = "<group>"; };
 		C591AAFD172A2A04003A2079 /* RequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestManager.m; sourceTree = "<group>"; };
 		C591B4AF171BDA4C0047C496 /* LocalShareDesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalShareDesView.h; sourceTree = "<group>"; };
@@ -1357,7 +1368,7 @@
 		C588B0D817003A1B006BBC34 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				C59F0F2617321E98005F890C /* commentbgView@2x.png */,
+				C58DD1341734A615006FF7BB /* commentView */,
 				C58354001726B43C00099E6E /* nav_bar_host.png */,
 				C583CF26170434F000CD3485 /* album_nb@2x.png */,
 				C58353C417250CB700099E6E /* album_nb.png */,
@@ -1742,6 +1753,18 @@
 			name = pictureState;
 			sourceTree = "<group>";
 		};
+		C58DD1341734A615006FF7BB /* commentView */ = {
+			isa = PBXGroup;
+			children = (
+				C59F0F2617321E98005F890C /* commentbgView@2x.png */,
+				C58DD13B1734B019006FF7BB /* commentBar_textBg.png */,
+				C58DD1351734A626006FF7BB /* commentBar_bg@2x.png */,
+				C58DD1361734A626006FF7BB /* commentBar_Button.png */,
+				C58DD1371734A626006FF7BB /* commentBar_textBg@2x.png */,
+			);
+			name = commentView;
+			sourceTree = "<group>";
+		};
 		C59F0F1F1732183C005F890C /* commentView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1749,6 +1772,8 @@
 				C59F0F211732189B005F890C /* CommentController.m */,
 				C59F0F2317321ADB005F890C /* CommentCell.h */,
 				C59F0F2417321ADB005F890C /* CommentCell.m */,
+				C58DD1311734A5C5006FF7BB /* ComentView.h */,
+				C58DD1321734A5C5006FF7BB /* ComentView.m */,
 			);
 			name = commentView;
 			sourceTree = "<group>";
@@ -2030,6 +2055,10 @@
 				C54DBC7B172BDEE200925B82 /* TabBarUpLoad.png in Resources */,
 				C550E940172CCF400042F419 /* TabBardelete.png in Resources */,
 				C59F0F2717321E98005F890C /* commentbgView@2x.png in Resources */,
+				C58DD1381734A626006FF7BB /* commentBar_bg@2x.png in Resources */,
+				C58DD1391734A626006FF7BB /* commentBar_Button.png in Resources */,
+				C58DD13A1734A626006FF7BB /* commentBar_textBg@2x.png in Resources */,
+				C58DD13C1734B019006FF7BB /* commentBar_textBg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2180,6 +2209,7 @@
 				C550E93E172CC6AF0042F419 /* NSObject+extension.m in Sources */,
 				C59F0F221732189B005F890C /* CommentController.m in Sources */,
 				C59F0F2517321ADC005F890C /* CommentCell.m in Sources */,
+				C58DD1331734A5C5006FF7BB /* ComentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

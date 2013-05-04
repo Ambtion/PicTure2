@@ -18,6 +18,7 @@
 {
     UITableView * _myTableView;
     UIImageView * _navBar;
+    NSDictionary * userInfodic;
 }
 @property(weak,nonatomic)id delegate;
 @end

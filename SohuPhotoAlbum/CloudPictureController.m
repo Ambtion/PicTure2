@@ -31,6 +31,7 @@
     self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
+    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [self.myTableView addSubview:_refresHeadView];
@@ -109,7 +110,7 @@
         [self reloadTableViewWithAssetsSource:self.assetsArray];
         [self doneRefrshLoadingTableViewData];
     } failure:^(NSString *error) {
-        [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:0.f];
+        [self doneRefrshLoadingTableViewData];
     }];
 }
 
@@ -160,13 +161,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView];
-    if (scrollView.contentSize.height - scrollView.frame.size.height -  scrollView.contentOffset.y < 100) {
-        if ([_moreFootView canLoadingMore]) {
-            [_moreFootView moreImmediately];
-            _isLoading = YES;
-        }
-    }
+    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 #pragma mark DataSource
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -286,15 +281,15 @@
     }
     if (_viewState == DeleteState) {
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:array success:^(NSString *response)
-        {
-            [self.assetsArray removeObjectsInArray:selectedArray];
-            [self reloadTableViewWithAssetsSource:self.assetsArray];
-            [self showPopAlerViewnotTotasView:NO WithMes:@"删除成功"];
-            [self setViewState:NomalState];
-        } failure:^(NSString *error) {
-            [self showPopAlerViewnotTotasView:NO WithMes:error];
-            [self setViewState:NomalState];
-        }];
+         {
+             [self.assetsArray removeObjectsInArray:selectedArray];
+             [self reloadTableViewWithAssetsSource:self.assetsArray];
+             [self showPopAlerViewnotTotasView:NO WithMes:@"删除成功"];
+             [self setViewState:NomalState];
+         } failure:^(NSString *error) {
+             [self showPopAlerViewnotTotasView:NO WithMes:error];
+             [self setViewState:NomalState];
+         }];
     }
 }
 @end

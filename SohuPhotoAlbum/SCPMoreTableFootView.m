@@ -82,12 +82,21 @@
     label.text = @"加载中...";
     [acv startAnimating];
 }
-- (void)scpMoreScrollViewDidScroll:(UIScrollView *)scrollView
+- (void)scpMoreScrollViewDidScroll:(UIScrollView *)scrollView isAutoLoadMore:(BOOL)isAuto WithIsLoadingPoint:(BOOL *)isload
 {
-    if (scrollView.contentOffset.y <= scrollView.contentSize.height - scrollView.frame.size.height || scrollView.contentSize.height <= scrollView.frame.size.height) {
-        if (_willLodingMore) {
-            _willLodingMore = NO;
-            [self realLoadingMore:nil];
+    if (isAuto) {
+        if (scrollView.contentSize.height - scrollView.frame.size.height -  scrollView.contentOffset.y < 100 && scrollView.contentSize.height > scrollView.frame.size.height) {
+            [self moreImmediately];
+            * isload = YES;
+        }else{
+            * isload = NO;
+        }
+    }else{
+        if (scrollView.contentOffset.y <= scrollView.contentSize.height - scrollView.frame.size.height || scrollView.contentSize.height <= scrollView.frame.size.height) {
+            if (_willLodingMore) {
+                _willLodingMore = NO;
+                [self realLoadingMore:nil];
+            }
         }
     }
 }

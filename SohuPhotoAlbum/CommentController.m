@@ -8,6 +8,7 @@
 
 #import "CommentController.h"
 #import "UIImageView+WebCache.h"
+#import "EmojiUnit.h"
 
 @interface CommentController ()
 
@@ -17,42 +18,52 @@
 @synthesize sourceId;
 @synthesize imageUrl;
 
-- (id)initWithSourceId:(NSString *)AsourceId andSoruceType:(source_type)Atype withBgImageURL:(NSString * )bgUrl
+- (id)initWithSourceId:(NSString *)AsourceId andSoruceType:(source_type)Atype withBgImageURL:(NSString * )bgUrl WithOwnerID:(NSString *)ownID
 {
     self = [super init];
     if (self) {
         self.sourceId = AsourceId;
         type = Atype;
         self.imageUrl = bgUrl;
+        sourceOwnId = ownID;
     }
     return self;
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.view.backgroundColor = BASEWALLCOLOR;
+    [self addBgView];
+    [self addTableView];
+    [self addCommentView];
+    _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
+    [self refrshDataFromNetWork];
+}
+- (void)addBgView
+{
+    _myBgView  = [[UIImageView alloc] initWithFrame:_myTableView.bounds];
+    _myBgView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_myBgView];
+    self.view.clipsToBounds = YES;
+    __weak UIImageView * bgViewSelf = _myBgView;
+    __weak CommentController * weakSelf = self;
+    
+    [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.imageUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
+        CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
+        bgViewSelf.frame = (CGRect){0,0,size};
+        bgViewSelf.center = CGPointMake(weakSelf.view.bounds.size.width /2.f, weakSelf.view.bounds.size.height /2.f);
+    } failure:^(NSError *error) {
+        
+    }];
+}
+- (void)addTableView
+{
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = [UIColor clearColor];
-    _myBgView  = [[UIImageView alloc] initWithFrame:_myTableView.bounds];
-    _myBgView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:_myBgView];
-    self.view.clipsToBounds = YES;
-    DLog(@"MMM %@",[NSString stringWithFormat:@"%@w640",self.imageUrl]);
-    __weak UIImageView * bgViewSelf = _myBgView;
-    __weak UITableView * tableViewSelf = _myTableView;
-    __weak CommentController * weakSelf = self;
-    [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.imageUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
-        CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
-        bgViewSelf.frame = (CGRect ){0,0,size};
-        bgViewSelf.center = CGPointMake(tableViewSelf.bounds.size.width /2.f, tableViewSelf.bounds.size.height /2.f);
-    } failure:^(NSError *error) {
-        
-    }];
     
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
@@ -61,9 +72,17 @@
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-    _myTableView.tableFooterView = _moreFootView;
-    _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    [self getMoreFromNetWork];
+    
+}
+- (void)addCommentView
+{
+    commentView = [[ComentView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 38, 320, 38)];
+    [self.view addSubview:commentView];
+    [commentView addresignFirTapOnView:self.view];
+    [commentView commentbuttonAddtar:self action:@selector(commetButtonClick:)];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(commentkeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [center addObserver:self selector:@selector(commentkeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 - (CGSize)getIdentifyImageSizeWithImageView:(UIImage *)image
 {
@@ -77,6 +96,7 @@
     DLog(@"%@ %f,%f",NSStringFromCGRect(rect),w,h );
     return rect.size;
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -97,6 +117,39 @@
     [super viewWillDisappear:animated];
     [_navBar removeFromSuperview];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
+}
+#pragma mark KeyBord
+- (void)commentkeyboardWillShow:(NSNotification *)notification
+{
+    NSDictionary * dic = [notification userInfo];
+    CGFloat heigth = [[dic objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    [UIView animateWithDuration:0.3 animations:^{
+        commentView.frame = CGRectMake(0, self.view.frame.size.height - 38 - heigth, 320, 38);
+    }];
+}
+- (void)commentkeyboardWillHide:(NSNotification *)notification
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        commentView.frame = CGRectMake(0, self.view.frame.size.height - 38, 320, 38);
+    }];
+}
+
+- (void)commetButtonClick:(UIButton *)button
+{
+    if ([EmojiUnit stringContainsEmoji:commentView.textView.text]) {
+        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:@"提示信息" message:@"评论内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [tip show];
+        return;
+    }
+    [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:[LoginStateManager currentUserId] andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.text success:^(NSString *response) {
+        [commentView.textView resignFirstResponder];
+        commentView.textView.text = nil;
+        
+        [self getMoreFromNetWork];
+        
+    } failure:^(NSString *error) {
+        
+    }];
 }
 #pragma mark - refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
@@ -151,11 +204,26 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
+    [RequestManager getCommentWithSourceType:type andSourceID:sourceId success:^(NSString *response) {
+        [_dataSourceArray removeAllObjects];
+    } failure:^(NSString *error) {
+        
+    }];
     for (int i = 0; i< 20; i++) {
         [_dataSourceArray addObject:[self getCellDataSourceFromInfo:nil]];
     }
     [self doneRefrshLoadingTableViewData];
-    //    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
+    [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
+        userInfo = [response JSONValue];
+    } failure:^(NSString *error) {
+        
+    }];
+    
+}
+- (void)addDataSourceWithArray:(NSArray *)array
+{
+    for (int i = 0; i< array.count; i++)
+        [_dataSourceArray addObject:[self getCellDataSourceFromInfo:nil]];
     
 }
 - (CommentCellDeteSource *)getCellDataSourceFromInfo:(NSDictionary *)info
@@ -167,7 +235,6 @@
 }
 - (void)getMoreFromNetWork
 {
-//    [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
     [RequestManager getCommentWithSourceType:type andSourceID:sourceId success:^(NSString *response) {
         DLog(@"%@",response);
     } failure:^(NSString *error) {
@@ -184,11 +251,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView];
-    if (scrollView.contentSize.height - scrollView.frame.size.height -  scrollView.contentOffset.y < 100) {
-        [_moreFootView moreImmediately];
-        _isLoading = YES;
-    }
+    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 #pragma mark -tableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

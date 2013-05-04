@@ -96,7 +96,7 @@
 - (void)updataSubViews
 {
     userAccount.text  = _dataSource.userName;
-    sizeOfCloundDisk.text  = [NSString stringWithFormat:@"已用%.2fG/总容量:%.2fG",_dataSource.sizeOfUsed,_dataSource.sizeOfAll];
+    sizeOfCloundDisk.text  = [NSString stringWithFormat:@"已用%.2fG/总容量:%.2fG",_dataSource.sizeOfUsed/(1024.f * 1024 * 1024),_dataSource.sizeOfAll/(1024.f * 1024 * 1024)];
     progessView.progress = _dataSource.sizeOfUsed / _dataSource.sizeOfAll;
     
 }

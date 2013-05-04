@@ -10,6 +10,7 @@
 #import "PerfrenceSettingManager.h"
 #import "UserInfoCell.h"
 #import "FeedBackController.h"
+#import "RequestManager.h"
 
 #define maxRow 7
 static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清楚缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};\
@@ -43,8 +44,8 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
     [_navBar addSubview:backButton];
+    [self getUserInfo];
 }
-
 #pragma mark View lifeCircle
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -68,9 +69,21 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
         [_delegate settingControllerDidDisappear:self];
     }
 }
-
+#pragma mark - UserInfo
+- (void)getUserInfo
+{
+    if ([LoginStateManager isLogin]) {
+        [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
+            userInfodic = [response JSONValue];
+            DLog(@"%@",userInfodic);
+            [_myTableView reloadData];
+        } failure:^(NSString *error) {
+            
+        }];
+    }
+    
+}
 #pragma mark Delegate
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return maxRow;
@@ -93,9 +106,16 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
             infoCell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"infoCell"];
         }
         UserInfoCellDataSource * dataSource = [[UserInfoCellDataSource alloc] init];
-        dataSource.userName = @"afdkadfa@qq.com";
-        dataSource.sizeOfAll = 5.f;
-        dataSource.sizeOfUsed = 1.234235f;
+        if (userInfodic) {
+            dataSource.userName =[NSString stringWithFormat:@"%@(@%@)", [userInfodic objectForKey:@"user_nick"],[userInfodic objectForKey:@"sname"]];
+            dataSource.sizeOfAll = [[userInfodic objectForKey:@"quota"] floatValue];
+            dataSource.sizeOfUsed = [[userInfodic objectForKey:@"usage"] floatValue];
+        }else{
+            dataSource.userName = @"用户未登陆";
+            dataSource.sizeOfAll = 0.f;
+            dataSource.sizeOfUsed = 0.f;
+        }
+    
         infoCell.dataSource = dataSource;
         return infoCell;
     }
