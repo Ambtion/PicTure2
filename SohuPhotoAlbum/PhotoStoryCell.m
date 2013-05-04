@@ -22,7 +22,7 @@
     CGFloat heigth = OFFSETY;
     heigth += 300; //图片
     heigth += OFFSETY;
-    if (!imageDes || [imageDes isEqualToString:@""])
+    if (!imageDes ||[imageDes isKindOfClass:[NSNull class]] || [imageDes isEqualToString:@""])
         imageDes = @"用户暂无描述";
     CGSize size = [imageDes sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
     heigth += OFFSETY + 5;
@@ -140,14 +140,12 @@
     CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
     
     _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + OFFSETY + 5, size.width, size.height);
-    
     _bgImageView.frame = CGRectMake(0, OFFSETY, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 10);
     //commentSize
     for (CommentView * view in _commentArray){
         [view setHidden:YES];
     }
     if (_dataSource.commentInfoArray && _dataSource.commentInfoArray.count) {
-        
         CommentView * view = [_commentArray objectAtIndex:0];
         view.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:0]; //计算view.frame
         view.frame = CGRectMake(view.frame.origin.x, _desLabel.frame.size.height + _desLabel.frame.origin.y + 5, view.frame.size.width, view.frame.size.height);

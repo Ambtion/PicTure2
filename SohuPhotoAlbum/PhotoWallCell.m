@@ -180,7 +180,7 @@
         NSString * str = [NSString stringWithFormat:@"%@_c320",[photoInfo objectForKey:@"photo_url"]];
         [imageView setImageWithURL:[NSURL URLWithString:str]];
     }
-    _wallDesLabel.text = _dataSource.wallDescription;
+    _wallDesLabel.text = _dataSource.wallDescription ? _dataSource.wallDescription : nil;
     CGSize size = [_dataSource.wallDescription sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
     _wallDesLabel.frame = CGRectMake(KWallOffsetX + 2, heigth + OFFSETY, size.width, size.height);
     
@@ -189,8 +189,13 @@
     _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
     _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
     _countLabel.text = [NSString stringWithFormat:@"%d",_dataSource.photoCount];
-    
     _backImageView.frame = CGRectMake(0, 0, self.bounds.size.width, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY);
+    if (_dataSource.isLiking) {
+        [_footView.likeCountbutton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    }else{
+        [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
+        [_footView.likeCountbutton setSelected:YES];
+    }
 }
 #pragma mark ActionFunction
 - (void)handleGesture:(id)sender

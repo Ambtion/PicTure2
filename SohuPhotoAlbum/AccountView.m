@@ -91,18 +91,11 @@
 }
 - (void)handleAccestoryTapGesture:(id)sender
 {
-    CGAffineTransform transfrom1 = CGAffineTransformRotate(accessory.transform,M_PI);
-    [UIView animateWithDuration:0.3 animations:^{
-        accessory.transform = transfrom1;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([_delegate respondsToSelector:@selector(accountView:accessoryClick:)]) {
-                [_delegate accountView:self accessoryClick:sender];
-            }
-        });
-        
-    } completion:^(BOOL finished) {
-        
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_delegate respondsToSelector:@selector(accountView:accessoryClick:)]) {
+            [_delegate accountView:self accessoryClick:sender];
+        }
+    });
 }
 - (void)handleSettingGesture:(id)sender
 {

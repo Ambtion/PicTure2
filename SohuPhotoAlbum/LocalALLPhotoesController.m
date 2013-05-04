@@ -71,8 +71,8 @@
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    
 }
-
 - (void)viewDidAppear:(BOOL)animated
 {
     if (self.assetsArray.count) {

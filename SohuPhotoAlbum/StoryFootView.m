@@ -13,6 +13,7 @@ static NSString * const normalImage[4] = {@"storyTalkButton.png",@"storylikeButt
                                             @"storyShareButton.png",@"storyDeleteButton.png"};
 static NSString * const higthedimage[4] = {};
 
+
 @implementation StoryFootView
 @synthesize delegate = _delegate;
 

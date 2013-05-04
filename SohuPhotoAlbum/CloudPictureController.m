@@ -39,7 +39,7 @@
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-    self.myTableView.tableFooterView = _moreFootView;
+//    self.myTableView.tableFooterView = _moreFootView;
     
     [self initDataContainer];
     [self getMoreFromNetWork];

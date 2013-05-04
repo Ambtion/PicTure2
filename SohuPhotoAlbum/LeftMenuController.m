@@ -65,12 +65,11 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     //暂时写着
     if (![LoginStateManager isLogin]) {
         _accountView.portraitImageView.imageView.image = [UIImage imageNamed:@"1.jpg"];
-        _accountView.desLabel.text =  @"请登录账号";
-        _accountView.nameLabel.text = nil;
+        _accountView.nameLabel.text =  @"请登录账号";
+        _accountView.desLabel.text = nil;
     }else{
         [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
         NSDictionary * dic = [response JSONValue];
-            DLog(@"%@",dic);
             [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
             _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
             _accountView.nameLabel.text = [dic objectForKey:@"user_nick"];
@@ -181,6 +180,20 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 }
 - (void)accountView:(AccountView *)acountView accessoryClick:(id)sender
 {
+    if (![LoginStateManager isLogin]) {
+        LoginViewController * lv = [[LoginViewController alloc] init];
+        lv.delegate = self;
+        UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:lv];
+        [self presentModalViewController:nav animated:YES];
+        return;
+    }
+    UIButton * accessory = (UIButton *)sender;
+    CGAffineTransform transfrom1 = CGAffineTransformRotate(accessory.transform,M_PI);
+    [UIView animateWithDuration:0.3 animations:^{
+        accessory.transform = transfrom1;
+    } completion:^(BOOL finished) {
+        
+    }];
     if ([self isHiddenOAuthorView]) {
         [self showOAuthorView];
     }else{

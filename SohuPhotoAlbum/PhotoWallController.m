@@ -38,7 +38,7 @@
     [self.view addSubview:_myTableView];
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-    _myTableView.tableFooterView = _moreFootView;
+//    _myTableView.tableFooterView = _moreFootView;
     
     _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 10, 77, 20)];
     [_timelabel setHidden:YES];
@@ -54,6 +54,7 @@
 }
 - (void)addDataSourceWith:(NSArray *)array
 {
+    DLog(@"%@",[array lastObject]);
     for (int i = 0; i < array.count; i++) {
         [_dataSourceArray addObject:[self getCellDataSourceFromDic:[array objectAtIndex:i]]];
     }
@@ -68,8 +69,8 @@
     dataSource.imageWallInfo = phtotArray;
     dataSource.wallDescription = nil;
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
-    dataSource.likeCount = 100;
-    dataSource.talkCount = 200;
+    dataSource.likeCount = [[dic objectForKey:@"like_count"] intValue];
+    dataSource.talkCount =[[dic objectForKey:@"comment_num"] intValue];
     dataSource.photoCount = [[dic objectForKey:@"photo_num"] intValue];
     return dataSource;
 }
@@ -175,7 +176,6 @@
     [_moreFootView setMoreFunctionOff:NO];
     [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
-        
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
         [self doneMoreLoadingTableViewData];
@@ -227,9 +227,9 @@
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
-    CGFloat ratioInTableView = pointY / _myTableView.contentSize.height;
+    CGFloat ratioInTableView = pointY / (_myTableView.contentSize.height);
     CGRect rect = _timelabel.frame;
-    rect.origin.y = _myTableView.frame.origin.y + rect.size.height / 2.f + ratioInTableView * (_myTableView.frame.size.height - rect.size.height - _myTableView.tableFooterView.frame.size.height - rect.size.height / 2.f);
+    rect.origin.y = _myTableView.frame.origin.y + rect.size.height / 2.f + ratioInTableView * (_myTableView.frame.size.height);
     return rect;
 }
 
@@ -279,15 +279,18 @@
 }
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
-//    DLog(@"%s",__FUNCTION__);
     NSDictionary * dic = [[[cell dataSource] imageWallInfo] objectAtIndex:0];
     NSString * urlStr = [dic objectForKey:@"photo_url"];
-//    NSString * sourceOwnId = []
     [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] wallId] andSoruceType:KSourcePortfolios withBgImageURL:urlStr WithOwnerID:self.ownerID] animated:YES];
 }
 - (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
 {
     DLog(@"%s",__FUNCTION__);
+    [RequestManager likeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
+        DLog(@"%@",response);
+    } failure:^(NSString *error) {
+        
+    }];
 }
 
 - (void)photoWallCell:(PhotoWallCell *)cell photosClick:(id)sender

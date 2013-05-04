@@ -41,31 +41,11 @@
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-    _myTableView.tableFooterView = _moreFootView;
-    _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
+//    _myTableView.tableFooterView = _moreFootView;
     
+    _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
-    //    //测试用
-    //    for (int i = 0; i < 20; i++) {
-    //        PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
-    //
-    //        dataSource.imageID = @"1.jpg";
-    //        dataSource.imageDes = @"我啦对法拉第飞啊记得发,你是挨打发对法拉飞.挨打放假的了";
-    //        NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
-    //        int n = arc4random() % 3;
-    //        for (int i = 0; i <= n; i++) {
-    //            CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
-    //            cds.userName = @"游客踩踩";
-    //            cds.potraitImage = @"1.jpg";
-    //            cds.shareTime = @"6个小时前";
-    //            cds.comment = @"ASDFA,adf就啊了的控件飞,加啊克里斯蒂法律人阿的江";
-    //            [array addObject:cds];
-    //        }
-    //        dataSource.commentInfoArray = array;
-    //        dataSource.likeCount = 100;
-    //        [_dataSourceArray addObject:dataSource];
-    //    }
-    //    [_myTableView reloadData];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -173,13 +153,14 @@
 }
 - (PhotoStoryCellDataSource *)getCellSourceFromInfo:(NSDictionary *)info
 {
+    DLog(@"story:%@",info);
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
     dataSource.photoId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
     dataSource.imageUrl = [info objectForKey:@"photo_url"];
     dataSource.imageDes = [info objectForKey:@"description"];
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
-    int n = arc4random() % 3;
-    for (int i = 0; i <= n; i++) {
+    NSArray * commentarray = [info objectForKey:@"comments"];
+    for (int i = 0; i < commentarray.count; i++) {
         CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
         cds.userName = @"游客踩踩";
         cds.potraitImage = @"1.jpg";
@@ -242,9 +223,16 @@
     DLog(@"photoStoryCell %d",index);
     switch (index) {
         case 0: //评论
-            [self.navigationController pushViewController:[[CommentController alloc] init] animated:YES];
+            [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] photoId] andSoruceType:KSourcePhotos withBgImageURL:[[cell dataSource] imageUrl] WithOwnerID:self.ownerID] animated:YES];
             break;
         case 1: //喜欢
+            DLog(@"%s",__FUNCTION__);
+            [RequestManager likeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
+                DLog(@"%@",response);
+            } failure:^(NSString *error) {
+                
+            }];
+
             break;
         case 2:
             break;
@@ -255,7 +243,6 @@
         default:
             break;
     }
-    
 }
 -(void)photoStoryCell:(PhotoStoryCell *)cell commentClickAtIndex:(NSInteger)index
 {

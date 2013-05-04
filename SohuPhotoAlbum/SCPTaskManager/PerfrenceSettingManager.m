@@ -55,7 +55,7 @@
 {
     NSDictionary * userinfo = [self valueForUserinfo];
     NSNumber * number = [self valueForKey:ISAUTOUPLOAD inUserinfo:userinfo];
-    return (number && [number boolValue]);
+    return [number boolValue];
 }
 +(void)setIsAutoUpload:(BOOL)ture
 {
