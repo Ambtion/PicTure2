@@ -21,6 +21,7 @@
 @synthesize request = _request;
 @synthesize data = _data;
 
+
 - (id)init
 {
     self = [super init];
@@ -50,23 +51,26 @@
         DLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
     }else{
         NSDictionary * dic = [self infoDic];
-        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)_fulldata);
+        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge_retained CFDataRef)data);
         CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+        if (!imageRef) {
+             imageRef = CGImageCreateWithPNGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+        }
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.5);
         data = [self writeExif:dic intoImage:data];
         DLog(@"cpmpre:when upload: %f",[data length]/(1024 * 1024.f));
-//        NSLog(@"%@",[self getPropertyOfdata:data]);
     }
     return data;
 }
+
 - (NSData *)fullData
 {
     ALAssetRepresentation * defaultRep = [self.asset defaultRepresentation];
     Byte *buffer = (Byte*)malloc(defaultRep.size);
     NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
     NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-    return data;
+    return [data copy];
 }
 - (NSDictionary *)infoDic
 {

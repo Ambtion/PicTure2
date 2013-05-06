@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PortraitView.h"
+
 typedef enum _DesshareModel{
     QQModel,
     RenrenModel,
@@ -24,6 +26,7 @@ typedef enum _DesshareModel{
     UIImageView * _contentView;
     UITextView * _contentTextView;
     UILabel * _textcount;
+    PortraitView * _porTraitView;
 }
 @property(weak,nonatomic) id<LocalShareDesViewDelegate> delegate;
 - (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;

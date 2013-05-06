@@ -62,16 +62,6 @@
     [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray];
 }
 
-#pragma mark LoginViewController Delegate
-- (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo
-{
-    if (self.navigationController) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    if (self.presentingViewController) {
-        [self.presentingViewController dismissModalViewControllerAnimated:YES];
-    }
-}
 #pragma mark SetViewState
 - (void)setViewState:(viewState)viewState
 {

@@ -16,6 +16,7 @@ static NSString * const higthedimage[4] = {};
 
 @implementation StoryFootView
 @synthesize delegate = _delegate;
+@synthesize likeButton = _likeButton;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -38,15 +39,16 @@ static NSString * const higthedimage[4] = {};
         button.frame = CGRectMake(offset + width * i, 0, width, self.bounds.size.height);
         [button setImage:[UIImage imageNamed:normalImage[i]] forState:UIControlStateNormal];
         button.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        button.tag = i;
+        button.tag = i + 1000;
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
     }
+    _likeButton = (UIButton *)[self viewWithTag:1001];
 }
 - (void)clickButton:(UIButton *)sender
 {
     if ([_delegate respondsToSelector:@selector(storyFootView:clickButtonAtIndex:)]) {
-        [_delegate storyFootView:self clickButtonAtIndex:sender.tag];
+        [_delegate storyFootView:self clickButtonAtIndex:sender.tag - 1000];
     }
 }
 

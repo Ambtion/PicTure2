@@ -150,7 +150,10 @@
 }
 - (void)showImageViewStatus:(StatusImageView *)imageView byAsset:(ALAsset *)asset
 {
-    if (!asset) return;
+    if (!asset){
+        [imageView resetImageViewTohide];
+        return;
+    }
     if ([[DataBaseManager defaultDataBaseManager] hasPhotoURL:[[asset defaultRepresentation] url]]) {
         [imageView showStatusWithUpload];
     }else{

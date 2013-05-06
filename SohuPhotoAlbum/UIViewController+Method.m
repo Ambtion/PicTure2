@@ -6,11 +6,11 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "UIViewController+DivideAsset.h"
+#import "UIViewController+Method.h"
 #import "CloudPictureCell.h"
 #import "PhotoesCell.h"
 
-@implementation UIViewController (DivideAsset)
+@implementation UIViewController (Method)
 #pragma mark Data divideAssettByDayTime
 
 - (void)cloundDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)_assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)_assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray
@@ -33,7 +33,6 @@
     }
     for (NSMutableArray * array in tempArray )
         [dataSourceArray addObject:[self cloundCoverAssertToDataSource:array]];
-
 }
 - (NSMutableArray *)cloundCoverAssertToDataSource:(NSMutableArray *)array
 {
@@ -168,5 +167,18 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         view.image = [UIImage imageNamed:@"sectionNo.png"];
     }
     return view;
+}
+@end
+
+@implementation UIViewController(Private)
+- (void)showLoginViewWithMethodNav:(BOOL)isNav
+{
+    LoginViewController * loginView = [[LoginViewController alloc] init];
+    loginView.delegate = (UIViewController<LoginViewControllerDelegate> *)self;
+    if (isNav) {
+        [self.navigationController pushViewController:loginView animated:YES];
+    }else{
+        [self presentModalViewController:loginView animated:YES];
+    }
 }
 @end

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIViewController+Method.h"
 #import "PopAlertView.h"
 #import "ToastAlertView.h"
 #import "MBProgressHUD.h"
 @interface NSObject (extension)
-- (void)showPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage;
-+ (void)objectPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage;
+- (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage;
++ (void)objectPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage;
 @end

@@ -12,7 +12,7 @@
 #ifdef DEV
 
 #define BASICURL @"http://dev.pp.sohu.com"
-//#define BASICURL_V1 @"http://dev.pp.sohu.com/api/v1"
+#define BASICURL_V1 @"http://dev.pp.sohu.com/api/v1"
 
 #else
 

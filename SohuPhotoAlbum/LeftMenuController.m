@@ -131,7 +131,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
             self.viewDeckController.centerController = cp;
         }
         if (indexPath.row == 2) {
-            PhotoWallController * lp = [[PhotoWallController alloc] initWithOwnerID:[LoginStateManager currentUserId]];
+            PhotoWallController * lp = [[PhotoWallController alloc] initWithOwnerID:[LoginStateManager currentUserId] isRootController:YES];
             self.viewDeckController.centerController = lp;
         }
         if (indexPath.row == 3) {
@@ -157,7 +157,11 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 #pragma mark - Delegate of SetttingControlelr
 - (void)settingControllerDidDisappear:(SettingController *)controller
 {
-    [self.viewDeckController toggleLeftViewAnimated:NO];
+    if (controller.isChangeLoginState && ![LoginStateManager isLogin]) {
+        [self resetLeftMenu];
+    }else{
+        [self.viewDeckController toggleLeftViewAnimated:NO];
+    }
 }
 
 #pragma mark -  AccoutViewDelgate
@@ -165,18 +169,23 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 {
     if ([LoginStateManager isLogin]) {
         [LoginStateManager logout];
-        [self setAccountView];
-        [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
-            LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
-            self.viewDeckController.centerController = la;
-            self.view.userInteractionEnabled = YES;
-        }];
+        [self resetLeftMenu];
     }else{
         LoginViewController * lv = [[LoginViewController alloc] init];
         lv.delegate = self;
         UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:lv];
         [self presentModalViewController:nav animated:YES];
     }
+}
+
+- (void)resetLeftMenu
+{
+    [self setAccountView];
+    [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
+        LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
+        self.viewDeckController.centerController = la;
+        self.view.userInteractionEnabled = YES;
+    }];
 }
 - (void)accountView:(AccountView *)acountView accessoryClick:(id)sender
 {

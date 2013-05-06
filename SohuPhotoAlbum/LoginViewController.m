@@ -189,16 +189,15 @@
 - (void)loginButtonClicked:(UIButton*)button
 {
     if (!_usernameTextField.text|| [_usernameTextField.text isEqualToString:@""]) {
-        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写用户名"];
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写用户名"];
         return;
     }
     if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
-        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写密码"];
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
 //    [_passwordTextField resignFirstResponder];
 //    [_usernameTextField resignFirstResponder];
-    
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];
@@ -218,13 +217,19 @@
 {
     [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
     [AccountLoginResquest resigiterDevice];
-    DLog(@"%lld",[LoginStateManager deviceId]);
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
+    
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    if (self.presentingViewController) {
+        [self.presentingViewController dismissModalViewControllerAnimated:YES];
+    }
 }
 - (void)showError:(NSString *)error
 {
-    [self showPopAlerViewnotTotasView:YES WithMes:error];
+    [self showPopAlerViewRatherThentasView:YES WithMes:error];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginFailtureWithinfo:)])
         [_delegate loginViewController:self loginFailtureWithinfo:error];
 }

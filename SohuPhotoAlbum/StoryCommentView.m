@@ -6,7 +6,8 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CommentView.h"
+#import "StoryCommentView.h"
+#import "UIImageView+WebCache.h"
 
 #define MAXSIZE CGSizeMake(230, 10000)
 #define OFFSETX 18
@@ -16,7 +17,7 @@
 #define CommentLABLELINEBREAK   NSLineBreakByWordWrapping
 
 
-@implementation CommentViewDataSource
+@implementation StoryCommentViewDataSource
 @synthesize userId,potraitImage,userName,shareTime,comment;
 - (CGFloat)commetViewheigth
 {
@@ -28,7 +29,7 @@
 }
 @end
 
-@implementation CommentView
+@implementation StoryCommentView
 
 @synthesize portraitView,userName,shareTime,commentLabel;
 @synthesize dataScoure = _dataScoure;
@@ -44,6 +45,7 @@
         [self addSubview:bgImageView];
         self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(OFFSETX, OFFSETY, 50, 50)];
         [self addSubview:portraitView];
+        [self.portraitView setUserInteractionEnabled:YES];
         self.userName = [[UILabel alloc] initWithFrame:CGRectZero];
         [self setUserNameLabel];
         [self addSubview:self.userName];
@@ -73,7 +75,7 @@
 - (void)updateLabel
 {
    //布局规则
-    portraitView.image = [UIImage imageNamed:_dataScoure.potraitImage];
+    [portraitView setImageWithURL:[NSURL URLWithString:_dataScoure.potraitImage] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
     userName.text = [_dataScoure userName];
     shareTime.text  = [_dataScoure shareTime];
     commentLabel.text  = [_dataScoure comment];
@@ -93,7 +95,7 @@
 {
     return [label.text sizeWithFont:label.font constrainedToSize:containSize lineBreakMode:label.lineBreakMode];
 }
-- (void)setDataScoure:(CommentViewDataSource *)dataScoure
+- (void)setDataScoure:(StoryCommentViewDataSource *)dataScoure
 {
     if (_dataScoure != dataScoure) {
         _dataScoure = dataScoure;

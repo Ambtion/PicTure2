@@ -7,11 +7,12 @@
 //
 
 #import "CommentCell.h"
+#import "UIImageView+WebCache.h"
 
 #define TEXTCOLOR  [UIColor colorWithRed:75.f/255 green:75.f/255 blue:75.f/255 alpha:1.f]
 #define TEXTFONT  [UIFont systemFontOfSize:12]
 @implementation CommentCellDeteSource
-@synthesize portraitUrl,userName,commentStr;
+@synthesize userId,portraitUrl,userName,commentStr;
 
 - (CGFloat)cellHeigth
 {
@@ -21,6 +22,7 @@
 
 @end
 @implementation CommentCell
+@synthesize delegate = _delegate;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -40,7 +42,10 @@
     porViews.layer.borderWidth = 1.f;
     porViews.layer.borderColor = [[UIColor blackColor] CGColor];
     porViews.backgroundColor = [UIColor clearColor];
+    [porViews setUserInteractionEnabled:YES];
     [self.contentView addSubview:porViews];
+    UITapGestureRecognizer * ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleUserPortraitTap:) ];
+    [porViews addGestureRecognizer:ges];
     
     commentbgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"commentbgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 25, 5, 25)]];
     [self.contentView addSubview:commentbgView];
@@ -77,13 +82,17 @@
 }
 - (void)updateViews
 {
-    porViews.imageView.image = [UIImage imageNamed:@"1.jpg"];
-    
-    nameLabel.text = _dataSource.userName;
+    [porViews.imageView setImageWithURL:[NSURL URLWithString:_dataSource.portraitUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+    nameLabel.text = [NSString stringWithFormat:@"%@:",_dataSource.userName];
     CGSize size = [_dataSource.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
     CGRect rect = CGRectMake(68, 35, size.width, size.height);
     commentLabel.frame = rect;
     commentLabel.text = _dataSource.commentStr;
     commentbgView.frame = CGRectMake(50, 6, 240, rect.origin.y + rect.size.height);
+}
+- (void)handleUserPortraitTap:(UIGestureRecognizer *)gesture
+{
+    if ([_delegate respondsToSelector:@selector(commentCell:clickPortrait:)])
+        [_delegate commentCell:self clickPortrait:gesture];
 }
 @end

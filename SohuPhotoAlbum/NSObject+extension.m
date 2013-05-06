@@ -10,7 +10,7 @@
 
 @implementation NSObject (extension)
 #pragma mark ShowAlert
-- (void)showPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage
+- (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage
 {
     if (isPopView) {
         PopAlertView * popA = [[PopAlertView alloc] initWithTitle:mesage message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -21,7 +21,7 @@
     }
 }
 
-+ (void)objectPopAlerViewnotTotasView:(BOOL)isPopView WithMes:(NSString *)mesage
++ (void)objectPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage
 {
     if (isPopView) {
         PopAlertView * popA = [[PopAlertView alloc] initWithTitle:mesage message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];

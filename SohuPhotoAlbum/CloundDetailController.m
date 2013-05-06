@@ -47,9 +47,9 @@
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[NSArray arrayWithObject:photoId]success:^(NSString *response) {
             [self.assetsArray removeObject:[self.assetsArray objectAtIndex:self.curPageNum]];
             [self refreshScrollView];
-            [self showPopAlerViewnotTotasView:NO WithMes:@"删除成功"];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
         } failure:^(NSString *error) {
-            [self showPopAlerViewnotTotasView:NO WithMes:@"删除失败"];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
         }];
     }
     if (button.tag == TABBARSHARETAG){        //分享图片
@@ -69,15 +69,15 @@
             UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
         });
     } failure:^(NSError *error) {
-        [self showPopAlerViewnotTotasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
+        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
     }];
 }
 - (void)image: (UIImage *) image didFinishSavingWithError:(NSError *)error contextInfo: (void *) contextInfo
 {
     if (error) {
-        [self showPopAlerViewnotTotasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
+        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
     }else{
-        [self showPopAlerViewnotTotasView:NO WithMes:@"图片已保存到本地"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已保存到本地"];
     }
 }
 - (void)showShareView
@@ -135,27 +135,24 @@
 {
     [super setImageView:scaleView imageFromAsset:asset];
     NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
-    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"] options:SDWebImageRetryFailed];
 }
 
 #pragma mark - GetActualImage
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
-//    [super setImageView:imageView ActualImage:asset andOrientation:orientation];
-//    NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
-//    [imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+    
 }
 #pragma mark GetMoreAssets
 - (void)getMoreAssets
 {
-    DLog(@"");
     [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:[[[self.assetsArray lastObject] objectForKey:@"taken_id"] longLongValue] count:100 success:^(NSString *response) {
         NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
         if (!photoArray || !photoArray.count) _hasMoreAssets = NO;
         [self.assetsArray addObjectsFromArray:photoArray];
         [self refreshScrollView];
     } failure:^(NSString *error) {
-        [self showPopAlerViewnotTotasView:NO WithMes:error];
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
     }];
 }
 @end

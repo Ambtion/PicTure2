@@ -197,13 +197,7 @@
         self.viewDeckController.centerController = [[LocalAlbumsController alloc] init];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
-        if ([LoginStateManager isLogin]) {
-            [self setViewState:UPloadState];
-        }else{
-            LoginViewController * lvc  = [[LoginViewController alloc] init];
-            lvc.delegate = self;
-            [self.navigationController pushViewController:lvc animated:YES];
-        }
+        [self setViewState:UPloadState];
     }
     if (button.tag == CANCELBUTTONTAG) {
         [self setViewState:NomalState];
@@ -213,7 +207,7 @@
             [self uploadPicTureWithArray:selectedArray];
             [self setViewState:NomalState];
         }else{
-            [self showPopAlerViewnotTotasView:YES WithMes:@"请选择上传图片"];
+            [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择上传图片"];
         }
     }
 }

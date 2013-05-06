@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (DivideAsset)
+@interface UIViewController (Method)
 - (void)cloundDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)_assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)_assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray;
 - (void)localDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray;
 - (NSMutableArray *)sortArrayByTime:(NSMutableArray *)array;
 
 - (UIView *)getSectionView:(NSInteger)section ByisShow:(BOOL)isShowRow WithTimeText:(NSString *)labelText;
+@end
+
+@interface UIViewController (Private)
+- (void)showLoginViewWithMethodNav:(BOOL)isNav;
+
 @end

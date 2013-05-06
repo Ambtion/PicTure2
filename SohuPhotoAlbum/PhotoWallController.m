@@ -10,14 +10,16 @@
 #import "PhotoStoryController.h"
 #import "RequestManager.h"
 #import "CommentController.h"
+#import "LoginStateManager.h"
 
 @implementation PhotoWallController
 @synthesize ownerID;
-- (id)initWithOwnerID:(NSString *)ownID
+- (id)initWithOwnerID:(NSString *)ownID isRootController:(BOOL)isRoot
 {
     self = [super init];
     if (self) {
         self.ownerID = ownID;
+        _isRoot = isRoot;
     }
     return self;
 }
@@ -45,7 +47,7 @@
     [self.view addSubview:_timelabel];
     
     [self initContainer];
-    [self getMoreFromNetWork];
+    [self refrshDataFromNetWork];
   
 }
 - (void)initContainer
@@ -54,7 +56,6 @@
 }
 - (void)addDataSourceWith:(NSArray *)array
 {
-    DLog(@"%@",[array lastObject]);
     for (int i = 0; i < array.count; i++) {
         [_dataSourceArray addObject:[self getCellDataSourceFromDic:[array objectAtIndex:i]]];
     }
@@ -67,11 +68,13 @@
     dataSource.wallId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
     NSArray * phtotArray = [dic objectForKey:@"photos"];
     dataSource.imageWallInfo = phtotArray;
-    dataSource.wallDescription = nil;
+    dataSource.wallDescription = [dic objectForKey:@"description"];
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
     dataSource.likeCount = [[dic objectForKey:@"like_count"] intValue];
     dataSource.talkCount =[[dic objectForKey:@"comment_num"] intValue];
     dataSource.photoCount = [[dic objectForKey:@"photo_num"] intValue];
+    dataSource.isLiking = [[dic objectForKey:@"is_liked"] boolValue];
+    dataSource.OwnerISMe = YES;
     return dataSource;
 }
 - (NSString *)stringFromdate:(NSDate *)date
@@ -85,15 +88,20 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationItem setHidesBackButton:YES];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-        [_navBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_navBar.nLabelText setText:@"图片墙"];
         [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
+    if (_isRoot) {
+        [_navBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
+        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    }else{
+        [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
-    self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -132,7 +140,6 @@
     [_refresHeadView refreshImmediately];
     [self reloadTableViewDataSource];
     [self resetLabel];
-
 }
 
 #pragma mark - more
@@ -158,7 +165,10 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID start:0 count:20 success:^(NSString *response) {
+    NSString * token = nil;
+    if ([LoginStateManager isLogin])
+        token = [LoginStateManager currentToken];
+    [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID withAccessToken:token start:0 count:20  success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
         [self doneRefrshLoadingTableViewData];
@@ -174,7 +184,10 @@
         return;
     }
     [_moreFootView setMoreFunctionOff:NO];
-    [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
+    NSString * token = nil;
+    if ([LoginStateManager isLogin])
+        token = [LoginStateManager currentToken];
+    [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID withAccessToken:token start:[_dataSourceArray count] count:20 success:^(NSString *response) {
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
@@ -194,6 +207,7 @@
     [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
     [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
+
 - (void)resetLabel
 {
     if (_dataSourceArray.count) {
@@ -205,8 +219,10 @@
         _timelabel.yesDayLabel.text = nil;
     }
 }
+
 - (void)updataLabelWithScrollView:(UIScrollView *)aScrollView
 {
+    if (!_dataSourceArray.count) return;
     NSArray * cells = _myTableView.visibleCells;
     _timelabel.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
     for (PhotoWallCell * cell in cells) {
@@ -217,13 +233,14 @@
         }
     }
 }
-
 - (void)setLabelTimeWithTime:(NSString *)time
 {
     NSArray * array = [time componentsSeparatedByString:@"-"];
-    _timelabel.daysLabel.text = [array objectAtIndex:2];
-    _timelabel.yesDayLabel.text = [NSString stringWithFormat:@"%@年",[array objectAtIndex:0]];
-    _timelabel.mouthsLabel.text = [NSString stringWithFormat:@"%@月",[array objectAtIndex:1]];
+    if (array.count == 3) {
+        _timelabel.daysLabel.text = [array objectAtIndex:2];
+        _timelabel.yesDayLabel.text = [NSString stringWithFormat:@"%@年",[array objectAtIndex:0]];
+        _timelabel.mouthsLabel.text = [NSString stringWithFormat:@"%@月",[array objectAtIndex:1]];
+    }
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
@@ -236,9 +253,10 @@
 #pragma mark DataSource
 - (PhotoWallCellDataSource *)dataScourForindexPath:(NSIndexPath *)path
 {
-    if (!_dataSourceArray.count) return nil;
+    if (!_dataSourceArray.count || path.row >= _dataSourceArray.count) return nil;
     return [_dataSourceArray objectAtIndex:path.row];
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_dataSourceArray count];
@@ -247,6 +265,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PhotoWallCellDataSource * dataSoure = [self dataScourForindexPath:indexPath];
+    if (!dataSoure) return 0.f;
+    if (indexPath.row == _dataSourceArray.count - 1) {
+        return [dataSoure  getLastCellHeigth];
+    }
     return dataSoure ? [dataSoure getCellHeigth]: 0.f;
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -255,15 +277,14 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     PhotoWallCellDataSource * dataSoure = [self dataScourForindexPath:indexPath];
     NSInteger num = [dataSoure numOfCellStragey];
-    
     PhotoWallCell * cell = [tableView dequeueReusableCellWithIdentifier:identify[num]];
     if (!cell) {
         cell = [[PhotoWallCell alloc ] initWithStyle:UITableViewCellStyleDefault reuseIdentifierNum:num];\
         cell.delegate = self;
     }
-//    DLog(@"data %d : frame:%@",dataSoure.imageWallInfo.count,cell.reuseIdentifier);
     cell.dataSource = dataSoure;
     return cell;
 }
@@ -271,7 +292,10 @@
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     if (button.tag == LEFTBUTTON) {
-        [self.viewDeckController toggleLeftViewAnimated:YES];
+        if (_isRoot)
+            [self.viewDeckController toggleLeftViewAnimated:YES];
+        else
+            [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //分享
         
@@ -279,20 +303,53 @@
 }
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
+    if (![LoginStateManager isLogin]) {
+        [self showLoginViewWithMethodNav:YES];
+        return;
+    }
     NSDictionary * dic = [[[cell dataSource] imageWallInfo] objectAtIndex:0];
     NSString * urlStr = [dic objectForKey:@"photo_url"];
     [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] wallId] andSoruceType:KSourcePortfolios withBgImageURL:urlStr WithOwnerID:self.ownerID] animated:YES];
 }
-- (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
+- (void)photoWallCell:(PhotoWallCell *)cell deleteClick:(UIButton *)button
 {
-    DLog(@"%s",__FUNCTION__);
-    [RequestManager likeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
-        DLog(@"%@",response);
-    } failure:^(NSString *error) {
-        
+    //若出现,这是个人页面
+    [RequestManager deleteStoryFromWallWithaccessToken:[LoginStateManager currentToken] StoryId:[[cell dataSource] wallId] success:^(NSString *response) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
+        [_dataSourceArray removeObject:cell.dataSource];
+        NSIndexPath * path =  [_myTableView indexPathForCell:cell];
+        [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self resetLabel];
+       //删除成功
+    }  failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
     }];
 }
-
+- (void)photoWallCell:(PhotoWallCell *)cell likeClick:(UIButton *)button
+{
+    if (![LoginStateManager isLogin]) {
+        [self showLoginViewWithMethodNav:YES];
+        return;
+    }
+    if (cell.dataSource.isLiking) {
+        [RequestManager unlikeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
+            cell.dataSource.isLiking = NO;
+            cell.dataSource.likeCount--;
+            cell.dataSource.likeCount = MAX(cell.dataSource.likeCount, 0);
+            [cell updataSubViews];
+        } failure:^(NSString *error) {
+                
+        }];
+    }else{
+        [RequestManager likeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
+            cell.dataSource.isLiking = YES;
+            cell.dataSource.likeCount ++;
+            [cell updataSubViews];
+        } failure:^(NSString *error) {
+            
+        }];
+    }
+}
 - (void)photoWallCell:(PhotoWallCell *)cell photosClick:(id)sender
 {    
     PhotoWallCellDataSource * source = cell.dataSource;

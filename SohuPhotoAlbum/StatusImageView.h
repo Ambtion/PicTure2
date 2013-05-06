@@ -23,6 +23,7 @@
 - (void)showStatusWithUpload;
 
 - (void)resetStatusImageToHidden;
+- (void)resetImageViewTohide;
 - (void)setImage:(UIImage *)image;
 - (UIImage *)image;
 @end

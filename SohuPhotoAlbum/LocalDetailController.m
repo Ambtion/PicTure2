@@ -7,8 +7,6 @@
 //
 
 #import "LocalDetailController.h"
-#import "LocalShareController.h"
-
 
 @implementation LocalDetailController
 @synthesize cache = _cache, group = _group;
@@ -26,7 +24,6 @@
         self.curPageNum = [array indexOfObject:asset];
         self.assetsArray = [array copy];
         self.group = group;
-
     }
     return self;
 }
@@ -141,10 +138,10 @@
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
-    if (![LoginStateManager isLogin]) {
-        [self showLoginView];
-        return;
-    }
+//    if (![LoginStateManager isLogin]) {
+//        [self showLoginViewWithMethodNav:YES];
+//        return;
+//    }
     if (button.tag == TABBARSHARETAG){        //分享图片
         [self showShareView];
     }
@@ -152,16 +149,6 @@
         ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
         [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset];
     }
-}
-- (void)showLoginView
-{
-    LoginViewController * loginView = [[LoginViewController alloc] init];
-    loginView.delegate = self;
-    [self.navigationController pushViewController:loginView animated:YES];
-}
-- (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)showShareView
 {

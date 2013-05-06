@@ -6,13 +6,13 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "ComentView.h"
+#import "MakeCommentView.h"
 
 #define DESC_COUNT_LIMIT 200
 #define PLACEHOLDER  @"我来说两句"
 #define TITLE_DES @"300字以内"
 
-@implementation ComentView
+@implementation MakeCommentView
 @synthesize textView = _textView;
 @synthesize textCountLimit = _textCountLimit;
 @synthesize comentButton = _comentButton;

@@ -183,11 +183,14 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //上传
-        if ([LoginStateManager isLogin]) {
-            [self setViewState:UPloadState];
-        }else{
-            [self.navigationController pushViewController:[[LoginViewController alloc] init] animated:YES];
-        }
+        [self setViewState:UPloadState];
+
+//        if ([LoginStateManager isLogin]) {
+//        }else{
+//            [self setViewState:UPloadState];
+//            //不会出现;
+//            [self showLoginViewWithMethodNav:YES];
+//        }
     }
     if (button.tag == CANCELBUTTONTAG) {
         if (_isInitUpload) {
@@ -206,7 +209,7 @@
                 [self setViewState:NomalState];
             }
         }else{
-            [self showPopAlerViewnotTotasView:YES WithMes:@"请选择上传图片"];
+            [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择上传图片"];
         }
     }
 }

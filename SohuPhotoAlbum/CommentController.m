@@ -9,6 +9,7 @@
 #import "CommentController.h"
 #import "UIImageView+WebCache.h"
 #import "EmojiUnit.h"
+#import "PhotoWallController.h"
 
 @interface CommentController ()
 
@@ -76,7 +77,7 @@
 }
 - (void)addCommentView
 {
-    commentView = [[ComentView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 38, 320, 38)];
+    commentView = [[MakeCommentView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 38, 320, 38)];
     [self.view addSubview:commentView];
     [commentView addresignFirTapOnView:self.view];
     [commentView commentbuttonAddtar:self action:@selector(commetButtonClick:)];
@@ -143,13 +144,21 @@
     }
     [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:[LoginStateManager currentUserId] andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.text success:^(NSString *response) {
         [commentView.textView resignFirstResponder];
+        [_dataSourceArray insertObject:[self getCommentSoureWithComment:commentView.textView.text] atIndex:0];
         commentView.textView.text = nil;
-        
-        [self getMoreFromNetWork];
-        
+        [_myTableView reloadData];
     } failure:^(NSString *error) {
         
     }];
+}
+- (CommentCellDeteSource *)getCommentSoureWithComment:(NSString *)comment
+{
+    CommentCellDeteSource * dataSource = [[CommentCellDeteSource alloc] init];
+    dataSource.portraitUrl = [userInfo objectForKey:@"user_icon"];
+    dataSource.userName = [userInfo objectForKey:@"user_nick"];
+    dataSource.userId = [userInfo objectForKey:@"user_id"];
+    dataSource.commentStr = comment;
+    return dataSource;
 }
 #pragma mark - refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
@@ -204,15 +213,14 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getCommentWithSourceType:type andSourceID:sourceId success:^(NSString *response) {
+    [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:0 success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
-    } failure:^(NSString *error) {
+        [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
+        [self doneRefrshLoadingTableViewData];
         
+    } failure:^(NSString *error) {
+        [self doneRefrshLoadingTableViewData];
     }];
-    for (int i = 0; i< 20; i++) {
-        [_dataSourceArray addObject:[self getCellDataSourceFromInfo:nil]];
-    }
-    [self doneRefrshLoadingTableViewData];
     [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
         userInfo = [response JSONValue];
     } failure:^(NSString *error) {
@@ -222,23 +230,28 @@
 }
 - (void)addDataSourceWithArray:(NSArray *)array
 {
+    DLog(@"%@",[array objectAtIndex:0]);
     for (int i = 0; i< array.count; i++)
-        [_dataSourceArray addObject:[self getCellDataSourceFromInfo:nil]];
-    
+        [_dataSourceArray addObject:[self getCellDataSourceFromInfo:[array objectAtIndex:i]]];
+    [_myTableView reloadData];
 }
 - (CommentCellDeteSource *)getCellDataSourceFromInfo:(NSDictionary *)info
 {
     CommentCellDeteSource * data = [[CommentCellDeteSource alloc] init];
-    data.userName = @"ok";
-    data.commentStr = @"我整的没法描述这个耳温计,也不,你是吗,asdf就,,啊知道说是吗.,,,";
+    data.userId = [NSString stringWithFormat:@"%@",[info objectForKey:@"user_id"]];
+    data.userName = [info objectForKey:@"user_nick"];
+    data.commentStr = [info objectForKey:@"content"];
+    data.portraitUrl = [info objectForKey:@"avatar"];
     return data;
 }
 - (void)getMoreFromNetWork
 {
-    [RequestManager getCommentWithSourceType:type andSourceID:sourceId success:^(NSString *response) {
-        DLog(@"%@",response);
+    if (_dataSourceArray.count && _dataSourceArray.count%20) return;
+    [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:_dataSourceArray.count / 20 + 1 success:^(NSString *response) {
+        [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
+        [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
-        
+        [self doneMoreLoadingTableViewData];
     }];
 }
 
@@ -272,6 +285,7 @@
     CommentCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentify];
     if (!cell) {
         cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentify];
+        cell.delegate = self;
     }
     if (indexPath.row < _dataSourceArray.count)
         cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
@@ -283,5 +297,9 @@
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+- (void)commentCell:(CommentCell *)cell clickPortrait:(id)sender
+{
+    [self.navigationController pushViewController:[[PhotoWallController alloc] initWithOwnerID:[[cell dataSource] userId] isRootController:NO] animated:YES];
 }
 @end

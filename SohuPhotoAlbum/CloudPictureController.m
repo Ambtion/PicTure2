@@ -7,7 +7,6 @@
 //
 
 #import "CloudPictureController.h"
-#import "RequestManager.h"
 #import "CloundDetailController.h"
 
 @interface CloudPictureController()
@@ -272,24 +271,74 @@
 - (void)handleEnsureClick
 {
     if (!selectedArray.count) {
-        [self showPopAlerViewnotTotasView:YES WithMes:@"请选择图片"];
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择图片"];
         return;
     }
+   
+    if (_viewState == DeleteState) {
+        [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[self photosIdArray] success:^(NSString *response)
+         {
+             [self.assetsArray removeObjectsInArray:selectedArray];
+             [self reloadTableViewWithAssetsSource:self.assetsArray];
+             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
+             [self setViewState:NomalState];
+         } failure:^(NSString *error) {
+             [self showPopAlerViewRatherThentasView:NO WithMes:error];
+             [self setViewState:NomalState];
+         }];
+    }
+    if (_viewState == ShareState) {
+        [self showShareView];
+    }
+}
+- (NSArray *)photosIdArray
+{
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     for (NSDictionary * dic in selectedArray) {
         [array addObject:[dic objectForKey:@"id"]];
     }
-    if (_viewState == DeleteState) {
-        [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:array success:^(NSString *response)
-         {
-             [self.assetsArray removeObjectsInArray:selectedArray];
-             [self reloadTableViewWithAssetsSource:self.assetsArray];
-             [self showPopAlerViewnotTotasView:NO WithMes:@"删除成功"];
-             [self setViewState:NomalState];
-         } failure:^(NSString *error) {
-             [self showPopAlerViewnotTotasView:NO WithMes:error];
-             [self setViewState:NomalState];
-         }];
+    return array;
+}
+#pragma mark Share
+- (void)showShareView
+{
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间", nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            model = KShareSina;
+            break;
+        case 1:
+            model = KShareRenRen;
+            break;
+        case 2:
+            model = KShareQQ;
+            break;
+        default:
+            break;
     }
+    TextAlertView * text  = [[TextAlertView alloc] initWithDelegate:self name:nil];
+    [text show];
+}
+- (void)textAlertView:(TextAlertView *)view OKClicked:(UITextField *)textField
+{
+    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken] photoIDs:[self photosIdArray] share_to:model optionalTitle:@"adf" desc:textField.text success:^(NSString *response) {
+        DLog(@"%@",response);
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+        [selectedArray removeAllObjects];
+        [self setViewState:NomalState];
+    } failure:^(NSString *error) {
+        DLog(@"%@",error);
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+
+    }];
+}
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text
+{
+    
 }
 @end

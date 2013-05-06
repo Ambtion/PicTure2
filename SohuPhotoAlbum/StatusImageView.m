@@ -29,7 +29,6 @@
         [self addSubview:_statuImage];
         self.backgroundColor = [UIColor clearColor];
         [self resetStatusImageToHidden];
-//        [_statuImage addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionOld context:NULL];
     }
     return self;
 }
@@ -86,6 +85,11 @@
     [_actualView setAlpha:1.0];
     [_statuImage setHidden:YES];
     _statuImage.image = nil;
+}
+- (void)resetImageViewTohide
+{
+    [self resetStatusImageToHidden];
+    [_actualView.layer setBorderWidth:0.0f];
 }
 - (void)shouldShowAcutalViewLayer:(BOOL)isShow
 {

@@ -12,10 +12,10 @@
 #import "CustomizationNavBar.h"
 #import "CommentCell.h"
 #import "RequestManager.h"
-#import "ComentView.h"
+#import "MakeCommentView.h"
 
 @interface CommentController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
-SCPMoreTableFootViewDelegate,CusNavigationBarDelegate>
+SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,CommentCellDelegate>
 {
     UITableView * _myTableView;
     UIImageView * _myBgView;
@@ -25,7 +25,7 @@ SCPMoreTableFootViewDelegate,CusNavigationBarDelegate>
     CustomizationNavBar * _navBar;
     BOOL _isLoading;
     source_type type;
-    ComentView * commentView;
+    MakeCommentView * commentView;
     NSString * sourceOwnId;
     
     NSDictionary * userInfo;

@@ -9,6 +9,9 @@
 #import "PhotoStoryController.h"
 #import "RequestManager.h"
 #import "CommentController.h"
+#import "LoginStateManager.h"
+#import "PhotoWallController.h"
+
 
 @implementation PhotoStoryController
 @synthesize storyID,ownerID;
@@ -41,11 +44,10 @@
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-//    _myTableView.tableFooterView = _moreFootView;
     
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -146,14 +148,13 @@
     }];}
 - (void)addSoruceFromArray:(NSArray *)array
 {
-    DLog(@"%@",[array lastObject]);
+    DLog(@"%@",[array objectAtIndex:0]);
     for (NSDictionary * info in array)
-        [_dataSourceArray addObject:[self getCellSourceFromInfo:info]];
+        [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
     [_myTableView reloadData];
 }
-- (PhotoStoryCellDataSource *)getCellSourceFromInfo:(NSDictionary *)info
+- (PhotoStoryCellDataSource *)getdataSourceFromInfo:(NSDictionary *)info
 {
-    DLog(@"story:%@",info);
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
     dataSource.photoId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
     dataSource.imageUrl = [info objectForKey:@"photo_url"];
@@ -161,11 +162,12 @@
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     NSArray * commentarray = [info objectForKey:@"comments"];
     for (int i = 0; i < commentarray.count; i++) {
-        CommentViewDataSource * cds = [[CommentViewDataSource alloc] init];
-        cds.userName = @"游客踩踩";
-        cds.potraitImage = @"1.jpg";
+        StoryCommentViewDataSource * cds = [[StoryCommentViewDataSource alloc] init];
+        NSDictionary * dic = [commentarray objectAtIndex:i];
+        cds.userName =[dic objectForKey:@"user_nick"];
+        cds.potraitImage = [dic objectForKey:@"avatar"];
         cds.shareTime = @"6个小时前";
-        cds.comment = @"ASDFA,adf就啊了的控件飞,加啊克里斯蒂法律人阿的江";
+        cds.comment = [dic objectForKey:@"content"];
         [array addObject:cds];
     }
     dataSource.commentInfoArray = array;
@@ -220,32 +222,74 @@
 }
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
 {
-    DLog(@"photoStoryCell %d",index);
+    DLog(@"%d",index);
     switch (index) {
         case 0: //评论
             [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] photoId] andSoruceType:KSourcePhotos withBgImageURL:[[cell dataSource] imageUrl] WithOwnerID:self.ownerID] animated:YES];
             break;
         case 1: //喜欢
-            DLog(@"%s",__FUNCTION__);
-            [RequestManager likeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
-                DLog(@"%@",response);
-            } failure:^(NSString *error) {
-                
-            }];
-
+            [self likeClickOnCell:cell];
             break;
         case 2:
             break;
-                //分享
+            //分享
         case 3:
             break;
-                //删除
+            //删除
+            [self delePhtotFromStroy:cell];
         default:
             break;
     }
 }
--(void)photoStoryCell:(PhotoStoryCell *)cell commentClickAtIndex:(NSInteger)index
+-(void)photoStoryCell:(PhotoStoryCell *)cell commentClickAtIndex:(NSIndexPath *)index
 {
-    DLog(@"photoStoryCell %d",index);
+    DLog(@"%@",index);
+    //最多3条评论
+    if (index.row == 0) {
+        NSString * ownerId = [[[[cell dataSource] commentInfoArray] objectAtIndex:index.section] userId];
+        PhotoWallController * wall = [[PhotoWallController alloc] initWithOwnerID:ownerId isRootController:NO];
+        [self.navigationController pushViewController:wall animated:YES];
+        return;
+    }
+    //评论
+    [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[cell.dataSource photoId] andSoruceType:KSourcePhotos withBgImageURL:cell.dataSource.imageUrl WithOwnerID:self.ownerID] animated:YES];
+}
+- (void)likeClickOnCell:(PhotoStoryCell *)cell
+{
+    if (![LoginStateManager isLogin]) {
+        [self showLoginViewWithMethodNav:YES];
+        return;
+    }
+    if (cell.dataSource.isLiking) {
+        [RequestManager unlikeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
+            cell.dataSource.isLiking = NO;
+            [cell updateAllSubViewsFrames];
+        } failure:^(NSString *error) {
+            
+        }];
+    }else{
+        [RequestManager likeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
+            cell.dataSource.isLiking = YES;
+            [cell updateAllSubViewsFrames];
+        } failure:^(NSString *error) {
+            
+        }];
+    }
+}
+- (void)delePhtotFromStroy:(PhotoStoryCell *)cell
+{
+    if (![LoginStateManager isLogin]) {
+        [self showLoginViewWithMethodNav:YES];
+        return;
+    }
+    [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] photoId:[[cell dataSource] photoId]success:^(NSString *response) {
+        DLog(@"%@",response);
+        [_dataSourceArray removeObject:[cell dataSource]];
+        NSIndexPath * path = [_myTableView  indexPathForCell:cell];
+        [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
+        [_myTableView reloadData];
+    } failure:^(NSString *error) {
+        DLog(@"%@",error);
+    }];
 }
 @end

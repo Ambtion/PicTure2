@@ -206,11 +206,11 @@
 - (void)doRegister
 {
     if (!_usernameTextField.text || [_usernameTextField.text isEqualToString:@""]) {
-        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写用户名"];
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写用户名"];
         return;
     }
     if (!_passwordTextField.text || [_passwordTextField.text isEqualToString:@""]) {
-        [self showPopAlerViewnotTotasView:YES WithMes:@"您还没有填写密码"];
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
     [self allTextFieldsResignFirstResponder:nil];
@@ -224,12 +224,12 @@
                 [self backhome];
             } failtureSucess:^(NSString *error) {
                 [self stopWait];
-                [self showPopAlerViewnotTotasView:YES WithMes:error];
+                [self showPopAlerViewRatherThentasView:YES WithMes:error];
             }];
         });
     }failtureSucess:^(NSString *error) {
         [self stopWait];
-        [self showPopAlerViewnotTotasView:YES WithMes:error];
+        [self showPopAlerViewRatherThentasView:YES WithMes:error];
     }];
 }
 -(void)waitForMomentsWithTitle:(NSString*)str

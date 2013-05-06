@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-
-
-@interface CommentViewDataSource : NSObject
+@interface StoryCommentViewDataSource : NSObject
 @property(strong,nonatomic)NSString * userId;
 @property(strong,nonatomic)NSString * potraitImage;
 @property(strong,nonatomic)NSString * userName;
@@ -18,15 +16,15 @@
 @property(strong,nonatomic)NSString * comment;
 - (CGFloat)commetViewheigth;
 @end
-@interface CommentView : UIView
+@interface StoryCommentView : UIView
 {
-    CommentViewDataSource * _dataScoure;
+    StoryCommentViewDataSource * _dataScoure;
 }
 @property(strong,nonatomic)UIImageView * portraitView;
 @property(strong,nonatomic)UILabel * userName;
 @property(strong,nonatomic)UILabel * shareTime;
 @property(strong,nonatomic)UILabel * commentLabel;
-@property(strong,nonatomic)CommentViewDataSource * dataScoure;
+@property(strong,nonatomic)StoryCommentViewDataSource * dataScoure;
 - (void)addtarget:(id)target action:(SEL)action;
 
 @end

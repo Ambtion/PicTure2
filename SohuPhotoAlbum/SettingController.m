@@ -15,6 +15,7 @@
 #define maxRow 7
 static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清楚缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};\
 @implementation SettingController
+@synthesize isChangeLoginState;
 
 - (void)viewDidLoad
 {
@@ -44,6 +45,8 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
     [_navBar addSubview:backButton];
+    
+    isChangeLoginState = NO;
     [self getUserInfo];
 }
 #pragma mark View lifeCircle
@@ -187,7 +190,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
         [PerfrenceSettingManager setIsAutoUpload:[Aswitch isTure]];
     }
     if (path.row == 2) {
-        DLog(@"%d",[Aswitch isTure]);
         [PerfrenceSettingManager setIsUploadJPEGImage:[Aswitch isTure]];
     }
 }
@@ -205,7 +207,9 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
 }
 - (void)loginOut:(id)sender
 {
-    if ([LoginStateManager isLogin])
+    if ([LoginStateManager isLogin]){
+        isChangeLoginState = YES;
         [LoginStateManager logout];
+    }
 }
 @end

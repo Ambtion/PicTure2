@@ -16,7 +16,7 @@
 #define DESLABLELINEBREAK   NSLineBreakByWordWrapping
 
 @implementation PhotoStoryCellDataSource
-@synthesize photoId,imageUrl,imageDes,commentInfoArray,allCommentCount;
+@synthesize isLiking,photoId,imageUrl,imageDes,commentInfoArray,allCommentCount;
 - (CGFloat)cellHeigth
 {
     CGFloat heigth = OFFSETY;
@@ -29,7 +29,7 @@
     heigth += size.height; //des
     heigth += 5.f; // desview->commnetView
     for (int i = 0; i < MIN(3, commentInfoArray.count); i++) {
-        CommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
+        StoryCommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
         heigth += [dataSoure commetViewheigth];
     }
     if (!MIN(3, commentInfoArray.count)){
@@ -99,9 +99,11 @@
     [self setDesLabelPerporty:_desLabel];
     [self.contentView addSubview:_desLabel];
     for (int i = 0; i < 3; i++) {
-        CommentView * view  =[[CommentView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
+        StoryCommentView * view  =[[StoryCommentView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
         view.tag = i;
         [view addtarget:self action:@selector(commentViewClick:)];
+        UITapGestureRecognizer * gesTure = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentPortraitView:)];
+        [view.portraitView addGestureRecognizer:gesTure];
         [self.contentView addSubview:view];
         [_commentArray addObject:view];
     }
@@ -124,42 +126,41 @@
 {
     if (_dataSource != dataSource) {
         _dataSource = dataSource;
-        [self updaAllSubViewsFrames];
+        [self updateAllSubViewsFrames];
     }
 }
 
-- (void)updaAllSubViewsFrames
+- (void)updateAllSubViewsFrames
 {
     
     NSString * str = [NSString stringWithFormat:@"%@_c640",[_dataSource imageUrl]];
     [_photoView setImageWithURL:[NSURL URLWithString:str]];
     _photoView.frame = CGRectMake((_photoView.superview.frame.size.width - 320)/2.f, 0, 320, 320);
-    
     //_desLabel Size
     _desLabel.text = [_dataSource imageDes];
-    CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
     
+    CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
     _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + OFFSETY + 5, size.width, size.height);
     _bgImageView.frame = CGRectMake(0, OFFSETY, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 10);
     //commentSize
-    for (CommentView * view in _commentArray){
+    for (StoryCommentView * view in _commentArray){
         [view setHidden:YES];
     }
     if (_dataSource.commentInfoArray && _dataSource.commentInfoArray.count) {
-        CommentView * view = [_commentArray objectAtIndex:0];
+        StoryCommentView * view = [_commentArray objectAtIndex:0];
         view.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:0]; //计算view.frame
         view.frame = CGRectMake(view.frame.origin.x, _desLabel.frame.size.height + _desLabel.frame.origin.y + 5, view.frame.size.width, view.frame.size.height);
         [view setHidden:NO];
         [self setFootViewWithView:view];
         if (_dataSource.commentInfoArray.count > 1){
-            CommentView * view1 = [_commentArray objectAtIndex:1];
+            StoryCommentView * view1 = [_commentArray objectAtIndex:1];
             view1.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:1];
             view1.frame = CGRectMake(view1.frame.origin.x, view.frame.size.height + view.frame.origin.y, view1.frame.size.width, view1.frame.size.height);
             [view1 setHidden:NO];
             [self setFootViewWithView:view1];
 
             if (_dataSource.commentInfoArray.count > 2){
-                CommentView * view2 = [_commentArray objectAtIndex:2];
+                StoryCommentView * view2 = [_commentArray objectAtIndex:2];
                 view2.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:2];
                 view2.frame = CGRectMake(view2.frame.origin.x, view1.frame.size.height + view1.frame.origin.y, view2.frame.size.width, view2.frame.size.height);
                 [view2 setHidden:NO];
@@ -167,12 +168,20 @@
             }
         }
     }else{
+        [_commentCount.superview setHidden:YES];
         _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y+ OFFSETY /2.f ,320, 40);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
+    if (_dataSource.isLiking) {
+        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton1.png"] forState:UIControlStateNormal];
+    }else{
+        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton.png"] forState:UIControlStateNormal];
+    }
 }
 - (void)setFootViewWithView:(UIView *)view
 {
+    //commetCount
+    [_commentCount.superview setHidden:NO];
     _commentCount.superview.frame = CGRectMake(0, view.frame.size.height+view.frame.origin.y, 320, 30);
     _commentCount.frame = CGRectMake(OFFSETY + 5,4, 320, 21);
     _footView.frame = CGRectMake(0, _commentCount.superview.frame.size.height + _commentCount.superview.frame.origin.y,320, 40);
@@ -188,10 +197,16 @@
         [_delegate photoStoryCell:self footViewClickAtIndex:index];
 }
 #pragma mark - commentClick
+- (void)commentPortraitView:(UITapGestureRecognizer *)sender
+{
+    NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:[[sender view] tag]];
+    if ([_delegate respondsToSelector:@selector(photoStoryCell:commentClickAtIndex:)])
+        [_delegate photoStoryCell:self commentClickAtIndex:path];
+}
 - (void)commentViewClick:(UITapGestureRecognizer *)sender
 {
+    NSIndexPath * path = [NSIndexPath indexPathForRow:1 inSection:[[sender view] tag]];
     if ([_delegate respondsToSelector:@selector(photoStoryCell:commentClickAtIndex:)])
-        [_delegate photoStoryCell:self commentClickAtIndex:[[sender view] tag]];
+        [_delegate photoStoryCell:self commentClickAtIndex:path];
 }
-
 @end

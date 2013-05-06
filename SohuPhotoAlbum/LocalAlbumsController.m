@@ -79,11 +79,13 @@
         self.viewDeckController.centerController  = [[LocalALLPhotoesController alloc] init];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
-        if ([LoginStateManager isLogin]) {
-            [self setViewState:UPloadState];
-        }else{
-            [self.navigationController pushViewController:[[LoginViewController alloc] init] animated:YES];
-        }
+        [self setViewState:UPloadState];
+
+//        if ([LoginStateManager isLogin]) {
+//            [self setViewState:UPloadState];
+//        }else{
+//            [self showLoginViewWithMethodNav:YES];
+//        }
     }
     if (button.tag == CANCELBUTTONTAG) {
         [self setViewState:NomalState];

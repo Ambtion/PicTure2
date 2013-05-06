@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ComentView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate>
+@interface MakeCommentView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate>
 {
     UIButton * _comentButton;
     UITextField * _placeHolder;

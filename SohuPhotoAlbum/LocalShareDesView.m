@@ -8,7 +8,7 @@
 
 #import "LocalShareDesView.h"
 #import "EmojiUnit.h"
-#import "PortraitView.h"
+#import "UIImageView+WebCache.h"
 
 #define DESC_COUNT_LIMIT 140
 
@@ -30,7 +30,6 @@
         //headView
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        //        [center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
         [self addheadView];
         [self addContentViewwithTunmbnail:thumbnail];
     }
@@ -83,15 +82,15 @@
     [_contentView addSubview:_textcount];
     
     
-    PortraitView * imageView = [[PortraitView alloc] initWithFrame:CGRectMake(10, _contentView.frame.size.height - 45, 40, 40)];
-    imageView.imageView.image = thumbnail;
-    imageView.clipsToBounds = YES;
-    imageView.layer.cornerRadius = 5.f;
-    imageView.layer.borderWidth = 1.f;
-    imageView.layer.borderColor = [[UIColor blackColor] CGColor];
-    imageView.backgroundColor = [UIColor clearColor];
-    imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [_contentView addSubview:imageView];
+    _porTraitView = [[PortraitView alloc] initWithFrame:CGRectMake(10, _contentView.frame.size.height - 45, 40, 40)];
+    _porTraitView.imageView.image = thumbnail;
+    _porTraitView.clipsToBounds = YES;
+    _porTraitView.layer.cornerRadius = 5.f;
+    _porTraitView.layer.borderWidth = 1.f;
+    _porTraitView.layer.borderColor = [[UIColor blackColor] CGColor];
+    _porTraitView.backgroundColor = [UIColor clearColor];
+    _porTraitView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    [_contentView addSubview:_porTraitView];
     [self addSubview:_contentView];
     [_contentTextView  becomeFirstResponder];
 }

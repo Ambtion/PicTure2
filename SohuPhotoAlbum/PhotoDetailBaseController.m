@@ -7,7 +7,6 @@
 //
 
 #import "PhotoDetailBaseController.h"
-#import "LocalShareController.h"
 #import "AppDelegate.h"
 
 #define OFFSETX 20
@@ -32,7 +31,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [self reloadAllSubViews];
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -46,7 +45,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [self resetStatueBar];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
+    
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -56,6 +55,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
                                              selector:@selector(listOrientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
+    DLog(@"%f",_scrollView.contentSize.width);
 }
 - (void)setStatueBar
 {
@@ -70,13 +70,13 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 
 - (void)upCusTitle
 {
-//    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
+    //    [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%d/%d",_curPageNum + 1, _assetsArray.count]];
 }
 
 #pragma mark - ReloadSubViews
 - (void)reloadAllSubViews
 {
-
+    
     [self initSubViews];
     [self setScrollViewProperty];
     [self refreshScrollView];
@@ -91,7 +91,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     NSArray * aray = [self.view subviews];
     [aray makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.view.frame = self.view.bounds;
-
+    
     CGRect rect = self.view.bounds;
     rect.size.width += OFFSETX * 2;
     rect.origin.x -= OFFSETX;
@@ -105,7 +105,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     self.curScaleImage = [[ImageScaleView alloc]initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     self.curScaleImage.Adelegate = self;
     self.rearScaleImage = [[ImageScaleView alloc] initWithFrame:CGRectMake(OFFSETX + _scrollView.bounds.size.width * 2, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-     self.rearScaleImage.Adelegate = self;
+    self.rearScaleImage.Adelegate = self;
     
     [_scrollView addSubview:_fontScaleImage];
     [_scrollView addSubview:_rearScaleImage];
@@ -164,7 +164,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
                 return UIDeviceOrientationIsPortrait(orientation);
             if (UIDeviceOrientationIsPortrait(PreOrientation))
                 return UIDeviceOrientationIsLandscape(orientation);
-    }
+        }
     return NO;
 }
 
@@ -208,7 +208,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     _canGetActualImage = YES;
     //prevent than  when seting offset it can  scrollViewDidScroll
     _scrollView.delegate = nil;
-    [self upCusTitle];
+    //    [self upCusTitle];
     if (_assetsArray.count <= 3) {
         [self refreshScrollViewWhenPhotonumLessThree];
     }else if (_curPageNum == 0) {
@@ -238,12 +238,14 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * 2,0)];
     _imagestate = AtMore;
 }
+
 - (void)refreshScrollViewWhenPhotonumLessThree
 {
     [self setImageView:_fontScaleImage imageFromAsset:[_assetsArray objectAtIndex:0]];
     if (_assetsArray.count == 2) {
+        
         [self setImageView:_curScaleImage imageFromAsset:[_assetsArray objectAtIndex:1]];
-
+        
     }else if(_assetsArray.count == 3){
         [self setImageView:_curScaleImage imageFromAsset:[_assetsArray objectAtIndex:1]];
         [self setImageView:_rearScaleImage imageFromAsset:[_assetsArray objectAtIndex:2]];
@@ -252,8 +254,11 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
         _rearScaleImage.imageView.image = nil;
     }
     [self resetAllImagesFrame];
+    [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width *_assetsArray.count , _scrollView.frame.size.height)];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width * _curPageNum, 0)];
+    
 }
+
 - (void)refreshScrollViewNormal
 {
     if ([self getDisplayImagesWithCurpage:_curPageNum])
@@ -272,13 +277,15 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
     if (_isAnimating || !_assetsArray.count)  return;
-    if (self.curPageNum == _assetsArray.count - 2)
-            [self getMoreAssets];
+    
     if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];
         return;
     }
+    //默认图片数量最小的值大于3
+    if (self.curPageNum == _assetsArray.count - 2)
+        [self getMoreAssets];
     int  x = aScrollView.contentOffset.x;
     if (x == aScrollView.frame.size.width) {
         if (_imagestate != AtNomal) {
@@ -323,13 +330,14 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 - (void)fixScrollViewOffset:(UIScrollView *)scrollView
 {
+    if (_assetsArray.count <= 3) return;
     CGPoint point = CGPointZero;
     point.y = 0;
     if (_curPageNum > 0 && _curPageNum < self.assetsArray.count - 1) {
         point.x = scrollView.frame.size.width;
     }else if(_curPageNum == 0){
         point.x = 0;
-    }else{
+    }else {
         point.x = scrollView.frame.size.width * 2;
     }
     [scrollView setContentOffset:point animated:NO];
@@ -343,18 +351,18 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
             switch (_assetsArray.count) {
                 case 1:
                     [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
-
+                    
                     break;
                 case 2:
                     [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
                     [self setImageView:_curScaleImage ActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
-
+                    
                     break;
                 case 3:
                     [self setImageView:_fontScaleImage ActualImage:[_assetsArray objectAtIndex:0] andOrientation:0];
                     [self setImageView:_curScaleImage ActualImage:[_assetsArray objectAtIndex:1] andOrientation:0];
                     [self setImageView:_rearScaleImage ActualImage:[_assetsArray objectAtIndex:2] andOrientation:0];
-
+                    
                     break;
                 default:
                     break;
@@ -383,7 +391,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
-//    DLog(@"%s",__FUNCTION__);
+    //    DLog(@"%s",__FUNCTION__);
 }
 
 - (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait
@@ -426,7 +434,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [self resetImageRect:_rearScaleImage];
 }
 - (NSArray *)getDisplayImagesWithCurpage:(int)page
-{    
+{
     int pre = [self validPageValue:_curPageNum -1];
     int last = [self validPageValue:_curPageNum+1];
     if([_curImageArray count] != 0) [_curImageArray removeAllObjects];
@@ -439,7 +447,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     if(value <= 0) value = 0;                   // value＝1为第一张，value = 0为前面一张
     if(value >= _assetsArray.count){
-      value = _assetsArray.count - 1;
+        value = _assetsArray.count - 1;
     }
     return value;
 }

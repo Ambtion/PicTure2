@@ -14,4 +14,5 @@
 @end
 @interface StoryFootView : UIImageView
 @property(weak,nonatomic)id<StoryFootViewDelegate> delegate;
+@property(nonatomic,strong)UIButton * likeButton;
 @end

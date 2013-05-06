@@ -19,6 +19,8 @@
     UITableView * _myTableView;
     UIImageView * _navBar;
     NSDictionary * userInfodic;
+
 }
 @property(weak,nonatomic)id delegate;
+@property(nonatomic,assign) BOOL isChangeLoginState;
 @end

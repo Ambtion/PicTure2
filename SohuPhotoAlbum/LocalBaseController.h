@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "CustomizationNavBar.h"
-#import "LoginViewController.h"
 #import "UPLoadController.h"
-#import "UIViewController+DivideAsset.h"
 
 typedef enum ViewState {
     NomalState  ,
@@ -20,7 +18,7 @@ typedef enum ViewState {
     DeleteState
 }viewState;
 
-@interface LocalBaseController : UIViewController<CusNavigationBarDelegate,LoginViewControllerDelegate,UPLoadControllerDelegate>
+@interface LocalBaseController : UIViewController<CusNavigationBarDelegate,UPLoadControllerDelegate>
 {
     CustomizationNavBar * _cusBar;
     NSMutableArray * selectedArray;

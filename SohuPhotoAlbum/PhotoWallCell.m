@@ -16,9 +16,19 @@
 #define DESLABELMAXSIZE     (CGSize){298,1000}
 #define DESLABLELINEBREAK   NSLineBreakByWordWrapping
 
+@implementation NSObject(string)
+
++ (NSString *)isString:(id)sender
+{
+    if (!sender ||[sender isKindOfClass:[NSNull class]] || [sender isEqualToString:@""])
+        return nil;
+    return sender;
+}
+@end
 @implementation CellFootView
 @synthesize shareTimeLabel,likeCountbutton,talkCountbutton;
 @synthesize talkContLabel,likeCountLabel;
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -70,12 +80,29 @@
 @end
 
 @implementation PhotoWallCellDataSource
-@synthesize wallId,imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount;
+@synthesize wallId,imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount,OwnerISMe,isLiking;
 - (CGFloat)getCellHeigth
 {
     if (imageWallInfo.count) {
         CGFloat heigth = [ImageViewAdaper setFramesinToArray:nil byImageCount:MIN([imageWallInfo count] , 6)];
         heigth +=OFFSETY; //图片描述
+        self.wallDescription = [NSObject isString:self.wallDescription];
+        CGSize size = [wallDescription sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
+        //offset 缺省为0;
+        heigth += size.height; //desLabel
+        heigth +=OFFSETY; //描述footView
+        heigth += FOOTVIEWHEIGTH;
+//        heigth +=OFFSETY; //下边界
+        return heigth;
+    }
+    return 0.f;
+}
+- (CGFloat)getLastCellHeigth
+{
+    if (imageWallInfo.count) {
+        CGFloat heigth = [ImageViewAdaper setFramesinToArray:nil byImageCount:MIN([imageWallInfo count] , 6)];
+        heigth +=OFFSETY; //图片描述
+        self.wallDescription = [NSObject isString:self.wallDescription];
         CGSize size = [wallDescription sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
         //offset 缺省为0;
         heigth += size.height; //desLabel
@@ -147,15 +174,23 @@
         [_imageViewArray addObject:imageView];
         [_backImageView addSubview:imageView];
     }
-    //暂时测试
     if (_imageViewArray.count) {
         //        if (_imageViewArray.count == 6) {
         UIView * view = [_imageViewArray lastObject];
         _countLabel = [[CountLabel alloc] initIconLabeWithFrame:CGRectMake(view.frame.size.width - 30, view.frame.size.height - 30, 22, 22)];
         [self setCountLabelProperty:_countLabel];
         [view addSubview:_countLabel];
+        CGRect rect = [self.contentView convertRect:_countLabel.frame fromView:view];
+        rect.origin.x = 20.f;
+        rect.size.width = 32.f;
+        rect.size.height = 22.f;
+        _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_deleteButton setImage:[UIImage imageNamed:@"stroyDeleteButton.png"] forState:UIControlStateNormal];
+        [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        _deleteButton.frame = rect;
+        [self.contentView addSubview:_deleteButton];
     }
-    
+
 }
 - (void)setCountLabelProperty:(CountLabel *)label
 {
@@ -171,6 +206,7 @@
         [self updataSubViews];
     }
 }
+
 - (void)updataSubViews
 {
     for (int i = 0; i < _imageViewArray.count;i++) {
@@ -180,7 +216,7 @@
         NSString * str = [NSString stringWithFormat:@"%@_c320",[photoInfo objectForKey:@"photo_url"]];
         [imageView setImageWithURL:[NSURL URLWithString:str]];
     }
-    _wallDesLabel.text = _dataSource.wallDescription ? _dataSource.wallDescription : nil;
+    _wallDesLabel.text = _dataSource.wallDescription;
     CGSize size = [_dataSource.wallDescription sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
     _wallDesLabel.frame = CGRectMake(KWallOffsetX + 2, heigth + OFFSETY, size.width, size.height);
     
@@ -189,12 +225,13 @@
     _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
     _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
     _countLabel.text = [NSString stringWithFormat:@"%d",_dataSource.photoCount];
+    [_deleteButton setHidden:![_dataSource OwnerISMe]];
     _backImageView.frame = CGRectMake(0, 0, self.bounds.size.width, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY);
     if (_dataSource.isLiking) {
-        [_footView.likeCountbutton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon1.png"] forState:UIControlStateNormal];
+
     }else{
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
-        [_footView.likeCountbutton setSelected:YES];
     }
 }
 #pragma mark ActionFunction
@@ -212,5 +249,10 @@
 {
     if ([_delegate respondsToSelector:@selector(photoWallCell:talkClick:)])
         [_delegate photoWallCell:self talkClick:button];
+}
+- (void)deleteButtonClick:(UIButton *)button
+{
+    if ([_delegate respondsToSelector:@selector(photoWallCell:deleteClick:)])
+        [_delegate photoWallCell:self deleteClick:button];
 }
 @end
