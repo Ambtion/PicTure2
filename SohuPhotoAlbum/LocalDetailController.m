@@ -357,7 +357,7 @@
     WXImageObject *ext = [WXImageObject object];
     ext.imageData = [self getDataFromAsset:[self.assetsArray objectAtIndex:self.curPageNum]];
     message.mediaObject = ext;
-    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    SendMessageToWXReq * req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
     req.scene = scene;
@@ -368,7 +368,7 @@
 {
     CGImageRef imageRef = [[asset defaultRepresentation] fullScreenImage];
     UIImage * image = [UIImage imageWithCGImage:imageRef];
-    return UIImageJPEGRepresentation(image, 1.f);
+    return UIImageJPEGRepresentation(image, 0.5);
 }
 -(void) onResp:(BaseResp*)resp
 {

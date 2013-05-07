@@ -39,5 +39,5 @@
 #import "WXApiObject.h"
 
 
-#define kWeiXinApp_ID @"wxb10af14588447520"
-#define kWeiXinApp_Key @"48434c61bc3cd43500a37f6146615636"
+#define kWeiXinApp_ID @"wx75b12add871bfd58"
+#define kWeiXinApp_Key @"4a337875eb3b1e2c1e16bebb09d6a243"

@@ -8,7 +8,6 @@
 
 #import "PhotoWallController.h"
 #import "PhotoStoryController.h"
-#import "RequestManager.h"
 #import "CommentController.h"
 #import "LoginStateManager.h"
 
@@ -57,7 +56,9 @@
 - (void)addDataSourceWith:(NSArray *)array
 {
     for (int i = 0; i < array.count; i++) {
-        [_dataSourceArray addObject:[self getCellDataSourceFromDic:[array objectAtIndex:i]]];
+        PhotoWallCellDataSource * source = [self getCellDataSourceFromDic:[array objectAtIndex:i]];
+        if (source)
+        [_dataSourceArray addObject:source];
     }
     [self resetLabel];
     [_myTableView reloadData];
@@ -67,6 +68,8 @@
     PhotoWallCellDataSource * dataSource = [[PhotoWallCellDataSource alloc] init];
     dataSource.wallId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
     NSArray * phtotArray = [dic objectForKey:@"photos"];
+    if (!phtotArray || !phtotArray.count)
+            return nil;
     dataSource.imageWallInfo = phtotArray;
     dataSource.wallDescription = [dic objectForKey:@"description"];
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
@@ -106,10 +109,14 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_navBar removeFromSuperview];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
-}
 
+}
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_navBar removeFromSuperview];
+}
 #pragma mark - refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
 {
@@ -201,6 +208,7 @@
     [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
     [_moreFootView scpMoreScrollViewDidEndDragging:scrollView];
 }
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self updataLabelWithScrollView:scrollView];
@@ -233,14 +241,13 @@
         }
     }
 }
+
 - (void)setLabelTimeWithTime:(NSString *)time
 {
     NSArray * array = [time componentsSeparatedByString:@"-"];
-    if (array.count == 3) {
-        _timelabel.daysLabel.text = [array objectAtIndex:2];
-        _timelabel.yesDayLabel.text = [NSString stringWithFormat:@"%@年",[array objectAtIndex:0]];
-        _timelabel.mouthsLabel.text = [NSString stringWithFormat:@"%@月",[array objectAtIndex:1]];
-    }
+    _timelabel.daysLabel.text = [array objectAtIndex:2];
+    _timelabel.yesDayLabel.text = [NSString stringWithFormat:@"%@年",[array objectAtIndex:0]];
+    _timelabel.mouthsLabel.text = [NSString stringWithFormat:@"%@月",[array objectAtIndex:1]];
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
@@ -271,23 +278,56 @@
     }
     return dataSoure ? [dataSoure getCellHeigth]: 0.f;
 }
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundColor = BASEWALLCOLOR;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
+{    
     PhotoWallCellDataSource * dataSoure = [self dataScourForindexPath:indexPath];
     NSInteger num = [dataSoure numOfCellStragey];
     PhotoWallCell * cell = [tableView dequeueReusableCellWithIdentifier:identify[num]];
-    if (!cell) {
-        cell = [[PhotoWallCell alloc ] initWithStyle:UITableViewCellStyleDefault reuseIdentifierNum:num];\
+    if (cell == nil) {
+        cell = [[PhotoWallCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifierNum:num];
         cell.delegate = self;
     }
     cell.dataSource = dataSoure;
     return cell;
 }
+#pragma mark Share
+- (void)showShareView
+{
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间", nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            model = SinaModel;
+            break;
+        case 1:
+            model = RenrenModel;
+            break;
+        case 2:
+            model = QQModel;
+            break;
+        default:
+            return;
+            break;
+    }
+    if (_dataSourceArray.count) {
+        PhotoWallCellDataSource * source = [_dataSourceArray objectAtIndex:0];
+        NSString * bgPhotoUrl = [[[source imageWallInfo] objectAtIndex:0] objectForKey:@"photo_url"];
+        ShareViewController * sv = [[ShareViewController alloc] initWithModel:model bgPhotoUrl:bgPhotoUrl andDelegate:nil];
+        sv.ownerId = self.ownerID;
+        [self.navigationController pushViewController:sv animated:YES];
+    }
+}
+
 #pragma mark Action
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
@@ -298,9 +338,10 @@
             [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //分享
-        
+        [self showShareView];
     }
 }
+
 - (void)photoWallCell:(PhotoWallCell *)cell talkClick:(UIButton *)button
 {
     if (![LoginStateManager isLogin]) {
@@ -318,7 +359,7 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
         [_dataSourceArray removeObject:cell.dataSource];
         NSIndexPath * path =  [_myTableView indexPathForCell:cell];
-        [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
         [self resetLabel];
        //删除成功
     }  failure:^(NSString *error) {

@@ -85,6 +85,7 @@
     [center addObserver:self selector:@selector(commentkeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(commentkeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
+
 - (CGSize)getIdentifyImageSizeWithImageView:(UIImage *)image
 {
     if (!image) return CGSizeZero;
@@ -230,7 +231,8 @@
 }
 - (void)addDataSourceWithArray:(NSArray *)array
 {
-    DLog(@"%@",[array objectAtIndex:0]);
+    if (array.count)
+        DLog(@"%@",[array objectAtIndex:0]);
     for (int i = 0; i< array.count; i++)
         [_dataSourceArray addObject:[self getCellDataSourceFromInfo:[array objectAtIndex:i]]];
     [_myTableView reloadData];

@@ -14,6 +14,7 @@
 
 #define TIMEOUT 10.f
 #define REQUSETFAILERROR @"当前网络不给力,请稍后重试"
+#define REQUSETSOURCEFIAL @"访问的资源不存在"
 #define REFRESHFAILTURE @"登录过期,请重新登录"
 
 @implementation RequestManager(private)
@@ -71,14 +72,22 @@
         if ([self handlerequsetStatucode:code withblock:failure]) {
             success([request responseString]);
         }else{
-            [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
-            failure(REQUSETFAILERROR);
+            if (code == 404) {
+                [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETSOURCEFIAL];
+                if (failure)
+                    failure(REQUSETSOURCEFIAL);
+            }else{
+                [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
+                if (failure)
+                    failure(REQUSETFAILERROR);
+            }
         }
     }];
     [request setFailedBlock:^{
         if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
         [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
-        failure(REQUSETFAILERROR);
+        if (failure)
+            failure(REQUSETFAILERROR);
     }];
     [request startAsynchronous];
     
@@ -88,6 +97,7 @@
 {
     [self getWithUrlStr:strUrl andMethod:@"GET" body:nil success:success failure:failure];
 }
+
 #pragma mark POST
 + (void)postWithURL:(NSString *)strUrl body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -116,7 +126,7 @@
     }
     DLog(@"%@",str);
     [self getSourceWithStringUrl:str success:success failure:failure];
-
+    
 }
 + (void)deletePhotosWithaccessToken:(NSString *)token	photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -134,7 +144,7 @@
 }
 
 //图片墙
-#pragma mark - 
+#pragma mark -
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId withAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * mmm;
@@ -149,7 +159,7 @@
 
 +(void)deleteStoryFromWallWithaccessToken:(NSString *)token StoryId:(NSString *)storyId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-//    2.2 DELETE /portfolios/$id  删除指定的作品集。
+    //    2.2 DELETE /portfolios/$id  删除指定的作品集。
     NSString * string = [NSString stringWithFormat:@"%@/portfolios/%@?access_token=%@",BASICURL_V1,storyId,token];
     [self deleteSoruce:string success:success failure:failure];
 }
@@ -163,10 +173,10 @@
                       BASICURL_V1,storyId,ownId,start,count];
     [self getSourceWithStringUrl:str success:success failure:failure];
 }
-+(void)deletePhotoFromStoryWithAccessToken:(NSString *)token photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++(void)deletePhotoFromStoryWithAccessToken:(NSString *)token stroyid:(NSString *)storyId photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-//    2.4 DELETE /portfolios/$id/photos/$photoid  删除指定的故事中的指定图片。
-    NSString * string = [NSString stringWithFormat:@"%@/portfolios/%@/photos?access_token=%@",BASICURL_V1,photoId,token];
+    //    2.4 DELETE /portfolios/$id/photos/$photoid  删除指定的故事中的指定图片。
+    NSString * string = [NSString stringWithFormat:@"%@/portfolios/%@/photos/%@?access_token=%@",BASICURL_V1,storyId,photoId,token];
     [self deleteSoruce:string success:success failure:failure];
 }
 

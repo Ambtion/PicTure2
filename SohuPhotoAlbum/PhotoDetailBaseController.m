@@ -25,7 +25,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
 #pragma mark - initSubView
 - (void)viewDidLoad
 {
@@ -54,8 +53,8 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(listOrientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
-    DLog(@"%f",_scrollView.contentSize.width);
+                                            object:nil];
+    DLog(@"%@",NSStringFromCGRect(self.view.frame));
 }
 - (void)setStatueBar
 {

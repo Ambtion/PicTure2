@@ -67,10 +67,13 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_navBar removeFromSuperview];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_navBar removeFromSuperview];
+}
 #pragma mark - refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
 {
@@ -217,7 +220,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //分享
-        
+        [self showShareViewIsAllshare:YES];
     }
 }
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
@@ -231,12 +234,13 @@
             [self likeClickOnCell:cell];
             break;
         case 2:
-            break;
             //分享
-        case 3:
+            [self sharePhotoStroy:cell];
             break;
+        case 3:
             //删除
             [self delePhtotFromStroy:cell];
+            break;
         default:
             break;
     }
@@ -276,14 +280,18 @@
         }];
     }
 }
+- (void)sharePhotoStroy:(PhotoStoryCell *)cell
+{
+    _shareDateSource = cell.dataSource;
+    [self showShareViewIsAllshare:NO];
+}
 - (void)delePhtotFromStroy:(PhotoStoryCell *)cell
 {
     if (![LoginStateManager isLogin]) {
         [self showLoginViewWithMethodNav:YES];
         return;
     }
-    [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] photoId:[[cell dataSource] photoId]success:^(NSString *response) {
-        DLog(@"%@",response);
+    [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] stroyid:self.storyID photoId:[[cell dataSource] photoId]success:^(NSString *response) {
         [_dataSourceArray removeObject:[cell dataSource]];
         NSIndexPath * path = [_myTableView  indexPathForCell:cell];
         [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
@@ -292,4 +300,48 @@
         DLog(@"%@",error);
     }];
 }
+
+#pragma mark Share
+- (void)showShareViewIsAllshare:(BOOL)isShareAll
+{
+    _isShareAll = isShareAll;
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间", nil];
+    [sheet showInView:self.view];
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            model = SinaModel;
+            break;
+        case 1:
+            model = RenrenModel;
+            break;
+        case 2:
+            model = QQModel;
+            break;
+        default:
+            return;
+            break;
+    }
+    if (_dataSourceArray.count) {
+        if (_isShareAll) {//分享story
+            PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
+            NSString * bgPhotoUrl = [source imageUrl];
+            ShareViewController * sv = [[ShareViewController alloc] initWithModel:model bgPhotoUrl:bgPhotoUrl andDelegate:nil];
+            sv.ownerId = self.ownerID;
+            sv.storyId = self.storyID;
+            [self.navigationController pushViewController:sv animated:YES];
+        }else{ //分享单张图片
+            NSString * bgPhotoUrl = [_shareDateSource imageUrl];
+            ShareViewController * sv = [[ShareViewController alloc] initWithModel:model bgPhotoUrl:bgPhotoUrl andDelegate:nil];
+            sv.ownerId = self.ownerID;
+            sv.storyId = self.storyID;
+            sv.photosArray = [NSArray arrayWithObject:_shareDateSource.photoId];
+            [self.navigationController pushViewController:sv animated:YES];
+        }
+      
+    }
+}
+
 @end

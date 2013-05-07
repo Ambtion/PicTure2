@@ -11,17 +11,16 @@
 #import "SCPMoreTableFootView.h"
 #import "CloudPictureCell.h"
 #import "LocalBaseController.h"
-#import "LocalShareDesView.h"
-#import "TextAlertView.h"
 #import "RequestManager.h"
+#import "ShareViewController.h"
 
-@interface CloudPictureController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,UIActionSheetDelegate,LocalShareDesViewDelegate,TextAlertViewDelegate>
+@interface CloudPictureController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,UIActionSheetDelegate,ShareViewControllerDelegate>
 {
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;
     BOOL _isLoading;
     BOOL _isLoadingMax;
-    requsetShareMode model;
+    DesViewShareModel model;
 }
 
 @end

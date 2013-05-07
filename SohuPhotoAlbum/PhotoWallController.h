@@ -12,8 +12,10 @@
 #import "PhotoWallCell.h"
 #import "CustomizationNavBar.h"
 #import "TimeLabelView.h"
+#import "RequestManager.h"
+#import "ShareViewController.h"
 
-@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate>
+@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate,UIActionSheetDelegate>
 {
     UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;
@@ -21,6 +23,7 @@
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
     TimeLabelView * _timelabel;
+    DesViewShareModel model;
     BOOL _isLoading;
     BOOL _isRoot;
 }

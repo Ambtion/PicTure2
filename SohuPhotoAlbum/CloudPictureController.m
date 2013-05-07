@@ -8,6 +8,7 @@
 
 #import "CloudPictureController.h"
 #import "CloundDetailController.h"
+#import "ShareViewController.h"
 
 @interface CloudPictureController()
 @property(strong,nonatomic)NSMutableArray * dataSourceArray;
@@ -36,12 +37,12 @@
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
     
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-    _moreFootView.delegate = self;
+//    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+//    _moreFootView.delegate = self;
 //    self.myTableView.tableFooterView = _moreFootView;
     
     [self initDataContainer];
-    [self getMoreFromNetWork];
+    [self refrshDataFromNetWork];
 }
 - (void)initDataContainer
 {
@@ -135,6 +136,7 @@
         //        [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:0.f];
     }];
 }
+
 - (void)reloadTableViewWithAssetsSource:(NSMutableArray *)assetArray
 {
     [self initDataContainer];
@@ -169,7 +171,7 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getSectionView:section ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
+    return [self getSectionView:section withImageCount:[(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -310,35 +312,34 @@
 {
     switch (buttonIndex) {
         case 0:
-            model = KShareSina;
+            model = SinaModel;
             break;
         case 1:
-            model = KShareRenRen;
+            model = RenrenModel;
             break;
         case 2:
-            model = KShareQQ;
+            model = QQModel;
             break;
         default:
             break;
     }
-    TextAlertView * text  = [[TextAlertView alloc] initWithDelegate:self name:nil];
-    [text show];
+//    TextAlertView * text  = [[TextAlertView alloc] initWithDelegate:self name:nil];
+//    [text show];
+    DLog(@"%@",[selectedArray objectAtIndex:0]);
+    [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[selectedArray objectAtIndex:0] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
-- (void)textAlertView:(TextAlertView *)view OKClicked:(UITextField *)textField
-{
-    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken] photoIDs:[self photosIdArray] share_to:model optionalTitle:@"adf" desc:textField.text success:^(NSString *response) {
-        DLog(@"%@",response);
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-        [selectedArray removeAllObjects];
-        [self setViewState:NomalState];
-    } failure:^(NSString *error) {
-        DLog(@"%@",error);
-        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+//- (void)textAlertView:(TextAlertView *)view OKClicked:(UITextField *)textField
+//{
+//    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken] photoIDs:[self photosIdArray] share_to:model optionalTitle:@"adf" desc:textField.text success:^(NSString *response) {
+//        DLog(@"%@",response);
+//        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+//        [selectedArray removeAllObjects];
+//        [self setViewState:NomalState];
+//    } failure:^(NSString *error) {
+//        DLog(@"%@",error);
+//        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+//
+//    }];
+//}
 
-    }];
-}
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text
-{
-    
-}
 @end

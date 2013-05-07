@@ -115,8 +115,9 @@ static NSString * provider = nil;
 #pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    
+    return YES;
     NSString * str = [request.URL absoluteString];
+    DLog(@"%@",str);
     if ([str rangeOfString:@"http://pp.sohu.com"].length && ![str rangeOfString:@"client_id"].length) {
         NSRange rang = [str rangeOfString:@"code="];
         if (rang.length) {

@@ -38,13 +38,15 @@
     self.myTableView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.myTableView];
     
-    [self initDataContainer];
+//    [self initDataContainer];
     [self readAlbum];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 - (void)initDataContainer
 {
     selectedArray = [NSMutableArray arrayWithCapacity:0];
+    assetsArray = [NSMutableArray arrayWithCapacity:0];
+    assetGroups = [NSMutableArray arrayWithCapacity:0];
     assetsSection = [NSMutableArray arrayWithCapacity:0];
     assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
     assetsArray  = [NSMutableArray arrayWithCapacity:0];
@@ -91,8 +93,7 @@
     _isReading = YES;
     if (!_library)
         _library = [[ALAssetsLibrary alloc] init];
-	self.assetGroups = [NSMutableArray arrayWithCapacity:0];
-    self.assetsArray = [NSMutableArray arrayWithCapacity:0];
+    [self initDataContainer];
     [_library readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
         [self autoUplaodPic];
         [self prepareDataWithTimeOrder];
@@ -136,7 +137,7 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getSectionView:section ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
+    return [self getSectionView:section withImageCount:[(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

@@ -14,9 +14,12 @@ typedef enum _DesshareModel{
     RenrenModel,
     SinaModel
 }DesViewShareModel;
+
 @class LocalShareDesView;
 @protocol LocalShareDesViewDelegate <NSObject>
 - (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text;
+@optional
+- (void)localShareDesViewcancelShare:(LocalShareDesView *)view;
 @end
 @interface LocalShareDesView : UIImageView<UITextViewDelegate>
 {
@@ -27,7 +30,9 @@ typedef enum _DesshareModel{
     UITextView * _contentTextView;
     UILabel * _textcount;
     PortraitView * _porTraitView;
+    CGFloat _offsetY;
 }
 @property(weak,nonatomic) id<LocalShareDesViewDelegate> delegate;
 - (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;
+- (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY;
 @end

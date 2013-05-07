@@ -141,7 +141,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     }
 }
 #pragma mark SectionView
-- (UIView *)getSectionView:(NSInteger)section ByisShow:(BOOL)isShowRow WithTimeText:(NSString *)labelText
+- (UIView *)getSectionView:(NSInteger)section withImageCount:(NSInteger)count ByisShow:(BOOL)isShowRow WithTimeText:(NSString *)labelText
 {
     UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
     [view setUserInteractionEnabled:YES];
@@ -152,17 +152,26 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     UIImageView * iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(8, 3, 22, 22)];
     [view addSubview:iconImage];
     //label
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 200, 24)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 100, 24)];
     label.font = [UIFont boldSystemFontOfSize:12.f];
     label.backgroundColor = [UIColor clearColor];
     label.text = labelText;
     [view addSubview:label];
+    UILabel * countLabel = [[UILabel alloc] initWithFrame:CGRectMake(250, 2, 55, 24)];
+    countLabel.font = [UIFont boldSystemFontOfSize:12.f];
+    countLabel.backgroundColor = [UIColor clearColor];
+    countLabel.textAlignment = UITextAlignmentRight;
+    countLabel.text = [NSString stringWithFormat:@"%d",count];
+    [view addSubview:countLabel];
+    
     if (isShowRow) {
         label.textColor = [UIColor colorWithRed:189.f/255 green:189.f/255 blue:189.f/255 alpha:1.f];
+        countLabel.textColor  =[UIColor colorWithRed:189.f/255 green:189.f/255 blue:189.f/255 alpha:1.f];
         iconImage.image = [UIImage imageNamed:@"sectionIcon.png"];
         view.image = [UIImage imageNamed:@"section.png"];
     }else{
         label.textColor = [UIColor colorWithRed:100.f/255 green:100.f/255 blue:100.f/255 alpha:1.f];
+        countLabel.textColor = [UIColor colorWithRed:100.f/255 green:100.f/255 blue:100.f/255 alpha:1.f];
         iconImage.image = [UIImage imageNamed:@"sectionIconNo.png"];
         view.image = [UIImage imageNamed:@"sectionNo.png"];
     }
@@ -181,4 +190,5 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self presentModalViewController:loginView animated:YES];
     }
 }
+
 @end

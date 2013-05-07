@@ -21,9 +21,14 @@
 }
 - (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete
 {
+    return [self initWithModel:model thumbnail:thumbnail andDelegate:Adelegete offsetY:20.f];
+}
+- (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY
+{
     self = [super initWithFrame:[[UIScreen mainScreen] bounds]];
     if (self) {
         self.delegate = Adelegete;
+        _offsetY = offsetY;
         [self setUserInteractionEnabled:YES];
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         _model = model;
@@ -37,15 +42,15 @@
 }
 - (void)addheadView
 {
-    UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, 320, 44)];
+    UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, _offsetY, 320, 44)];
     headView.backgroundColor = [UIColor clearColor];
     headView.image = [UIImage imageNamed:@"desViewBar.png"];
-    
     [headView setUserInteractionEnabled:YES];
     UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     backBtn.frame = CGRectMake(0, 0, 44, 44);
     [backBtn setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     backBtn.tag = 100;
+    
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(44 + 10, 0, 320 - 88, 44)];
     [self setLabelProperty:label];
     [headView addSubview:label];
@@ -58,11 +63,12 @@
     [_shareButton addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [headView addSubview:_shareButton];
     [self addSubview:headView];
+    headView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
 }
 
 - (void)addContentViewwithTunmbnail:(UIImage *)thumbnail
 {
-    _contentView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 84, 300, self.bounds.size.height - 100)];
+    _contentView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 64 + _offsetY, 300, self.bounds.size.height - 100)];
     [_contentView setUserInteractionEnabled:YES];
     _contentView.image = [[UIImage imageNamed:@"contentBgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
     _contentView.backgroundColor = [UIColor clearColor];
@@ -93,6 +99,7 @@
     [_contentView addSubview:_porTraitView];
     [self addSubview:_contentView];
     [_contentTextView  becomeFirstResponder];
+    _contentTextView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
 }
 
 - (void)setLabelProperty:(UILabel *)label
@@ -118,6 +125,10 @@
 {
     switch (button.tag) {
         case 100: //back
+            if ([_delegate respondsToSelector:@selector(localShareDesViewcancelShare:)]) {
+                [_delegate localShareDesViewcancelShare:self];
+                return;
+            }
             [self removeFromSuperview];
             break;
         case 200: //share

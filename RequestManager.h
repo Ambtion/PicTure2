@@ -34,7 +34,7 @@ typedef enum  RequsetShareMode requsetShareMode;
 
 //story图片
 + (void)getAllPhototInStoryWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
-+(void)deletePhotoFromStoryWithAccessToken:(NSString *)token photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++(void)deletePhotoFromStoryWithAccessToken:(NSString *)token stroyid:(NSString *)storyId photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //获取个人信息
 + (void)getUserInfoWithToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
