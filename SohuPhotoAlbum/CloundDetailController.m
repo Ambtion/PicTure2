@@ -146,13 +146,13 @@
 #pragma mark GetMoreAssets
 - (void)getMoreAssets
 {
-    [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:[[[self.assetsArray lastObject] objectForKey:@"taken_id"] longLongValue] count:100 success:^(NSString *response) {
-        NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
-        if (!photoArray || !photoArray.count) _hasMoreAssets = NO;
-        [self.assetsArray addObjectsFromArray:photoArray];
-        [self refreshScrollView];
-    } failure:^(NSString *error) {
-        [self showPopAlerViewRatherThentasView:NO WithMes:error];
-    }];
+//    [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:[[[self.assetsArray lastObject] objectForKey:@"taken_id"] longLongValue] count:100 success:^(NSString *response) {
+//        NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
+//        if (!photoArray || !photoArray.count) _hasMoreAssets = NO;
+//        [self.assetsArray addObjectsFromArray:photoArray];
+//        [self refreshScrollView];
+//    } failure:^(NSString *error) {
+//        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+//    }];
 }
 @end

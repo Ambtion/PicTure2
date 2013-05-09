@@ -308,6 +308,7 @@
 		C591B4B1171BDA4C0047C496 /* LocalShareDesView.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4B0171BDA4C0047C496 /* LocalShareDesView.m */; };
 		C591B4B4171BE5820047C496 /* EmojiUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4B3171BE5810047C496 /* EmojiUnit.m */; };
 		C591B4E6171C20A10047C496 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = C591B4E5171C20A10047C496 /* AccountView.m */; };
+		C5940424173A09E500AA9B04 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C5940423173A09E500AA9B04 /* GTMBase64.m */; };
 		C59F0F221732189B005F890C /* CommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = C59F0F211732189B005F890C /* CommentController.m */; };
 		C59F0F2517321ADC005F890C /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C59F0F2417321ADB005F890C /* CommentCell.m */; };
 		C59F0F2717321E98005F890C /* commentbgView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C59F0F2617321E98005F890C /* commentbgView@2x.png */; };
@@ -782,6 +783,9 @@
 		C591B4B3171BE5810047C496 /* EmojiUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiUnit.m; sourceTree = "<group>"; };
 		C591B4E4171C20A10047C496 /* AccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
 		C591B4E5171C20A10047C496 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
+		C5940422173A09E500AA9B04 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		C5940423173A09E500AA9B04 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		C5940425173A0AF700AA9B04 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		C59F0F201732189B005F890C /* CommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentController.h; sourceTree = "<group>"; };
 		C59F0F211732189B005F890C /* CommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentController.m; sourceTree = "<group>"; };
 		C59F0F2317321ADB005F890C /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
@@ -1773,6 +1777,9 @@
 				C535D93A172BAC2E00A2FBAA /* UIViewController+Method.m */,
 				C550E93C172CC6AF0042F419 /* NSObject+extension.h */,
 				C550E93D172CC6AF0042F419 /* NSObject+extension.m */,
+				C5940425173A0AF700AA9B04 /* GTMDefines.h */,
+				C5940422173A09E500AA9B04 /* GTMBase64.h */,
+				C5940423173A09E500AA9B04 /* GTMBase64.m */,
 			);
 			name = catory;
 			sourceTree = "<group>";
@@ -2224,6 +2231,7 @@
 				C59F0F2517321ADC005F890C /* CommentCell.m in Sources */,
 				C58DD1331734A5C5006FF7BB /* MakeCommentView.m in Sources */,
 				C5A8460E1738B21900E57476 /* ShareViewController.m in Sources */,
+				C5940424173A09E500AA9B04 /* GTMBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,22 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "PortraitView.h"
 
-typedef enum _DesshareModel{
-    QQModel,
-    RenrenModel,
-    SinaModel
-}DesViewShareModel;
-
 @class LocalShareDesView;
 @protocol LocalShareDesViewDelegate <NSObject>
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text;
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text;
 @optional
 - (void)localShareDesViewcancelShare:(LocalShareDesView *)view;
 @end
 @interface LocalShareDesView : UIImageView<UITextViewDelegate>
 {
     UIImageView * _thumbNailView;
-    DesViewShareModel  _model;
+    shareModel  _model;
     UIButton * _shareButton;
     UIImageView * _contentView;
     UITextView * _contentTextView;
@@ -33,6 +27,6 @@ typedef enum _DesshareModel{
     CGFloat _offsetY;
 }
 @property(weak,nonatomic) id<LocalShareDesViewDelegate> delegate;
-- (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;
-- (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY;
+- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;
+- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY;
 @end

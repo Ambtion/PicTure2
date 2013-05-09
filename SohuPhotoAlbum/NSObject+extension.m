@@ -7,6 +7,7 @@
 //
 
 #import "NSObject+extension.h"
+#import "GTMBase64.h"
 
 @implementation NSObject (extension)
 #pragma mark ShowAlert
@@ -30,5 +31,23 @@
         ToastAlertView * alertView = [[ToastAlertView alloc] initWithTitle:mesage];
         [alertView show];
     }
+}
+
+- (NSString *)encodeWithBase64:(NSString *)input
+{
+    NSData *data = [input dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    //转换到base64
+    data = [GTMBase64 encodeData:data];
+    NSString * base64String = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return base64String;
+}
+
+- (NSString*)decodeBase64:(NSString*)input
+{
+    NSData *data = [input dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    //转换到base64
+    data = [GTMBase64 decodeData:data];
+    NSString * base64String = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return base64String;
 }
 @end

@@ -60,12 +60,13 @@
         frame.origin.x = frame.origin.x + frame.size.width + 4;
     }
 }
+
 - (void)setDataSource:(CloudPictureCellDataSource *)dataSource
 {
     if (_dataSource != dataSource) {
         _dataSource = dataSource;
-        [self updataViews];
     }
+    [self updataViews];
 }
 - (void)updataViews
 {
@@ -79,23 +80,29 @@
 {
     if (dic) {
         //设置图片
-        NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
-        __weak StatusImageView* weakSelf = imageView;
-        [imageView.statueImage setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:nil success:^(UIImage *image) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf setImage:image];
-            });
-           
-        } failure:^(NSError *error) {
-            
-        }];
+        if ([dic allKeys].count) {
+            canBeOperated = YES;
+            NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
+            __weak StatusImageView* weakSelf = imageView;
+            UIImageView * AimageView = [[UIImageView alloc] init];
+            [AimageView setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:nil success:^(UIImage *image) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf setImage:image];
+                });
+            } failure:^(NSError *error) {
+            }];
+        }else{
+            canBeOperated = NO;
+            [imageView setImage:[UIImage imageNamed:@"1.jpg"]];
+        }
     }else{
         //temp
-        imageView.image = nil;
+        [imageView setImage:nil];
     }
 }
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
 {
+    if (!canBeOperated) return;
     StatusImageView * view = (StatusImageView *)[gesture view];
     [view setSelected:!view.isSelected];
     NSDictionary * dic = nil;
@@ -156,7 +163,6 @@
 }
 - (void)cloudPictureCellisShow:(BOOL)isShow selectedDic:(NSDictionary *)dic
 {
-    
     if (_dataSource.firstDic == dic ) {
         [(StatusImageView *)[self.contentView viewWithTag:1000] setSelected:isShow];
     }

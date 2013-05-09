@@ -50,28 +50,50 @@
     if (!isUploadJPEGImage) {
         DLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
     }else{
-        NSDictionary * dic = [self infoDic];
-        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge_retained CFDataRef)data);
-        CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-        if (!imageRef) {
-             imageRef = CGImageCreateWithPNGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+        NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
+        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+        CGImageRef imageRef = nil;
+        if ([[self.asset.defaultRepresentation UTI] hasSuffix:@"png"]) {
+            imageRef = CGImageCreateWithPNGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+        }else{
+            imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
         }
+        DLog(@"%@",[self.asset.defaultRepresentation UTI]);
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.5);
-        data = [self writeExif:dic intoImage:data];
+        if (dic){
+            [self fixinfoDic:dic];
+            data = [self writeExif:dic intoImage:data];
+        }
         DLog(@"cpmpre:when upload: %f",[data length]/(1024 * 1024.f));
     }
     return data;
 }
-
+- (NSString *)stringFromdate:(NSDate *)date
+{
+    //转化日期格式
+    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyy:MM:dd HH:mm:ss"];
+    return [dateFormatter stringFromDate:date];
+}
+- (void)fixinfoDic:(NSMutableDictionary *)dic
+{
+    NSMutableDictionary * extfDic = [NSMutableDictionary dictionaryWithDictionary:[dic objectForKey:@"{Exif}"]];
+    NSDate * date = [self.asset valueForProperty:ALAssetPropertyDate];
+    if (extfDic && ![extfDic objectForKey:@"DateTimeOriginal"]) {
+        [extfDic setObject:[self stringFromdate:date] forKey:@"DateTimeOriginal"];
+        [dic setObject:extfDic forKey:@"{Exif}"];
+    }
+}
 - (NSData *)fullData
 {
     ALAssetRepresentation * defaultRep = [self.asset defaultRepresentation];
     Byte *buffer = (Byte*)malloc(defaultRep.size);
     NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
     NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-    return [data copy];
+    return data;
 }
+
 - (NSDictionary *)infoDic
 {
     if (!_fulldata)
@@ -92,31 +114,17 @@
 }
 - (CFDictionaryRef )getPropertyOfdata:(NSData *)data
 {
+    //1
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
     if (imageSource == NULL) {
         // Error loading image
         return nil;
     }
+    //2
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
                              nil];
     CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (__bridge CFDictionaryRef)options);
     return imageProperties;
 }
-//- (void)setImagePropertyWith:(ALAsset *)asset
-//{
-//    //get full imageData
-//    ALAssetRepresentation * defaultRep = [asset defaultRepresentation];
-//    Byte *buffer = (Byte*)malloc(defaultRep.size);
-//    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-//    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-//    // compressData providerData
-//    CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
-//    CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
-//    UIImage * image = [UIImage imageWithCGImage:imageRef];
-//    NSData* finaldata = UIImageJPEGRepresentation(image, 0.5);
-//    //compressData with exif
-//    finaldata =  [self writeExif:(NSDictionary *)[self getPropertyOfdata:data] intoImage:finaldata];
-//}
-
 @end

@@ -307,13 +307,13 @@
 {
     switch (buttonIndex) {
         case 0:
-            model = SinaModel;
+            model = SinaWeiboShare;
             break;
         case 1:
-            model = RenrenModel;
+            model = RenrenShare;
             break;
         case 2:
-            model = QQModel;
+            model = QQShare;
             break;
         default:
             return;

@@ -12,6 +12,7 @@
 @synthesize selected = _selected;
 @synthesize isShowStatus;
 @synthesize statueImage = _statuImage;
+@synthesize actualView = _actualView;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -27,7 +28,6 @@
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
         [self addSubview:_statuImage];
-        self.backgroundColor = [UIColor clearColor];
         [self resetStatusImageToHidden];
     }
     return self;
@@ -102,7 +102,6 @@
 #pragma mark - Reloadfunctions
 - (void)setImage:(UIImage *)image
 {
-    
     if (!image) {
         [self setUserInteractionEnabled:NO];
         _actualView.layer.borderWidth = 0.f;

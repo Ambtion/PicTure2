@@ -137,8 +137,23 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getSectionView:section withImageCount:[(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
+    return [self getSectionView:section withImageCount:[self numberofPhtotsWithSection:section] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
 }
+- (NSInteger)numberofPhtotsWithSection:(NSInteger)section
+{
+    NSArray * array = [self.dataSourceArray objectAtIndex:section];
+    PhotoesCellDataSource * source = [array lastObject];
+    NSInteger number = [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] * 4;
+    if (!source.secoundAsset) {
+        number -= 3;
+    }else if(!source.thridAsset){
+        number -= 2;
+    }else if(!source.lastAsset){
+        number --;
+    }
+    return number;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.dataSourceArray.count;

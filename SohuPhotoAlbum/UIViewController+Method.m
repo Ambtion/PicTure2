@@ -143,6 +143,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 #pragma mark SectionView
 - (UIView *)getSectionView:(NSInteger)section withImageCount:(NSInteger)count ByisShow:(BOOL)isShowRow WithTimeText:(NSString *)labelText
 {
+    
     UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 28)];
     [view setUserInteractionEnabled:YES];
     UITapGestureRecognizer * tap  =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInSection:)    ];

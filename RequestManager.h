@@ -15,17 +15,18 @@ enum Soruce_Type {
 typedef enum  Soruce_Type source_type;
 
 
-enum RequsetShareMode {
-    KShareQQ = 0,
-    KShareSina = 1,
-    KShareRenRen = 2
-    };
-typedef enum  RequsetShareMode requsetShareMode;
+//enum RequsetShareMode {
+//    KShareQQ = 0,
+//    KShareSina = 1,
+//    KShareRenRen = 2
+//    };
+//typedef enum  RequsetShareMode requsetShareMode;
 
 @interface RequestManager : NSObject
 
 //时间轴相册
-+ (void)getTimePhtotWithAccessToken:(NSString *)token beforeTime:(long long)time count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)getTimePhtotWithAccessToken:(NSString *)token day:(NSString *)days success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 + (void)deletePhotosWithaccessToken:(NSString *)token photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //获取图片墙storys
@@ -48,6 +49,6 @@ typedef enum  RequsetShareMode requsetShareMode;
 + (void)unlikeWithSourceId:(NSString *)sourceID source:(source_type)type OwnerID:(NSString *)ownId Accesstoken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //分享
-+ (void)sharePhtotsWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(requsetShareMode)shareMode optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)sharePhtotsWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 @end

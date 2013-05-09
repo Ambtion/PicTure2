@@ -115,15 +115,21 @@
 @implementation RequestManager
 
 //时间轴获取
-+ (void)getTimePhtotWithAccessToken:(NSString *)token beforeTime:(long long)time count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    
+//    http://dev.pp.sohu.com/api/v1/sync_photos/infos?access_token=e16dac12-9c69-3288-b710-ea2aefd76a0f&before=2013-05-08
     NSString *  str = nil;
-    if (time) {
-        str =  [NSString stringWithFormat:@"%@/sync_photos?access_token=%@&before_taken_id=%lld&count=%d",BASICURL_V1,token,time,count];
+    if (beforeTime) {
+        str =  [NSString stringWithFormat:@"%@/sync_photos/infos?access_token=%@&before=%@",BASICURL_V1,token,beforeTime];
     }else{
-        str =  [NSString stringWithFormat:@"%@/sync_photos?access_token=%@&count=%d",BASICURL_V1,token,count];
+        str =  [NSString stringWithFormat:@"%@/sync_photos/infos?access_token=%@",BASICURL_V1,token];
     }
+    [self getSourceWithStringUrl:str success:success failure:failure];
+}
++ (void)getTimePhtotWithAccessToken:(NSString *)token day:(NSString *)days success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    //http://dev.pp.sohu.com/api/v1/sync_photos?access_token=e16dac12-9c69-3288-b710-ea2aefd76a0f&day=2013-05-07
+    NSString * str = [NSString stringWithFormat:@"%@/sync_photos?access_token=%@&day=%@",BASICURL_V1,token,days];
     DLog(@"%@",str);
     [self getSourceWithStringUrl:str success:success failure:failure];
     
@@ -222,11 +228,12 @@
 }
 
 //分享
-+ (void)sharePhtotsWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(requsetShareMode)shareMode optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)sharePhtotsWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * string = [NSString stringWithFormat:@"%@/share/photos",BASICURL_V1];
+    NSString * string = [NSString stringWithFormat:@"%@/photos/share",BASICURL_V1];
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
     [body setValue:token forKey:@"access_token"];
+    [body setValue:sharetoken forKey:@"share_access_token"];
     NSString * iDsStr = nil;
     if (photos_Ids.count > 1){
         iDsStr = [photos_Ids componentsJoinedByString:@","];
@@ -236,19 +243,21 @@
     [body setValue:iDsStr forKey:@"photo_ids"];
     NSString * shareModeStr = nil;
     switch (shareMode) {
-        case KShareQQ:
+        case QQShare:
             shareModeStr = @"qq";
             break;
-        case KShareSina:
+        case SinaWeiboShare:
             shareModeStr = @"sina";
             break;
-        case KShareRenRen:
+        case RenrenShare:
             shareModeStr = @"renren";
             break;
         default:
             break;
     }
+    if (!shareModeStr) return;
     [body setValue:shareModeStr forKey:@"share_to"];
+    [body setValue:shareModeStr forKey:@"share_access_token"];
     if (title) {
         [body setValue:title forKey:@"title"];
     }

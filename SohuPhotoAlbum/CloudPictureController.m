@@ -19,9 +19,9 @@
 
 @implementation CloudPictureController
 @synthesize dataSourceArray = _dataSourceArray;
-@synthesize assetsArray = _assetsArray;
 @synthesize assetsSection = _assetsSection;
 @synthesize assetSectionisShow = _assetSectionisShow;
+@synthesize assetDictionary = _assetDictionary;
 
 - (void)viewDidLoad
 {
@@ -47,9 +47,9 @@
 - (void)initDataContainer
 {
     selectedArray = [NSMutableArray arrayWithCapacity:0];
+    _assetDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
     _assetsSection = [NSMutableArray arrayWithCapacity:0];
     _assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
-    _assetsArray  = [NSMutableArray arrayWithCapacity:0];
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
 }
 #pragma mark - Refresh
@@ -103,48 +103,67 @@
 #pragma mark - refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:0 count:100 success:^(NSString *response) {
-        [self.assetsArray removeAllObjects];
-        NSArray * photos = [[response JSONValue] objectForKey:@"photos"];
-        [self.assetsArray addObjectsFromArray:photos];
-        [self reloadTableViewWithAssetsSource:self.assetsArray];
+    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil success:^(NSString *response) {
+        [self initDataContainer];
+        [self.assetsSection addObjectsFromArray:[[response JSONValue] objectForKey:@"days"]];
+        [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];
+        [self.myTableView reloadData];
         [self doneRefrshLoadingTableViewData];
+        [self scrollViewDidEndDecelerating:self.myTableView];
     } failure:^(NSString *error) {
         [self doneRefrshLoadingTableViewData];
     }];
 }
-
 - (void)getMoreFromNetWork
 {
-    NSDictionary * dic = nil;
-    if (self.assetsArray.count)
-        dic =  [self.assetsArray lastObject];
+//    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil success:^(NSString *response) {
+//        [self.assetsSection addObjectsFromArray:[[response JSONValue] objectForKey:@"days"]];
+//        [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];
+//        [self.myTableView reloadData];
+//        [self doneMoreLoadingTableViewData];
+//    } failure:^(NSString *error) {
+//        [self doneMoreLoadingTableViewData];
+//    }];
+}
+- (void)reloadTableViewWithAssetsSection:(NSMutableArray *)asssetSection andRefresh:(BOOL)isRefresh
+{
+    NSInteger numberSource = _dataSourceArray.count;
+    NSInteger numberAssection = asssetSection.count;
+    for (int i = numberSource; i < numberAssection; i++) {
+        NSDictionary * dic = [asssetSection objectAtIndex:i];
+        [_dataSourceArray addObject:[self sectionSourceArrayWithSectionInfo:dic]];
+        [self.assetSectionisShow addObject:[NSNumber numberWithBool:YES]];
+    }
     
-    long long time = dic ? [[dic objectForKey:@"taken_id"] longLongValue] : 0;
-    _isLoading = YES;
-    [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:time count:100 success:^(NSString *response) {
-        NSArray * photos = [[response JSONValue] objectForKey:@"photos"];
-        if (photos  && photos.count){
-            [self.assetsArray addObjectsFromArray:photos];
-            [self reloadTableViewWithAssetsSource:self.assetsArray];
-            [_moreFootView setMoreFunctionOff:NO];
-        }else{
-            [_moreFootView setMoreFunctionOff:YES];
-        }
-        [self doneMoreLoadingTableViewData];
-    } failure:^(NSString *error) {
-        //        [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:0.f];
-    }];
+}
+- (NSMutableArray *)sectionSourceArrayWithSectionInfo:(NSDictionary *)info
+{
+    NSInteger count = [[info objectForKey:@"count"] intValue];
+    NSInteger last = count % 4;
+    NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
+    for (int i = 0; i < count / 4; i++) {
+        CloudPictureCellDataSource * soure = [[CloudPictureCellDataSource alloc] init];
+        soure.firstDic  = soure.secoundDic = soure.thridDic = soure.lastDic = [NSMutableDictionary dictionaryWithCapacity:0];
+        [tempArray addObject:soure];
+    }
+    CloudPictureCellDataSource * soure = [[CloudPictureCellDataSource alloc] init];
+    switch (last) {
+        case 3:
+            soure.thridDic =  [NSMutableDictionary dictionaryWithCapacity:0];
+        case 2:
+            soure.secoundDic =  [NSMutableDictionary dictionaryWithCapacity:0];
+        case 1:
+            soure.firstDic =  [NSMutableDictionary dictionaryWithCapacity:0];
+            break;
+        default:
+            break;
+    }
+    if (soure.firstDic) {
+        [tempArray addObject:soure];
+    }
+    return tempArray;
 }
 
-- (void)reloadTableViewWithAssetsSource:(NSMutableArray *)assetArray
-{
-    [self initDataContainer];
-    [self.assetsArray addObjectsFromArray:assetArray];
-    [self cloundDivideAssettByDayTimeWithAssetArray:self.assetsArray exportToassestionArray:self.assetsSection assetSectionisShow:self.assetSectionisShow dataScource:self.dataSourceArray];
-    [self.myTableView reloadData];
-    
-}
 #pragma mark - SectionClick
 - (void)handleTapInSection:(UITapGestureRecognizer *)gesture
 {
@@ -154,6 +173,74 @@
     [self.myTableView reloadData];
 }
 #pragma mark Refresh-More function
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSArray * array = [self arraySectionForVisibleCell];
+    for (NSNumber * number in array) {
+        [self insertDataSourceWithDays:[number integerValue]];
+    }
+}
+
+- (NSArray *)arraySectionForVisibleCell
+{
+    NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
+    if (_dataSourceArray.count) {
+        NSArray * cellArray = [self.myTableView visibleCells];
+        for (UITableViewCell * vsCell in cellArray) {
+            NSIndexPath * path = [self.myTableView indexPathForCell:vsCell];
+            if (![array containsObject:[NSNumber numberWithInteger:path.section]]) {
+                [array addObject:[NSNumber numberWithInteger:path.section]];
+            }
+        }
+    }
+    return array;
+}
+- (void)insertDataSourceWithDays:(NSInteger )section
+{
+    NSDictionary * dic = [self.assetsSection objectAtIndex:section];
+    NSString * days = [dic objectForKey:@"day"];
+    if ([_assetDictionary objectForKey:days]) {
+        return;
+    }
+    [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:days success:^(NSString *response) {
+        NSMutableArray * array = [_dataSourceArray objectAtIndex:section];
+        NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
+        [_assetDictionary setObject:photoArray forKey:days];
+        [self insertInfo:photoArray intoDataSourceArray:array]; 
+        [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+    } failure:^(NSString *error) {
+        
+    }];
+}
+
+- (void)insertInfo:(NSArray *)photoInfo intoDataSourceArray:(NSArray *)sourceArray
+{
+    NSInteger count = photoInfo.count;
+    NSInteger last = count % 4;
+    for (int i = 0; i < count - last; i+=4) {
+        CloudPictureCellDataSource * soure  = nil;
+        if (i / 4 < sourceArray.count)
+                soure = [sourceArray objectAtIndex:i / 4];
+        soure.firstDic  = [photoInfo objectAtIndex:i];
+        soure.secoundDic = [photoInfo objectAtIndex:i + 1];
+        soure.thridDic = [photoInfo objectAtIndex:i + 2];
+        soure.lastDic = [photoInfo objectAtIndex:i + 3];
+    }
+    if (last && count / 4 < sourceArray.count) {
+        CloudPictureCellDataSource * soure = [sourceArray objectAtIndex:count / 4];
+        switch (last) {
+            case 3:
+                soure.thridDic = [photoInfo objectAtIndex:(count / 4)*4 + 2];
+            case 2:
+                soure.secoundDic =  [photoInfo objectAtIndex:(count / 4)*4  + 1];
+            case 1:
+                soure.firstDic = [photoInfo objectAtIndex:(count / 4) * 4 ];
+                break;
+            default:
+                break;
+        }
+    }
+}
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
@@ -171,11 +258,11 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self getSectionView:section withImageCount:[(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
+    return [self getSectionView:section withImageCount:[[[_assetsSection objectAtIndex:section] objectForKey:@"count"] intValue] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[[self.assetsSection objectAtIndex:section] objectForKey:@"day"]];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.dataSourceArray.count;
+    return _assetsSection.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -202,6 +289,7 @@
         cell = [[CloudPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.delegate = self;
     }
+    
     if (indexPath.section < self.dataSourceArray.count
         && indexPath.row < [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count])
         cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
@@ -259,8 +347,9 @@
 
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
+    NSIndexPath * path = [self.myTableView indexPathForCell:cell];
     CloundDetailController * cd = [[CloundDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:dic];
-    [self.navigationController pushViewController:cd animated:YES];
+//    [self.navigationController pushViewController:cd animated:YES];
 }
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
 {
@@ -280,8 +369,7 @@
     if (_viewState == DeleteState) {
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[self photosIdArray] success:^(NSString *response)
          {
-             [self.assetsArray removeObjectsInArray:selectedArray];
-             [self reloadTableViewWithAssetsSource:self.assetsArray];
+             [self refrshDataFromNetWork];
              [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
              [self setViewState:NomalState];
          } failure:^(NSString *error) {
@@ -312,34 +400,33 @@
 {
     switch (buttonIndex) {
         case 0:
-            model = SinaModel;
+            _cloudmodel = SinaWeiboShare;
             break;
         case 1:
-            model = RenrenModel;
+            _cloudmodel = RenrenShare;
             break;
         case 2:
-            model = QQModel;
+            _cloudmodel = QQShare;
             break;
         default:
             break;
     }
-//    TextAlertView * text  = [[TextAlertView alloc] initWithDelegate:self name:nil];
-//    [text show];
-    DLog(@"%@",[selectedArray objectAtIndex:0]);
-    [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[selectedArray objectAtIndex:0] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
+    [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:_cloudmodel bgPhotoUrl:[[selectedArray objectAtIndex:0] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
-//- (void)textAlertView:(TextAlertView *)view OKClicked:(UITextField *)textField
-//{
-//    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken] photoIDs:[self photosIdArray] share_to:model optionalTitle:@"adf" desc:textField.text success:^(NSString *response) {
-//        DLog(@"%@",response);
-//        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-//        [selectedArray removeAllObjects];
-//        [self setViewState:NomalState];
-//    } failure:^(NSString *error) {
-//        DLog(@"%@",error);
-//        [self showPopAlerViewRatherThentasView:NO WithMes:error];
-//
-//    }];
-//}
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
+{
+    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:nil  optionalTitle:@"adf" desc:des success:^(NSString *response) {
+               DLog(@"%@",response);
+              [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+               [selectedArray removeAllObjects];
+              [self setViewState:NomalState];
+           } failure:^(NSString *error) {
+                DLog(@"%@",error);
+                [self showPopAlerViewRatherThentasView:NO WithMes:error];
+       
+    }];
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
 
 @end

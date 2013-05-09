@@ -22,7 +22,7 @@
     SCPMoreTableFootView * _moreFootView;
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
-    DesViewShareModel model;
+    shareModel model;
     PhotoStoryCellDataSource * _shareDateSource;
     BOOL _isShareAll;
     BOOL _isLoading;

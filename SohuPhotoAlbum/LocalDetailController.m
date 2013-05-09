@@ -175,19 +175,19 @@
     }
 }
 #pragma mark - ShareWithDes
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text
 {
     [UIView animateWithDuration:0.2 animations:^{
         [view removeFromSuperview];
     }];
     switch (model) {
-        case SinaModel:
+        case SinaWeiboShare:
             [self sinaUploadPicWithDes:text];
             break;
-        case RenrenModel:
+        case RenrenShare:
             [self renrenUPlaodPicWithDes:text];
             break;
-        case QQModel:
+        case QQShare:
             [self qqUploadPicWithDes:text];
             break;
         default:
@@ -223,7 +223,7 @@
 #pragma mark - SINA UPloadPic
 - (void)sinaweiboDidLogIn:(SinaWeibo *)sinaweibo
 {
-    [self.view addSubview:[[LocalShareDesView alloc] initWithModel:SinaModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
+    [self.view addSubview:[[LocalShareDesView alloc] initWithModel:SinaWeiboShare thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
 //    [self sinaUploadPic];
 }
 - (void)sinaweibo:(SinaWeibo *)sinaweibo logInDidFailWithError:(NSError *)error
@@ -260,7 +260,7 @@
 #pragma mark RenRen upload
 - (void)renrenDidLogin:(Renren *)renren
 {
-     [self.view addSubview:[[LocalShareDesView alloc] initWithModel:RenrenModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
+     [self.view addSubview:[[LocalShareDesView alloc] initWithModel:RenrenShare thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
 }
 - (void)renrenDidLogout:(Renren *)renren
 {
@@ -289,7 +289,7 @@
 #pragma mark - QQ UPloadPic
 - (void)tencentDidLogin
 {
-     [self.view addSubview:[[LocalShareDesView alloc] initWithModel:QQModel thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
+     [self.view addSubview:[[LocalShareDesView alloc] initWithModel:QQShare thumbnail:[UIImage imageWithCGImage:[[self.assetsArray objectAtIndex:self.curPageNum] thumbnail]] andDelegate:self]];
 }
 - (void)tencentDidNotLogin:(BOOL)cancelled
 {

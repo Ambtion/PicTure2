@@ -20,14 +20,6 @@ typedef enum _imageStatePosition
     
 }imageStatePosition;
 
-typedef enum __shareModel {
-    SinaWeiboShare,
-    RenrenShare,
-    WeixinShare,
-    QQShare,
-}shareModel;
-
-
 @interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate>
 {
     UIScrollView * _scrollView;

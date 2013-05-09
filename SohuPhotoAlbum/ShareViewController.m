@@ -14,12 +14,13 @@
 @synthesize ownerId,storyboard,photosArray;
 @synthesize delegate = _delegate;
 
-- (id)initWithModel:(DesViewShareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete
+- (id)initWithModel:(shareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete
 {
     self = [super init];
     if (self) {
         self.bgPhotoUrl = bgPhotoUrl;
         _sharemodel = model;
+        _delegate = Adelegete;
     }
     return self;
 }
@@ -58,11 +59,6 @@
     [self.view addSubview:localView];
     
 }
-- (void)viewDidAppear:(BOOL)animated
-{
-    DLog(@"self.view:%@",NSStringFromCGRect(self.view.frame));
-    DLog(@"self.bgView:%@",NSStringFromCGRect(_myBgView.frame));         
-}
 - (void)addBgView
 {
     self.view.frame = [[UIScreen mainScreen] bounds];
@@ -94,14 +90,12 @@
     return rect.size;
 }
 #pragma mark DesShareDelegate
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(DesViewShareModel)model withDes:(NSString *)text
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text
 {
-    return;
-    if ([_delegate respondsToSelector:@selector(shareViewcontrollerDidShareSucess:)]) {
-        [_delegate shareViewcontrollerDidShareSucess:self];
-    }
-    if ([_delegate respondsToSelector:@selector(shareViewcontrollerDidSharefailture:)]) {
-        [_delegate shareViewcontrollerDidSharefailture:self];
+    DLog(@"%@",_delegate);
+    if ([_delegate respondsToSelector:@selector(shareViewcontrollerDidShareClick: withDes: shareMode:)]) {
+        [_delegate shareViewcontrollerDidShareClick:self withDes:text shareMode:_sharemodel];
+        return;
     }
     [self.navigationController popViewControllerAnimated:YES];
 }

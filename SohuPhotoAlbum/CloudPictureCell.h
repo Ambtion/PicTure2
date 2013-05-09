@@ -31,6 +31,7 @@
 
 {
     CloudPictureCellDataSource * _dataSource;
+    BOOL canBeOperated;
 }
 
 @property(nonatomic,weak)id<CloudPictureCellDelegate> delegate;

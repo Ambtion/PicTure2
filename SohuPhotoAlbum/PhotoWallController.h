@@ -23,7 +23,7 @@
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
     TimeLabelView * _timelabel;
-    DesViewShareModel model;
+    shareModel model;
     BOOL _isLoading;
     BOOL _isRoot;
 }

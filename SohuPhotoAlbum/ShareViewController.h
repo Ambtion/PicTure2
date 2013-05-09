@@ -8,17 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "LocalShareDesView.h"
-
+#import "RequestManager.h"
 @class ShareViewController;
 @protocol ShareViewControllerDelegate <NSObject>
 @optional
-- (void)shareViewcontrollerDidShareSucess:(ShareViewController *)controller;
-- (void)shareViewcontrollerDidSharefailture:(ShareViewController *)controller;
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model;
 @end
 
 @interface ShareViewController : UIViewController<LocalShareDesViewDelegate>
 {
-    DesViewShareModel _sharemodel;
+    shareModel _sharemodel;
     UIImageView * _myBgView;
 }
 @property(nonatomic,strong)NSString * bgPhotoUrl;
@@ -26,6 +25,6 @@
 @property(nonatomic,strong)NSString * storyId;
 @property(nonatomic,strong)NSArray * photosArray;
 @property(weak,nonatomic)id<ShareViewControllerDelegate> delegate;
-- (id)initWithModel:(DesViewShareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete;
+- (id)initWithModel:(shareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete;
 
 @end

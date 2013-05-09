@@ -20,7 +20,8 @@
     SCPMoreTableFootView * _moreFootView;
     BOOL _isLoading;
     BOOL _isLoadingMax;
-    DesViewShareModel model;
+    shareModel _cloudmodel;
 }
 
+@property(nonatomic,strong)NSMutableDictionary * assetDictionary;
 @end

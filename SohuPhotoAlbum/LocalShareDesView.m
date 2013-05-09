@@ -19,11 +19,11 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-- (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete
+- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete
 {
     return [self initWithModel:model thumbnail:thumbnail andDelegate:Adelegete offsetY:20.f];
 }
-- (id)initWithModel:(DesViewShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY
+- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY
 {
     self = [super initWithFrame:[[UIScreen mainScreen] bounds]];
     if (self) {
@@ -107,13 +107,13 @@
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor whiteColor];
     switch (_model) {
-        case QQModel:
+        case QQShare:
             label.text = @"腾讯QQ空间上传";
             break;
-        case RenrenModel:
+        case RenrenShare:
             label.text = @"人人校内分享";
             break;
-        case SinaModel:
+        case SinaWeiboShare:
             label.text = @"新浪微博分享";
             break;
         default:

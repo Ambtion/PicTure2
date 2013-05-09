@@ -52,6 +52,7 @@
     [request setPostValue:CLIENT_ID forKey:@"client_id"];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setCompletionBlock:^{
+        DLog(@"%d %@",[request responseStatusCode],[request responseString]);
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] < 300 &&[[request responseString] JSONValue]) {
             success([[request responseString] JSONValue]);
         }else if([request responseStatusCode] == 403){
@@ -66,6 +67,7 @@
     }];
     [request startAsynchronous];
 }
+
 + (void)resigiterWithuseName:(NSString *)useName password:(NSString *)password nickName:(NSString *)nick sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {
     NSString * str = [NSString stringWithFormat:@"%@/api/v1/register",BASICURL];

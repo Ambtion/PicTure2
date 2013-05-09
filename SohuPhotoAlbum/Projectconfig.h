@@ -36,3 +36,10 @@
 #import "LoginViewController.h"
 #import "UploadTaskManager.h"
 
+//share
+typedef enum __shareModel {
+    SinaWeiboShare,
+    RenrenShare,
+    WeixinShare,
+    QQShare,
+}shareModel;
