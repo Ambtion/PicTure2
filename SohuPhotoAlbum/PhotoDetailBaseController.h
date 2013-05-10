@@ -54,6 +54,7 @@ typedef enum _imageStatePosition
 - (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset;
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation;
 - (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait;
-- (void)getMoreAssets;
+- (void)getMoreAssetsAfterCurNum;
+- (void)getMoreAssetsBeforeCurNum;
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button;
 @end

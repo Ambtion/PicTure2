@@ -37,9 +37,9 @@
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
     
-//    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-//    _moreFootView.delegate = self;
-//    self.myTableView.tableFooterView = _moreFootView;
+    //    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+    //    _moreFootView.delegate = self;
+    //    self.myTableView.tableFooterView = _moreFootView;
     
     [self initDataContainer];
     [self refrshDataFromNetWork];
@@ -116,14 +116,19 @@
 }
 - (void)getMoreFromNetWork
 {
-//    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil success:^(NSString *response) {
-//        [self.assetsSection addObjectsFromArray:[[response JSONValue] objectForKey:@"days"]];
-//        [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];
-//        [self.myTableView reloadData];
-//        [self doneMoreLoadingTableViewData];
-//    } failure:^(NSString *error) {
-//        [self doneMoreLoadingTableViewData];
-//    }];
+    NSString * time = [[self.assetsSection lastObject] objectForKey:@"day"];
+    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time success:^(NSString *response) {
+        NSArray * array = [[response JSONValue] objectForKey:@"days"];
+        if (array && array.count) {
+            [self.assetsSection addObjectsFromArray:array];
+            [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];
+            [self.myTableView reloadData];
+        }
+        [self doneMoreLoadingTableViewData];
+        
+    } failure:^(NSString *error) {
+        [self doneMoreLoadingTableViewData];
+    }];
 }
 - (void)reloadTableViewWithAssetsSection:(NSMutableArray *)asssetSection andRefresh:(BOOL)isRefresh
 {
@@ -170,7 +175,8 @@
     NSNumber * num = [self.assetSectionisShow objectAtIndex:[gesture view].tag];
     BOOL isShow = ![num boolValue];
     [self.assetSectionisShow replaceObjectAtIndex:[gesture view].tag withObject:[NSNumber numberWithBool:isShow]];
-    [self.myTableView reloadData];
+//    [self.myTableView reloadData];
+    [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:[gesture view].tag] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 #pragma mark Refresh-More function
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -206,7 +212,7 @@
         NSMutableArray * array = [_dataSourceArray objectAtIndex:section];
         NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
         [_assetDictionary setObject:photoArray forKey:days];
-        [self insertInfo:photoArray intoDataSourceArray:array]; 
+        [self insertInfo:photoArray intoDataSourceArray:array];
         [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSString *error) {
         
@@ -220,7 +226,7 @@
     for (int i = 0; i < count - last; i+=4) {
         CloudPictureCellDataSource * soure  = nil;
         if (i / 4 < sourceArray.count)
-                soure = [sourceArray objectAtIndex:i / 4];
+            soure = [sourceArray objectAtIndex:i / 4];
         soure.firstDic  = [photoInfo objectAtIndex:i];
         soure.secoundDic = [photoInfo objectAtIndex:i + 1];
         soure.thridDic = [photoInfo objectAtIndex:i + 2];
@@ -348,8 +354,47 @@
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
     NSIndexPath * path = [self.myTableView indexPathForCell:cell];
-    CloundDetailController * cd = [[CloundDetailController alloc] initWithAssetsArray:self.assetsArray andCurAsset:dic];
-//    [self.navigationController pushViewController:cd animated:YES];
+    NSInteger  leftTime = 0;
+    NSInteger  rightTime = 0;
+    NSArray *  array = [self commentcontinuousTimeFormcurtimeSection:path.section ArrayAndSetLeftTime:&leftTime
+                                                           RinghTime:&rightTime];
+    CloundDetailController * cd = [[CloundDetailController alloc] initWithAssetsArray:array andCurAsset:dic];
+    cd.sectionArray = self.assetsSection;
+    cd.assetDictionaary = self.assetDictionary;
+    cd.leftBoundsDays = leftTime;
+    cd.rightBoudsDays = rightTime;
+    [self.navigationController pushViewController:cd animated:YES];
+}
+- (NSArray *)commentcontinuousTimeFormcurtimeSection:(NSInteger)section ArrayAndSetLeftTime:(int *)lefttime RinghTime:(int *)rightTime
+{
+    
+    NSMutableArray * rightarray = [NSMutableArray arrayWithCapacity:0];
+    NSMutableArray * leftArray = [NSMutableArray arrayWithCapacity:0];
+    for (int i = section - 1; i >=0 ; i--) {
+        NSString * days = [[self.assetsSection objectAtIndex:i] objectForKey:@"day"];
+        NSArray * array = [self.assetDictionary objectForKey:days];
+        if (array) {
+            * lefttime = i;
+            [leftArray addObjectsFromArray:array];
+        }else{
+            break;
+        }
+    }
+    for (int i = section + 1; i < self.assetsSection.count; i++) {
+        NSString * days = [[self.assetsSection objectAtIndex:i] objectForKey:@"day"];
+        NSArray * array = [self.assetDictionary objectForKey:days];
+        if (array) {
+            * rightTime = i;
+            [rightarray addObjectsFromArray:array];
+        }else{
+            break;
+        }
+    }
+    NSString * days = [[self.assetsSection objectAtIndex:section] objectForKey:@"day"];
+    NSArray * array = [self.assetDictionary objectForKey:days];
+    [leftArray addObjectsFromArray:array];
+    [leftArray  addObjectsFromArray:rightarray];
+    return leftArray;
 }
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
 {
@@ -365,7 +410,7 @@
         [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择图片"];
         return;
     }
-   
+    
     if (_viewState == DeleteState) {
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[self photosIdArray] success:^(NSString *response)
          {
@@ -415,18 +460,18 @@
 }
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
 {
-    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:nil  optionalTitle:@"adf" desc:des success:^(NSString *response) {
-               DLog(@"%@",response);
-              [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-               [selectedArray removeAllObjects];
-              [self setViewState:NomalState];
-           } failure:^(NSString *error) {
-                DLog(@"%@",error);
-                [self showPopAlerViewRatherThentasView:NO WithMes:error];
-       
+    [RequestManager sharePhtotsWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:nil  optionalTitle:@"title" desc:des success:^(NSString *response) {
+        DLog(@"%@",response);
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+        [selectedArray removeAllObjects];
+        [self setViewState:NomalState];
+    } failure:^(NSString *error) {
+        DLog(@"%@",error);
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+        
     }];
     [self.navigationController popViewControllerAnimated:YES];
-
+    
 }
 
 @end

@@ -20,6 +20,8 @@
 #import "RequestManager.h"
 
 @implementation CloundDetailController
+@synthesize assetDictionaary,sectionArray;
+@synthesize leftBoundsDays,rightBoudsDays;
 
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(NSDictionary *)asset
 {
@@ -144,15 +146,60 @@
     
 }
 #pragma mark GetMoreAssets
-- (void)getMoreAssets
+- (void)getMoreAssetsAfterCurNum
 {
-//    [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] beforeTime:[[[self.assetsArray lastObject] objectForKey:@"taken_id"] longLongValue] count:100 success:^(NSString *response) {
-//        NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
-//        if (!photoArray || !photoArray.count) _hasMoreAssets = NO;
-//        [self.assetsArray addObjectsFromArray:photoArray];
-//        [self refreshScrollView];
-//    } failure:^(NSString *error) {
-//        [self showPopAlerViewRatherThentasView:NO WithMes:error];
-//    }];
+    NSString * lefttime = [self getleftTime];
+    if (lefttime) {
+        [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:lefttime success:^(NSString *response) {
+            NSArray * array = [[response JSONValue] objectForKey:@"photos"];
+            if (array && array.count) {
+                NSMutableArray * finalArray = [NSMutableArray arrayWithArray:array];
+                [finalArray addObjectsFromArray:self.assetsArray];
+                self.curPageNum += array.count;
+                self.assetsArray = finalArray;
+            }
+        } failure:^(NSString *error) {
+            
+        }];
+    }
+}
+- (void)getMoreAssetsBeforeCurNum
+{
+    NSString * lefttime = [self getleftTime];
+    if (lefttime) {
+        [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:lefttime success:^(NSString *response) {
+            NSArray * array = [[response JSONValue] objectForKey:@"photos"];
+            if (array && array.count) {
+                [self.assetsArray addObjectsFromArray:array];
+            }
+        } failure:^(NSString *error) {
+            
+        }];
+    }else{
+        NSString * time = [[self.sectionArray lastObject] objectForKey:@"day"];
+        [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time success:^(NSString *response) {
+            NSArray * array = [[response JSONValue] objectForKey:@"days"];
+            if (array && array.count) {
+                [self.sectionArray addObjectsFromArray:array];
+            }
+        } failure:^(NSString *error) {
+        }];
+    }
+}
+- (NSString *)getleftTime
+{
+    if (leftBoundsDays > 0) {
+        NSDictionary * dic = [self.sectionArray objectAtIndex:leftBoundsDays - 1];
+        return [dic objectForKey:@"day"];
+    }
+   return nil;
+}
+- (NSString *)getRithtTime
+{
+    if (rightBoudsDays < self.sectionArray.count - 1) {
+        NSDictionary * dic = [self.sectionArray objectAtIndex:rightBoudsDays + 1];
+        return [dic objectForKey:@"day"];
+    }
+    return nil;
 }
 @end

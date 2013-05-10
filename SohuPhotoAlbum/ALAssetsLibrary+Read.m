@@ -42,10 +42,8 @@
                 });
                 return ;
             }
-            if ([group numberOfAssets]){
+            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"My Photo Stream"])
                 [assetGroups addObject:group];
-            }
-            
         } failureBlock:^(NSError *error) {
             failture(error);
         }];
@@ -67,8 +65,9 @@
                 });
                 return ;
             }
-            if ([group numberOfAssets])
-                [assetGroups addObject:group];
+            //filter group 
+            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"My Photo Stream"])
+                [assetGroups addObject:group];       
         } failureBlock:^(NSError *error) {
             failture(error);
         }];

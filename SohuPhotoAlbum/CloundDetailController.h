@@ -14,4 +14,8 @@
     BOOL _hasMoreAssets;
 }
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(NSDictionary *)asset;
+@property(nonatomic,strong)NSMutableArray * sectionArray;
+@property(nonatomic,strong)NSMutableDictionary * assetDictionaary;
+@property(nonatomic,assign)NSInteger  leftBoundsDays;
+@property(nonatomic,assign)NSInteger  rightBoudsDays;
 @end

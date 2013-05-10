@@ -196,8 +196,6 @@
         [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
-//    [_passwordTextField resignFirstResponder];
-//    [_usernameTextField resignFirstResponder];
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];

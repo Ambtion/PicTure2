@@ -64,7 +64,6 @@
 {
     return [self dataForKey:USER_ID] != nil;
 }
-
 + (void)loginUserId:(NSString *)uid withToken:(NSString *)token RefreshToken:(NSString *)refreshToken
 {
     [self storeData:uid forKey:USER_ID];

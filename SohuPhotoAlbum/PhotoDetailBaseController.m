@@ -54,7 +54,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
                                              selector:@selector(listOrientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                             object:nil];
-    DLog(@"%@",NSStringFromCGRect(self.view.frame));
 }
 - (void)setStatueBar
 {
@@ -277,14 +276,17 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     if (_isAnimating || !_assetsArray.count)  return;
     
-    if (_assetsArray.count <= 3) {
+       if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];
         return;
     }
     //默认图片数量最小的值大于3
     if (self.curPageNum == _assetsArray.count - 2)
-        [self getMoreAssets];
+        [self getMoreAssetsAfterCurNum];
+    if (self.curPageNum == 1)
+        [self getMoreAssetsBeforeCurNum];
+
     int  x = aScrollView.contentOffset.x;
     if (x == aScrollView.frame.size.width) {
         if (_imagestate != AtNomal) {
@@ -397,9 +399,13 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     return CGSizeZero;
 }
-- (void)getMoreAssets
+- (void)getMoreAssetsAfterCurNum
 {
     // for more Assets
+}
+- (void)getMoreAssetsBeforeCurNum
+{
+    
 }
 #pragma mark - BarDelegate
 

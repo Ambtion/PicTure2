@@ -86,7 +86,6 @@
 {
     [self readAlbum];
 }
-
 - (void) readAlbum
 {
     if (_isReading) return;
@@ -127,7 +126,8 @@
     NSNumber * num = [self.assetSectionisShow objectAtIndex:[gesture view].tag];
     BOOL isShow = ![num boolValue];
     [self.assetSectionisShow replaceObjectAtIndex:[gesture view].tag withObject:[NSNumber numberWithBool:isShow]];
-    [self.myTableView reloadData];
+//    [self.myTableView reloadData];
+    [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:[gesture view].tag] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - TableDataSource

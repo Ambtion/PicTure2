@@ -30,12 +30,13 @@
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
     [request setPostValue:[[UIDevice currentDevice] name] forKey:@"device_name"];
-    [request setPostValue:@"123123" forKey:@"device_type"];
+    [request setPostValue:@1 forKey:@"device_type"];
     [request setPostValue:[[UIDevice currentDevice] model] forKey:@"model"];
     [request setPostValue:[self getUUID] forKey:@"device_serial_number"];
     [request startSynchronous];
     if (request.responseStatusCode == 200) {
         NSNumber * num = [[[request responseString] JSONValue] objectForKey:@"device_id"];
+        DLog(@"%@",[[request responseString] JSONValue]);
         [LoginStateManager storeDeviceID:num];
         return YES;
     }
