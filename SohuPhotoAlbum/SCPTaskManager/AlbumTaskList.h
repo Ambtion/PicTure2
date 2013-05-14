@@ -24,7 +24,10 @@
 @interface AlbumTaskList : NSObject<ASIHTTPRequestDelegate>
 {
     NSMutableArray * _taskList;
+    BOOL isStopTask;
 }
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
+
 
 @property (weak, nonatomic) id<AlbumTaskListDelegate> delegate;
 
@@ -39,6 +42,8 @@
 
 //@property (nonatomic,retain)ASINetworkQueue * operationQuene;
 
+- (void)pauseTask;
+- (void)startTask;
 
 //队列任务管理
 - (void)go;

@@ -32,7 +32,7 @@
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
     self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
@@ -443,6 +443,7 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (buttonIndex == 3) return ; //取消
     switch (buttonIndex) {
         case 0:
             _cloudmodel = SinaWeiboShare;

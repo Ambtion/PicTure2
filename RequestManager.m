@@ -67,7 +67,7 @@
     for (id key in [body allKeys])
         [request setPostValue:[body objectForKey:key] forKey:key];
     [request setCompletionBlock:^{
-        DLog(@"url :%@ :%d",request.url,[request responseStatusCode]);
+        DLog(@"url :%@ code :%d",request.url,[request responseStatusCode]);
         NSInteger code = [request responseStatusCode];
         if ([self handlerequsetStatucode:code withblock:failure]) {
             success([request responseString]);
@@ -84,6 +84,7 @@
         }
     }];
     [request setFailedBlock:^{
+        DLog(@"failturl :%@ :%d %@",request.url,[request responseStatusCode],[request responseString]);
         if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
         [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
         if (failure)

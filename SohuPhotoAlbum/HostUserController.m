@@ -40,7 +40,7 @@
         HostUserCellDataSource * dataSource = [[HostUserCellDataSource alloc] init];
         dataSource.userName = @"afdkadfa";
         dataSource.accountName = @"@qq.com";
-        dataSource.portrait =@"1.jpg";
+        dataSource.portrait =@"nicheng.png";
         [_dataSourceArray addObject:dataSource];
     }
     [self.myTableView reloadData];

@@ -11,9 +11,12 @@
 #import "UserInfoCell.h"
 #import "FeedBackController.h"
 #import "RequestManager.h"
+#import "CacheManager.h"
 
 #define maxRow 7
-static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清楚缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};\
+
+static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清除缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};
+
 @implementation SettingController
 @synthesize isChangeLoginState;
 
@@ -45,7 +48,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
     [_navBar addSubview:backButton];
-    
     isChangeLoginState = NO;
     [self getUserInfo];
 }
@@ -62,15 +64,16 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
 }
 - (void)cancelLogin:(UIButton *)button
 {
+    if ([_delegate respondsToSelector:@selector(settingControllerWillDisappear:)]) {
+        [_delegate settingControllerWillDisappear:self];
+    }
     if (self.navigationController) {
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (self.presentingViewController) {
         [self.presentingViewController dismissModalViewControllerAnimated:YES];
     }
-    if ([_delegate respondsToSelector:@selector(settingControllerDidDisappear:)]) {
-        [_delegate settingControllerDidDisappear:self];
-    }
+    
 }
 #pragma mark - UserInfo
 - (void)getUserInfo
@@ -78,7 +81,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     if ([LoginStateManager isLogin]) {
         [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
             userInfodic = [response JSONValue];
-            DLog(@"%@",userInfodic);
+            NSLog(@"%@",userInfodic);
             [_myTableView reloadData];
         } failure:^(NSString *error) {
             
@@ -118,7 +121,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
             dataSource.sizeOfAll = 0.f;
             dataSource.sizeOfUsed = 0.f;
         }
-    
+        
         infoCell.dataSource = dataSource;
         return infoCell;
     }
@@ -129,7 +132,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     }
     [cell setSectionTitle:[self getSectionByIndexpath:indexPath]];
     cell.c_Label.text = titleOfRow[indexPath.row];
-
+    
     if (indexPath.row == 4) {
         [cell.accessoryImage setHidden:NO];
     }else{
@@ -144,7 +147,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
         [self setDifCellSwithcByRow:indexPath.row cell:cell];
     }else{
         [cell.cusSwitch setHidden:YES];
-
+        
     }
     return cell;
 }
@@ -172,8 +175,8 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
             break;
         case 1:
             return @"同步设置";
-//        case 4:
-//            return @"分享设置";
+            //        case 4:
+            //            return @"分享设置";
         case 4:
             return @"其他设置";
         default:
@@ -197,19 +200,89 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
-        case 4:
+        case 3: //清除缓冲
+            _cache = [[PopAlertView alloc] initWithTitle:@"确认清除缓存" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+            [_cache show];
+            break;
+        case 4: //反馈
             [self.navigationController pushViewController:[[FeedBackController alloc] init] animated:YES];
             break;
-            
+        case 5: //打分
+            [self rating];
+            break;
+        case 6: //更新
+            [self onCheckVersion];
+            break;
         default:
             break;
     }
 }
+
+#pragma mark AlertDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (_cache == alertView && buttonIndex == 1)
+        [CacheManager removeCacheOfImage];
+    //
+    if (_loginView == alertView && buttonIndex == 1) {
+        isChangeLoginState = YES;
+        [[UploadTaskManager currentManager] cancelAllOperation];
+        [LoginStateManager logout];
+    }
+}
+
+#pragma mark Rating
+- (void)rating
+{
+    NSDictionary * dic = [self getAppInfoFromNet];
+    UIApplication *application = [UIApplication sharedApplication];
+    [application openURL:[NSURL URLWithString:[dic objectForKey:@"updateURL"]]];
+}
+#pragma mark CheckVerSion
+-(void)onCheckVersion
+{
+    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+    NSNumber *currentVersion = [infoDic objectForKey:@"VersionCode"];
+    
+    NSDictionary * dic = [self getAppInfoFromNet];
+    NSNumber * newVersion = [dic objectForKey:@"versionCode"];
+    
+    BOOL isUpata = [self CompareVersionFromOldVersion:currentVersion newVersion:newVersion];
+    if (isUpata) {
+        UIApplication *application = [UIApplication sharedApplication];
+        [application openURL:[NSURL URLWithString:[dic objectForKey:@"updateURL"]]];
+    }else{
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"当前已是最新版本"];
+    }
+}
+-(BOOL)CompareVersionFromOldVersion : (NSNumber *)oldVersion newVersion : (NSNumber *)newVersion
+{
+    return ([oldVersion intValue] < [newVersion intValue]);
+}
+- (NSDictionary *)getAppInfoFromNet
+{
+    NSString *URL =[NSString stringWithFormat:@"%@/version?app=ios",BASICURL_V1];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:URL]];
+    [request setHTTPMethod:@"GET"];
+    NSHTTPURLResponse *urlResponse = nil;
+    NSError * error = nil;
+    NSData * recervedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
+    return [results JSONValue];
+}
+#pragma mark Login
 - (void)loginOut:(id)sender
 {
     if ([LoginStateManager isLogin]){
-        isChangeLoginState = YES;
-        [LoginStateManager logout];
+        NSString * str = nil;
+        if (![[UploadTaskManager currentManager] taskList] || ![[UploadTaskManager currentManager] taskList].count) {
+            str  = [NSString stringWithFormat:@"确定要登出吗?"];
+        }else{
+            str  = [NSString stringWithFormat:@"图片上传中,确定登出?"];
+        }
+        _loginView = [[PopAlertView alloc] initWithTitle:str message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+        [_loginView show];
     }
 }
 @end

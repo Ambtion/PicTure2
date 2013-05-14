@@ -16,12 +16,14 @@
 #define UPLOADIMAGESIZE 1024 * 1024 * 10  // 图片最大10MB
 
 @implementation AlbumTaskList
+
+@synthesize backgroundUpdateTask;
 @synthesize taskList = _taskList;
 @synthesize albumId = _albumId;
 @synthesize isUpLoading = _isUpLoading;
 @synthesize delegate = _delegate;
-
 @synthesize currentTask = _currentTask;
+
 - (void)dealloc
 {
     [self.currentTask.request cancel];
@@ -32,31 +34,42 @@
 {
     self = [super init];
     if (self) {
+        self.backgroundUpdateTask = UIBackgroundTaskInvalid;
         self.taskList = taskList;
         self.albumId = albumID;
         _isUpLoading = NO;
+        isStopTask = NO;
     }
     return self;
 }
 
+#pragma mark 
+- (void)pauseTask
+{
+    isStopTask = YES;
+}
+- (void)startTask
+{
+    NSLog(@"");
+    isStopTask = NO;
+    [self go];
+}
 - (void)goNextTask
 {
     DLog(@"%s",__FUNCTION__);
-    [self addTaskUnitToQuene];
+    if (isStopTask) return;
+    [self go];
 }
 - (void)addTaskUnitToQuene
 {
     if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
-    self.currentTask.request = [self getUploadRequest:nil];
+    self.currentTask.request = [self getUploadRequest:[self currentTask].asset];
     NSData * imageData = [self.currentTask imageDataFromAsset];
     if ([imageData length] > UPLOADIMAGESIZE) {
         [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
         [self requestFailed:self.currentTask.request];
         return ;
     }else{
-//        [self.currentTask.request setData:imageData withFileName:@"fromIOS" andContentType:@"image/*" forKey:@"file"];
-//        [self.currentTask.request setData:imageData forKey:@"file"];
-//        [self.currentTask.request appendPostData:imageData];
         [self.currentTask.request setPostBody:[imageData mutableCopy]];
         [self.currentTask.request startAsynchronous];
     }
@@ -107,7 +120,6 @@
     NSDictionary * dic = [[request responseString] JSONValue];
     NSInteger code = [[dic objectForKey:@"code"] intValue];
     if (![self handleCode:code]) return;
-    DLog(@"%@",dic);
     //上传成功
     [request cancel];
     [request clearDelegatesAndCancel];
@@ -120,20 +132,21 @@
     
     //开始下一任务
     self.currentTask = nil;
-    if (self.taskList.count) {
-        [self goNextTask];
-    }else{
-        //        NSLog(@"Task Finished");
-        if ([_delegate respondsToSelector:@selector(albumTaskQueneFinished:)]) {
-            [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
-        }
-    }
+//    if (self.taskList.count) {
+//        [self goNextTask];
+//    }else{
+//        //        NSLog(@"Task Finished");
+//        if ([_delegate respondsToSelector:@selector(albumTaskQueneFinished:)]) {
+//            [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
+//        }
+//    }
+    [self startToNext];
 }
 - (BOOL)handleCode:(NSInteger)code
 {
     BOOL returnValue = NO;
     NSString * reason = nil;
-    switch (code) {
+    switch (code){
         case 0:
             returnValue = YES;
             break;
@@ -189,20 +202,34 @@
     //开始下一任务
     if (self.taskList.count)
         [self.taskList removeObjectAtIndex:0];
+    [self startToNext];
+}
+
+- (void)startToNext
+{
+ 
     if (self.taskList.count) {
-        [self goNextTask];
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
+            [self beginBackgroundUpdateTask];
+            [self goNextTask];
+        }else{
+            [self endBackgroundUpdateTask];
+            [self goNextTask];
+        }
     }else{
+        [self endBackgroundUpdateTask];
         if ([_delegate respondsToSelector:@selector(albumTaskQueneFinished:)]) {
             [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
         }
     }
-}
 
-- (ASIFormDataRequest *)getUploadRequest:(NSData *)imageData
+}
+- (ASIFormDataRequest *)getUploadRequest:(ALAsset *)asset
 {
     //    http://pp.sohu.com/upload/api/sync
-    //    NSString * str = [NSString stringWithFormat:@"%@/upload/api?folder_id=%@&access_token=%@",BASICURL,ALBUMID,[LoginStateManager currentToken]];
-    NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync?device=%lld&access_token=%@&filename=1.png",BASICURL,[LoginStateManager deviceId],[LoginStateManager  currentToken]];
+    NSString * photoName = [[asset defaultRepresentation] filename];
+    NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync?device=%lld&access_token=%@&filename=%@",BASICURL,[LoginStateManager deviceId],[LoginStateManager  currentToken],photoName];
+    DLog(@"upload:%@",str);
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
     [request setStringEncoding:NSUTF8StringEncoding];
@@ -212,12 +239,24 @@
     [request setShowAccurateProgress:YES];
     [request setShouldAttemptPersistentConnection:NO];
     [request setNumberOfTimesToRetryOnTimeout:5];
-//    [request setPostValue:[self getUUID] forKey:@"device"];
-//    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
+    
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
     [request setShouldContinueWhenAppEntersBackground:YES];
 #endif
     return request;
 }
 
+#pragma mark  backGround
+- (void)beginBackgroundUpdateTask
+{
+    self.backgroundUpdateTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [self endBackgroundUpdateTask];
+    }];
+}
+- (void) endBackgroundUpdateTask
+{
+    if (self.backgroundUpdateTask == UIBackgroundTaskInvalid) return;
+    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundUpdateTask];
+    self.backgroundUpdateTask = UIBackgroundTaskInvalid;
+}
 @end

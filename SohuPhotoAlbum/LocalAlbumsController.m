@@ -80,12 +80,6 @@
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         [self setViewState:UPloadState];
-
-//        if ([LoginStateManager isLogin]) {
-//            [self setViewState:UPloadState];
-//        }else{
-//            [self showLoginViewWithMethodNav:YES];
-//        }
     }
     if (button.tag == CANCELBUTTONTAG) {
         [self setViewState:NomalState];
@@ -160,7 +154,8 @@
 #pragma mark CellDelegate
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
 {
-    [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] animated:YES];
+    
+    [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState lib:_library] animated:YES];
 }
 
 @end

@@ -11,7 +11,7 @@
 #import "CommentController.h"
 #import "LoginStateManager.h"
 #import "PhotoWallController.h"
-
+#import "UIImageView+WebCache.h"
 
 @implementation PhotoStoryController
 @synthesize storyID,ownerID;
@@ -37,14 +37,13 @@
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = [UIColor clearColor];
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-    
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
     
@@ -57,12 +56,17 @@
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-        [_navBar.nLabelText setText:@"故事"];
+        [_navBar.nLabelText setText:@"图片墙"];
         [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.navigationItem setHidesBackButton:YES];
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -151,7 +155,6 @@
     }];}
 - (void)addSoruceFromArray:(NSArray *)array
 {
-    DLog(@"%@",[array objectAtIndex:0]);
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
     [_myTableView reloadData];
@@ -161,6 +164,8 @@
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
     dataSource.photoId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
     dataSource.imageUrl = [info objectForKey:@"photo_url"];
+    dataSource.higth = [[info objectForKey:@"height"] floatValue];
+    dataSource.weigth = [[info objectForKey:@"width"] floatValue];
     dataSource.imageDes = [info objectForKey:@"description"];
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     NSArray * commentarray = [info objectForKey:@"comments"];
@@ -196,7 +201,11 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [(PhotoStoryCellDataSource *)[_dataSourceArray objectAtIndex:indexPath.row] cellHeigth];
+    PhotoStoryCellDataSource * soruce = [_dataSourceArray objectAtIndex:indexPath.row];
+    if (indexPath.row == [_dataSourceArray count] - 1) {
+        return [soruce lastCellHeigth];
+    }
+    return [soruce cellHeigth];
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -305,7 +314,7 @@
 - (void)showShareViewIsAllshare:(BOOL)isShareAll
 {
     _isShareAll = isShareAll;
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间", nil];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间",@"保存到本地相册", nil];
     [sheet showInView:self.view];
 }
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -320,9 +329,18 @@
         case 2:
             model = QQShare;
             break;
+        case 3:
+            model = NoShare;
+//            UIImageWriteToSavedPhotosAlbum(<#UIImage *image#>, <#id completionTarget#>, <#SEL completionSelector#>, <#void *contextInfo#>)
+            break;
         default:
             return;
             break;
+    }
+    if (model == NoShare) {
+        NSString * bgPhotoUrl = [_shareDateSource imageUrl];
+        [self writePicToAlbumWith:bgPhotoUrl];
+        return;
     }
     if (_dataSourceArray.count) {
         if (_isShareAll) {//分享story
@@ -340,7 +358,6 @@
             sv.photosArray = [NSArray arrayWithObject:_shareDateSource.photoId];
             [self.navigationController pushViewController:sv animated:YES];
         }
-      
     }
 }
 

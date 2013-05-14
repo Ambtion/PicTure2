@@ -33,7 +33,7 @@
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BASEWALLCOLOR;
     _myTableView.showsVerticalScrollIndicator = NO;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];
@@ -41,7 +41,7 @@
     _moreFootView.delegate = self;
 //    _myTableView.tableFooterView = _moreFootView;
     
-    _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 10, 77, 20)];
+    _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 5, 77, 20)];
     [_timelabel setHidden:YES];
     [self.view addSubview:_timelabel];
     
@@ -105,6 +105,11 @@
     }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.navigationItem setHidesBackButton:YES];
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -211,7 +216,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self updataLabelWithScrollView:scrollView];
+    if ( scrollView.contentSize.height >= scrollView.frame.size.height)
+        [self updataLabelWithScrollView:scrollView];
     [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
     [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
@@ -222,6 +228,7 @@
         [_timelabel setHidden:NO];
         [self setLabelTimeWithTime:[[_dataSourceArray objectAtIndex:0] shareTime]];
     }else{
+        [_timelabel setHidden:YES];
         _timelabel.daysLabel.text = nil;
         _timelabel.mouthsLabel.text = nil;
         _timelabel.yesDayLabel.text = nil;
@@ -230,7 +237,10 @@
 
 - (void)updataLabelWithScrollView:(UIScrollView *)aScrollView
 {
-    if (!_dataSourceArray.count) return;
+    if (!_dataSourceArray.count) {
+        [self resetLabel];
+        return;
+    }
     NSArray * cells = _myTableView.visibleCells;
     _timelabel.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
     for (PhotoWallCell * cell in cells) {
@@ -251,9 +261,9 @@
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
-    CGFloat ratioInTableView = pointY / (_myTableView.contentSize.height);
+    CGFloat ratioInTableView = pointY / (_myTableView.contentSize.height - _myTableView.frame.size.height);
     CGRect rect = _timelabel.frame;
-    rect.origin.y = _myTableView.frame.origin.y + rect.size.height / 2.f + ratioInTableView * (_myTableView.frame.size.height);
+    rect.origin.y = _myTableView.frame.origin.y + 5 + ratioInTableView * (_myTableView.frame.size.height - rect.size.height - 10);
     return rect;
 }
 
@@ -360,7 +370,7 @@
         [_dataSourceArray removeObject:cell.dataSource];
         NSIndexPath * path =  [_myTableView indexPathForCell:cell];
         [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
-        [self resetLabel];
+        [self updataLabelWithScrollView:_myTableView];
        //删除成功
     }  failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];

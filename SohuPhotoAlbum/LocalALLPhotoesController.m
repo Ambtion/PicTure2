@@ -57,6 +57,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
@@ -126,7 +127,6 @@
     NSNumber * num = [self.assetSectionisShow objectAtIndex:[gesture view].tag];
     BOOL isShow = ![num boolValue];
     [self.assetSectionisShow replaceObjectAtIndex:[gesture view].tag withObject:[NSNumber numberWithBool:isShow]];
-//    [self.myTableView reloadData];
     [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:[gesture view].tag] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
@@ -213,6 +213,10 @@
         self.viewDeckController.centerController = [[LocalAlbumsController alloc] init];
     }
     if (button.tag == RIGHT2BUTTON) { //上传
+        if (![LoginStateManager isLogin]) {
+            [self showLoginViewWithMethodNav:YES];
+            return;
+        }
         [self setViewState:UPloadState];
     }
     if (button.tag == CANCELBUTTONTAG) {
@@ -220,7 +224,7 @@
     }
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
-            [self uploadPicTureWithArray:selectedArray];
+            [self uploadPicTureWithArray:selectedArray andLib:_library];
             [self setViewState:NomalState];
         }else{
             [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择上传图片"];

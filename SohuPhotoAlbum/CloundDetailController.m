@@ -58,36 +58,18 @@
         [self showShareView];
     }
     if (button.tag == TABBARLOADPIC){        //下载图片
-        [self writePicToAlbumWith:[self.assetsArray objectAtIndex:self.curPageNum]];
+        NSString * strUrl = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"]];
+        [self writePicToAlbumWith:strUrl];
     }
     
 }
-- (void)writePicToAlbumWith:(NSDictionary *)dic
-{
-    UIImageView * view = [[UIImageView alloc] init];
-    NSString * strUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"photo_url"]];
-    [view setImageWithURL:[NSURL URLWithString:strUrl] success:^(UIImage *image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
-        });
-    } failure:^(NSError *error) {
-        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
-    }];
-}
-- (void)image: (UIImage *) image didFinishSavingWithError:(NSError *)error contextInfo: (void *) contextInfo
-{
-    if (error) {
-        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
-    }else{
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已保存到本地"];
-    }
-}
 - (void)showShareView
 {
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"微信发送",@"腾讯QQ空间", nil];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间", nil];
     [sheet showInView:self.view];
     sheet.tag = 100;
 }
+
 #pragma mark - ActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -110,7 +92,6 @@
             break;
     }
 }
-
 #pragma mark overLoad
 #pragma mark - GetIdentifyImageSizeWithImageView
 - (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait
@@ -136,8 +117,14 @@
 - (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset
 {
     [super setImageView:scaleView imageFromAsset:asset];
+    [scaleView.imageView startLoading];
+    __weak ImageScaleView * weakImage = scaleView;
     NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
-    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"] options:SDWebImageRetryFailed];
+    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image){
+        [weakImage.imageView stopLoading];
+    } failure:^(NSError *error) {
+        [weakImage.imageView stopLoading];
+    }];
 }
 
 #pragma mark - GetActualImage

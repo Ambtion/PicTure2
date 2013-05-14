@@ -11,16 +11,17 @@
 #import "PerfrenceSettingManager.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "UIImage+FixOrientation.h"
 
 @implementation TaskUnit
 
+@synthesize lib = _lib;
 @synthesize asset = _asset;
 @synthesize description = _description;
 @synthesize taskState = _taskState;
 @synthesize thumbnail = _thumbnail;
 @synthesize request = _request;
 @synthesize data = _data;
-
 
 - (id)init
 {
@@ -47,10 +48,10 @@
     if (!_fulldata)
         _fulldata = [self fullData];
     NSData * data = _fulldata;
-    if (!isUploadJPEGImage) {
-        DLog(@"ori:when upload: %f",[data length]/(1024 * 1024.f));
-    }else{
+    DLog(@"data: %f",[data length]/(1024 * 1024.f));
+    if (isUploadJPEGImage) {
         NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
+//        NSMutableDictionary * dic = [[NSMutableDictionary alloc] initFromAssetURL:[self.asset valueForProperty:ALAssetPropertyAssetURL]];
         CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
         CGImageRef imageRef = nil;
         if ([[self.asset.defaultRepresentation UTI] hasSuffix:@"png"]) {
@@ -58,14 +59,14 @@
         }else{
             imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
         }
-        DLog(@"%@",[self.asset.defaultRepresentation UTI]);
         UIImage * image = [UIImage imageWithCGImage:imageRef];
-        data = UIImageJPEGRepresentation(image, 0.5);
+        data = UIImageJPEGRepresentation(image, 0.2);
+        DLog(@"cpmpre1:when upload: %f M",[data length]/(1024 * 1024.f));
         if (dic){
             [self fixinfoDic:dic];
             data = [self writeExif:dic intoImage:data];
         }
-        DLog(@"cpmpre:when upload: %f",[data length]/(1024 * 1024.f));
+        DLog(@"cpmpre afterWrite:when upload: %f M",[data length]/(1024 * 1024.f));
     }
     return data;
 }
@@ -79,26 +80,33 @@
 - (void)fixinfoDic:(NSMutableDictionary *)dic
 {
     NSMutableDictionary * extfDic = [NSMutableDictionary dictionaryWithDictionary:[dic objectForKey:@"{Exif}"]];
-    NSDate * date = [self.asset valueForProperty:ALAssetPropertyDate];
     if (extfDic && ![extfDic objectForKey:@"DateTimeOriginal"]) {
+        NSDate * date = [self.asset valueForProperty:ALAssetPropertyDate];
         [extfDic setObject:[self stringFromdate:date] forKey:@"DateTimeOriginal"];
-        [dic setObject:extfDic forKey:@"{Exif}"];
     }
+//    [dic removeAllObjects];
+    [dic setObject:extfDic forKey:@"{Exif}"];
 }
 - (NSData *)fullData
 {
     ALAssetRepresentation * defaultRep = [self.asset defaultRepresentation];
-    Byte *buffer = (Byte*)malloc(defaultRep.size);
-    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-    return data;
+    CGImageRef  imageRef = [defaultRep fullResolutionImage];
+    UIImage * image = [UIImage imageWithCGImage:imageRef scale:1.f orientation:(int)defaultRep.orientation];
+    image = [image fixOrientation];
+    if ([self.asset.defaultRepresentation.UTI hasSuffix:@"png"]) {
+        NSLog(@"%@",self.asset.defaultRepresentation.UTI);
+        return UIImagePNGRepresentation(image);
+    }
+    return UIImageJPEGRepresentation(image, 0.5);
+//    Byte *buffer = (Byte*)malloc(defaultRep.size);
+//    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+//    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+//    return data;
 }
 
 - (NSDictionary *)infoDic
 {
-    if (!_fulldata)
-        _fulldata = [self fullData];
-    return (NSDictionary *)[self getPropertyOfdata:_fulldata];
+    return (NSDictionary *)[self getPropertyInfo];
 }
 
 - (NSData *)writeExif:(NSDictionary *)dic intoImage:(NSData *)myimageData
@@ -106,14 +114,18 @@
     NSMutableData * mydata = [[NSMutableData alloc] initWithLength:0];
     CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)myimageData);
     CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+    
     CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)mydata, kUTTypeJPEG, 1, NULL);
     CGImageDestinationAddImage(destination, imageRef, (__bridge CFDictionaryRef)dic);
     CGImageDestinationFinalize(destination);
     CFRelease(destination);
     return mydata;
 }
-- (CFDictionaryRef )getPropertyOfdata:(NSData *)data
+- (CFDictionaryRef )getPropertyInfo
 {
+    Byte *buffer = (Byte*)malloc(self.asset.defaultRepresentation.size);
+    NSUInteger buffered = [self.asset.defaultRepresentation getBytes:buffer fromOffset:0.0 length:self.asset.defaultRepresentation.size error:nil];
+    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
     //1
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
     if (imageSource == NULL) {

@@ -93,7 +93,7 @@
             }];
         }else{
             canBeOperated = NO;
-            [imageView setImage:[UIImage imageNamed:@"1.jpg"]];
+            [imageView setImage:[UIImage imageNamed:@"moren.png"]];
         }
     }else{
         //temp

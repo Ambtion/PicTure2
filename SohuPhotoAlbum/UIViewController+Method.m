@@ -9,6 +9,7 @@
 #import "UIViewController+Method.h"
 #import "CloudPictureCell.h"
 #import "PhotoesCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation UIViewController (Method)
 #pragma mark Data divideAssettByDayTime
@@ -189,6 +190,29 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self.navigationController pushViewController:loginView animated:YES];
     }else{
         [self presentModalViewController:loginView animated:YES];
+    }
+}
+@end
+
+@implementation UIViewController(writeImage)
+
+- (void)writePicToAlbumWith:(NSString *)imageStr
+{
+    UIImageView * view = [[UIImageView alloc] init];
+    [view setImageWithURL:[NSURL URLWithString:imageStr] success:^(UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+        });
+    } failure:^(NSError *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
+    }];
+}
+- (void)image: (UIImage *) image didFinishSavingWithError:(NSError *)error contextInfo: (void *) contextInfo
+{
+    if (error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已保存到本地"];
     }
 }
 

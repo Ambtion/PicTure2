@@ -63,14 +63,18 @@
 - (void)albumTaskStart:(NSNotification *)notification
 {
     DLog(@"albumstart");
-    [[self upLoadimageView] setHidden:NO];
-    [[self upLoadimageView] startAnimating];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self upLoadimageView] setHidden:NO];
+        [[self upLoadimageView] startAnimating];
+    });
 }
 - (void)albumTaskOver:(NSNotification *)notification
 {
     DLog(@"Finished");
-    [[self upLoadimageView] stopAnimating];
-    [[self upLoadimageView] setHidden:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self upLoadimageView] stopAnimating];
+        [[self upLoadimageView] setHidden:YES];
+    });
 }
 
 @end

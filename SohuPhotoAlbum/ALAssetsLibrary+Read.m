@@ -42,14 +42,14 @@
                 });
                 return ;
             }
-            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"My Photo Stream"])
+            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] hasSuffix:@"Photo Stream"])
                 [assetGroups addObject:group];
         } failureBlock:^(NSError *error) {
             failture(error);
         }];
     }
-
 }
+
 #pragma mark read All photoes
 - (void) readAlbumIntoGroupContainer:(NSMutableArray *)assetGroups  assetsContainer:(NSMutableArray *)assetsArray sucess:(void(^)(void))sucess failture:(void(^)(NSError * error))failture;
 {
@@ -65,8 +65,8 @@
                 });
                 return ;
             }
-            //filter group 
-            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"My Photo Stream"])
+            //filter group
+            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] hasSuffix:@"Photo Stream"])
                 [assetGroups addObject:group];       
         } failureBlock:^(NSError *error) {
             failture(error);

@@ -18,3 +18,7 @@
 @interface UIViewController (Private)
 - (void)showLoginViewWithMethodNav:(BOOL)isNav;
 @end
+
+@interface UIViewController(writeImage)
+- (void)writePicToAlbumWith:(NSString *)imageStr;
+@end

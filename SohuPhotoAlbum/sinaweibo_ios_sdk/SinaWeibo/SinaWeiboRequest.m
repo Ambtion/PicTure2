@@ -398,7 +398,6 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	[self failedWithError:error];
-	
 	[responseData release];
 	responseData = nil;
     

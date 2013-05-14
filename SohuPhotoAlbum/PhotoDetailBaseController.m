@@ -18,7 +18,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 @synthesize curPageNum = _curPageNum;
 @synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage;
 @synthesize tabBar = _tabBar;
-//@synthesize cusBar = _cusBar;
 
 - (void)dealloc
 {
@@ -44,7 +43,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [self resetStatueBar];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -422,10 +420,10 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     CGSize ratationSize = [self.view bounds].size;
     if (imageView.image) {
         imageView.frame = (CGRect){0,0,size};
-        imageView.center = CGPointMake(ratationSize.width / 2.f, ratationSize.height /2.f);
     }else{
         imageView.frame = CGRectMake(0, 0, size.width,size.height);
     }
+    imageView.center = CGPointMake(ratationSize.width / 2.f, ratationSize.height /2.f);
 }
 
 - (void)resetAllImagesFrame

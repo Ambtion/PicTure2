@@ -12,6 +12,8 @@
 @synthesize delegate = _delegate;
 @synthesize loadButton;
 @synthesize deleteButton;
+@synthesize shareButton;
+
 - (id)initWithFrame:(CGRect)frame delegate:(id<CusTabBarDelegate>)deletate
 
 {

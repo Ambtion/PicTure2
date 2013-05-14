@@ -11,7 +11,7 @@
 
 #define MENUMAXNUMBER 4
 
-static NSString *   menuText[4] =   {@"本地相册",@"云备份",@"分享历史",@"星用户"};
+static NSString *   menuText[4] =   {@"本地相册",@"云备份",@"图片墙",@"星用户"};
 static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png"};
 
 @implementation LeftMenuController
@@ -58,19 +58,18 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     [self setAccountView];
     [_tableView reloadData];
 }
-
 #pragma mark AccoutView
 - (void)setAccountView
 {
     //暂时写着
     if (![LoginStateManager isLogin]) {
-        _accountView.portraitImageView.imageView.image = [UIImage imageNamed:@"1.jpg"];
+        _accountView.portraitImageView.imageView.image = [UIImage imageNamed:@"nicheng.png"];
         _accountView.nameLabel.text =  @"请登录账号";
         _accountView.desLabel.text = nil;
     }else{
         [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
         NSDictionary * dic = [response JSONValue];
-            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
             _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
             _accountView.nameLabel.text = [dic objectForKey:@"user_nick"];
         } failure:^(NSString *error) {
@@ -112,7 +111,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 #pragma mark Selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.view.userInteractionEnabled = NO;
+//    self.view.userInteractionEnabled = NO;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row) {
         if (![LoginStateManager isLogin]) {
@@ -138,7 +137,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
             HostUserController * hs = [[HostUserController alloc] init];
             self.viewDeckController.centerController = hs;
         }
-        self.view.userInteractionEnabled = YES;
+//        self.view.userInteractionEnabled = YES;
     }];
 }
 
@@ -155,10 +154,11 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 }
 
 #pragma mark - Delegate of SetttingControlelr
-- (void)settingControllerDidDisappear:(SettingController *)controller
+- (void)settingControllerWillDisappear:(SettingController *)controller
 {
     if (controller.isChangeLoginState && ![LoginStateManager isLogin]) {
         [self resetLeftMenu];
+        
     }else{
         [self.viewDeckController toggleLeftViewAnimated:NO];
     }
@@ -167,10 +167,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 #pragma mark -  AccoutViewDelgate
 - (void)accountView:(AccountView *)acountView fullScreenClick:(id)sender
 {
-    if ([LoginStateManager isLogin]) {
-        [LoginStateManager logout];
-        [self resetLeftMenu];
-    }else{
+    if (![LoginStateManager isLogin]) {
         LoginViewController * lv = [[LoginViewController alloc] init];
         lv.delegate = self;
         UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:lv];

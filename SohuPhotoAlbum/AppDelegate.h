@@ -11,7 +11,7 @@
 #import "IIViewDeckController.h"
 
 @class LocalShareController;
-@interface AppDelegate : AppDelegateOauthor
+@interface AppDelegate : AppDelegateOauthor<UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

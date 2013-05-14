@@ -57,9 +57,9 @@
     return selectedArray.count;
 }
 
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray andLib:(ALAssetsLibrary *)lib
 {
-    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray];
+    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray andLib:lib];
 }
 
 #pragma mark SetViewState

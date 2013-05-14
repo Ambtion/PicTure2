@@ -42,7 +42,6 @@
 {
     NSDictionary * userinfo = [self valueForUserinfo];
     NSNumber * num = [self valueForKey:ISUPLOADJPEGIMAGE inUserinfo:userinfo];
-    DLog(@"%@",num);
     return !num || [num  boolValue];
 }
 +(void)setIsUploadJPEGImage:(BOOL)ture

@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@interface InfoImageView : UIImageView<UIWebViewDelegate>
+{
+    UIActivityIndicatorView * actV;
+    UIImageView * logo;
+}
+- (void)startLoading;
+- (void)stopLoading;
+@end
+
 @class ImageScaleView;
 @protocol ImageScaleViewDelegate <NSObject>
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview;
@@ -15,11 +24,11 @@
 
 @interface ImageScaleView : UIScrollView<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 {
-    UIImageView * _imageView;
+    InfoImageView * _imageView;
 }
 
 @property(nonatomic,weak)id<ImageScaleViewDelegate> Adelegate;
-@property(nonatomic,strong)UIImageView * imageView;
+@property(nonatomic,strong)InfoImageView * imageView;
 @property(nonatomic,strong)id asset;
 @property(nonatomic,assign)BOOL tapEnabled;
 @end

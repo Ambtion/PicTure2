@@ -15,23 +15,23 @@
 
 @property(nonatomic,strong)NSMutableArray * assetsArray;
 @property(nonatomic,strong)NSMutableArray * dataSourceArray;
-//@property(nonatomic,retain)NSMutableArray * selectedArray;
 @end
 
 @implementation AlbumPhotoesController
+@synthesize libiary = _libiary;
 @synthesize assetGroup = _assetGroup;
 @synthesize assetsArray = _assetsArray;
 @synthesize dataSourceArray = _dataSourceArray;
-//@synthesize selectedArray = selectedArray;
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state
+- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state lib:(ALAssetsLibrary *)lib
 {
     if (self = [super init]) {
         self.assetGroup = AnAssetGroup;
+        self.libiary = lib;
         selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
         _viewState = state;
         
@@ -80,7 +80,6 @@
         }else{
             [_cusBar.sLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
             [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
-//            [_cusBar.sRightStateButton setButtoUploadState:YES];
         }
         [_cusBar switchBarStateToUpload:_viewState == UPloadState];
     }
@@ -202,7 +201,8 @@
     
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
-            [self uploadPicTureWithArray:selectedArray];
+            NSLog(@"%@",_libiary);
+            [self uploadPicTureWithArray:selectedArray andLib:_libiary];
             if (_isInitUpload) {
                 [self.navigationController popViewControllerAnimated:YES];
             }else{

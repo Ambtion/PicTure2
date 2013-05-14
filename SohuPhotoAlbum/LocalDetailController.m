@@ -35,6 +35,7 @@
     //fix tabBar
     [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
     [self.tabBar.deleteButton setHidden:YES];
+    [self.tabBar.shareButton setHidden:YES];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -147,7 +148,7 @@
     }
     if (button.tag == TABBARLOADPIC){        //上传图片
         ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
-        [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset];
+        [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset andLib:nil];
     }
 }
 - (void)showShareView
@@ -254,6 +255,7 @@
 }
 - (void)request:(SinaWeiboRequest *)request didFailWithError:(NSError *)error
 {
+    NSLog(@"%@",error);
     [self showInvalidTokenOrOpenIDMessageWithMes:[error description]];
 }
 

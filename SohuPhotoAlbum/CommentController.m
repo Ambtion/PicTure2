@@ -66,7 +66,7 @@
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = [UIColor clearColor];
     
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor redColor] backGroundColor:[UIColor clearColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];

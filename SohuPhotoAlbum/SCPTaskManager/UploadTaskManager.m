@@ -26,6 +26,7 @@ static UploadTaskManager * sharedTaskManager = nil;
     }
     return sharedTaskManager;
 }
+
 #pragma mark - AutonUploadPic
 - (BOOL)isAutoUploading
 {
@@ -53,6 +54,7 @@ static UploadTaskManager * sharedTaskManager = nil;
         [[UploadTaskManager currentManager] addTaskList:album];
     }
 }
+
 #pragma mark - Init
 - (id)init
 {
@@ -110,6 +112,24 @@ static UploadTaskManager * sharedTaskManager = nil;
 {
     return [[_taskDic objectForKey:self.curTask.albumId] copy];
 }
+
+//#pragma mark  - BackGround
+//- (void)changeToBackGroundUploadState
+//{
+//    [[self curTask] pauseTask];
+//    if ([[UIDevice currentDevice] isMultitaskingSupported]) {
+//        [self beginBackgroundUpdateTask];
+//        [[[UploadTaskManager currentManager] curTask] startTask];
+//    }
+//}
+//- (void)changeToNomalUploadState
+//{
+//    [[self curTask] pauseTask];
+//    if ([[UIDevice currentDevice] isMultitaskingSupported] && self.backgroundUpdateTask != UIBackgroundTaskInvalid){
+//        [self endBackgroundUpdateTask];
+//    }
+//    [[[UploadTaskManager currentManager] curTask] startTask];
+//}
 
 #pragma mark - AlbumInfo
 - (void)updataAlbumInfoWith:(AlbumTaskList *)taskList
@@ -245,6 +265,7 @@ static UploadTaskManager * sharedTaskManager = nil;
         [self cancelOneRequestWith:taskList];
     }
 }
+#pragma <#arguments#>
 #pragma mark AlbumProgress
 - (void)albumTaskStart
 {
@@ -276,27 +297,29 @@ static UploadTaskManager * sharedTaskManager = nil;
 }
 - (void)albumTask:(AlbumTaskList *)albumTaskList requsetFailed:(ASIHTTPRequest *)requset
 {
-//    NSLog(@"fail one Requset");
     [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTASKCHANGE object:nil userInfo:nil];
 }
 #pragma mark upload
-- (void)uploadPicTureWithALasset:(ALAsset *)asset
+- (void)uploadPicTureWithALasset:(ALAsset *)asset andLib:(ALAssetsLibrary *)lib
 {
-    [self uploadPicTureWithArray:[NSMutableArray arrayWithObject:asset]];
+    [self uploadPicTureWithArray:[NSMutableArray arrayWithObject:asset] andLib:lib];
 }
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray andLib:(ALAssetsLibrary *)lib
 {
-    NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
+    [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已在后台上传"];
+        NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     for (ALAsset * asset in assetArray) {
         TaskUnit * unit = [[TaskUnit alloc] init];
         unit.asset = asset;
+        unit.lib = lib;
         unit.description = nil;
         [array addObject:unit];
     }
-    ToastAlertView * tos = [[ToastAlertView alloc] initWithTitle:@"图片已在后台上传"];
-    [tos show];
     AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:array album_id:ALBUMID];
-    [[UploadTaskManager currentManager] addTaskList:album];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[UploadTaskManager currentManager] addTaskList:album];
+    });
+
 }
 
 @end

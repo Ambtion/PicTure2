@@ -20,15 +20,17 @@ typedef enum {
 @interface TaskUnit : NSObject
 {
     NSData * _fulldata;
+    ALAssetsLibrary * _lib;
 }
+
 // 要上传的图片的路径
+@property (strong, nonatomic) ALAssetsLibrary * lib;
 @property (strong, nonatomic) ALAsset * asset;
 //缩略图
 @property (strong, nonatomic) UIImage * thumbnail;
 // 要上传的图片的文字描述
 @property (strong, nonatomic)  NSString * description;
 @property (strong, nonatomic ) NSData * data;
-@property (strong, nonatomic)  NSDictionary * infoDic;
 //任务状态
 @property (assign, nonatomic) UPloadStatus taskState;
 

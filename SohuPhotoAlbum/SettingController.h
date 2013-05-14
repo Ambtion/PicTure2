@@ -12,14 +12,15 @@
 
 @class SettingController;
 @protocol SettingControllerDelegate <NSObject>
-- (void)settingControllerDidDisappear:(SettingController *)controller;
+- (void)settingControllerWillDisappear:(SettingController *)controller;
 @end
-@interface SettingController : UIViewController<UITableViewDataSource,UITableViewDelegate,MySettingCellDelegate>
+@interface SettingController : UIViewController<UITableViewDataSource,UITableViewDelegate,MySettingCellDelegate,UIAlertViewDelegate>
 {
     UITableView * _myTableView;
     UIImageView * _navBar;
     NSDictionary * userInfodic;
-
+    PopAlertView * _cache;
+    PopAlertView * _loginView;
 }
 @property(weak,nonatomic)id delegate;
 @property(nonatomic,assign) BOOL isChangeLoginState;

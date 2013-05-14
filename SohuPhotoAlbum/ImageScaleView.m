@@ -9,6 +9,56 @@
 #import "ImageScaleView.h"
 #define OFFSETX 0
 
+@implementation InfoImageView
+
+- (id)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        [self setSubViews];
+    }
+    return self;
+}
+- (id)initWithImage:(UIImage *)image
+{
+    if (self = [super initWithImage:image]) {
+        [self setSubViews];
+    }
+    return self;
+}
+- (void)setSubViews
+{
+    logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"moren1.png"]];
+    logo.frame = CGRectMake(0, 0, 141/2.f,139/2.f);
+    logo.center = CGPointMake(self.frame.size.width/ 2.f, self.frame.size.height/2.f);
+    logo.backgroundColor = [UIColor clearColor];
+    [logo setHidden:YES];
+    [self addSubview:logo];
+    
+    actV = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    actV.alpha = 0.6;
+    actV.center = CGPointMake(self.frame.size.width/ 2.f, self.frame.size.height/2.f);
+    actV.hidesWhenStopped = YES;
+    self.backgroundColor = [UIColor clearColor];
+    [self addSubview:actV];
+}
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    logo.center = CGPointMake(self.frame.size.width/ 2.f, self.frame.size.height/2.f);
+    actV.center = CGPointMake(self.frame.size.width/ 2.f, self.frame.size.height/2.f);
+}
+- (void)startLoading
+{
+    [actV startAnimating];
+    [logo setHidden:NO];
+}
+- (void)stopLoading
+{
+    [actV stopAnimating];
+    [logo setHidden:YES];
+}
+
+@end
 @implementation ImageScaleView
 @synthesize Adelegate = _Adelegate;
 @synthesize imageView = _imageView;
@@ -28,14 +78,14 @@
     self.maximumZoomScale = 2.f;
     self.minimumZoomScale = 1.f;
     self.bouncesZoom = YES;
-    self.backgroundColor = [UIColor clearColor];
     self.delegate = self;
     self.tapEnabled = YES;
+    self.backgroundColor = [UIColor colorWithRed:34/255.f green:37/255.f blue:40.f/255.f alpha:1];
 }
 
 - (void)addImageView
 {
-    _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    _imageView = [[InfoImageView alloc] initWithFrame:self.bounds];
     _imageView.backgroundColor = [UIColor clearColor];
     [self addSubview:_imageView];
     [_imageView setUserInteractionEnabled:YES];

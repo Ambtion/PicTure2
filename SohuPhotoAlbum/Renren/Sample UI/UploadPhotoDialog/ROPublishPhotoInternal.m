@@ -141,7 +141,7 @@
     _captionLimitLabel.text = [NSString stringWithFormat:@"%d/140",captionLen];
     _captionLimitLabel.textColor = [UIColor darkGrayColor];
     if (captionLen > 140) {
-        _captionLimitLabel.textColor = [UIColor redColor];
+        _captionLimitLabel.textColor = [UIColor grayColor];
     }
 }
 

@@ -12,9 +12,10 @@
 
 #define FOOTVIEWHEIGTH 40
 #define OFFSETY 5.F
-#define DESLABELFONT        [UIFont boldSystemFontOfSize:14]
+#define DESLABELFONT        [UIFont systemFontOfSize:14]
 #define DESLABELMAXSIZE     (CGSize){298,1000}
 #define DESLABLELINEBREAK   NSLineBreakByWordWrapping
+
 
 @implementation NSObject(string)
 
@@ -167,16 +168,21 @@
     [_imageViewArray removeAllObjects];
     heigth = [ImageViewAdaper setFramesinToArray:_framesArray byImageCount:identifyNum];
     for (NSValue * value in _framesArray) {
-        UIImageView * imageView = [[UIImageView alloc] initWithFrame:[value CGRectValue]];
+        UIView * view = [[UIView alloc] initWithFrame:[value CGRectValue]];
+        view.backgroundColor = [UIColor clearColor];
+        view.clipsToBounds = YES;
+        
+        UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 304, 304)];
+        imageView.center = CGPointMake(view.frame.size.width /2.f, view.frame.size.height/2.f);
         [imageView setUserInteractionEnabled:YES];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
         [imageView addGestureRecognizer:tap];
         [_imageViewArray addObject:imageView];
-        [_backImageView addSubview:imageView];
+        [view addSubview:imageView];
+        [_backImageView addSubview:view];
     }
     if (_imageViewArray.count) {
-        //        if (_imageViewArray.count == 6) {
-        UIView * view = [_imageViewArray lastObject];
+        UIView * view = [[_imageViewArray lastObject] superview];
         _countLabel = [[CountLabel alloc] initIconLabeWithFrame:CGRectMake(view.frame.size.width - 30, view.frame.size.height - 30, 22, 22)];
         [self setCountLabelProperty:_countLabel];
         [view addSubview:_countLabel];
@@ -213,7 +219,7 @@
         //设置图片
         UIImageView * imageView = [_imageViewArray objectAtIndex:i];
         NSDictionary * photoInfo = [_dataSource.imageWallInfo objectAtIndex:i];
-        NSString * str = [NSString stringWithFormat:@"%@_c320",[photoInfo objectForKey:@"photo_url"]];
+        NSString * str = [NSString stringWithFormat:@"%@_c410",[photoInfo objectForKey:@"photo_url"]];
         [imageView setImageWithURL:[NSURL URLWithString:str]];
     }
     _wallDesLabel.text = _dataSource.wallDescription;

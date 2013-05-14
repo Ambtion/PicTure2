@@ -47,11 +47,11 @@
 }
 
 #pragma mark AppDelegate FOR SSO
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return [self ssoReturn:url];
 }
-
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     return [self ssoReturn:url];
@@ -69,7 +69,7 @@
     if ([[url absoluteString] rangeOfString:@"tencent"].location != NSNotFound) {
         return [TencentOAuth HandleOpenURL:url];
     }
-    if ([[url absoluteString] rangeOfString:@"sinaweibosso"].location != NSNotFound) {
+    if ([[url absoluteString] rangeOfString:@"sina"].location != NSNotFound) {
         return [self.sinaweibo handleOpenURL:url];
     }
     return YES;

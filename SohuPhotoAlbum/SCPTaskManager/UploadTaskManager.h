@@ -7,21 +7,31 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
 #import "AlbumTaskList.h"
 #import "TaskNotification.h"
 #import "JSON.h"
 #import "PerfrenceSettingManager.h"
 
-@interface UploadTaskManager : NSObject<AlbumTaskListDelegate>
+@interface UploadTaskManager : NSObject <AlbumTaskListDelegate>
 {
     NSMutableArray * _taskList;
     NSMutableDictionary * _taskDic;
     BOOL isAutoUploading;
 }
-
 @property (nonatomic,strong)AlbumTaskList * curTask;
 @property (nonatomic,strong)NSMutableArray * taskList;
+
+
+
+
 + (UploadTaskManager *)currentManager; // 单例模式
+
+////后台运行
+//- (void)changeToBackGroundUploadState;
+//
+//- (void)changeToNomalUploadState;
 
 //增加队列上传任务
 
@@ -34,8 +44,8 @@
 - (void)cancelAllOperation;
 
 //上传接口
-- (void)uploadPicTureWithALasset:(ALAsset *)asset;
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray;
+- (void)uploadPicTureWithALasset:(ALAsset *)asset andLib:(ALAssetsLibrary *)lib;
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray andLib:(ALAssetsLibrary *)lib;
 
 #pragma mark view
 //管理相册列表上传进度
@@ -49,6 +59,7 @@
 - (BOOL)isUploading;
 
 - (BOOL)isAutoUploading;
+
 //自动批量上传
 - (void)autoUploadAssets:(NSMutableArray *)array ToTaskExceptIsUPloadAlready:(BOOL)isExceptAlready;
 @end

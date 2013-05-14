@@ -75,7 +75,7 @@
 - (void)updateLabel
 {
    //布局规则
-    [portraitView setImageWithURL:[NSURL URLWithString:_dataScoure.potraitImage] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+    [portraitView setImageWithURL:[NSURL URLWithString:_dataScoure.potraitImage] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
     userName.text = [_dataScoure userName];
     shareTime.text  = [_dataScoure shareTime];
     commentLabel.text  = [_dataScoure comment];

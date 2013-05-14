@@ -80,12 +80,11 @@
 
 - (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image
 {
+    NSString * webImgaeAniamtion;
     self.image = image;
     [self setNeedsDisplay];
     return;
-//    return;
-//    NSString * str;
-    [UIView transitionWithView:self duration:0.2 options:UIViewAnimationOptionCurveEaseInOut |
+    [UIView transitionWithView:self duration:0.1 options:UIViewAnimationOptionCurveEaseInOut |
                    UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
                     animations:^{
                         if (image) {

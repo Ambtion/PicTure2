@@ -42,4 +42,5 @@ typedef enum __shareModel {
     RenrenShare,
     WeixinShare,
     QQShare,
+    NoShare
 }shareModel;
