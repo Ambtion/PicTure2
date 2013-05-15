@@ -1283,7 +1283,6 @@
 		C588B09B17003032006BBC34 = {
 			isa = PBXGroup;
 			children = (
-				B89A47031743C0F200CA16DC /* CoreText.framework */,
 				C588B0AD17003032006BBC34 /* SohuPhotoAlbum */,
 				C588B0A617003032006BBC34 /* Frameworks */,
 				C588B0A517003032006BBC34 /* Products */,
@@ -1301,6 +1300,7 @@
 		C588B0A617003032006BBC34 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B89A47031743C0F200CA16DC /* CoreText.framework */,
 				C583A8AD17141AEF00DAC141 /* libz.dylib */,
 				C583A8301714198B00DAC141 /* Security.framework */,
 				C584D144170BC44800ACCD7C /* ImageIO.framework */,
