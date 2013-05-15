@@ -12,7 +12,6 @@
 
 @interface LocalAlbumsController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
 {
-    ALAssetsLibrary *_library;
     BOOL _isReading; //for app bacome background
 }
 @end

@@ -26,7 +26,7 @@
         labelText.font = [UIFont systemFontOfSize:19.f];
         labelText.textColor = [UIColor colorWithRed:171.f/255.f green:171.f/255.f blue:171.f/255.f alpha:1.f];
         labelText.shadowColor = [UIColor colorWithRed:15.f/255 green:15.f/255 blue:15.f/255 alpha:1.0];
-        labelText.shadowOffset = CGSizeMake(0, 2);
+        labelText.shadowOffset = CGSizeMake(0, 1);
         [self.contentView addSubview:labelText];
         
         UIImageView * lineimage = [[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height - 1 , 320, 1)];

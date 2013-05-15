@@ -13,6 +13,10 @@
 
 @implementation PhotoWallController
 @synthesize ownerID;
+- (void)dealloc
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
 - (id)initWithOwnerID:(NSString *)ownID isRootController:(BOOL)isRoot
 {
     self = [super init];
@@ -208,6 +212,10 @@
 }
 
 #pragma mark TableView Delegate
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [_timelabel  setHidden:YES];
+}
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
@@ -225,7 +233,6 @@
 - (void)resetLabel
 {
     if (_dataSourceArray.count) {
-        [_timelabel setHidden:NO];
         [self setLabelTimeWithTime:[[_dataSourceArray objectAtIndex:0] shareTime]];
     }else{
         [_timelabel setHidden:YES];
@@ -241,6 +248,7 @@
         [self resetLabel];
         return;
     }
+    [_timelabel  setHidden:NO];
     NSArray * cells = _myTableView.visibleCells;
     _timelabel.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
     for (PhotoWallCell * cell in cells) {

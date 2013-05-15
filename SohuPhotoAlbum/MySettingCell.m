@@ -45,10 +45,10 @@
     self.accessoryImage.image = [UIImage imageNamed:@"settings_arrow.png"];
     [self.contentView addSubview:self.accessoryImage];
     
-    _cusSwitch = [[CusSwitch alloc] initWithFrame:CGRectMake(0 ,0 , 54, 22) IconImage:[UIImage imageNamed:@"iconImage.png"] TureImage:[UIImage imageNamed:@"tureImage.png"] falueimage:[UIImage imageNamed:@"falureImage.png"]];
+    _cusSwitch = [[CusSwitch alloc] initWithFrame:CGRectMake(0 ,0 , 64, 25) IconImage:[UIImage imageNamed:@"SwitchThumb.png"] TureImage:[UIImage imageNamed:@"SwitchBackOn.png"] falueimage:[UIImage imageNamed:@"SwitchBackOff.png"]];
     _cusSwitch.delegate = self;
     [self.contentView addSubview:_cusSwitch];
-    _lineImageView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settingLine.png"]];
+    _lineImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settingLine.png"]];
     _lineImageView.frame = CGRectZero;
     [self.contentView addSubview:_lineImageView];
     [self createSectionViewWithTitle];
@@ -59,7 +59,7 @@
     self.d_Label.frame = CGRectMake(10, 19 + offset + 18, 200, 12);
     self.accessoryImage.frame = CGRectMake(290 , 16 + offset, 21, 21);
     _lineImageView.frame = CGRectMake(0, 53 + offset, 320, 1);
-    _cusSwitch.frame = CGRectMake(320 - 62, 16 + offset , 54, 22);
+    _cusSwitch.frame = CGRectMake(320 - 75, 16 + offset , 64, 25);
 }
 
 - (void)setSectionTitle:(NSString *)title

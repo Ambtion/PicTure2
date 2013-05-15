@@ -28,11 +28,6 @@
 
 + (UploadTaskManager *)currentManager; // 单例模式
 
-////后台运行
-//- (void)changeToBackGroundUploadState;
-//
-//- (void)changeToNomalUploadState;
-
 //增加队列上传任务
 
 - (void)addTaskList:(AlbumTaskList *)taskList; // 将任务列表加入到队列中
@@ -44,8 +39,8 @@
 - (void)cancelAllOperation;
 
 //上传接口
-- (void)uploadPicTureWithALasset:(ALAsset *)asset andLib:(ALAssetsLibrary *)lib;
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray andLib:(ALAssetsLibrary *)lib;
+- (void)uploadPicTureWithALasset:(ALAsset *)asset;
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray;
 
 #pragma mark view
 //管理相册列表上传进度

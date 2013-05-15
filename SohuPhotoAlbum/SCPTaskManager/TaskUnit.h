@@ -20,11 +20,9 @@ typedef enum {
 @interface TaskUnit : NSObject
 {
     NSData * _fulldata;
-    ALAssetsLibrary * _lib;
 }
 
 // 要上传的图片的路径
-@property (strong, nonatomic) ALAssetsLibrary * lib;
 @property (strong, nonatomic) ALAsset * asset;
 //缩略图
 @property (strong, nonatomic) UIImage * thumbnail;

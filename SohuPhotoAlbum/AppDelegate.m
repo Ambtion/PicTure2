@@ -16,7 +16,7 @@
 
 @implementation AppDelegate
 @synthesize window = _window;
-
+@synthesize assetsLibrary;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -34,10 +34,21 @@
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
     
     self.window.rootViewController = nav;
+    self.assetsLibrary = [[ALAssetsLibrary alloc] init];
     [self.window makeKeyAndVisible];
     //INIT DATABASE
     [DataBaseManager defaultDataBaseManager];
     return YES;
 }
 
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"
+                                                    message:notification.alertBody
+                                                   delegate:nil
+                                          cancelButtonTitle:@"确定"
+                                          otherButtonTitles:nil];
+    [alert show];
+    application.applicationIconBadgeNumber -= 1;
+}
 @end

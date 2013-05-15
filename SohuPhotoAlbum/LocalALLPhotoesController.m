@@ -90,10 +90,8 @@
 {
     if (_isReading) return;
     _isReading = YES;
-    if (!_library)
-        _library = [[ALAssetsLibrary alloc] init];
-    [self initDataContainer];
-    [_library readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+        [self initDataContainer];
+    [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
         [self autoUplaodPic];
         [self prepareDataWithTimeOrder];
     } failture:^(NSError *error) {
@@ -223,7 +221,7 @@
     }
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
-            [self uploadPicTureWithArray:selectedArray andLib:_library];
+            [self uploadPicTureWithArray:selectedArray];
             [self setViewState:NomalState];
         }else{
             [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择上传图片"];

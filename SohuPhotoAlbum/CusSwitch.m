@@ -33,6 +33,7 @@
     UISwipeGestureRecognizer * gesutre = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDrag:)];
     gesutre.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
     [_button addGestureRecognizer:gesutre];
+    [_button addTarget:self action:@selector(buttonDrag:) forControlEvents:UIControlEventTouchUpInside];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDrag:)];
     [self addGestureRecognizer:tap];
     [self addSubview:_button];    

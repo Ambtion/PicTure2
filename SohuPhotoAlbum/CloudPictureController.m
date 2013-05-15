@@ -25,6 +25,7 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
     self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
@@ -412,6 +413,18 @@
     }
     
     if (_viewState == DeleteState) {
+        PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+        [alertView show];
+        return;
+    }
+    if (_viewState == ShareState) {
+        [self showShareView];
+    }
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[self photosIdArray] success:^(NSString *response)
          {
              [self refrshDataFromNetWork];
@@ -421,9 +434,6 @@
              [self showPopAlerViewRatherThentasView:NO WithMes:error];
              [self setViewState:NomalState];
          }];
-    }
-    if (_viewState == ShareState) {
-        [self showShareView];
     }
 }
 - (NSArray *)photosIdArray

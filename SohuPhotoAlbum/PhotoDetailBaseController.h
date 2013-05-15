@@ -34,9 +34,7 @@ typedef enum _imageStatePosition
     BOOL _isHidingBar;
     BOOL _isInit;
     BOOL _isRotating;
-    BOOL _isAnimating;
-    
-    ALAssetsLibrary * _libiary;
+    BOOL _isAnimating;    
 }
 @property(nonatomic,strong)NSMutableArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;

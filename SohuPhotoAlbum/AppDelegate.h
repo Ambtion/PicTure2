@@ -13,6 +13,7 @@
 @class LocalShareController;
 @interface AppDelegate : AppDelegateOauthor<UIApplicationDelegate>
 
+@property (strong, nonatomic) ALAssetsLibrary * assetsLibrary;
 @property (strong, nonatomic) UIWindow *window;
 
 @end

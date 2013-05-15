@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #import "ASINetworkQueue.h"
 #import "ASIFormDataRequest.h"
 #import "TaskUnit.h"
 #import "DataBaseManager.h"
 #import "URLLibaray.h"
+#import "PopAlertView.h"
 
 @class AlbumTaskList;
 @protocol AlbumTaskListDelegate <NSObject>
@@ -21,10 +23,10 @@
 - (void)albumTaskQueneFinished:(AlbumTaskList *)albumTaskList ;
 @end
 
-@interface AlbumTaskList : NSObject<ASIHTTPRequestDelegate>
+@interface AlbumTaskList : NSObject<ASIHTTPRequestDelegate,UIAlertViewDelegate>
 {
     NSMutableArray * _taskList;
-    BOOL isStopTask;
+    PopAlertView * _alertView;
 }
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
 
@@ -41,9 +43,6 @@
 -(id)initWithTaskList:(NSMutableArray *)taskList album_id:(NSString *)albumID;
 
 //@property (nonatomic,retain)ASINetworkQueue * operationQuene;
-
-- (void)pauseTask;
-- (void)startTask;
 
 //队列任务管理
 - (void)go;

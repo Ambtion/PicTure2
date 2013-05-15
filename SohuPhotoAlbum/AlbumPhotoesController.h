@@ -13,11 +13,9 @@
 @interface AlbumPhotoesController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoesCellDelegate>
 {
     ALAssetsGroup * _assetGroup;
-    ALAssetsLibrary * _libiary;
     BOOL _isInitUpload;
     BOOL _isReading;
 }
-@property(nonatomic,strong)ALAssetsLibrary * libiary;
 @property(nonatomic,strong)ALAssetsGroup * assetGroup;
 
 - (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state lib:(ALAssetsLibrary *)lib;

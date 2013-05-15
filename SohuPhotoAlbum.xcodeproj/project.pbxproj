@@ -48,9 +48,6 @@
 		C58353E8172641F600099E6E /* resize_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = C58353E5172641F600099E6E /* resize_btn.png */; };
 		C58353EC1726704700099E6E /* CusSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = C58353EB1726704600099E6E /* CusSwitch.m */; };
 		C58353EE1726787800099E6E /* loginOut.png in Resources */ = {isa = PBXBuildFile; fileRef = C58353ED1726787700099E6E /* loginOut.png */; };
-		C58353F61726823F00099E6E /* falureImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C58353F31726823E00099E6E /* falureImage.png */; };
-		C58353F71726823F00099E6E /* iconImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C58353F41726823E00099E6E /* iconImage.png */; };
-		C58353F81726823F00099E6E /* tureImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C58353F51726823E00099E6E /* tureImage.png */; };
 		C58353FC1726917000099E6E /* HostUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = C58353FB1726917000099E6E /* HostUserController.m */; };
 		C58353FF17269B0900099E6E /* HostUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C58353FE17269B0900099E6E /* HostUserCell.m */; };
 		C58354011726B43E00099E6E /* nav_bar_host.png in Resources */ = {isa = PBXBuildFile; fileRef = C58354001726B43C00099E6E /* nav_bar_host.png */; };
@@ -335,6 +332,9 @@
 		C5CDCCC9171FFFFA00044330 /* sectionIconNo.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC8171FFFFA00044330 /* sectionIconNo.png */; };
 		C5CDCCCB17200F4100044330 /* navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCCA17200F4100044330 /* navbar.png */; };
 		C5E8305D1737C0D1005D5A70 /* stroyDeleteButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C5E8305C1737C0D1005D5A70 /* stroyDeleteButton.png */; };
+		C5F2A6BE174385B7000B6F92 /* SwitchBackOff.png in Resources */ = {isa = PBXBuildFile; fileRef = C5F2A6BB174385B7000B6F92 /* SwitchBackOff.png */; };
+		C5F2A6BF174385B7000B6F92 /* SwitchBackOn.png in Resources */ = {isa = PBXBuildFile; fileRef = C5F2A6BC174385B7000B6F92 /* SwitchBackOn.png */; };
+		C5F2A6C0174385B7000B6F92 /* SwitchThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = C5F2A6BD174385B7000B6F92 /* SwitchThumb.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -391,9 +391,6 @@
 		C58353EA1726704600099E6E /* CusSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CusSwitch.h; sourceTree = "<group>"; };
 		C58353EB1726704600099E6E /* CusSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CusSwitch.m; sourceTree = "<group>"; };
 		C58353ED1726787700099E6E /* loginOut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginOut.png; sourceTree = "<group>"; };
-		C58353F31726823E00099E6E /* falureImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = falureImage.png; sourceTree = "<group>"; };
-		C58353F41726823E00099E6E /* iconImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconImage.png; sourceTree = "<group>"; };
-		C58353F51726823E00099E6E /* tureImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tureImage.png; sourceTree = "<group>"; };
 		C58353FA1726917000099E6E /* HostUserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostUserController.h; sourceTree = "<group>"; };
 		C58353FB1726917000099E6E /* HostUserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HostUserController.m; sourceTree = "<group>"; };
 		C58353FD17269B0900099E6E /* HostUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostUserCell.h; sourceTree = "<group>"; };
@@ -829,6 +826,9 @@
 		C5CDCCC8171FFFFA00044330 /* sectionIconNo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionIconNo.png; sourceTree = "<group>"; };
 		C5CDCCCA17200F4100044330 /* navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbar.png; sourceTree = "<group>"; };
 		C5E8305C1737C0D1005D5A70 /* stroyDeleteButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stroyDeleteButton.png; sourceTree = "<group>"; };
+		C5F2A6BB174385B7000B6F92 /* SwitchBackOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwitchBackOff.png; sourceTree = "<group>"; };
+		C5F2A6BC174385B7000B6F92 /* SwitchBackOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwitchBackOn.png; sourceTree = "<group>"; };
+		C5F2A6BD174385B7000B6F92 /* SwitchThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwitchThumb.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -946,10 +946,10 @@
 		C58353D4172545B900099E6E /* SettingView */ = {
 			isa = PBXGroup;
 			children = (
+				C5F2A6BB174385B7000B6F92 /* SwitchBackOff.png */,
+				C5F2A6BC174385B7000B6F92 /* SwitchBackOn.png */,
+				C5F2A6BD174385B7000B6F92 /* SwitchThumb.png */,
 				C585988617277C690037A14B /* title_feedback.png */,
-				C58353F31726823E00099E6E /* falureImage.png */,
-				C58353F41726823E00099E6E /* iconImage.png */,
-				C58353F51726823E00099E6E /* tureImage.png */,
 				C58353ED1726787700099E6E /* loginOut.png */,
 				C58353E4172641F600099E6E /* real_size_btn.png */,
 				C58353E5172641F600099E6E /* resize_btn.png */,
@@ -2081,9 +2081,6 @@
 				C58353E7172641F600099E6E /* real_size_btn.png in Resources */,
 				C58353E8172641F600099E6E /* resize_btn.png in Resources */,
 				C58353EE1726787800099E6E /* loginOut.png in Resources */,
-				C58353F61726823F00099E6E /* falureImage.png in Resources */,
-				C58353F71726823F00099E6E /* iconImage.png in Resources */,
-				C58353F81726823F00099E6E /* tureImage.png in Resources */,
 				C58354011726B43E00099E6E /* nav_bar_host.png in Resources */,
 				C585988717277C690037A14B /* title_feedback.png in Resources */,
 				C5859889172787F10037A14B /* sohu-2013.png in Resources */,
@@ -2110,6 +2107,9 @@
 				C58DC38F17433AC8000DAC1D /* upload2.png in Resources */,
 				C58DC39017433AC8000DAC1D /* upload3.png in Resources */,
 				C58DC39117433AC8000DAC1D /* upload4.png in Resources */,
+				C5F2A6BE174385B7000B6F92 /* SwitchBackOff.png in Resources */,
+				C5F2A6BF174385B7000B6F92 /* SwitchBackOn.png in Resources */,
+				C5F2A6C0174385B7000B6F92 /* SwitchThumb.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+Method.h"
+#import "AppDelegate.h"
 #import "CloudPictureCell.h"
 #import "PhotoesCell.h"
 #import "UIImageView+WebCache.h"
@@ -215,5 +216,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已保存到本地"];
     }
 }
+@end
 
+@implementation UIViewController(libiary)
+- (ALAssetsLibrary *)libiary
+{
+    return [(AppDelegate *)[[UIApplication sharedApplication] delegate] assetsLibrary];
+}
 @end

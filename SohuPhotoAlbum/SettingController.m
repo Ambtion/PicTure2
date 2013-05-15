@@ -177,6 +177,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     cell.cusSwitch.isTure = isTure;
     cell.delegate = self;
 }
+
 - (NSString *)getSectionByIndexpath:(NSIndexPath *)path
 {
     switch (path.row) {

@@ -17,13 +17,15 @@
 + (id)buttonWithType:(UIButtonType)buttonType
 {
     UIButton * button = [super buttonWithType:buttonType];
+    button.clipsToBounds = YES;
     UIImageView * uploadImageView = [[UIImageView alloc] initWithFrame:button.bounds];
     uploadImageView.backgroundColor = [UIColor clearColor];
     uploadImageView.tag = 100;
     uploadImageView.animationImages = [NSArray arrayWithObjects:[UIImage imageNamed:@"upload.png"],
                                        [UIImage imageNamed:@"upload1.png"],[UIImage imageNamed:@"upload2.png"],
                                        [UIImage imageNamed:@"upload3.png"],[UIImage imageNamed:@"upload4.png"],nil];
-    uploadImageView.animationDuration = 1.f;
+    uploadImageView.backgroundColor=  [UIColor clearColor];
+    uploadImageView.animationDuration = 0.8f;
     uploadImageView.animationRepeatCount = 0;
     uploadImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [uploadImageView setHidden:YES];
@@ -47,13 +49,13 @@
 - (void)addObserVerOnCenter
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskStart:) name:ALBUMTUPLOADSTART object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumChange:) name:ALBUMTASKCHANGE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumChange:) name:ALBUMTASKCHANGE object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskOver:) name:ALBUMUPLOADOVER object:nil];
 }
 - (void)removeObserverOnCenter
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTUPLOADSTART  object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTASKCHANGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTASKCHANGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMUPLOADOVER  object:nil];
 }
 
@@ -63,7 +65,6 @@
 }
 - (void)albumTaskStart:(NSNotification *)notification
 {
-    DLog(@"albumstart");
     dispatch_async(dispatch_get_main_queue(), ^{
         [[self upLoadimageView] setHidden:NO];
         [[self upLoadimageView] startAnimating];
@@ -76,8 +77,15 @@
         [[self upLoadimageView] stopAnimating];
         [[self upLoadimageView] setHidden:YES];
     });
+    
 }
-
+- (void)albumChange:(NSNotification *)notification
+{
+    DLog(@"Change");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self upLoadimageView] setHidden:NO];
+        [[self upLoadimageView] startAnimating];
+    });}
 @end
 @implementation CustomizationNavBar
 @synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;

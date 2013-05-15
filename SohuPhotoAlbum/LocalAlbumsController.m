@@ -95,10 +95,9 @@
 {
     if (_isReading) return;
     _isReading = YES;
-    if (!_library)
-        _library = [[ALAssetsLibrary alloc] init];
+   
 	self.assetGroups = [NSMutableArray arrayWithCapacity:0];
-    [_library readAlbumsIntoGroupArray:self.assetGroups sucess:^{
+    [[self libiary] readAlbumsIntoGroupArray:self.assetGroups sucess:^{
         [self prepareData];
     } failture:^(NSError *error) {
         
@@ -155,7 +154,7 @@
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
 {
     
-    [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState lib:_library] animated:YES];
+    [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState lib:[self libiary]] animated:YES];
 }
 
 @end

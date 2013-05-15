@@ -96,8 +96,8 @@ static UploadTaskManager * sharedTaskManager = nil;
     }
     if (!task.isUpLoading) {
         [self setAlbumInfoWith:self.curTask];
-        [self albumTaskStart];
         [task go];
+        [self postNotificationAlbumTaskStart];
     }
 }
 - (BOOL)isUploading
@@ -265,9 +265,8 @@ static UploadTaskManager * sharedTaskManager = nil;
         [self cancelOneRequestWith:taskList];
     }
 }
-#pragma <#arguments#>
 #pragma mark AlbumProgress
-- (void)albumTaskStart
+- (void)postNotificationAlbumTaskStart
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTUPLOADSTART object:[_taskDic objectForKey:self.curTask.albumId]];
 }
@@ -286,6 +285,7 @@ static UploadTaskManager * sharedTaskManager = nil;
         NSLog(@"All operation Over");
     }
 }
+
 - (void)albumTask:(AlbumTaskList *)albumTaskList requsetFinish:(ASIHTTPRequest *)requset
 {
     [self finishOneRequsetWith:self.curTask];
@@ -300,18 +300,21 @@ static UploadTaskManager * sharedTaskManager = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTASKCHANGE object:nil userInfo:nil];
 }
 #pragma mark upload
-- (void)uploadPicTureWithALasset:(ALAsset *)asset andLib:(ALAssetsLibrary *)lib
+- (void)uploadPicTureWithALasset:(ALAsset *)asset
 {
-    [self uploadPicTureWithArray:[NSMutableArray arrayWithObject:asset] andLib:lib];
+    [self uploadPicTureWithArray:[NSMutableArray arrayWithObject:asset]];
 }
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray andLib:(ALAssetsLibrary *)lib
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray 
 {
+    if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
+        [self showNetWorkAlertView];
+        return;
+    }
     [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已在后台上传"];
-        NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
+    NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     for (ALAsset * asset in assetArray) {
         TaskUnit * unit = [[TaskUnit alloc] init];
         unit.asset = asset;
-        unit.lib = lib;
         unit.description = nil;
         [array addObject:unit];
     }

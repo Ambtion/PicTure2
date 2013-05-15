@@ -11,7 +11,6 @@
 
 
 @interface LocalBaseController ()
-
 @end
 
 @implementation LocalBaseController
@@ -57,9 +56,9 @@
     return selectedArray.count;
 }
 
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray andLib:(ALAssetsLibrary *)lib
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray
 {
-    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray andLib:lib];
+    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray];
 }
 
 #pragma mark SetViewState

@@ -45,17 +45,15 @@
 {
     ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
-    if (!_libiary)
-        _libiary = [[ALAssetsLibrary alloc] init];
     NSMutableArray * tempArry = [NSMutableArray arrayWithCapacity:0];
     if (!self.group) {
-        [_libiary readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
+        [[self libiary] readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
             [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
         } failture:^(NSError *error) {
             
         }];
     }else{
-        [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
+        [[self libiary] readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
             [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
         }];
     }
@@ -148,7 +146,7 @@
     }
     if (button.tag == TABBARLOADPIC){        //上传图片
         ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
-        [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset andLib:nil];
+        [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset];
     }
 }
 - (void)showShareView

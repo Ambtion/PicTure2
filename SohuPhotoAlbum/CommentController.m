@@ -48,7 +48,6 @@
     self.view.clipsToBounds = YES;
     __weak UIImageView * bgViewSelf = _myBgView;
     __weak CommentController * weakSelf = self;
-    
     [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.imageUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
         CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
         bgViewSelf.frame = (CGRect){0,0,size};
@@ -95,7 +94,6 @@
     CGRect rect = CGRectZero;
     CGFloat scale = MAX(frameRect.size.width / w, frameRect.size.height / h);
     rect = CGRectMake(0, 0, w * scale, h * scale);
-    DLog(@"%@ %f,%f",NSStringFromCGRect(rect),w,h );
     return rect.size;
 }
 

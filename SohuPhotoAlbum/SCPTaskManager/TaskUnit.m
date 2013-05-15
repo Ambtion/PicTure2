@@ -15,7 +15,6 @@
 
 @implementation TaskUnit
 
-@synthesize lib = _lib;
 @synthesize asset = _asset;
 @synthesize description = _description;
 @synthesize taskState = _taskState;
@@ -47,11 +46,10 @@
     }
     if (!_fulldata)
         _fulldata = [self fullData];
-    NSData * data = _fulldata;
-    DLog(@"data: %f",[data length]/(1024 * 1024.f));
+    NSData * data = [_fulldata copy];
+    DLog(@"original data: %f",[data length]/(1024 * 1024.f));
     if (isUploadJPEGImage) {
         NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
-//        NSMutableDictionary * dic = [[NSMutableDictionary alloc] initFromAssetURL:[self.asset valueForProperty:ALAssetPropertyAssetURL]];
         CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
         CGImageRef imageRef = nil;
         if ([[self.asset.defaultRepresentation UTI] hasSuffix:@"png"]) {
@@ -61,13 +59,12 @@
         }
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.2);
-        DLog(@"cpmpre1:when upload: %f M",[data length]/(1024 * 1024.f));
         if (dic){
             [self fixinfoDic:dic];
             data = [self writeExif:dic intoImage:data];
         }
-        DLog(@"cpmpre afterWrite:when upload: %f M",[data length]/(1024 * 1024.f));
     }
+    DLog(@"cpmpre afterWrite:when upload: %f M",[data length]/(1024 * 1024.f));
     return data;
 }
 - (NSString *)stringFromdate:(NSDate *)date
@@ -84,7 +81,6 @@
         NSDate * date = [self.asset valueForProperty:ALAssetPropertyDate];
         [extfDic setObject:[self stringFromdate:date] forKey:@"DateTimeOriginal"];
     }
-//    [dic removeAllObjects];
     [dic setObject:extfDic forKey:@"{Exif}"];
 }
 - (NSData *)fullData

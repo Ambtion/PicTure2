@@ -14,7 +14,7 @@
 #import "RequestManager.h"
 #import "ShareViewController.h"
 
-@interface CloudPictureController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,UIActionSheetDelegate,ShareViewControllerDelegate>
+@interface CloudPictureController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,UIActionSheetDelegate,ShareViewControllerDelegate,UIAlertViewDelegate>
 {
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;

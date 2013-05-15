@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface UIViewController (Method)
 - (void)cloundDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)_assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)_assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray;
@@ -21,4 +22,8 @@
 
 @interface UIViewController(writeImage)
 - (void)writePicToAlbumWith:(NSString *)imageStr;
+@end
+
+@interface UIViewController(libiary)
+- (ALAssetsLibrary *)libiary;
 @end

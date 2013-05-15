@@ -50,4 +50,41 @@
     NSString * base64String = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     return base64String;
 }
+
+#pragma mark - 
+- (NetworkStatus)netWorkStatues
+{
+    Reachability * reachability;
+    NetworkStatus  status;
+    reachability = [Reachability reachabilityForLocalWiFi];
+    status       = [reachability currentReachabilityStatus];
+    return  status;
+}
+- (void)showNetWorkAlertView
+{
+    PopAlertView * alerView = [[PopAlertView alloc] initWithTitle:@"通知" message:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil];
+    [alerView show];
+    [[UploadTaskManager currentManager] cancelAllOperation];
+}
+- (void)postNotification
+{
+    DLog(@"%s",__FUNCTION__);
+    //chuagjian一个本地推送
+    UILocalNotification * noti = [[UILocalNotification alloc] init];
+    //设置时区
+    noti.timeZone = [NSTimeZone defaultTimeZone];
+    //设置重复间隔
+    noti.repeatInterval = NSWeekCalendarUnit;
+    //推送声音
+    noti.soundName = UILocalNotificationDefaultSoundName;
+    //内容
+    noti.alertBody = @"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传";
+    //显示在icon上的红色圈中的数子
+    //设置userinfo 方便在之后需要撤销的时候使用
+    NSDictionary * infoDic = [NSDictionary dictionaryWithObject:@"name" forKey:@"key"];
+    noti.userInfo = infoDic;
+    //添加推送到uiapplication
+    UIApplication *app = [UIApplication sharedApplication];
+    [app scheduleLocalNotification:noti];
+}
 @end

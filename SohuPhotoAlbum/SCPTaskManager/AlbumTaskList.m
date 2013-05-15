@@ -38,28 +38,10 @@
         self.taskList = taskList;
         self.albumId = albumID;
         _isUpLoading = NO;
-        isStopTask = NO;
     }
     return self;
 }
 
-#pragma mark 
-- (void)pauseTask
-{
-    isStopTask = YES;
-}
-- (void)startTask
-{
-    NSLog(@"");
-    isStopTask = NO;
-    [self go];
-}
-- (void)goNextTask
-{
-    DLog(@"%s",__FUNCTION__);
-    if (isStopTask) return;
-    [self go];
-}
 - (void)addTaskUnitToQuene
 {
     if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
@@ -76,14 +58,13 @@
     return;
 }
 
-- (void)startTaskUnit
+- (void)startNextTaskUnit
 {
     [self addTaskUnitToQuene];
 }
 - (void)go
 {
-    [self startTaskUnit];
-    DLog(@"%s",__FUNCTION__);
+    [self startNextTaskUnit];
 }
 - (void)cancelupLoadWithTag:(NSArray *)unitArray
 {
@@ -132,14 +113,6 @@
     
     //开始下一任务
     self.currentTask = nil;
-//    if (self.taskList.count) {
-//        [self goNextTask];
-//    }else{
-//        //        NSLog(@"Task Finished");
-//        if ([_delegate respondsToSelector:@selector(albumTaskQueneFinished:)]) {
-//            [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
-//        }
-//    }
     [self startToNext];
 }
 - (BOOL)handleCode:(NSInteger)code
@@ -199,7 +172,6 @@
     if ([_delegate respondsToSelector:@selector(albumTask:requsetFailed:)]) {
         [_delegate performSelector:@selector(albumTask:requsetFailed:) withObject:self withObject:request];
     }
-    //开始下一任务
     if (self.taskList.count)
         [self.taskList removeObjectAtIndex:0];
     [self startToNext];
@@ -207,14 +179,27 @@
 
 - (void)startToNext
 {
- 
+    //开始下一任务
     if (self.taskList.count) {
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
-            [self beginBackgroundUpdateTask];
-            [self goNextTask];
+            
+            if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
+                [self postNotification];
+                [self endBackgroundUpdateTask];
+                [[UploadTaskManager currentManager] cancelAllOperation];
+            }else{
+                [self beginBackgroundUpdateTask];
+                [self startNextTaskUnit];
+            }
+            
         }else{
+            
             [self endBackgroundUpdateTask];
-            [self goNextTask];
+            if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
+                [self showNetWorkAlertView];
+            }else{
+                [self startNextTaskUnit];
+            }
         }
     }else{
         [self endBackgroundUpdateTask];
@@ -222,14 +207,13 @@
             [_delegate performSelector:@selector(albumTaskQueneFinished:) withObject:self];
         }
     }
-
 }
+
 - (ASIFormDataRequest *)getUploadRequest:(ALAsset *)asset
 {
     //    http://pp.sohu.com/upload/api/sync
     NSString * photoName = [[asset defaultRepresentation] filename];
     NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync?device=%lld&access_token=%@&filename=%@",BASICURL,[LoginStateManager deviceId],[LoginStateManager  currentToken],photoName];
-    DLog(@"upload:%@",str);
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
     [request setStringEncoding:NSUTF8StringEncoding];

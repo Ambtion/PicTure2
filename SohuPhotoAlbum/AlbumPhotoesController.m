@@ -18,7 +18,6 @@
 @end
 
 @implementation AlbumPhotoesController
-@synthesize libiary = _libiary;
 @synthesize assetGroup = _assetGroup;
 @synthesize assetsArray = _assetsArray;
 @synthesize dataSourceArray = _dataSourceArray;
@@ -27,11 +26,10 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state lib:(ALAssetsLibrary *)lib
+- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state 
 {
     if (self = [super init]) {
         self.assetGroup = AnAssetGroup;
-        self.libiary = lib;
         selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
         _viewState = state;
         
@@ -94,11 +92,9 @@
 {
     if (_isReading) return;
     _isReading = YES;
-    if (!_libiary)
-        _libiary = [[ALAssetsLibrary alloc] init];
-    
+  
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
-    [_libiary readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.assetGroup sucess:^{
+    [[self libiary] readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.assetGroup sucess:^{
         self.assetsArray = [self revertObjectArray:self.assetsArray];
         [self prepareDataWithTimeOrder];
     }];
@@ -201,8 +197,7 @@
     
     if (button.tag == RIGHTSELECTEDTAG) {
         if ([self canUpload]) {
-            NSLog(@"%@",_libiary);
-            [self uploadPicTureWithArray:selectedArray andLib:_libiary];
+            [self uploadPicTureWithArray:selectedArray];
             if (_isInitUpload) {
                 [self.navigationController popViewControllerAnimated:YES];
             }else{
