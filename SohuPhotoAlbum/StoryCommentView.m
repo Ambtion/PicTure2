@@ -46,7 +46,7 @@
         self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(OFFSETX, OFFSETY, 50, 50)];
         [self addSubview:portraitView];
         [self.portraitView setUserInteractionEnabled:YES];
-        self.userName = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.userName = [[DetailTextView alloc] initWithFrame:CGRectZero];
         [self setUserNameLabel];
         [self addSubview:self.userName];
         self.shareTime = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -90,6 +90,14 @@
     
     commentLabel.frame = CGRectMake(userName.frame.origin.x, userName.frame.size.height + userName.frame.origin.y + OFFSETY, size.width, size.height);
     self.frame = CGRectMake(0, 0, 320, MAX(70, commentLabel.frame.size.height + commentLabel.frame.origin.y + 10));
+    
+    return;
+    NSString * str = [NSString stringWithFormat:@"%@: %@ ",[_dataScoure userName],[_dataScoure comment]];
+    userName.text = str;
+    CGSize aSize = [self sizeOfLabel:userName containSize:MAXSIZE];
+    userName.frame = CGRectMake(portraitView.frame.size.width + portraitView.frame.origin.x + 10 , OFFSETY, aSize.width, aSize.height);
+    userName.backgroundColor = [UIColor redColor];
+
 }
 - (CGSize)sizeOfLabel:(UILabel *)label containSize:(CGSize)containSize
 {

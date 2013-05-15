@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DetailTextView.h"
 
 @interface StoryCommentViewDataSource : NSObject
 @property(strong,nonatomic)NSString * userId;
@@ -21,7 +22,7 @@
     StoryCommentViewDataSource * _dataScoure;
 }
 @property(strong,nonatomic)UIImageView * portraitView;
-@property(strong,nonatomic)UILabel * userName;
+@property(strong,nonatomic)DetailTextView * userName;
 @property(strong,nonatomic)UILabel * shareTime;
 @property(strong,nonatomic)UILabel * commentLabel;
 @property(strong,nonatomic)StoryCommentViewDataSource * dataScoure;
