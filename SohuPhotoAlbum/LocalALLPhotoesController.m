@@ -30,7 +30,6 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    
     self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
@@ -61,7 +60,7 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
+        _cusBar.nLabelText.text = @"本地相册";
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
         //上传按钮
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];

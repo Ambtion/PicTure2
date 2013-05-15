@@ -11,6 +11,7 @@
 
 #define ISUPLOADJPEGIMAGE @"__ISUPLOADJPEGIMAGE__"
 #define ISAUTOUPLOAD @"__ISAUTOUPLOAD__"
+#define ISWIFILIMITED @"__ISWIFILIMITED__"
 
 @implementation PerfrenceSettingManager
 
@@ -60,6 +61,18 @@
 {
     if (![LoginStateManager isLogin]) return;
     [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISAUTOUPLOAD];
+}
+#pragma mark - WifiLimit
++ (BOOL)WifiLimitedAutoUpload
+{
+    NSDictionary * userinfo = [self valueForUserinfo];
+    NSNumber * number = [self valueForKey:ISWIFILIMITED inUserinfo:userinfo];
+    return !number || [number  boolValue];
+}
++(void)setWifiLimited:(BOOL)ture
+{
+    if (![LoginStateManager isLogin]) return;
+    [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISWIFILIMITED];
 }
 
 #pragma mark -

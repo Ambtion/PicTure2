@@ -10,6 +10,7 @@
 
 @implementation MySettingCell
 @synthesize c_Label = _c_Label;
+@synthesize d_Label = _d_Label;
 @synthesize accessoryImage = _accessoryImage;
 @synthesize lineImageView = _lineImageView;
 @synthesize cusSwitch = _cusSwitch;
@@ -28,17 +29,23 @@
 - (void)addsubVies
 {
     
-    self.c_Label = [[UILabel alloc] initWithFrame:CGRectMake(8, 19 + offset , 320, 16)];
+    self.c_Label = [[UILabel alloc] initWithFrame:CGRectMake(8, 19 + offset , 200, 16)];
     self.c_Label.font = [UIFont fontWithName:@"STHeitiTC-Medium" size:14];
     self.c_Label.backgroundColor = [UIColor clearColor];
     self.c_Label.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1];
     [self.contentView addSubview:self.c_Label];
     
+    self.d_Label = [[UILabel alloc] initWithFrame:CGRectMake(10, 19 + offset + 18, 200, 12)];
+    self.d_Label.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1];
+    self.d_Label.backgroundColor = [UIColor clearColor];
+    self.d_Label.font = [UIFont systemFontOfSize:10];
+    [self.contentView addSubview:self.d_Label];
     self.accessoryImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.accessoryImage.backgroundColor = [UIColor clearColor];
     self.accessoryImage.image = [UIImage imageNamed:@"settings_arrow.png"];
     [self.contentView addSubview:self.accessoryImage];
-    _cusSwitch = [[CusSwitch alloc] initWithFrame:CGRectMake(0 ,0 , 48, 20) IconImage:[UIImage imageNamed:@"iconImage.png"] TureImage:[UIImage imageNamed:@"tureImage.png"] falueimage:[UIImage imageNamed:@"falureImage.png"]];
+    
+    _cusSwitch = [[CusSwitch alloc] initWithFrame:CGRectMake(0 ,0 , 54, 22) IconImage:[UIImage imageNamed:@"iconImage.png"] TureImage:[UIImage imageNamed:@"tureImage.png"] falueimage:[UIImage imageNamed:@"falureImage.png"]];
     _cusSwitch.delegate = self;
     [self.contentView addSubview:_cusSwitch];
     _lineImageView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settingLine.png"]];
@@ -48,10 +55,11 @@
 }
 - (void)layoutMySubViews
 {
-    self.c_Label.frame = CGRectMake(8, 19 + offset , 320, 16);
+    self.c_Label.frame = CGRectMake(8, 19 + offset , 200, 16);
+    self.d_Label.frame = CGRectMake(10, 19 + offset + 18, 200, 12);
     self.accessoryImage.frame = CGRectMake(290 , 16 + offset, 21, 21);
     _lineImageView.frame = CGRectMake(0, 53 + offset, 320, 1);
-    _cusSwitch.frame = CGRectMake(320 - 58, 16 + offset , 48, 20);
+    _cusSwitch.frame = CGRectMake(320 - 62, 16 + offset , 54, 22);
 }
 
 - (void)setSectionTitle:(NSString *)title
@@ -89,6 +97,7 @@
 }
 - (void)cusSwitchValueChange:(CusSwitch *)cusSwitch
 {
+    if (cusSwitch.isHidden) return;
     if ([_delegate respondsToSelector:@selector(mySettingCell:didSwitchValueChange:)]) {
         [_delegate mySettingCell:self didSwitchValueChange:cusSwitch];
     }

@@ -172,7 +172,8 @@
         view.backgroundColor = [UIColor clearColor];
         view.clipsToBounds = YES;
         
-        UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 304, 304)];
+        CGFloat maxSize = MAX(view.frame.size.width, view.frame.size.height);
+        UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, maxSize, maxSize)];
         imageView.center = CGPointMake(view.frame.size.width /2.f, view.frame.size.height/2.f);
         [imageView setUserInteractionEnabled:YES];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];

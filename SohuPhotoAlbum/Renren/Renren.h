@@ -43,6 +43,7 @@
 	id <RenrenDelegate> _renrenDelegate;
 }
 
+
 @property(nonatomic, copy) NSString *accessToken;
 
 @property(nonatomic, copy) NSString *secret;

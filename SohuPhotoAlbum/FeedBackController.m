@@ -60,6 +60,7 @@
     self.view.backgroundColor = [UIColor colorWithRed:244.f/255 green:244.f/255 blue:244.f/255 alpha:1.f];
     UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
     imageView.image = [UIImage imageNamed:@"title_feedback.png"];
+    imageView.image = nil;
     [self.view addSubview:imageView];
     
     UILabel * titleLabel = [[UILabel alloc] init];

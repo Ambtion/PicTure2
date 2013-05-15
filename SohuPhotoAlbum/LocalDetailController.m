@@ -35,7 +35,7 @@
     //fix tabBar
     [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
     [self.tabBar.deleteButton setHidden:YES];
-    [self.tabBar.shareButton setHidden:YES];
+//    [self.tabBar.shareButton setHidden:YES];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -200,6 +200,7 @@
 {
     return [[UIApplication sharedApplication] delegate];
 }
+
 - (void)upPicture:(shareModel)model
 {
     switch (model) {
@@ -244,7 +245,7 @@
 - (void)request:(SinaWeiboRequest *)request didFinishLoadingWithResult:(id)result
 {
     //发送
-    if ([request.url hasSuffix:@"statuses/upload.json"])
+    if ([request.url hasSuffix:@"statuses/upload"])
     {
         if ([(NSDictionary *)result objectForKey:@"error"]) {
             [self showInvalidTokenOrOpenIDMessageWithMes:[(NSDictionary *)result objectForKey:@"error"]];

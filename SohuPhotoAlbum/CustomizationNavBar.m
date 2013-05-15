@@ -21,7 +21,8 @@
     uploadImageView.backgroundColor = [UIColor clearColor];
     uploadImageView.tag = 100;
     uploadImageView.animationImages = [NSArray arrayWithObjects:[UIImage imageNamed:@"upload.png"],
-                                       [UIImage imageNamed:@"upload2.png"],[UIImage imageNamed:@"upload3.png"],nil];
+                                       [UIImage imageNamed:@"upload1.png"],[UIImage imageNamed:@"upload2.png"],
+                                       [UIImage imageNamed:@"upload3.png"],[UIImage imageNamed:@"upload4.png"],nil];
     uploadImageView.animationDuration = 1.f;
     uploadImageView.animationRepeatCount = 0;
     uploadImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;

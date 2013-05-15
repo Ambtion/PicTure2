@@ -40,7 +40,8 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
-    
+    [_tableView reloadData];
+
     //三方登陆绑定页面
     _oauthorBindView = [[OauthirizeView alloc] initWithFrame:CGRectMake(0, 48, 320, 0)];
     [_oauthorBindView addtarget:self action:@selector(oauthorizeButtonClick:)];
@@ -57,6 +58,10 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     [super viewWillAppear:animated];
     [self setAccountView];
     [_tableView reloadData];
+    if (!_selectPath)
+        _selectPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [_tableView selectRowAtIndexPath:_selectPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+
 }
 #pragma mark AccoutView
 - (void)setAccountView
@@ -112,7 +117,8 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    self.view.userInteractionEnabled = NO;
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    _selectPath = indexPath;
     if (indexPath.row) {
         if (![LoginStateManager isLogin]) {
             [self accountView:nil fullScreenClick:nil];
@@ -154,11 +160,10 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 }
 
 #pragma mark - Delegate of SetttingControlelr
-- (void)settingControllerWillDisappear:(SettingController *)controller
+- (void)settingControllerDidDisappear:(SettingController *)controller
 {
     if (controller.isChangeLoginState && ![LoginStateManager isLogin]) {
         [self resetLeftMenu];
-        
     }else{
         [self.viewDeckController toggleLeftViewAnimated:NO];
     }

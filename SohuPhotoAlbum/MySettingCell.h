@@ -20,6 +20,7 @@
 }
 
 @property(nonatomic,strong)UILabel* c_Label;
+@property(nonatomic,strong)UILabel* d_Label;
 @property(nonatomic,strong)UIImageView * accessoryImage;
 @property(nonatomic,strong)UIImageView * lineImageView;
 @property(nonatomic,strong)CusSwitch * cusSwitch;

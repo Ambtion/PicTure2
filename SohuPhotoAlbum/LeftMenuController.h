@@ -26,5 +26,6 @@
     UITableView * _tableView;
     AccountView * _accountView;
     OauthirizeView * _oauthorBindView;
+    NSIndexPath * _selectPath;
 }
 @end

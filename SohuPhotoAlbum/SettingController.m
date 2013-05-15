@@ -13,9 +13,9 @@
 #import "RequestManager.h"
 #import "CacheManager.h"
 
-#define maxRow 7
+#define maxRow 8
 
-static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上传图片",@"清除缓冲",@"意见反馈",@"为搜狐相册打分",@"检测更新"};
+static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi环境上传",@"压缩上传图片",@"清除缓存",@"意见反馈",@"为搜狐相册打分",@"检查新版本"};
 
 @implementation SettingController
 @synthesize isChangeLoginState;
@@ -23,6 +23,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    isInit = YES;
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _myTableView.delegate = self;
@@ -32,7 +33,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     [self.view addSubview:_myTableView];
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
     UIButton * loginOutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginOutButton.frame = CGRectMake(0, 0, 115, 41);
+    loginOutButton.frame = CGRectMake(0, 0, 250, 41);
     [loginOutButton addTarget:self action:@selector(loginOut:) forControlEvents:UIControlEventTouchUpInside];
     [loginOutButton setImage:[UIImage imageNamed:@"loginOut.png"] forState:UIControlStateNormal];
     [view addSubview:loginOutButton];
@@ -51,6 +52,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     isChangeLoginState = NO;
     [self getUserInfo];
 }
+
 #pragma mark View lifeCircle
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -64,16 +66,15 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
 }
 - (void)cancelLogin:(UIButton *)button
 {
-    if ([_delegate respondsToSelector:@selector(settingControllerWillDisappear:)]) {
-        [_delegate settingControllerWillDisappear:self];
-    }
     if (self.navigationController) {
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (self.presentingViewController) {
         [self.presentingViewController dismissModalViewControllerAnimated:YES];
     }
-    
+    if ([_delegate respondsToSelector:@selector(settingControllerDidDisappear:)]) {
+        [_delegate settingControllerDidDisappear:self];
+    }
 }
 #pragma mark - UserInfo
 - (void)getUserInfo
@@ -81,7 +82,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     if ([LoginStateManager isLogin]) {
         [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
             userInfodic = [response JSONValue];
-            NSLog(@"%@",userInfodic);
             [_myTableView reloadData];
         } failure:^(NSString *error) {
             
@@ -125,14 +125,18 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
         infoCell.dataSource = dataSource;
         return infoCell;
     }
+    
     MySettingCell * cell = [tableView dequeueReusableCellWithIdentifier:@"CELL"];
     if (!cell){
         cell = [[MySettingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL"];
-        cell.delegate = self;
     }
+    //sectionTitle
     [cell setSectionTitle:[self getSectionByIndexpath:indexPath]];
+    //title
     cell.c_Label.text = titleOfRow[indexPath.row];
-    
+    //detail
+    cell.d_Label.text  = [self getDetaiStringByIndexpath:indexPath];
+    //accestory
     if (indexPath.row == 4) {
         [cell.accessoryImage setHidden:NO];
     }else{
@@ -143,12 +147,14 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     }else{
         [cell.lineImageView setHidden:NO];
     }
-    if (indexPath.row == 1 || indexPath.row == 2) {
+    //设置选择开关
+    if (indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3) {
         [self setDifCellSwithcByRow:indexPath.row cell:cell];
     }else{
         [cell.cusSwitch setHidden:YES];
-        
     }
+    if (indexPath.row == maxRow)
+        isInit = NO;
     return cell;
 }
 - (void)setDifCellSwithcByRow:(NSInteger)row cell:(MySettingCell *)cell
@@ -160,12 +166,16 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
             isTure  = [PerfrenceSettingManager isAutoUpload];
             break;
         case 2:
+            isTure  = [PerfrenceSettingManager WifiLimitedAutoUpload];
+            break;
+        case 3:
             isTure  = [PerfrenceSettingManager isUploadJPEGImage];
             break;
         default:
             break;
     }
     cell.cusSwitch.isTure = isTure;
+    cell.delegate = self;
 }
 - (NSString *)getSectionByIndexpath:(NSIndexPath *)path
 {
@@ -175,8 +185,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
             break;
         case 1:
             return @"同步设置";
-            //        case 4:
-            //            return @"分享设置";
         case 4:
             return @"其他设置";
         default:
@@ -184,7 +192,17 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
     }
     return nil;
 }
-
+- (NSString *)getDetaiStringByIndexpath:(NSIndexPath *)path
+{
+    switch (path.row) {
+        case 1:
+            return @"您上传的图片仅限自己查看";
+            break;
+        case 2:
+            return @"图片自动同步时";
+    }
+    return nil;
+}
 #pragma mark  Action
 - (void)mySettingCell:(MySettingCell *)cell didSwitchValueChange:(CusSwitch *)Aswitch
 {
@@ -193,6 +211,9 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
         [PerfrenceSettingManager setIsAutoUpload:[Aswitch isTure]];
     }
     if (path.row == 2) {
+        [PerfrenceSettingManager setWifiLimited:[Aswitch isTure]];
+    }
+    if (path.row == 3) {
         [PerfrenceSettingManager setIsUploadJPEGImage:[Aswitch isTure]];
     }
 }
@@ -200,17 +221,17 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"压缩上�
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
-        case 3: //清除缓冲
+        case 4: //清除缓冲
             _cache = [[PopAlertView alloc] initWithTitle:@"确认清除缓存" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
             [_cache show];
             break;
-        case 4: //反馈
+        case 5: //反馈
             [self.navigationController pushViewController:[[FeedBackController alloc] init] animated:YES];
             break;
-        case 5: //打分
+        case 6: //打分
             [self rating];
             break;
-        case 6: //更新
+        case 7: //更新
             [self onCheckVersion];
             break;
         default:
