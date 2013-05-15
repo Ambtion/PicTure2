@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B89A47021743C0E500CA16DC /* DetailTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = B89A47011743C0E500CA16DC /* DetailTextView.m */; };
+		B89A47041743C0F200CA16DC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B89A47031743C0F200CA16DC /* CoreText.framework */; };
 		C502265E170300B400B77FC9 /* CustomizationNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C502265D170300B400B77FC9 /* CustomizationNavBar.m */; };
 		C5022661170301A700B77FC9 /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = C5022660170301A700B77FC9 /* list.png */; };
 		C502266A170301B600B77FC9 /* grid-view.png in Resources */ = {isa = PBXBuildFile; fileRef = C5022663170301B600B77FC9 /* grid-view.png */; };
@@ -338,6 +340,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B89A47001743C0E500CA16DC /* DetailTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailTextView.h; sourceTree = "<group>"; };
+		B89A47011743C0E500CA16DC /* DetailTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailTextView.m; sourceTree = "<group>"; };
+		B89A47031743C0F200CA16DC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		C502265C170300B400B77FC9 /* CustomizationNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomizationNavBar.h; sourceTree = "<group>"; };
 		C502265D170300B400B77FC9 /* CustomizationNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomizationNavBar.m; sourceTree = "<group>"; };
 		C5022660170301A700B77FC9 /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
@@ -836,6 +841,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B89A47041743C0F200CA16DC /* CoreText.framework in Frameworks */,
 				C583A8AE17141AEF00DAC141 /* libz.dylib in Frameworks */,
 				C583A8311714198C00DAC141 /* Security.framework in Frameworks */,
 				C584D141170BC3CF00ACCD7C /* MobileCoreServices.framework in Frameworks */,
@@ -1277,6 +1283,7 @@
 		C588B09B17003032006BBC34 = {
 			isa = PBXGroup;
 			children = (
+				B89A47031743C0F200CA16DC /* CoreText.framework */,
 				C588B0AD17003032006BBC34 /* SohuPhotoAlbum */,
 				C588B0A617003032006BBC34 /* Frameworks */,
 				C588B0A517003032006BBC34 /* Products */,
@@ -1452,6 +1459,8 @@
 				C58A5735171E87DC003B6817 /* PhotoStoryController.m */,
 				C58A5737171E8CE9003B6817 /* PhotoStoryCell.h */,
 				C58A5738171E8CE9003B6817 /* PhotoStoryCell.m */,
+				B89A47001743C0E500CA16DC /* DetailTextView.h */,
+				B89A47011743C0E500CA16DC /* DetailTextView.m */,
 				C58A573E171E90BC003B6817 /* StoryCommentView.h */,
 				C58A573F171E90BC003B6817 /* StoryCommentView.m */,
 				C58A573B171E8EF7003B6817 /* StoryFootView.h */,
@@ -2262,6 +2271,7 @@
 				C5A8460E1738B21900E57476 /* ShareViewController.m in Sources */,
 				C5940424173A09E500AA9B04 /* GTMBase64.m in Sources */,
 				C5830C721740C11C00E56AC8 /* CacheManager.m in Sources */,
+				B89A47021743C0E500CA16DC /* DetailTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

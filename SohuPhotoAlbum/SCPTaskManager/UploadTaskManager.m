@@ -33,12 +33,12 @@ static UploadTaskManager * sharedTaskManager = nil;
     return isAutoUploading;
 }
 
-- (void)autoUploadAssets:(NSMutableArray *)array ToTaskExceptIsUPloadAlready:(BOOL)isExceptAlready
+- (void)autoUploadAssets:(NSMutableArray *)array ToTaskIncludeAssetThatUploaded:(BOOL)isUploadAll
 {
     isAutoUploading = YES;
     NSMutableArray * taskArray = [NSMutableArray arrayWithCapacity:0];
     for (ALAsset * asset in array) {
-        if (isExceptAlready) {
+        if (!isUploadAll) {
             if (![[DataBaseManager defaultDataBaseManager] hasPhotoURL:[[asset defaultRepresentation] url]]) {
                 TaskUnit * unit = [[TaskUnit alloc] init];
                 unit.asset = asset;

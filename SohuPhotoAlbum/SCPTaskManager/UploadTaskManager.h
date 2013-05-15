@@ -44,7 +44,6 @@
 - (void)uploadPicTureWithArray:(NSMutableArray *)assetArray autoUpload:(BOOL)uploadState;
 
 #pragma mark view
-//管理相册列表上传进度
 
 //管理照片列表下载进度
 - (AlbumTaskList *)getAlbumTaskWithAlbum:(NSString *)albumId;
@@ -57,5 +56,5 @@
 - (BOOL)isAutoUploading;
 
 //自动批量上传
-- (void)autoUploadAssets:(NSMutableArray *)array ToTaskExceptIsUPloadAlready:(BOOL)isExceptAlready;
+- (void)autoUploadAssets:(NSMutableArray *)array ToTaskIncludeAssetThatUploaded:(BOOL)isUploadAll;
 @end

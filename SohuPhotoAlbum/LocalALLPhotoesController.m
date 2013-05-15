@@ -103,7 +103,7 @@
     //自动上传
     if ([LoginStateManager isLogin] && [PerfrenceSettingManager isAutoUpload]) {
         if (![[UploadTaskManager currentManager] isAutoUploading]) {
-            [[UploadTaskManager currentManager] autoUploadAssets:self.assetsArray ToTaskExceptIsUPloadAlready:YES];
+            [[UploadTaskManager currentManager] autoUploadAssets:self.assetsArray ToTaskIncludeAssetThatUploaded:NO];
         }
     }
 }
