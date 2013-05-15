@@ -2337,8 +2337,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Zhuo Yang (42249AX4WA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Zhuo Yang (42249AX4WA)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2352,8 +2352,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5390D9BF-A9CF-4CFC-9028-0E64FA9D44FE";
+				PROVISIONING_PROFILE = "B09CE9EE-06BA-42A7-A607-582CDD0AFF2B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B09CE9EE-06BA-42A7-A607-582CDD0AFF2B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2362,8 +2362,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Zhuo Yang (42249AX4WA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Zhuo Yang (42249AX4WA)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2377,8 +2377,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5390D9BF-A9CF-4CFC-9028-0E64FA9D44FE";
+				PROVISIONING_PROFILE = "B09CE9EE-06BA-42A7-A607-582CDD0AFF2B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B09CE9EE-06BA-42A7-A607-582CDD0AFF2B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -40,7 +40,8 @@
 
 //上传接口
 - (void)uploadPicTureWithALasset:(ALAsset *)asset;
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray;
+
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray autoUpload:(BOOL)uploadState;
 
 #pragma mark view
 //管理相册列表上传进度

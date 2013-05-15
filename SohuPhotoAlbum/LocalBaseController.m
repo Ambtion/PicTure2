@@ -58,9 +58,8 @@
 
 - (void)uploadPicTureWithArray:(NSMutableArray *)assetArray
 {
-    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray];
+    [[UploadTaskManager currentManager] uploadPicTureWithArray:assetArray autoUpload:NO];
 }
-
 #pragma mark SetViewState
 - (void)setViewState:(viewState)viewState
 {

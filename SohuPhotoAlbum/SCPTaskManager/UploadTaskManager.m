@@ -51,6 +51,7 @@ static UploadTaskManager * sharedTaskManager = nil;
         ToastAlertView * cus = [[ToastAlertView alloc] initWithTitle:@"照片开始备份"];
         [cus show];
         AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:taskArray album_id:ALBUMID];
+        album.isAutoUploadState = YES;
         [[UploadTaskManager currentManager] addTaskList:album];
     }
 }
@@ -302,9 +303,10 @@ static UploadTaskManager * sharedTaskManager = nil;
 #pragma mark upload
 - (void)uploadPicTureWithALasset:(ALAsset *)asset
 {
-    [self uploadPicTureWithArray:[NSMutableArray arrayWithObject:asset]];
+    [self uploadPicTureWithArray:[NSMutableArray arrayWithObject:asset] autoUpload:NO];
 }
-- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray 
+
+- (void)uploadPicTureWithArray:(NSMutableArray *)assetArray autoUpload:(BOOL)uploadState
 {
     if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
         [self showNetWorkAlertView];
@@ -319,6 +321,7 @@ static UploadTaskManager * sharedTaskManager = nil;
         [array addObject:unit];
     }
     AlbumTaskList * album = [[AlbumTaskList alloc] initWithTaskList:array album_id:ALBUMID];
+    album.isAutoUploadState = uploadState;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[UploadTaskManager currentManager] addTaskList:album];
     });

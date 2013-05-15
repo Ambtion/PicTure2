@@ -30,6 +30,7 @@
 }
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
 
+@property (assign, nonatomic) BOOL isAutoUploadState;
 
 @property (weak, nonatomic) id<AlbumTaskListDelegate> delegate;
 

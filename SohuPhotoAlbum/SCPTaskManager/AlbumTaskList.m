@@ -18,6 +18,7 @@
 @implementation AlbumTaskList
 
 @synthesize backgroundUpdateTask;
+@synthesize isAutoUploadState;
 @synthesize taskList = _taskList;
 @synthesize albumId = _albumId;
 @synthesize isUpLoading = _isUpLoading;
@@ -180,9 +181,13 @@
 - (void)startToNext
 {
     //开始下一任务
+    if (self.isAutoUploadState && ![PerfrenceSettingManager isAutoUpload] ) {
+        [[UploadTaskManager currentManager] cancelAllOperation];
+        self.isAutoUploadState = NO;
+        return;
+    }
     if (self.taskList.count) {
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
-            
             if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
                 [self postNotification];
                 [self endBackgroundUpdateTask];
@@ -191,10 +196,9 @@
                 [self beginBackgroundUpdateTask];
                 [self startNextTaskUnit];
             }
-            
         }else{
-            
             [self endBackgroundUpdateTask];
+            
             if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
                 [self showNetWorkAlertView];
             }else{
