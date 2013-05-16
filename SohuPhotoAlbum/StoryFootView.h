@@ -12,7 +12,13 @@
 @protocol StoryFootViewDelegate <NSObject>
 - (void)storyFootView:(StoryFootView *)view clickButtonAtIndex:(NSInteger)index;
 @end
+
 @interface StoryFootView : UIImageView
+{
+    BOOL ishiddenDelete;
+    UIButton * _likeButton;
+}
 @property(weak,nonatomic)id<StoryFootViewDelegate> delegate;
-@property(nonatomic,strong)UIButton * likeButton;
+- (void)setLikeStateTolike:(BOOL)isLike;
+- (id)initWitFrame:(CGRect)frame thenHiddenDeleteButton:(BOOL)isHidden;
 @end

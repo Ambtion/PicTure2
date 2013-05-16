@@ -51,7 +51,24 @@
         [tip show];
         return;
     }
-   //
+    [self feedBackWithidea:_textView.text];
+}
+- (void)feedBackWithidea:(NSString *)idea
+{
+    UMFeedback * umFeedBack = [UMFeedback sharedInstance];
+	[umFeedBack setAppkey:UM_APP_KEY delegate:self];
+	NSMutableDictionary * dic = [NSMutableDictionary dictionary];
+	[dic setObject:idea forKey:@"content"];
+	[dic setObject:[NSDictionary dictionaryWithObject:[LoginStateManager currentUserId] forKey:@"user_id"] forKey:@"contact"];
+	[umFeedBack post:dic];
+}
+- (void)postFinishedWithError:(NSError *)error
+{
+    if (error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"反馈失败"];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"成功提交,感谢您的反馈"];
+    }
 }
 #pragma mark -
 - (void)addSubviews

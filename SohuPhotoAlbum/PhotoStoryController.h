@@ -13,6 +13,7 @@
 #import "PhotoStoryCell.h"
 #import "ShareViewController.h"
 #import "RequestManager.h"
+#import "TitleAccountView.h"
 
 @interface PhotoStoryController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
                             SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,PhotoStoryCellDelegate,UIActionSheetDelegate>
@@ -21,7 +22,10 @@
     EGORefreshTableHeaderView * _refresHeadView;
     SCPMoreTableFootView * _moreFootView;
     NSMutableArray * _dataSourceArray;
+    NSMutableArray * _assetArray;
+
     CustomizationNavBar * _navBar;
+    TitleAccountView * _titleAccoutView;
     shareModel model;
     PhotoStoryCellDataSource * _shareDateSource;
     BOOL _isShareAll;

@@ -12,6 +12,7 @@
 {
     NSMutableAttributedString *resultAttributedString;
 }
+
 -(void)setKeyWordTextArray:(NSArray *)keyWordArray WithFont:(UIFont *)font AndColor:(UIColor *)keyWordColor;
 -(void)setText:(NSString *)text WithFont:(UIFont *)font AndColor:(UIColor *)color;
 

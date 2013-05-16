@@ -44,7 +44,6 @@
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
 //    _myTableView.tableFooterView = _moreFootView;
-    
     _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 5, 77, 20)];
     [_timelabel setHidden:YES];
     [self.view addSubview:_timelabel];
@@ -59,6 +58,7 @@
 }
 - (void)addDataSourceWith:(NSArray *)array
 {
+    DLog(@"ownId:%@ %@",ownerID,array);
     for (int i = 0; i < array.count; i++) {
         PhotoWallCellDataSource * source = [self getCellDataSourceFromDic:[array objectAtIndex:i]];
         if (source)
@@ -72,8 +72,7 @@
     PhotoWallCellDataSource * dataSource = [[PhotoWallCellDataSource alloc] init];
     dataSource.wallId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
     NSArray * phtotArray = [dic objectForKey:@"photos"];
-    if (!phtotArray || !phtotArray.count)
-            return nil;
+    if (!phtotArray || !phtotArray.count) return nil;
     dataSource.imageWallInfo = phtotArray;
     dataSource.wallDescription = [dic objectForKey:@"description"];
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
@@ -81,9 +80,10 @@
     dataSource.talkCount =[[dic objectForKey:@"comment_num"] intValue];
     dataSource.photoCount = [[dic objectForKey:@"photo_num"] intValue];
     dataSource.isLiking = [[dic objectForKey:@"is_liked"] boolValue];
-    dataSource.OwnerISMe = YES;
+    dataSource.isMine = [self isMineWithOwnerId:self.ownerID];
     return dataSource;
 }
+
 - (NSString *)stringFromdate:(NSDate *)date
 {
     //转化日期格式
@@ -96,6 +96,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationItem setHidesBackButton:YES];
+    
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLabelText setText:@"图片墙"];
@@ -106,6 +107,15 @@
         self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
     }else{
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    }
+    if (![self isMineWithOwnerId:self.ownerID]) {
+        [_navBar.nLabelText setText:nil];
+        if (!_titleAccoutView) {
+            _titleAccoutView = [[TitleAccountView alloc] initWithFrame:CGRectMake(46, 0, 200, 44)];
+            _titleAccoutView.userId = self.ownerID;
+            [_navBar addSubview:_titleAccoutView];
+        }
+        [_titleAccoutView refreshUserInfo];
     }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];

@@ -13,6 +13,7 @@
 #define TITLE_DES @"200字以内"
 
 @implementation MakeCommentView
+@synthesize delegte = _delegte;
 @synthesize textView = _textView;
 @synthesize textCountLimit = _textCountLimit;
 @synthesize comentButton = _comentButton;
@@ -32,7 +33,6 @@
         imageView.autoresizingMask =  UIViewAutoresizingFlexibleHeight;
         [self addSubview:imageView];
         
-        
         _commenBgView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 6, 259, 26)];
         _commenBgView.image = [[UIImage imageNamed:@"commentBar_textBg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(13, 100, 13, 100)];
         _commenBgView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -42,7 +42,7 @@
         //243
         _textView = [[UITextView alloc] initWithFrame:CGRectMake(8, 3, _commenBgView.frame.size.width - 16, _commenBgView.frame.size.height - 6)];
         _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        _textView.backgroundColor = [UIColor redColor];
+        _textView.backgroundColor = [UIColor clearColor];
         _textView.font =  [UIFont fontWithName:@"STHeitiTC-Medium" size:14];
         _textView.returnKeyType = UIReturnKeySend;
         _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -60,16 +60,19 @@
         _comentButton.frame = CGRectMake(269, 10, 45, 26);
         [_comentButton setImage:[UIImage imageNamed:@"commentBar_Button.png"] forState:UIControlStateNormal];
         _comentButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        [_comentButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_comentButton];
+        
     }
     return self;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-//    if ([text isEqualToString:@"\n"]) {
-//        [self resetTextViewFiled];
-//    }
+    if ([text isEqualToString:@"\n"]) {
+        [self buttonClick:nil];
+        return NO;
+    }
     NSUInteger newLength = [textView.text length] + [text length] - range.length;
     return (newLength >(_textCountLimit ? _textCountLimit:DESC_COUNT_LIMIT) )? NO : YES;
 }
@@ -101,10 +104,7 @@
     tap.delegate = self;
     [view addGestureRecognizer:tap];
 }
-- (void)commentbuttonAddtar:(id)target action:(SEL)action
-{
-    [_comentButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if ([[touch view] isKindOfClass:[UIButton class]] || [[touch view] isKindOfClass:[UITextView class]] )
@@ -115,5 +115,12 @@
 - (void)handleGuesture:(UITapGestureRecognizer *)gesture
 {
     [_textView resignFirstResponder];
+}
+
+- (void)buttonClick:(UIButton *)button
+{
+    if ([_delegte respondsToSelector:@selector(makeCommentView:commentClick:)]) {
+        [_delegte makeCommentView:self commentClick:button];
+    }
 }
 @end

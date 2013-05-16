@@ -6,9 +6,9 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "AccountView.h"
+#import "LeftAccountView.h"
 
-@implementation AccountView
+@implementation LeftAccountView
 @synthesize portraitImageView;
 @synthesize nameLabel;
 @synthesize desLabel;

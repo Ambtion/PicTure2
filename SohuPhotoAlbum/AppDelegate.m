@@ -14,6 +14,8 @@
 #import "Projectconfig.h"
 #import "UploadTaskManager.h"
 
+#import "UMAppKey.h"
+
 @implementation AppDelegate
 @synthesize window = _window;
 @synthesize assetsLibrary;
@@ -38,6 +40,8 @@
     [self.window makeKeyAndVisible];
     //INIT DATABASE
     [DataBaseManager defaultDataBaseManager];
+    //umeng
+    [MobClick startWithAppkey:UM_APP_KEY];
     return YES;
 }
 

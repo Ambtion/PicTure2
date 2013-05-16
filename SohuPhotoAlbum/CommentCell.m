@@ -47,7 +47,7 @@
     UITapGestureRecognizer * ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleUserPortraitTap:) ];
     [porViews addGestureRecognizer:ges];
     
-    commentbgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"commentbgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 25, 5, 25)]];
+    commentbgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"commentbgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 10, 45, 25)]];
     [self.contentView addSubview:commentbgView];
     nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 12, 200, 20)];
     [self setusernameLabel];
@@ -82,7 +82,8 @@
 }
 - (void)updateViews
 {
-    [porViews.imageView setImageWithURL:[NSURL URLWithString:_dataSource.portraitUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+//    [porViews.imageView setImageWithURL:[NSURL URLWithString:_dataSource.portraitUrl] placeholderImage:[UIImage imageNamed:@"1.jpg"]];
+    porViews.imageView.image = [UIImage imageNamed:@"nicheng.png"];
     nameLabel.text = [NSString stringWithFormat:@"%@:",_dataSource.userName];
     CGSize size = [_dataSource.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
     CGRect rect = CGRectMake(68, 35, size.width, size.height);

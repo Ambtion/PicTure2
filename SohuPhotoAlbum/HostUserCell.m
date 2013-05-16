@@ -7,9 +7,10 @@
 //
 
 #import "HostUserCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation HostUserCellDataSource
-@synthesize portrait,userName,accountName;
+@synthesize userId,portrait,userName,accountName;
 @end
 
 @implementation HostUserCell
@@ -19,10 +20,14 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleGray;
-        _portraitView = [[PortraitView alloc] initWithFrame:CGRectMake(10, 5, 42, 42)];
-        _portraitView.layer.cornerRadius = 21.f;
-//        _portraitView.layer.borderColor = [[UIColor colorWithRed:217.f/255 green:217.f/255 blue:217.f/255 alpha:1.f] CGColor];
-//        _portraitView.layer.borderWidth = 1.f;
+        _portraitView = [[PortraitView alloc] initWithFrame:CGRectMake(10, 10, 42, 42)];
+//        _portraitView.layer.cornerRadius = 21.f;
+        _portraitView.clipsToBounds = YES;
+        _portraitView.layer.cornerRadius = 5.f;
+        _portraitView.layer.borderWidth = 1.f;
+        _portraitView.layer.borderColor = [[UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.f] CGColor];
+        _portraitView.backgroundColor = [UIColor clearColor];
+        
         [self.contentView addSubview:_portraitView];
         _userName = [[UILabel alloc] initWithFrame:CGRectMake(63, 10, 200, 18)];
         [self  setUserNameLabel];
@@ -30,6 +35,10 @@
         _accounName = [[UILabel alloc] initWithFrame:CGRectMake(63, 30, 200, 16)];
         [self  setAcountNameLabel];
         [self.contentView addSubview:_accounName];
+        UIImageView * line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settingLine.png"]];
+        line.frame = CGRectMake(0, self.frame.size.height - 1, 320, 1);
+        line.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        [self.contentView addSubview:line];
     }
     return self;
 }
@@ -48,7 +57,6 @@
     _accounName.font = [UIFont systemFontOfSize:14];
     _accounName.textAlignment = UITextAlignmentLeft;
 }
-
 #pragma mark dataSource
 - (void)setDataSource:(HostUserCellDataSource *)dataSource
 {
@@ -59,7 +67,7 @@
 }
 - (void)updataViews
 {
-    _portraitView.imageView.image = [UIImage imageNamed:_dataSource.portrait];
+    [_portraitView.imageView setImageWithURL:[NSURL URLWithString:_dataSource.portrait]];
     _userName.text  = _dataSource.userName;
     _accounName.text = _dataSource.accountName;
 }

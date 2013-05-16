@@ -81,7 +81,7 @@
 @end
 
 @implementation PhotoWallCellDataSource
-@synthesize wallId,imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount,OwnerISMe,isLiking;
+@synthesize wallId,imageWallInfo,wallDescription,shareTime,talkCount,likeCount,photoCount,isMine,isLiking;
 - (CGFloat)getCellHeigth
 {
     if (imageWallInfo.count) {
@@ -192,7 +192,7 @@
         rect.size.width = 32.f;
         rect.size.height = 22.f;
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteButton setImage:[UIImage imageNamed:@"stroyDeleteButton.png"] forState:UIControlStateNormal];
+        [_deleteButton setImage:[UIImage imageNamed:@"WallDeleteButton.png"] forState:UIControlStateNormal];
         [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         _deleteButton.frame = rect;
         [self.contentView addSubview:_deleteButton];
@@ -232,7 +232,7 @@
     _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
     _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
     _countLabel.text = [NSString stringWithFormat:@"%d",_dataSource.photoCount];
-    [_deleteButton setHidden:![_dataSource OwnerISMe]];
+    [_deleteButton setHidden:![_dataSource isMine]];
     _backImageView.frame = CGRectMake(0, 0, self.bounds.size.width, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY);
     if (_dataSource.isLiking) {
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon1.png"] forState:UIControlStateNormal];

@@ -8,6 +8,8 @@
 
 #import "StatusImageView.h"
 
+#define BorderWidth 0.0f
+
 @implementation StatusImageView
 @synthesize selected = _selected;
 @synthesize isShowStatus;
@@ -19,11 +21,17 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        _actualView = [[UIImageView alloc] initWithFrame:self.bounds];
-        [self addSubview:_actualView];
-        _actualView.layer.borderColor = [[UIColor colorWithRed:192.f/255.f green:192.f/255.f blue:192.f/255.f alpha:1.f]CGColor];
-        _actualView.layer.shadowPath = [[UIBezierPath bezierPathWithRect:_actualView.bounds] CGPath];
-        _actualView.layer.borderWidth = 0.5f;
+        UIView * view = [[UIView alloc] initWithFrame:self.bounds];
+        view.backgroundColor = [UIColor clearColor];
+        
+        _actualView = [[UIImageView alloc] initWithFrame:CGRectMake(-1, -1, self.bounds.size.width + 2, self.bounds.size.height + 2)];
+        [view addSubview:_actualView];
+        view.clipsToBounds = YES;
+        [self addSubview:view];
+//        [self addSubview:_actualView];
+//        _actualView.layer.borderColor = [[UIColor colorWithRed:192.f/255.f green:192.f/255.f blue:192.f/255.f alpha:1.f]CGColor];
+//        _actualView.layer.shadowPath = [[UIBezierPath bezierPathWithRect:_actualView.bounds] CGPath];
+//        _actualView.layer.borderWidth = 0.0f;
 //        _actualView.layer.shouldRasterize = YES;
         _statuImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _statuImage.backgroundColor = [UIColor clearColor];
@@ -59,7 +67,6 @@
     isUpload = YES;
     [self uploadStatus];
 }
-
 - (void)uploadStatus
 {
     if (!isShowStatus)
@@ -71,10 +78,10 @@
     if (isUpload) {
         [_actualView setAlpha:0.5];
         [_statuImage setImage:[UIImage imageNamed:@"upload_pic.png"]];
-        [self shouldShowAcutalViewLayer:YES];
+//        [self shouldShowAcutalViewLayer:YES];
     }else{
         [_actualView setAlpha:0.5], [_statuImage setImage:nil];
-        [self shouldShowAcutalViewLayer:NO];
+//        [self shouldShowAcutalViewLayer:NO];
     }
 }
 - (void)resetStatusImageToHidden
@@ -94,11 +101,12 @@
 - (void)shouldShowAcutalViewLayer:(BOOL)isShow
 {
     if (isShow || _actualView.image) {
-        [_actualView.layer setBorderWidth:0.5f];
+        [_actualView.layer setBorderWidth:BorderWidth];
     }else{
         [_actualView.layer setBorderWidth:0.0f];
     }
 }
+
 #pragma mark - Reloadfunctions
 - (void)setImage:(UIImage *)image
 {
@@ -107,7 +115,7 @@
         _actualView.layer.borderWidth = 0.f;
     }else{
         [self setUserInteractionEnabled:YES];
-        _actualView.layer.borderWidth = 0.5f;
+        _actualView.layer.borderWidth = BorderWidth;
     }
     _actualView.image = image;
 }
@@ -115,5 +123,4 @@
 {
     return _actualView.image;
 }
-
 @end

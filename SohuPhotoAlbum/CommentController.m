@@ -45,11 +45,16 @@
     _myBgView  = [[UIImageView alloc] initWithFrame:_myTableView.bounds];
     _myBgView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_myBgView];
+    UIImageView * maskImageView = [[UIImageView alloc] initWithFrame:_myBgView.bounds];
+    [_myBgView addSubview:maskImageView];
+    maskImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    maskImageView.backgroundColor = [UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.5];
     self.view.clipsToBounds = YES;
     __weak UIImageView * bgViewSelf = _myBgView;
     __weak CommentController * weakSelf = self;
     [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.imageUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
         CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
+//        bgViewSelf.alpha = 0.5;
         bgViewSelf.frame = (CGRect){0,0,size};
         bgViewSelf.center = CGPointMake(weakSelf.view.bounds.size.width /2.f, weakSelf.view.bounds.size.height /2.f);
     } failure:^(NSError *error) {
@@ -78,8 +83,8 @@
 {
     commentView = [[MakeCommentView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 38, 320, 38)];
     [self.view addSubview:commentView];
+    commentView.delegte = self;
     [commentView addresignFirTapOnView:self.view];
-    [commentView commentbuttonAddtar:self action:@selector(commetButtonClick:)];
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(commentkeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(commentkeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -118,6 +123,7 @@
     [_navBar removeFromSuperview];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
 }
+
 #pragma mark KeyBord
 - (void)commentkeyboardWillShow:(NSNotification *)notification
 {
@@ -220,12 +226,11 @@
     } failure:^(NSString *error) {
         [self doneRefrshLoadingTableViewData];
     }];
-    [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
+    [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
         userInfo = [response JSONValue];
     } failure:^(NSString *error) {
         
     }];
-    
 }
 - (void)addDataSourceWithArray:(NSArray *)array
 {
@@ -301,5 +306,9 @@
 - (void)commentCell:(CommentCell *)cell clickPortrait:(id)sender
 {
     [self.navigationController pushViewController:[[PhotoWallController alloc] initWithOwnerID:[[cell dataSource] userId] isRootController:NO] animated:YES];
+}
+- (void)makeCommentView:(MakeCommentView *)view commentClick:(UIButton *)button
+{
+    [self commetButtonClick:button];
 }
 @end

@@ -27,3 +27,7 @@
 @interface UIViewController(libiary)
 - (ALAssetsLibrary *)libiary;
 @end
+
+@interface UIViewController(isMine)
+- (BOOL)isMineWithOwnerId:(NSString *)ownerID;
+@end

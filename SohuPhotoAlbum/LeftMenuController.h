@@ -16,15 +16,15 @@
 
 #import "LoginStateManager.h"
 #import "LoginViewController.h"
-#import "AccountView.h"
+#import "LeftAccountView.h"
 #import "OauthirizeView.h"
 #import "SettingController.h"
 #import "MenuCell.h"
 
-@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,AccountViewDelegate,SettingControllerDelegate>
+@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,LeftAccountViewDelegate,SettingControllerDelegate>
 {
     UITableView * _tableView;
-    AccountView * _accountView;
+    LeftAccountView * _accountView;
     OauthirizeView * _oauthorBindView;
     NSIndexPath * _selectPath;
 }

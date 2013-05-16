@@ -11,6 +11,7 @@
 
 
 @interface HostUserCellDataSource : NSObject
+@property(strong,nonatomic)NSString * userId;
 @property(strong,nonatomic)NSString * portrait;
 @property(strong,nonatomic)NSString * userName;
 @property(strong,nonatomic)NSString * accountName;

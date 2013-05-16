@@ -24,7 +24,6 @@
 @property(strong,nonatomic)UIImageView * portraitView;
 @property(strong,nonatomic)DetailTextView * userName;
 @property(strong,nonatomic)UILabel * shareTime;
-@property(strong,nonatomic)UILabel * commentLabel;
 @property(strong,nonatomic)StoryCommentViewDataSource * dataScoure;
 - (void)addtarget:(id)target action:(SEL)action;
 

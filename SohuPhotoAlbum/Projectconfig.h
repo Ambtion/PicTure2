@@ -7,7 +7,7 @@
 //
 
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #ifndef PROJECTCONFIG
 #define PROJECTCONFIG

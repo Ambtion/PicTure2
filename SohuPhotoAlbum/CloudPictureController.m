@@ -334,7 +334,6 @@
 #pragma mark Action
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
-    
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
@@ -361,7 +360,6 @@
                                                            RinghTime:&rightTime];
     CloundDetailController * cd = [[CloundDetailController alloc] initWithAssetsArray:array andCurAsset:dic];
     cd.sectionArray = self.assetsSection;
-    cd.assetDictionaary = self.assetDictionary;
     cd.leftBoundsDays = leftTime;
     cd.rightBoudsDays = rightTime;
     [self.navigationController pushViewController:cd animated:YES];
@@ -444,6 +442,7 @@
     }
     return array;
 }
+
 #pragma mark Share
 - (void)showShareView
 {

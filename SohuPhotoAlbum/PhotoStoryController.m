@@ -12,6 +12,7 @@
 #import "LoginStateManager.h"
 #import "PhotoWallController.h"
 #import "UIImageView+WebCache.h"
+#import "AlBumDetailController.h"
 
 @implementation PhotoStoryController
 @synthesize storyID,ownerID;
@@ -41,10 +42,10 @@
     _refresHeadView.delegate = self;
     [_myTableView addSubview:_refresHeadView];
     [self.view addSubview:_myTableView];
-    
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
+    _assetArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
     
 }
@@ -59,6 +60,15 @@
         [_navBar.nLabelText setText:@"图片墙"];
         [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
+    if (![self isMineWithOwnerId:self.ownerID]) {
+        [_navBar.nLabelText setText:nil];
+        if (!_titleAccoutView) {
+            _titleAccoutView = [[TitleAccountView alloc] initWithFrame:CGRectMake(46, 0, 200, 44)];
+            _titleAccoutView.userId = self.ownerID;
+            [_navBar addSubview:_titleAccoutView];
+        }
+        [_titleAccoutView refreshUserInfo];
+    }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
@@ -71,7 +81,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_navBar removeFromSuperview];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
 - (void)viewDidDisappear:(BOOL)animated
@@ -134,6 +143,7 @@
 {
     [RequestManager getAllPhototInStoryWithOwnerId:self.ownerID stroyId:self.storyID start:0 count:20 success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
+        [_assetArray removeAllObjects];
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
         [self doneRefrshLoadingTableViewData];
     } failure:^(NSString *error) {
@@ -156,6 +166,9 @@
     }];}
 - (void)addSoruceFromArray:(NSArray *)array
 {
+    if (array.count)
+    NSLog(@"%@",[array lastObject]);
+    [_assetArray addObjectsFromArray:array];
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
     [_myTableView reloadData];
@@ -217,7 +230,7 @@
     static NSString * str = @"CELLID";
     PhotoStoryCell * cell = [tableView dequeueReusableCellWithIdentifier:str];
     if (!cell) {
-        cell = [[PhotoStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str];
+        cell = [[PhotoStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str thenHiddeDeleteButton:![self isMineWithOwnerId:self.ownerID]];
         cell.delegate  = self;
     }
     cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
@@ -233,9 +246,14 @@
         [self showShareViewIsAllshare:YES];
     }
 }
+- (void)photoStoryCellImageClick:(PhotoStoryCell *)cell
+{
+    NSIndexPath * path = [_myTableView indexPathForCell:cell];
+    NSDictionary  * dic = [_assetArray objectAtIndex:path.row];
+    [self.navigationController pushViewController:[[AlBumDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic] animated:YES];
+}
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
 {
-    DLog(@"%d",index);
     switch (index) {
         case 0: //评论
             [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] photoId] andSoruceType:KSourcePhotos withBgImageURL:[[cell dataSource] imageUrl] WithOwnerID:self.ownerID] animated:YES];
@@ -332,7 +350,7 @@
             break;
         case 3:
             model = NoShare;
-//            UIImageWriteToSavedPhotosAlbum(<#UIImage *image#>, <#id completionTarget#>, <#SEL completionSelector#>, <#void *contextInfo#>)
+            
             break;
         default:
             return;

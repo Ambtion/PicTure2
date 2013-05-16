@@ -9,6 +9,8 @@
 #import "HostUserController.h"
 #import "AppDelegate.h"
 #import "HostUserCell.h"
+#import "RequestManager.h"
+#import "PhotoWallController.h"
 
 @interface HostUserController()
 @property(nonatomic,strong)NSMutableArray * dataSourceArray;
@@ -25,6 +27,7 @@
     self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
+    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor blackColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [self.myTableView addSubview:_refresHeadView];
@@ -32,18 +35,11 @@
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-    self.myTableView.tableFooterView = _moreFootView;
+//    self.myTableView.tableFooterView = _moreFootView;
     selectedArray = [NSMutableArray arrayWithCapacity:0];
     //dataSource
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i < 20; i++){
-        HostUserCellDataSource * dataSource = [[HostUserCellDataSource alloc] init];
-        dataSource.userName = @"afdkadfa";
-        dataSource.accountName = @"@qq.com";
-        dataSource.portrait =@"nicheng.png";
-        [_dataSourceArray addObject:dataSource];
-    }
-    [self.myTableView reloadData];
+    [self refrshDataFromNetWork];
 }
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
@@ -87,11 +83,11 @@
 {
     return _isLoading;
 }
-- (void)refeshOnce:(id)sender
-{
-    [_refresHeadView refreshImmediately];
-    [self reloadTableViewDataSource];
-}
+//- (void)refeshOnce:(id)sender
+//{
+//    [_refresHeadView refreshImmediately];
+//    [self reloadTableViewDataSource];
+//}
 
 #pragma mark - more
 - (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
@@ -116,13 +112,35 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
+//    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
+    [RequestManager getRecomendusersWithsuccess:^(NSString *response) {
+        [_dataSourceArray removeAllObjects];
+        [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"users"]];
+        [self doneRefrshLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self doneRefrshLoadingTableViewData];
+
+    }];
 }
 - (void)getMoreFromNetWork
 {
     [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
 }
-
+- (void)addDataSourceWithArray:(NSArray *)array
+{
+    for (int i = 0; i < array.count; i++)
+        [_dataSourceArray addObject:[self getDataSourceFromInfo:[array objectAtIndex:i]]];
+    [self.myTableView reloadData];
+}
+- (HostUserCellDataSource *)getDataSourceFromInfo:(NSDictionary *)info
+{
+    HostUserCellDataSource * dataSource = [[HostUserCellDataSource alloc] init];
+    dataSource.userId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
+    dataSource.userName = [info objectForKey:@"nick"];
+    dataSource.accountName = [NSString stringWithFormat:@"@%@",[info objectForKey:@"sname"]];
+    dataSource.portrait = [info objectForKey:@"avatar"];
+    return dataSource;
+}
 #pragma mark Refresh-More function
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
@@ -146,7 +164,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 52;
+    return 64;
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -172,6 +190,8 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DLog();
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    HostUserCellDataSource * souece = [_dataSourceArray objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:[[PhotoWallController alloc] initWithOwnerID:souece.userId isRootController:NO] animated:YES];
 }
 @end

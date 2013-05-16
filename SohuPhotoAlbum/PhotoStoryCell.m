@@ -67,13 +67,13 @@
 @synthesize dataSource = _dataSource;
 @synthesize delegate = _delegate;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier thenHiddeDeleteButton:(BOOL)isHidden
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         _commentArray = [NSMutableArray arrayWithCapacity:0];
-        [self initAllSubViews];
+        [self initAllSubViewsWithHiddenDeleButton:isHidden];
         [self.contentView setHidden:YES];
     }
     return self;
@@ -90,19 +90,30 @@
 }
 - (void)setCountLabel
 {
-    _commentCount.numberOfLines = 0;
-    _commentCount.font = [UIFont systemFontOfSize:14];
-    _commentCount.lineBreakMode = DESLABLELINEBREAK;
+//    _commentCount.numberOfLines = 0;
+//    _commentCount.font = [UIFont systemFontOfSize:14];
+//    _commentCount.lineBreakMode = DESLABLELINEBREAK;
+//    _commentCount.backgroundColor = [UIColor clearColor];
+//    _commentCount.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1.f];
     _commentCount.backgroundColor = [UIColor clearColor];
-    _commentCount.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1.f];
+    _commentCount.numberOfLines = 0;
+    _commentCount.font = [UIFont systemFontOfSize:14.f];
+    _commentCount.lineBreakMode = DESLABLELINEBREAK;
+    CGFloat color = 180.f/255.f;
+    _commentCount.textColor = [UIColor colorWithRed:color green:color blue:color alpha:1.f];
 }
+
 #pragma mark - InitSubViews
-- (void)initAllSubViews
+- (void)initAllSubViewsWithHiddenDeleButton:(BOOL)ishidden
 {
     _bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, OFFSETY, 320, 0)];
+    [_bgImageView setUserInteractionEnabled:YES];
     _bgImageView.image = [[UIImage imageNamed:@"photoStoryBg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(100, 160, 100, 160)];
     _photoView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    [_photoView setUserInteractionEnabled:YES];
     _photoView.frame = CGRectMake(6, 0, 320 - 12, 20);
+    UITapGestureRecognizer * gesTure = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)    ];
+    [_photoView addGestureRecognizer:gesTure];
     [_bgImageView addSubview:_photoView];
     [self.contentView addSubview:_bgImageView];
     
@@ -127,7 +138,7 @@
     [imageview addSubview:_commentCount];
     [self.contentView addSubview:imageview];
     
-    _footView = [[StoryFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    _footView = [[StoryFootView alloc] initWitFrame:CGRectMake(0, 0, 320, 40) thenHiddenDeleteButton:ishidden];
     _footView.delegate = self;
     [self.contentView addSubview:_footView];
 }
@@ -139,7 +150,6 @@
         [self updateAllSubViewsFrames];
     }
 }
-
 - (void)updateAllSubViewsFrames
 {
     
@@ -197,25 +207,24 @@
         }
     }else{
         [_commentCount.superview setHidden:YES];
-        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y ,320, 40);
+        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y ,320, _footView.frame.size.height);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
-    if (_dataSource.isLiking) {
-        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton1.png"] forState:UIControlStateNormal];
-    }else{
-        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton.png"] forState:UIControlStateNormal];
-    }
-    DLog(@"%f",_footView.frame.size.height + _footView.frame.origin.y);
-    DLog(@"%f",[_dataSource cellHeigth]);
-
+//    if (_dataSource.isLiking) {
+//        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton1.png"] forState:UIControlStateNormal];
+//    }else{
+//        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton.png"] forState:UIControlStateNormal];
+//    }
+    [_footView setLikeStateTolike:_dataSource.isLiking];
+    DLog(@"MMM::%f %f",_footView.frame.size.height + _footView.frame.origin.y,[_dataSource cellHeigth]);
 }
 - (void)setFootViewWithView:(UIView *)view
 {
     //commetCount
     [_commentCount.superview setHidden:NO];
     _commentCount.superview.frame = CGRectMake(0, view.frame.size.height + view.frame.origin.y, 320, 30);
-    _commentCount.frame = CGRectMake(OFFSETY + 5,4, 320, 21);
-    _footView.frame = CGRectMake(0, _commentCount.superview.frame.size.height + _commentCount.superview.frame.origin.y,320, 40);
+    _commentCount.frame = CGRectMake(OFFSETY + 10,4, 320, 21);
+    _footView.frame = CGRectMake(0, _commentCount.superview.frame.size.height + _commentCount.superview.frame.origin.y,320, _footView.frame.size.height);
 }
 - (CGSize)sizeOfLabel:(UILabel *)label containSize:(CGSize)containSize
 {
@@ -226,6 +235,12 @@
 {
     if ([_delegate respondsToSelector:@selector(photoStoryCell:footViewClickAtIndex:)])
         [_delegate photoStoryCell:self footViewClickAtIndex:index];
+}
+#pragma mark - TapGesture
+- (void)tapGesture:(UIGestureRecognizer *)gesture
+{
+    if ([_delegate respondsToSelector:@selector(photoStoryCellImageClick:)])
+        [_delegate photoStoryCellImageClick:self];
 }
 #pragma mark - commentClick
 - (void)commentPortraitView:(UITapGestureRecognizer *)sender

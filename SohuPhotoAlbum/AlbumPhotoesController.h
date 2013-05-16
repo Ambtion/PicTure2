@@ -17,6 +17,5 @@
     BOOL _isReading;
 }
 @property(nonatomic,strong)ALAssetsGroup * assetGroup;
-
-- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state lib:(ALAssetsLibrary *)lib;
+- (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state;
 @end

@@ -8,7 +8,6 @@
 
 #import "PhotoesCell.h"
 #import "DataBaseManager.h"
-#import <QuartzCore/QuartzCore.h>
 
 #define CELLHIGTH  80.f
 
@@ -24,6 +23,7 @@
     return CELLHIGTH + 5;
 }
 @end
+
 @implementation PhotoesCell
 @synthesize delegate = _delegate;
 @synthesize dataSource = _dataSource;
@@ -104,8 +104,8 @@
     }
     
 }
-#pragma mark ImageViewStatus
 
+#pragma mark ImageViewStatus
 - (void)showCellSelectedStatus
 {
     [self showImageViewStatus:(StatusImageView *)[self.contentView viewWithTag:1000] byAsset:_dataSource.firstAsset];

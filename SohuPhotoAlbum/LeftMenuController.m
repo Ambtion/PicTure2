@@ -47,7 +47,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     [_oauthorBindView addtarget:self action:@selector(oauthorizeButtonClick:)];
     [self.view addSubview:_oauthorBindView];
     //accoutView
-    _accountView = [[AccountView alloc] initWithFrame:CGRectMake(0, 0, 320, 63.f)];
+    _accountView = [[LeftAccountView alloc] initWithFrame:CGRectMake(0, 0, 320, 63.f)];
     _accountView.delegate = self;
     [self setAccountView];
     [self.view addSubview:_accountView];
@@ -72,7 +72,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         _accountView.nameLabel.text =  @"请登录账号";
         _accountView.desLabel.text = nil;
     }else{
-        [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
+        [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
         NSDictionary * dic = [response JSONValue];
             [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
             _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
@@ -170,7 +170,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 }
 
 #pragma mark -  AccoutViewDelgate
-- (void)accountView:(AccountView *)acountView fullScreenClick:(id)sender
+- (void)accountView:(LeftAccountView *)acountView fullScreenClick:(id)sender
 {
     if (![LoginStateManager isLogin]) {
         LoginViewController * lv = [[LoginViewController alloc] init];
@@ -189,7 +189,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         self.view.userInteractionEnabled = YES;
     }];
 }
-- (void)accountView:(AccountView *)acountView accessoryClick:(id)sender
+- (void)accountView:(LeftAccountView *)acountView accessoryClick:(id)sender
 {
     if (![LoginStateManager isLogin]) {
         LoginViewController * lv = [[LoginViewController alloc] init];
@@ -211,7 +211,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         [self hideOAuthorView];
     }
 }
-- (void)accountView:(AccountView *)acountView setttingClick:(id)sender
+- (void)accountView:(LeftAccountView *)acountView setttingClick:(id)sender
 {
     SettingController * sc = [[SettingController alloc] init];
     sc.delegate = self;

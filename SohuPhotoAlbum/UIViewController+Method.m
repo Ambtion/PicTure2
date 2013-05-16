@@ -224,3 +224,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     return [(AppDelegate *)[[UIApplication sharedApplication] delegate] assetsLibrary];
 }
 @end
+
+@implementation UIViewController(isMine)
+- (BOOL)isMineWithOwnerId:(NSString *)ownerID
+{
+    return [LoginStateManager isLogin] && [[LoginStateManager currentUserId] isEqualToString:ownerID];
+}
+@end

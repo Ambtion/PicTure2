@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class MakeCommentView;
+@protocol MakeCommentViewDelegate <NSObject>
+- (void)makeCommentView:(MakeCommentView *)view commentClick:(UIButton *)button;
+@end
 @interface MakeCommentView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate>
 {
     UIButton * _comentButton;
@@ -18,6 +22,6 @@
 @property(nonatomic,strong)UITextView * textView;
 @property(nonatomic,assign)NSInteger textCountLimit;
 @property(nonatomic,strong)UIButton * comentButton;
+@property(nonatomic,weak )id<MakeCommentViewDelegate> delegte;
 - (void)addresignFirTapOnView:(UIView *)view;
-- (void)commentbuttonAddtar:(id)target action:(SEL)action;
 @end

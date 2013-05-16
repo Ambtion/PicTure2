@@ -11,6 +11,7 @@
 #import "LoginStateManager.h"
 #import "PopAlertView.h"
 #import "URLLibaray.h"
+#import "UMAppKey.h"
 
 #define TIMEOUT 10.f
 #define REQUSETFAILERROR @"当前网络不给力,请稍后重试"
@@ -36,7 +37,8 @@
             NSDictionary * dic = [[request responseString] JSONValue];
             [LoginStateManager refreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"access_token"]] RefreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"refresh_token"]]];
         }else{
-            failure(REFRESHFAILTURE);
+            if (failure)
+                failure(REFRESHFAILTURE);
             [LoginStateManager logout];
         }
     }];
@@ -118,7 +120,7 @@
 //时间轴获取
 + (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-//    http://dev.pp.sohu.com/api/v1/sync_photos/infos?access_token=e16dac12-9c69-3288-b710-ea2aefd76a0f&before=2013-05-08
+    //    http://dev.pp.sohu.com/api/v1/sync_photos/infos?access_token=e16dac12-9c69-3288-b710-ea2aefd76a0f&before=2013-05-08
     NSString *  str = nil;
     if (beforeTime) {
         str =  [NSString stringWithFormat:@"%@/sync_photos/infos?access_token=%@&before=%@",BASICURL_V1,token,beforeTime];
@@ -205,9 +207,17 @@
 }
 
 #pragma mark - userInfo
-+ (void)getUserInfoWithToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getUserInfoWithId:(NSString *)userId success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * str = [NSString stringWithFormat:@"%@/user?access_token=%@",BASICURL_V1,token];
+    if (!userId) return;
+    NSString * str = nil;
+    if ([LoginStateManager isLogin] && [userId isEqualToString:[LoginStateManager currentUserId]])
+    {
+        str = [NSString stringWithFormat:@"%@/users/%@?access_token=%@",BASICURL_V1,userId,[LoginStateManager currentToken]];
+    }else{
+        str = [NSString stringWithFormat:@"%@/users/%@",BASICURL_V1,userId];
+
+    }
     [self getSourceWithStringUrl:str success:success failure:nil];
 }
 
@@ -267,4 +277,17 @@
     }
     [self postWithURL:string body:body success:success failure:failure];
 }
+
++ (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * strUrl = [NSString stringWithFormat:@"%@/users/recommend",BASICURL_V1];
+    [self getSourceWithStringUrl:strUrl success:success failure:failure];
+}
+
+//反馈
++ (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure
+{
+  
+}
+
 @end

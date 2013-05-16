@@ -38,7 +38,7 @@ typedef enum  Soruce_Type source_type;
 +(void)deletePhotoFromStoryWithAccessToken:(NSString *)token stroyid:(NSString *)storyId photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //获取个人信息
-+ (void)getUserInfoWithToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)getUserInfoWithId:(NSString *)userId success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //评论
 + (void)getCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId page:(NSInteger)page success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
@@ -51,4 +51,10 @@ typedef enum  Soruce_Type source_type;
 //分享
 + (void)sharePhtotsWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
+
+//星用户
++ (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
+
+//反馈
++ (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure;
 @end

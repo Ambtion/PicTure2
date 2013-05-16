@@ -14,6 +14,7 @@
 #import "TimeLabelView.h"
 #import "RequestManager.h"
 #import "ShareViewController.h"
+#import "TitleAccountView.h"
 
 @interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate,UIActionSheetDelegate>
 {
@@ -23,6 +24,7 @@
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
     TimeLabelView * _timelabel;
+    TitleAccountView * _titleAccoutView;
     shareModel model;
     BOOL _isLoading;
     BOOL _isRoot;

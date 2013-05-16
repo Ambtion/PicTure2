@@ -19,9 +19,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.clipsToBounds = YES;
-//        self.layer.cornerRadius = 5.f;
-//        self.layer.borderWidth = 1.f;
-//        self.layer.borderColor = [[UIColor blackColor] CGColor];
         
         self.backgroundColor = [UIColor clearColor];
         self.imageView = [[UIImageView alloc] initWithFrame:self.bounds];
@@ -36,6 +33,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    if (!self.imageView.image) return;
     CGSize size = [self getRectofProtrait:self.imageView.image];
     self.imageView.frame = CGRectMake(0, 0, size.width, size.height);
     self.imageView.center = CGPointMake(self.frame.size.width /2.f, self.frame.size.height /2.f);

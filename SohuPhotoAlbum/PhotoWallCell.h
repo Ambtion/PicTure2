@@ -30,7 +30,7 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 @property(assign,nonatomic)NSInteger likeCount;
 @property(assign,nonatomic)NSInteger photoCount;
 @property(assign,nonatomic)BOOL isLiking;
-@property(assign,nonatomic)BOOL OwnerISMe;
+@property(assign,nonatomic)BOOL isMine;
 
 - (CGFloat)getCellHeigth;
 - (CGFloat)getLastCellHeigth;

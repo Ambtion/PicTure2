@@ -195,6 +195,7 @@
 }
 
 #pragma mark - NavigationBarDelegate
+
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     if (isupload) {

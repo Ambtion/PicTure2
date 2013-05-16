@@ -35,7 +35,7 @@
     //fix tabBar
     [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
     [self.tabBar.deleteButton setHidden:YES];
-//    [self.tabBar.shareButton setHidden:YES];
+    [self.tabBar.shareButton setHidden:YES];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {

@@ -80,7 +80,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 - (void)getUserInfo
 {
     if ([LoginStateManager isLogin]) {
-        [RequestManager getUserInfoWithToken:[LoginStateManager currentToken] success:^(NSString *response) {
+        [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
             userInfodic = [response JSONValue];
             [_myTableView reloadData];
         } failure:^(NSString *error) {

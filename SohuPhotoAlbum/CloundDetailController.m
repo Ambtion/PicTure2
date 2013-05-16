@@ -20,7 +20,7 @@
 #import "RequestManager.h"
 
 @implementation CloundDetailController
-@synthesize assetDictionaary,sectionArray;
+@synthesize sectionArray;
 @synthesize leftBoundsDays,rightBoudsDays;
 
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(NSDictionary *)asset

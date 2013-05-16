@@ -15,7 +15,7 @@
 #import "MakeCommentView.h"
 
 @interface CommentController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
-SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,CommentCellDelegate>
+SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,CommentCellDelegate,MakeCommentViewDelegate>
 {
     UITableView * _myTableView;
     UIImageView * _myBgView;
