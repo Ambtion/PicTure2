@@ -118,6 +118,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [_navBar removeFromSuperview];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 
 }

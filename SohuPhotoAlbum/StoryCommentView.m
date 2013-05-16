@@ -13,7 +13,7 @@
 #define OFFSETX 18
 #define OFFSETY 10
 #define CommentLABELFONT        [UIFont boldSystemFontOfSize:11]
-#define CommentLABELMAXSIZE     (CGSize){300,1000}
+#define CommentLABELMAXSIZE     (CGSize){230,1000}
 #define CommentLABLELINEBREAK   NSLineBreakByWordWrapping
 #define CommentColor [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1.f]
 
@@ -25,9 +25,9 @@
 //    heigth += 21; //userNameheigth
 //    heigth += OFFSETY;
 //    heigth += [comment sizeWithFont:CommentLABELFONT constrainedToSize:CommentLABELMAXSIZE lineBreakMode:CommentLABLELINEBREAK].height;
-    NSString * str = [NSString stringWithFormat:@"%@: %@ ",[self userName],[self comment]];
+    NSString * str = [NSString stringWithFormat:@"%@: %@  ",[self userName],[self comment]];
     CGSize size = [str sizeWithFont:CommentLABELFONT constrainedToSize:CommentLABELMAXSIZE lineBreakMode:CommentLABLELINEBREAK];
-    heigth += size.height;
+    heigth += size.height;    
     heigth += 21; //shareTime
     return MAX(70, heigth + 10);
 }
@@ -76,6 +76,7 @@
     label.lineBreakMode = CommentLABLELINEBREAK;
     label.textColor = CommentColor;
 }
+
 - (void)updateLabel
 {
    //布局规则
@@ -97,25 +98,21 @@
 //    commentLabel.frame = CGRectMake(userName.frame.origin.x, userName.frame.size.height + userName.frame.origin.y + OFFSETY, size.width, size.height);
 //    self.frame = CGRectMake(0, 0, 320, MAX(70, commentLabel.frame.size.height + commentLabel.frame.origin.y + 10));
     
-//    return;
-    NSString * str = [NSString stringWithFormat:@"%@: %@ ",[_dataScoure userName],[_dataScoure comment]];
-//    userName.text = str;
+    NSString * str = [NSString stringWithFormat:@"%@: %@  ",[_dataScoure userName],[_dataScoure comment]];
     [userName setText:str WithFont:CommentLABELFONT AndColor:CommentColor];
-    CGSize aSize = [self sizeOfLabel:userName containSize:MAXSIZE];
+    CGSize aSize = [str sizeWithFont:CommentLABELFONT constrainedToSize:CommentLABELMAXSIZE lineBreakMode:CommentLABLELINEBREAK];
     userName.frame = CGRectMake(portraitView.frame.size.width + portraitView.frame.origin.x + 10 , OFFSETY, aSize.width, aSize.height);
-    userName.backgroundColor = [UIColor redColor];
+    userName.backgroundColor = [UIColor clearColor];
     
     [userName setKeyWordTextArray:[NSArray arrayWithObjects:[_dataScoure userName],nil] WithFont:[UIFont boldSystemFontOfSize:12] AndColor:[UIColor blueColor]];
+    
     shareTime.frame = CGRectMake(userName.frame.origin.x, userName.frame.origin.y + userName.frame.size.height, 200, 21);
-    shareTime.backgroundColor = [UIColor greenColor];
+    shareTime.backgroundColor = [UIColor clearColor];
     shareTime.text = [_dataScoure shareTime];
     self.frame = CGRectMake(0, 0, 320, MAX(70, shareTime.frame.size.height + shareTime.frame.origin.y + 10));
     DLog(@"%f,%f",self.frame.size.height,[_dataScoure commetViewheigth]);
 }
-- (CGSize)sizeOfLabel:(UILabel *)label containSize:(CGSize)containSize
-{
-    return [label.text sizeWithFont:label.font constrainedToSize:containSize lineBreakMode:label.lineBreakMode];
-}
+
 - (void)setDataScoure:(StoryCommentViewDataSource *)dataScoure
 {
     if (_dataScoure != dataScoure) {

@@ -13,6 +13,7 @@
     UIButton * _comentButton;
     UITextField * _placeHolder;
     CGFloat startWidth;
+    UIImageView * _commenBgView;
 }
 @property(nonatomic,strong)UITextView * textView;
 @property(nonatomic,assign)NSInteger textCountLimit;

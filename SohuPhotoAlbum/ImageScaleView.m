@@ -80,7 +80,8 @@
     self.bouncesZoom = YES;
     self.delegate = self;
     self.tapEnabled = YES;
-    self.backgroundColor = [UIColor colorWithRed:34/255.f green:37/255.f blue:40.f/255.f alpha:1];
+//    self.backgroundColor = [UIColor colorWithRed:34/255.f green:37/255.f blue:40.f/255.f alpha:1];
+    self.backgroundColor = [UIColor blackColor];
 }
 
 - (void)addImageView
