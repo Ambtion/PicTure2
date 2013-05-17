@@ -28,8 +28,10 @@
     LocalALLPhotoesController * lp = [[LocalALLPhotoesController alloc] init];
     //左菜单
     LeftMenuController *leftVC = [[LeftMenuController alloc] init];
+    leftVC.localAllController = lp;
     
-    IIViewDeckController *deckViewController = [[IIViewDeckController alloc] initWithCenterViewController:lp leftViewController:leftVC];
+    IIViewDeckController * deckViewController = [[IIViewDeckController alloc] initWithCenterViewController:leftVC.localAllController leftViewController:leftVC];
+    
     deckViewController.navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
     
@@ -42,6 +44,12 @@
     [DataBaseManager defaultDataBaseManager];
     //umeng
     [MobClick startWithAppkey:UM_APP_KEY];
+    
+    
+    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeAlert |
+      UIRemoteNotificationTypeBadge |
+      UIRemoteNotificationTypeSound)];
     return YES;
 }
 
@@ -53,6 +61,28 @@
                                           cancelButtonTitle:@"确定"
                                           otherButtonTitles:nil];
     [alert show];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSString *token = [NSString
+                    stringWithFormat:@"%@",deviceToken];
+    NSLog(@"token:%@",token);
+    [LoginStateManager storeDeviceToken:token];
+}
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSString *str = [NSString stringWithFormat: @"Error: %@", error];
+    NSLog(@"%@",str);
+}
+
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary  *)userInfo {
+    
+    NSLog(@"%@",[userInfo allKeys]);
+    NSLog(@"%@",userInfo);
+    UIAlertView * alterview = [[UIAlertView alloc] initWithTitle:@"通知" message:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"] delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"详细", nil];
+    [alterview show];
     application.applicationIconBadgeNumber -= 1;
 }
+
 @end

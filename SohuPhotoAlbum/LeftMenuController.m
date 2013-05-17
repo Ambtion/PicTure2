@@ -15,6 +15,7 @@ static NSString *   menuText[4] =   {@"本地相册",@"云备份",@"图片墙",@
 static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png"};
 
 @implementation LeftMenuController
+@synthesize localAllController;
 
 - (void)viewDidLoad
 {
@@ -41,7 +42,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
     [_tableView reloadData];
-
+    
     //三方登陆绑定页面
     _oauthorBindView = [[OauthirizeView alloc] initWithFrame:CGRectMake(0, 48, 320, 0)];
     [_oauthorBindView addtarget:self action:@selector(oauthorizeButtonClick:)];
@@ -60,8 +61,8 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     [_tableView reloadData];
     if (!_selectPath)
         _selectPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [_tableView selectRowAtIndexPath:_selectPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-
+    [_tableView selectRowAtIndexPath:_selectPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    
 }
 #pragma mark AccoutView
 - (void)setAccountView
@@ -73,7 +74,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         _accountView.desLabel.text = nil;
     }else{
         [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
-        NSDictionary * dic = [response JSONValue];
+            NSDictionary * dic = [response JSONValue];
             [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
             _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
             _accountView.nameLabel.text = [dic objectForKey:@"user_nick"];
@@ -116,10 +117,10 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 #pragma mark Selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    self.view.userInteractionEnabled = NO;
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    //    self.view.userInteractionEnabled = NO;
+    //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     _selectPath = indexPath;
-    if (indexPath.row) {
+    if (indexPath.row && indexPath.row != 3) {
         if (![LoginStateManager isLogin]) {
             [self accountView:nil fullScreenClick:nil];
             self.view.userInteractionEnabled = YES;
@@ -128,8 +129,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     }
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
         if (indexPath.row == 0) {
-            LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
-            self.viewDeckController.centerController = la;
+            self.viewDeckController.centerController = localAllController;
         }
         if (indexPath.row == 1) {
             CloudPictureController * cp = [[CloudPictureController alloc] init];
@@ -143,7 +143,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
             HostUserController * hs = [[HostUserController alloc] init];
             self.viewDeckController.centerController = hs;
         }
-//        self.view.userInteractionEnabled = YES;
+        //        self.view.userInteractionEnabled = YES;
     }];
 }
 
@@ -183,11 +183,10 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 - (void)resetLeftMenu
 {
     [self setAccountView];
-    [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
-        LocalALLPhotoesController * la = [[LocalALLPhotoesController alloc] init];
-        self.viewDeckController.centerController = la;
-        self.view.userInteractionEnabled = YES;
-    }];
+    _selectPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [_tableView selectRowAtIndexPath:_selectPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    self.viewDeckController.centerController = self.localAllController;
+    self.view.userInteractionEnabled = YES;
 }
 - (void)accountView:(LeftAccountView *)acountView accessoryClick:(id)sender
 {

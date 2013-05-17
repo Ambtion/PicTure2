@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "LoginViewController.h"
 
-
-
-
 @interface LoginStateManager : NSObject
 
 + (BOOL)isLogin;
@@ -36,4 +33,6 @@
 + (void)storeDeviceID:(NSNumber *)deviceId;
 + (long long)deviceId;
 
++ (void)storeDeviceToken:(NSString *)deviceToken;
++ (NSString *)deviceToken;
 @end

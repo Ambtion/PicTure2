@@ -79,9 +79,10 @@
     imageView.image = [UIImage imageNamed:@"title_feedback.png"];
     imageView.image = nil;
     [self.view addSubview:imageView];
-    
+    _bavBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+    [self.view addSubview:_bavBar];
     UILabel * titleLabel = [[UILabel alloc] init];
-    titleLabel.frame = CGRectMake(5, 100, 160, 18);
+    titleLabel.frame = CGRectMake(5, 50, 160, 18);
     titleLabel.font = [UIFont systemFontOfSize:12];
     titleLabel.textAlignment = UITextAlignmentLeft;
     titleLabel.backgroundColor = [UIColor clearColor];
@@ -106,7 +107,7 @@
     [_saveButton setUserInteractionEnabled:NO];
     [self.view addSubview:_saveButton];
     
-    _textView_bg = [[UIView alloc] initWithFrame:CGRectMake(8, 122, 304, 134)];
+    _textView_bg = [[UIView alloc] initWithFrame:CGRectMake(8, 122 - 50, 304, 134 + 50)];
     _textView_bg.backgroundColor = [UIColor whiteColor];
     _textView_bg.layer.cornerRadius = 5.f;
     _textView_bg.layer.borderColor = [UIColor colorWithRed:222.f/255.f green:222.f/255.f blue:222.f/255.f alpha:1].CGColor;
@@ -115,7 +116,7 @@
     _textView_bg.layer.shouldRasterize = NO;
     [self.view addSubview:_textView_bg];
     
-    _textView = [[UITextView alloc] initWithFrame:CGRectMake(2, 2, 300, 130)];
+    _textView = [[UITextView alloc] initWithFrame:CGRectMake(2, 2, 300, _textView.frame.size.height - 4)];
     _textView.backgroundColor = [UIColor clearColor];
     _textView.font =  [UIFont fontWithName:@"STHeitiTC-Medium" size:16];
     _textView.returnKeyType = UIReturnKeyDefault;
@@ -130,6 +131,7 @@
     [_placeHolder setUserInteractionEnabled:NO];
     [_textView addSubview:_placeHolder];
 }
+
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     NSDictionary * dic = [notification userInfo];
@@ -177,5 +179,9 @@
         if (_placeHolder.hidden)
             [_placeHolder setHidden:NO];
     }
+}
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    return;
 }
 @end

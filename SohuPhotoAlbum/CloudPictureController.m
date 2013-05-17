@@ -38,13 +38,13 @@
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
     
-    //    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-    //    _moreFootView.delegate = self;
+    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+    _moreFootView.delegate = self;
     //    self.myTableView.tableFooterView = _moreFootView;
-    
     [self initDataContainer];
     [self refrshDataFromNetWork];
 }
+
 - (void)initDataContainer
 {
     selectedArray = [NSMutableArray arrayWithCapacity:0];
@@ -53,6 +53,7 @@
     _assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
 }
+
 #pragma mark - Refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
 {
@@ -117,9 +118,11 @@
 }
 - (void)getMoreFromNetWork
 {
+
     NSString * time = [[self.assetsSection lastObject] objectForKey:@"day"];
     [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"days"];
+        DLog(@"%@",array);
         if (array && array.count) {
             [self.assetsSection addObjectsFromArray:array];
             [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];

@@ -9,6 +9,7 @@
 #import "LoginStateManager.h"
 
 #define USER_ID             @"__USER_ID__"
+#define DEVICE_TOKEN        @"__device_token__"
 
 #define USER_TOKEN          @"__USER_TOKEN__"
 #define REFRESH_TOKEN       @"__REFRESH_TOKEN__"
@@ -64,6 +65,7 @@
 {
     return [self dataForKey:USER_ID] != nil;
 }
+
 + (void)loginUserId:(NSString *)uid withToken:(NSString *)token RefreshToken:(NSString *)refreshToken
 {
     [self storeData:uid forKey:USER_ID];
@@ -130,5 +132,15 @@
 + (long long)deviceId
 {
     return [[[self valueForUserinfo] objectForKey:DEVICEDID] longLongValue];
+}
+
++ (void)storeDeviceToken:(NSString *)deviceToken
+{
+    if ([self deviceToken] && [[self deviceToken] isEqualToString:deviceToken]) return;
+    [self storeData:deviceToken forKey:DEVICE_TOKEN];
+}
++ (NSString *)deviceToken
+{
+    return [self dataForKey:DEVICE_TOKEN];
 }
 @end

@@ -34,7 +34,7 @@ typedef enum _imageStatePosition
     BOOL _isHidingBar;
     BOOL _isInit;
     BOOL _isRotating;
-    BOOL _isAnimating;    
+    BOOL _isAnimating;
 }
 @property(nonatomic,strong)NSMutableArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
@@ -43,6 +43,7 @@ typedef enum _imageStatePosition
 @property(nonatomic,strong)ImageScaleView * curScaleImage;
 @property(nonatomic,strong)ImageScaleView * rearScaleImage;
 @property(nonatomic,strong)CustomizetionTabBar * tabBar;
+@property(nonatomic,assign)BOOL isLoading;
 
 - (int)validPageValue:(NSInteger)value;
 - (void)refreshScrollView;

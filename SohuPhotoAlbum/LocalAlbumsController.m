@@ -9,7 +9,7 @@
 #import "LocalAlbumsController.h"
 #import "AlbumPhotoesController.h"
 #import "LocalALLPhotoesController.h"
-
+#import "LeftMenuController.h"
 
 @interface LocalAlbumsController ()
 @property(nonatomic,strong)NSMutableArray *assetGroups;
@@ -76,7 +76,8 @@
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) {
-        self.viewDeckController.centerController  = [[LocalALLPhotoesController alloc] init];
+        LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
+        self.viewDeckController.centerController = leftCon.localAllController;
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         [self setViewState:UPloadState];

@@ -28,4 +28,6 @@
     OauthirizeView * _oauthorBindView;
     NSIndexPath * _selectPath;
 }
+@property(nonatomic,strong)LocalALLPhotoesController * localAllController;
+
 @end

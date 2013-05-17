@@ -23,8 +23,7 @@ static NSString * const Images3[3] = {@"footViewtalk3.png",@"footViewunlike3.png
         ishiddenDelete = isHidden;
         self.backgroundColor = [UIColor clearColor];
         [self setUserInteractionEnabled:YES];
-        [self initAllSubViews];
-        return self;
+
         if (isHidden) {
             [self initSubViewsWithOutDeleteButton];
         }else{

@@ -160,7 +160,6 @@
 		C586DCEE171CE75D000A4014 /* CloudPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCED171CE75D000A4014 /* CloudPictureController.m */; };
 		C586DCF1171CF9CB000A4014 /* CloudPictureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */; };
 		C586DCF4171D22A0000A4014 /* PhotoWallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF3171D22A0000A4014 /* PhotoWallCell.m */; };
-		C586DCF6171D255E000A4014 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C586DCF5171D255E000A4014 /* 1.jpg */; };
 		C586DCF9171D3E70000A4014 /* ImageViewAdaper.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF8171D3E70000A4014 /* ImageViewAdaper.m */; };
 		C586DCFC171D7245000A4014 /* LabelIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C586DCFB171D7245000A4014 /* LabelIcon.png */; };
 		C5870B64170AEB9A00CBDB23 /* IIViewDeckController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5870B63170AEB9A00CBDB23 /* IIViewDeckController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -575,7 +574,6 @@
 		C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudPictureCell.m; sourceTree = "<group>"; };
 		C586DCF2171D22A0000A4014 /* PhotoWallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoWallCell.h; sourceTree = "<group>"; };
 		C586DCF3171D22A0000A4014 /* PhotoWallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoWallCell.m; sourceTree = "<group>"; };
-		C586DCF5171D255E000A4014 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		C586DCF7171D3E70000A4014 /* ImageViewAdaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewAdaper.h; sourceTree = "<group>"; };
 		C586DCF8171D3E70000A4014 /* ImageViewAdaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewAdaper.m; sourceTree = "<group>"; };
 		C586DCFB171D7245000A4014 /* LabelIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LabelIcon.png; sourceTree = "<group>"; };
@@ -1316,7 +1314,6 @@
 		C58773FA1716AB3C00799730 /* CloudPicture */ = {
 			isa = PBXGroup;
 			children = (
-				C586DCF5171D255E000A4014 /* 1.jpg */,
 				C5850D301741EAF7005AC9C9 /* nicheng.png */,
 				C567F5471741FEF100293864 /* moren1.png */,
 				C5850D2E1741E85C005AC9C9 /* moren.png */,
@@ -2067,7 +2064,6 @@
 				C583A8D217144AD500DAC141 /* popup_alert.png in Resources */,
 				C5841A1117158F8B00588CE5 /* load_more_pics.png in Resources */,
 				C5841A1317158F9D00588CE5 /* end_bg.png in Resources */,
-				C586DCF6171D255E000A4014 /* 1.jpg in Resources */,
 				C586DCFC171D7245000A4014 /* LabelIcon.png in Resources */,
 				C58CB42A171F980F00DB85B3 /* logoText.png in Resources */,
 				C58CB42C171F983E00DB85B3 /* menuBackground.png in Resources */,
@@ -2358,7 +2354,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 科 屈 (NSB8AC8Y32)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2374,7 +2370,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "303175C1-9048-4AAA-9D0E-6C3CFBB69383";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2390,7 +2386,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 科 屈 (NSB8AC8Y32)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2399,7 +2395,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "303175C1-9048-4AAA-9D0E-6C3CFBB69383";
+				PROVISIONING_PROFILE = "EE4DA250-E526-48C7-A49E-1E003A6F631E";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2409,8 +2405,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2425,8 +2421,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "8FBCC1D8-383C-40D0-B584-50EA66CB4429";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FBCC1D8-383C-40D0-B584-50EA66CB4429";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2435,8 +2431,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2451,8 +2447,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "8FBCC1D8-383C-40D0-B584-50EA66CB4429";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8FBCC1D8-383C-40D0-B584-50EA66CB4429";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -260,6 +260,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     UIApplication *application = [UIApplication sharedApplication];
     [application openURL:[NSURL URLWithString:[dic objectForKey:@"updateURL"]]];
 }
+
 #pragma mark CheckVerSion
 -(void)onCheckVersion
 {

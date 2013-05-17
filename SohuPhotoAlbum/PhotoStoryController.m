@@ -163,7 +163,8 @@
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
         [self doneMoreLoadingTableViewData];
-    }];}
+    }];
+}
 - (void)addSoruceFromArray:(NSArray *)array
 {
     if (array.count)
@@ -250,7 +251,10 @@
 {
     NSIndexPath * path = [_myTableView indexPathForCell:cell];
     NSDictionary  * dic = [_assetArray objectAtIndex:path.row];
-    [self.navigationController pushViewController:[[AlBumDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic] animated:YES];
+    AlBumDetailController * detailController = [[AlBumDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic];
+    detailController.ownerId = self.ownerID;
+    detailController.storyID = self.storyID;
+    [self.navigationController pushViewController:detailController animated:YES];
 }
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
 {

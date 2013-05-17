@@ -53,14 +53,14 @@
     }
     if (!MIN(3, commentInfoArray.count)){ //评论内容不存在
         heigth += 40;
-        return heigth;
     }else{
         heigth += 30; //comment Account
         heigth += 40; //footView
-        return heigth;
     }
+    return heigth + 5; //边界
     return 0.f;
 }
+
 @end
 
 @implementation PhotoStoryCell

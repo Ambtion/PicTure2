@@ -135,6 +135,7 @@
 #pragma mark GetMoreAssets
 - (void)getMoreAssetsAfterCurNum
 {
+    self.isLoading = YES;
     NSString * lefttime = [self getleftTime];
     if (lefttime) {
         [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:lefttime success:^(NSString *response) {
@@ -144,23 +145,26 @@
                 [finalArray addObjectsFromArray:self.assetsArray];
                 self.curPageNum += array.count;
                 self.assetsArray = finalArray;
+                self.isLoading = NO;
             }
         } failure:^(NSString *error) {
-            
+            self.isLoading = NO;
         }];
     }
 }
 - (void)getMoreAssetsBeforeCurNum
 {
+    self.isLoading = YES;
     NSString * lefttime = [self getleftTime];
     if (lefttime) {
         [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:lefttime success:^(NSString *response) {
             NSArray * array = [[response JSONValue] objectForKey:@"photos"];
             if (array && array.count) {
                 [self.assetsArray addObjectsFromArray:array];
+                self.isLoading = NO;
             }
         } failure:^(NSString *error) {
-            
+            self.isLoading = NO;
         }];
     }else{
         NSString * time = [[self.sectionArray lastObject] objectForKey:@"day"];

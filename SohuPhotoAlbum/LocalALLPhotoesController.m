@@ -26,6 +26,14 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        isinit = YES;
+    }
+    return self;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -36,9 +44,10 @@
     self.myTableView.separatorColor = [UIColor clearColor];
     self.myTableView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.myTableView];
-    
-//    [self initDataContainer];
-    [self readAlbum];
+    if (isinit){
+        isinit = NO;
+        [self readAlbum];
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 - (void)initDataContainer
@@ -208,7 +217,9 @@
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //切换页面
-        self.viewDeckController.centerController = [[LocalAlbumsController alloc] init];
+        if (!localAlbumsConroller)
+            localAlbumsConroller = [[LocalAlbumsController alloc] init];
+        self.viewDeckController.centerController = localAlbumsConroller;
     }
     if (button.tag == RIGHT2BUTTON) { //上传
         if (![LoginStateManager isLogin]) {

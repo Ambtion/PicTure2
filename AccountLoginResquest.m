@@ -35,7 +35,6 @@
     [request startSynchronous];
     if (request.responseStatusCode == 200) {
         NSNumber * num = [[[request responseString] JSONValue] objectForKey:@"device_id"];
-        DLog(@"%@",[[request responseString] JSONValue]);
         [LoginStateManager storeDeviceID:num];
         return YES;
     }
