@@ -197,8 +197,16 @@
 #pragma mark -
 + (void)getAllPhototInStoryWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * str = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
+    NSString * str = nil;
+    if ([LoginStateManager isLogin]) {
+        str  = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d&&access_token=%@",
+                      BASICURL_V1,storyId,ownId,start,count,[LoginStateManager currentToken]];
+
+    }else{
+        str = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
                       BASICURL_V1,storyId,ownId,start,count];
+
+    }
     [self getSourceWithStringUrl:str success:success failure:failure];
 }
 +(void)deletePhotoFromStoryWithAccessToken:(NSString *)token stroyid:(NSString *)storyId photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure

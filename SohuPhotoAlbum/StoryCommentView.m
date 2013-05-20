@@ -31,6 +31,7 @@
     heigth += 15; //shareTime
     return MAX(58, heigth + 10);
 }
+
 @end
 
 @implementation StoryCommentView

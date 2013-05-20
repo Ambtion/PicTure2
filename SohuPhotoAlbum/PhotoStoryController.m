@@ -168,12 +168,13 @@
 - (void)addSoruceFromArray:(NSArray *)array
 {
     if (array.count)
-        NSLog(@"%@",[array lastObject]);
+        NSLog(@"%@",[array objectAtIndex:0]);
     [_assetArray addObjectsFromArray:array];
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
     [_myTableView reloadData];
 }
+
 - (PhotoStoryCellDataSource *)getdataSourceFromInfo:(NSDictionary *)info
 {
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
@@ -182,6 +183,7 @@
     dataSource.higth = [[info objectForKey:@"height"] floatValue];
     dataSource.weigth = [[info objectForKey:@"width"] floatValue];
     dataSource.imageDes = [info objectForKey:@"description"];
+    dataSource.isLiking = [[info objectForKey:@"is_liked"] boolValue];
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     NSArray * commentarray = [info objectForKey:@"comments"];
     for (int i = 0; i < commentarray.count; i++) {
