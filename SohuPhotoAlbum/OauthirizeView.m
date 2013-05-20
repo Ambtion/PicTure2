@@ -20,7 +20,7 @@
         [self setUserInteractionEnabled:YES];
         self.clipsToBounds = YES;
         self.image = [UIImage imageNamed:@"menuBackground.png"];
-
+        self.backgroundColor = [UIColor whiteColor];
         CGFloat offsetX = 29.f;
         CGFloat offsetY = 45.f;
         CGFloat width = 50.f;

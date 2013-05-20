@@ -19,6 +19,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 @synthesize scrollView = _scrollView,fontScaleImage = _fontScaleImage,curScaleImage = _curScaleImage,rearScaleImage = _rearScaleImage;
 @synthesize tabBar = _tabBar;
 @synthesize isLoading;
+@synthesize isPushView;
 
 - (void)dealloc
 {
@@ -37,13 +38,21 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     [super viewWillAppear:animated];
     [self setStatueBar];
+  
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self resetStatueBar];
+    if (!isPushView)
+        [self resetStatueBar];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (!isPushView)
+        [self resetStatueBar];
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -52,17 +61,23 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(listOrientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
-                                            object:nil];
+                                        object:nil];
 }
 - (void)setStatueBar
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    if (!self.navigationController.navigationBar.isHidden) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+        [self.navigationController setNavigationBarHidden:YES animated:!self.isPushView];
+    }
+    self.isPushView = NO;
+
 }
 - (void)resetStatueBar
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    if (self.navigationController.navigationBar.isHidden) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+    }
 }
 
 - (void)upCusTitle
@@ -201,21 +216,24 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - Refresh ScrollView
 - (void)refreshScrollView
 {
-    if (!_assetsArray.count) return;
+    DLog(@"%d",self.curPageNum);
+    if (!self.assetsArray.count) return;
     _canGetActualImage = YES;
     //prevent than  when seting offset it can  scrollViewDidScroll
     _scrollView.delegate = nil;
     //    [self upCusTitle];
-    if (_assetsArray.count <= 3) {
+    if (self.assetsArray.count <= 3) {
         [self refreshScrollViewWhenPhotonumLessThree];
     }else if (_curPageNum == 0) {
         [self refreshScrollViewOnMinBounds];
-    }else if (_curPageNum == _assetsArray.count - 1) {
+    }else if (_curPageNum == self.assetsArray.count - 1) {
         [self refreshScrollViewOnMaxBounds];
     }else{
         [self refreshScrollViewNormal];
     }
     _scrollView.delegate = self;
+    [self scrollViewDidEndDecelerating:_scrollView];
+    
 }
 - (void)refreshScrollViewOnMinBounds
 {
@@ -274,7 +292,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
     if (_isAnimating || !_assetsArray.count || isLoading)  return;
-    
        if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];

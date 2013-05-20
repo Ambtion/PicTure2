@@ -10,10 +10,13 @@
 #import "AppDelegate.h"
 #import "LocalShareRef.h"
 #import "LocalShareDesView.h"
+#import "ShareBox.h"
 
 @interface LocalDetailController : PhotoDetailBaseController<UIActionSheetDelegate,LoginViewControllerDelegate
-                                ,TencentSessionDelegate,SinaWeiboDelegate,SinaWeiboRequestDelegate,RenrenDelegate,WXApiDelegate,LocalShareDesViewDelegate>
-
+                                ,TencentSessionDelegate,SinaWeiboDelegate,SinaWeiboRequestDelegate,RenrenDelegate,WXApiDelegate,LocalShareDesViewDelegate,ShareBoxDelegate>
+{
+    ShareBox * _shareBox;
+}
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(ALAsset *)asset andAssetGroup:(ALAssetsGroup *)group;
 
 @property(nonatomic,strong)ALAssetsGroup * group;

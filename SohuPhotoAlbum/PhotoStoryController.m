@@ -168,7 +168,7 @@
 - (void)addSoruceFromArray:(NSArray *)array
 {
     if (array.count)
-    NSLog(@"%@",[array lastObject]);
+        NSLog(@"%@",[array lastObject]);
     [_assetArray addObjectsFromArray:array];
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
@@ -244,6 +244,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //分享
+        if (!_dataSourceArray.count) return;
         [self showShareViewIsAllshare:YES];
     }
 }
@@ -279,7 +280,6 @@
 }
 -(void)photoStoryCell:(PhotoStoryCell *)cell commentClickAtIndex:(NSIndexPath *)index
 {
-    DLog(@"%@",index);
     //最多3条评论
     if (index.row == 0) {
         NSString * ownerId = [[[[cell dataSource] commentInfoArray] objectAtIndex:index.section] userId];
@@ -319,69 +319,136 @@
 }
 - (void)delePhtotFromStroy:(PhotoStoryCell *)cell
 {
-    if (![LoginStateManager isLogin]) {
-        [self showLoginViewWithMethodNav:YES];
-        return;
+    tempCellForDelete = cell;
+    [self showDeleteView];
+    
+}
+
+#pragma mark Deleget
+- (void)showDeleteView
+{
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+    [alertView show];
+    return;
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] stroyid:self.storyID photoId:[[tempCellForDelete dataSource] photoId]success:^(NSString *response) {
+            [_dataSourceArray removeObject:[tempCellForDelete dataSource]];
+            NSIndexPath * path = [_myTableView  indexPathForCell:tempCellForDelete];
+            [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
+            [_myTableView reloadData];
+        } failure:^(NSString *error) {
+            
+        }];
     }
-    [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] stroyid:self.storyID photoId:[[cell dataSource] photoId]success:^(NSString *response) {
-        [_dataSourceArray removeObject:[cell dataSource]];
-        NSIndexPath * path = [_myTableView  indexPathForCell:cell];
-        [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
-        [_myTableView reloadData];
-    } failure:^(NSString *error) {
-        DLog(@"%@",error);
-    }];
 }
 
 #pragma mark Share
 - (void)showShareViewIsAllshare:(BOOL)isShareAll
 {
     _isShareAll = isShareAll;
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间",@"保存到本地相册", nil];
-    [sheet showInView:self.view];
+    if (!_shareBox) {
+        _shareBox = [[ShareBox alloc] init];
+        _shareBox.delegate = self;
+    }
+    if (_isShareAll) {
+        [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:NO OnView:self.view];
+    }else{
+        [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:YES OnView:self.view];
+    }
 }
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)shareBoxViewShareTo:(shareModel)model
 {
-    switch (buttonIndex) {
-        case 0:
-            model = SinaWeiboShare;
-            break;
-        case 1:
-            model = RenrenShare;
-            break;
-        case 2:
-            model = QQShare;
-            break;
-        case 3:
-            model = NoShare;
+    //    _pushView = YES;
+    PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
+    if (_isShareAll) {
+        source = _shareDateSource;
+    }
+    NSString * photoString = [NSString stringWithFormat:@"%@",[source imageUrl]];
+    [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:photoString andDelegate:self] animated:YES];
+}
+- (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene
+{
+    [self respImageContentToSence:scene];
+}
+- (void)shareBoxViewWriteImageTolocal
+{
+    NSString * bgPhotoUrl = [_shareDateSource imageUrl];
+    [self writePicToAlbumWith:bgPhotoUrl];
+}
+#pragma mark -
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
+{
+    if (_isShareAll) {
+        //分享
+        [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:@"abc" desc:des success:^(NSString *response) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+        } failure:^(NSString *error) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
             
-            break;
-        default:
-            return;
-            break;
-    }
-    if (model == NoShare) {
-        NSString * bgPhotoUrl = [_shareDateSource imageUrl];
-        [self writePicToAlbumWith:bgPhotoUrl];
-        return;
-    }
-    if (_dataSourceArray.count) {
-        if (_isShareAll) {//分享story
-            PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
-            NSString * bgPhotoUrl = [source imageUrl];
-            ShareViewController * sv = [[ShareViewController alloc] initWithModel:model bgPhotoUrl:bgPhotoUrl andDelegate:nil];
-            sv.ownerId = self.ownerID;
-            sv.storyId = self.storyID;
-            [self.navigationController pushViewController:sv animated:YES];
-        }else{ //分享单张图片
-            NSString * bgPhotoUrl = [_shareDateSource imageUrl];
-            ShareViewController * sv = [[ShareViewController alloc] initWithModel:model bgPhotoUrl:bgPhotoUrl andDelegate:nil];
-            sv.ownerId = self.ownerID;
-            sv.storyId = self.storyID;
-            sv.photosArray = [NSArray arrayWithObject:_shareDateSource.photoId];
-            [self.navigationController pushViewController:sv animated:YES];
-        }
+        }];
+    }else{
+        [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:@"abc" desc:des success:^(NSString *response) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+        } failure:^(NSString *error) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
+        }];
     }
 }
 
+- (void) respImageContentToSence:(enum WXScene)scene
+{
+    //发送内容给微信
+    if (_isShareAll) {
+        [self shareAllWithWeixin:scene];
+    }else{
+        [self shareSourceWithWeiXin:scene];
+    }
+}
+- (void)shareAllWithWeixin:(enum WXScene)scene
+
+{
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = @"这是一个图片墙";
+    message.description = @"测试环境好像打不开";
+    PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
+    NSString * photoString = [NSString stringWithFormat:@"%@_w200",[source imageUrl]];
+    NSData* date = [NSData dataWithContentsOfURL:[NSURL URLWithString:photoString]];
+    [message setThumbImage:[UIImage imageWithData:date]];
+    WXWebpageObject *ext = [WXWebpageObject object];
+    ext.webpageUrl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,self.storyID];
+    message.mediaObject = ext;
+    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    [WXApi sendReq:req];
+}
+- (void)shareSourceWithWeiXin:(enum WXScene)scene
+{
+    WXMediaMessage * message = [WXMediaMessage message];
+    message.title = @"这是一个图片墙";
+    message.description = @"测试环境好像打不开";
+    NSString * photoString = [NSString stringWithFormat:@"%@_w200",[_shareDateSource imageUrl]];
+    NSData* date = [NSData dataWithContentsOfURL:[NSURL URLWithString:photoString]];
+    [message setThumbImage:[UIImage imageWithData:date]];
+    WXWebpageObject *ext = [WXWebpageObject object];
+    ext.webpageUrl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,self.storyID];
+    message.mediaObject = ext;
+    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    [WXApi sendReq:req];
+}
+-(void) onReq:(BaseReq*)req
+{
+    //    DLog(@"%@",req);
+}
 @end

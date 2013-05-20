@@ -35,6 +35,7 @@
     [self.myTableView setScrollsToTop:YES];
     [self.view addSubview:self.myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDidwriteImage:) name:WRITEIMAGE object:nil];
     [self readAlbum];
 }
 #pragma mark - CUSBar
@@ -44,7 +45,8 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
+//        [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
+        _cusBar.nLabelText.text = @"本地相册";
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
         
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
@@ -62,6 +64,11 @@
     [self setViewState:NomalState];
     [self.navigationItem setHidesBackButton:YES animated:NO];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    
+    if (needReadonce) {
+        [self readAlbum];
+        needReadonce = NO;
+    }
 }
 
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
@@ -88,6 +95,10 @@
 }
 
 #pragma mark - ReadData
+- (void)albumDidwriteImage:(NSNotification *)notification
+{
+    needReadonce = YES;
+}
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readAlbum];

@@ -14,9 +14,10 @@
 #import "ShareViewController.h"
 #import "RequestManager.h"
 #import "TitleAccountView.h"
+#import "ShareBox.h"
 
 @interface PhotoStoryController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
-                            SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,PhotoStoryCellDelegate,UIActionSheetDelegate>
+                            SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,PhotoStoryCellDelegate,UIActionSheetDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate>
 {
     UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;
@@ -26,10 +27,11 @@
 
     CustomizationNavBar * _navBar;
     TitleAccountView * _titleAccoutView;
-    shareModel model;
-    PhotoStoryCellDataSource * _shareDateSource;
+    ShareBox * _shareBox;
     BOOL _isShareAll;
     BOOL _isLoading;
+    PhotoStoryCellDataSource * _shareDateSource;
+    PhotoStoryCell * tempCellForDelete;
 }
 @property(strong,nonatomic)NSString * ownerID;
 @property(strong,nonatomic)NSString * storyID;

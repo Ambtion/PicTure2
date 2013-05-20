@@ -62,14 +62,20 @@
                                           otherButtonTitles:nil];
     [alert show];
 }
-
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:-1];
+}
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSString *token = [NSString
-                    stringWithFormat:@"%@",deviceToken];
+    NSString * token = [NSString stringWithFormat:@"%@",deviceToken];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     NSLog(@"token:%@",token);
     [LoginStateManager storeDeviceToken:token];
 }
+
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     NSString *str = [NSString stringWithFormat: @"Error: %@", error];
@@ -78,11 +84,11 @@
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary  *)userInfo {
     
-    NSLog(@"%@",[userInfo allKeys]);
-    NSLog(@"%@",userInfo);
-    UIAlertView * alterview = [[UIAlertView alloc] initWithTitle:@"通知" message:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"] delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"详细", nil];
-    [alterview show];
-    application.applicationIconBadgeNumber -= 1;
+//    NSLog(@"%@",[userInfo allKeys]);
+//    NSLog(@"%@",userInfo);
+//    UIAlertView * alterview = [[UIAlertView alloc] initWithTitle:@"通知" message:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"] delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"详细", nil];
+//    [alterview show];
+//    application.applicationIconBadgeNumber -= 1;
 }
 
 @end

@@ -28,7 +28,7 @@
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
     self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor blackColor] backGroundColor:[UIColor clearColor]];
+    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
@@ -47,7 +47,8 @@
     [super viewWillAppear:animated];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-        _cusBar.normalBar.image = [UIImage imageNamed:@"nav_bar_host.png"];
+        _cusBar.normalBar.image = [UIImage imageNamed:@"navbarnoline.png"];
+        _cusBar.nLabelText.text = @"星用户";
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)

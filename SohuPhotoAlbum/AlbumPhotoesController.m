@@ -54,6 +54,7 @@
     [self.view addSubview:self.myTableView];
     [self readPhotoAssetes];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDidwriteImage:) name:WRITEIMAGE object:nil];
 }
 
 #pragma mark - NavigationBar
@@ -83,6 +84,16 @@
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
+    if (needReadonce) {
+        [self readPhotoAssetes];
+        needReadonce = NO;
+    }
+}
+
+#pragma mark ReadData
+- (void)albumDidwriteImage:(NSNotification *)notification
+{
+    needReadonce = YES;
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {

@@ -49,7 +49,9 @@
         [self readAlbum];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDidwriteImage:) name:WRITEIMAGE object:nil];
 }
+
 - (void)initDataContainer
 {
     selectedArray = [NSMutableArray arrayWithCapacity:0];
@@ -76,13 +78,17 @@
         [_cusBar.nRightButton2 setButtoUploadState:YES];
         
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        
         [_cusBar.sLabelText setText:SLABELTEXT];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
-    
+    if (needReadonce) {
+        [self readAlbum];
+        needReadonce = NO;
+    }
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -91,6 +97,10 @@
     }
 }
 #pragma mark - ReadData
+- (void)albumDidwriteImage:(NSNotification *)notification
+{
+    needReadonce = YES;
+}
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readAlbum];
@@ -126,7 +136,6 @@
     [self.myTableView reloadData];
     _isReading = NO;
 }
-
 #pragma mark - SectionClick
 - (void)handleTapInSection:(UITapGestureRecognizer *)gesture
 {

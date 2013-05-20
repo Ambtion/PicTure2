@@ -15,6 +15,7 @@
 {
     self = [super init];
     if (self) {
+        
         self.wantsFullScreenLayout = YES;
         _curImageArray = [NSMutableArray arrayWithCapacity:0];
         _isHidingBar = NO;
@@ -35,7 +36,6 @@
     //fix tabBar
     [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
     [self.tabBar.deleteButton setHidden:YES];
-    [self.tabBar.shareButton setHidden:YES];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -43,18 +43,18 @@
 }
 - (void)readPhotoes
 {
-    ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
+    NSURL * assetUrl = [[[self.assetsArray objectAtIndex:self.curPageNum] defaultRepresentation] url];
     self.assetsArray = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray * tempArry = [NSMutableArray arrayWithCapacity:0];
     if (!self.group) {
         [[self libiary] readAlbumIntoGroupContainer:tempArry assetsContainer:self.assetsArray sucess:^{
-            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
+            [self resetCurNumWhenAssetArryChangeWithPreAsset:assetUrl];
         } failture:^(NSError *error) {
             
         }];
     }else{
         [[self libiary] readPhotoIntoAssetsContainer:self.assetsArray fromGroup:self.group sucess:^{
-            [self resetCurNumWhenAssetArryChangeWithPreAsset:asset];
+            [self resetCurNumWhenAssetArryChangeWithPreAsset:assetUrl];
         }];
     }
 }
@@ -66,19 +66,27 @@
         [finalArray addObject:[array objectAtIndex:i]];
     return finalArray;
 }
-- (void)resetCurNumWhenAssetArryChangeWithPreAsset:(ALAsset *)asset
+- (void)resetCurNumWhenAssetArryChangeWithPreAsset:(NSURL *)assetUrl
 {
-    self.assetsArray = [self revertObjectArray:self.assetsArray]; //逆序排序
-    NSUInteger curnum = [self.assetsArray indexOfObject:asset];
+    self.assetsArray = [self sortArrayByTime:self.assetsArray]; //逆序排序
+    NSUInteger curnum = [self indexWithAssetUrl:assetUrl.absoluteString];
     if (curnum == NSNotFound) {
         self.curPageNum = [self validPageValue:self.curPageNum];
     }else{
         self.curPageNum =  curnum;
     }
-    _canGetActualImage = YES;
     [self refreshScrollView];
 }
-
+- (NSInteger)indexWithAssetUrl:(NSString *)assetString
+{
+    for (int i = 0; i < self.assetsArray.count; i++) {
+        ALAsset * asset  =[self.assetsArray objectAtIndex:i];
+        if ([assetString isEqualToString:[[[asset defaultRepresentation] url] absoluteString]]) {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
 #pragma mark - GetIdentifyImageSizeWithImageView
 - (CGSize)getIdentifyImageSizeWithImageView:(ImageScaleView *)scaleView isPortraitorientation:(BOOL)isPortrait
 {
@@ -98,7 +106,6 @@
     rect = CGRectMake(0, 0, w * scale, h * scale);
     return rect.size;
 }
-
 #pragma mark -  GetImageFromAsset
 - (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset
 {
@@ -137,42 +144,37 @@
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
-//    if (![LoginStateManager isLogin]) {
-//        [self showLoginViewWithMethodNav:YES];
-//        return;
-//    }
+    if (![LoginStateManager isLogin]) {
+        [self showLoginViewWithMethodNav:YES];
+        return;
+    }
     if (button.tag == TABBARSHARETAG){        //分享图片
         [self showShareView];
     }
     if (button.tag == TABBARLOADPIC){        //上传图片
+        
         ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
         [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset];
     }
 }
 - (void)showShareView
 {
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"微信发送",@"腾讯QQ空间", nil];
-    [sheet showInView:self.view];
-    sheet.tag = 100;
-}
-#pragma mark - ActionSheetDelegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag != 100){
-        switch (buttonIndex) {
-            case 0:
-                [self respImageContentToSence:WXSceneTimeline];
-                break;
-            case 1:
-                [self respImageContentToSence:WXSceneSession];
-                break;
-            default:
-                break;
-        }
-    }else{
-        [self upPicture:buttonIndex];
+    if (!_shareBox) {
+        _shareBox = [[ShareBox alloc] init];
+        _shareBox.delegate = self;
     }
+    [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:NO OnView:self.view];
 }
+
+- (void)shareBoxViewShareTo:(shareModel)model
+{
+    [self upPicture:model];
+}
+- (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene
+{
+    [self respImageContentToSence:scene];
+}
+
 #pragma mark - ShareWithDes
 - (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text
 {

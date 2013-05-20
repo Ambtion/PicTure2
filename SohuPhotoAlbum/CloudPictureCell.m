@@ -75,6 +75,7 @@
     [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1002] With:_dataSource.thridDic];
     [self setImageViews:(StatusImageView *)[self.contentView viewWithTag:1003] With:_dataSource.lastDic];
 }
+
 #pragma mark - SetImage
 - (void)setImageViews:(StatusImageView*)imageView With:(NSDictionary *)dic  
 {
@@ -85,7 +86,7 @@
             NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
             __weak StatusImageView* weakSelf = imageView;
             UIImageView * AimageView = [[UIImageView alloc] init];
-            [AimageView setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:nil success:^(UIImage *image) {
+            [AimageView setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:[UIImage imageNamed:@"moren.png"] success:^(UIImage *image) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf setImage:image];
                 });

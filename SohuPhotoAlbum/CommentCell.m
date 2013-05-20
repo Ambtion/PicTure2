@@ -9,15 +9,16 @@
 #import "CommentCell.h"
 #import "UIImageView+WebCache.h"
 
-#define TEXTCOLOR  [UIColor colorWithRed:75.f/255 green:75.f/255 blue:75.f/255 alpha:1.f]
-#define TEXTFONT  [UIFont systemFontOfSize:12]
+#define TEXTCOLOR   [UIColor colorWithRed:75.f/255 green:75.f/255 blue:75.f/255 alpha:1.f]
+#define TEXTFONT    [UIFont systemFontOfSize:14]
+#define OFFSETY     10.f
 @implementation CommentCellDeteSource
 @synthesize userId,portraitUrl,userName,commentStr;
 
 - (CGFloat)cellHeigth
 {
     CGSize size = [self.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
-    return size.height + 43 + 10;
+    return size.height + 43 + 10 + OFFSETY;
 }
 
 @end
@@ -36,7 +37,8 @@
 }
 - (void)initSubViews
 {
-    porViews = [[PortraitView alloc] initWithFrame:CGRectMake(6, 6, 38, 38)];
+    
+    porViews = [[PortraitView alloc] initWithFrame:CGRectMake(6, 6 + OFFSETY, 38, 38)];
     porViews.clipsToBounds = YES;
     porViews.layer.cornerRadius = 5.f;
     porViews.layer.borderWidth = 1.f;
@@ -47,9 +49,9 @@
     UITapGestureRecognizer * ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleUserPortraitTap:) ];
     [porViews addGestureRecognizer:ges];
     
-    commentbgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"commentbgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 10, 45, 25)]];
+    commentbgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"commentbgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 10 + OFFSETY, 45, 25)]];
     [self.contentView addSubview:commentbgView];
-    nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 12, 200, 20)];
+    nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 12 + OFFSETY, 200, 20)];
     [self setusernameLabel];
     [self.contentView addSubview:nameLabel];
     commentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -60,7 +62,7 @@
 {
     nameLabel.textColor = [UIColor colorWithRed:75.f/255 green:75.f/255 blue:75.f/255 alpha:1.f];
     nameLabel.backgroundColor = [UIColor clearColor];
-    nameLabel.font = [UIFont boldSystemFontOfSize:14];
+    nameLabel.font = [UIFont boldSystemFontOfSize:16];
 }
 - (void)setCommentLabel
 {
@@ -85,10 +87,10 @@
     porViews.imageView.image = [UIImage imageNamed:@"nicheng.png"];
     nameLabel.text = [NSString stringWithFormat:@"%@:",_dataSource.userName];
     CGSize size = [_dataSource.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
-    CGRect rect = CGRectMake(68, 35, size.width, size.height);
+    CGRect rect = CGRectMake(68, 35 + OFFSETY, size.width, size.height);
     commentLabel.frame = rect;
     commentLabel.text = _dataSource.commentStr;
-    commentbgView.frame = CGRectMake(50, 6, 240, rect.origin.y + rect.size.height);
+    commentbgView.frame = CGRectMake(50, 6 + OFFSETY, 240, rect.origin.y + rect.size.height);
 }
 - (void)handleUserPortraitTap:(UIGestureRecognizer *)gesture
 {

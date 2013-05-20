@@ -31,11 +31,13 @@
 - (CGFloat)cellHeigth
 {
     CGFloat heigth =  OFFSETY + 1; //biView Offset;
-    if (weigth < 308 * 2){//图片
-        heigth += higth / 2.f;
-    }else{
-        heigth += 308  * higth / weigth;
-    }
+//    if (weigth < 308 * 2){//图片
+//        heigth += higth / 2.f;
+//    }else{
+//        heigth += 308  * higth / weigth;
+//    }
+    heigth += 308  * higth / weigth; //等宽缩放
+
     if (!imageDes ||[imageDes isKindOfClass:[NSNull class]] || [imageDes isEqualToString:@""]){
         imageDes = nil;
     }else{
@@ -157,11 +159,12 @@
     __weak UIImageView * photoViewWeak = _photoView;
     __weak PhotoStoryCell * weakSelf = self;
     [_photoView setImageWithURL:[NSURL URLWithString:str] success:^(UIImage *image) {
-        if (image.size.width <= 308 * 2) {
-            photoViewWeak.frame = CGRectMake(0, 1, image.size.width /2.f, image.size.height/2.f);
-        }else{
-            photoViewWeak.frame = CGRectMake(0, 1, 308 , 308 * image.size.height / image.size.width);
-        }
+//        if (image.size.width <= 308 * 2) {
+//            photoViewWeak.frame = CGRectMake(0, 1, image.size.width /2.f, image.size.height/2.f);
+//        }else{
+//            photoViewWeak.frame = CGRectMake(0, 1, 308 , 308 * image.size.height / image.size.width);
+//        }
+        photoViewWeak.frame = CGRectMake(0, 1, 308 , 308 * image.size.height / image.size.width);
         photoViewWeak.center = CGPointMake(160, photoViewWeak.center.y);
         [weakSelf updateAllOhterViewButImageView];
     } failure:^(NSError *error) {

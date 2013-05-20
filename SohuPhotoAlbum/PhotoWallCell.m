@@ -93,7 +93,7 @@
         heigth += size.height; //desLabel
         heigth +=OFFSETY; //描述footView
         heigth += FOOTVIEWHEIGTH;
-//        heigth +=OFFSETY; //下边界
+        //        heigth +=OFFSETY; //下边界
         return heigth;
     }
     return 0.f;
@@ -197,7 +197,7 @@
         _deleteButton.frame = rect;
         [self.contentView addSubview:_deleteButton];
     }
-
+    
 }
 - (void)setCountLabelProperty:(CountLabel *)label
 {
@@ -236,7 +236,7 @@
     _backImageView.frame = CGRectMake(0, 0, self.bounds.size.width, _wallDesLabel.frame.size.height + _wallDesLabel.frame.origin.y + OFFSETY);
     if (_dataSource.isLiking) {
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon1.png"] forState:UIControlStateNormal];
-
+        
     }else{
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
     }

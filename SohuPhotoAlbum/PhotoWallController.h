@@ -15,8 +15,10 @@
 #import "RequestManager.h"
 #import "ShareViewController.h"
 #import "TitleAccountView.h"
+#import "ShareBox.h"
 
-@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate,UIActionSheetDelegate>
+@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,      SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate,
+            UIActionSheetDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate>
 {
     UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;
@@ -25,9 +27,11 @@
     CustomizationNavBar * _navBar;
     TimeLabelView * _timelabel;
     TitleAccountView * _titleAccoutView;
-    shareModel model;
+    ShareBox * _shareBox;
     BOOL _isLoading;
     BOOL _isRoot;
+    BOOL _pushView;
+    PhotoWallCell * tempCellForDelete;
 }
 @property(nonatomic,strong)NSString * ownerID;
 - (id)initWithOwnerID:(NSString *)ownID isRootController:(BOOL)isRoot;

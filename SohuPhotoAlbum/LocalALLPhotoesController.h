@@ -16,5 +16,6 @@
     BOOL _isReading; //for app bacome background
     LocalAlbumsController * localAlbumsConroller;
     BOOL isinit;
+    BOOL needReadonce;
 }
 @end

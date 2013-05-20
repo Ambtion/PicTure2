@@ -113,7 +113,7 @@
         
         self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
         [_normalBar addSubview:nLabelImage];
-        self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)];
+        self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 150, 44)];
         self.nLabelText.backgroundColor = [UIColor clearColor];
         self.nLabelText.textColor = [UIColor blackColor];
         [_normalBar addSubview:nLabelText];
@@ -129,7 +129,7 @@
     [_stateBar setUserInteractionEnabled:YES];
     _stateBar.image = [UIImage imageNamed:@"navbar.png"];
     
-    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 150, 44)];
+    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 150, 44)];
     self.sLabelText.backgroundColor = [UIColor clearColor];
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];
@@ -142,7 +142,7 @@
     [_stateBar addSubview:sLeftButton];
     
     self.sRightStateButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    sRightStateButton.frame = CGRectMake(320 - 50, 0, 44, 44);
+    sRightStateButton.frame = CGRectMake(320 - 44, 0, 44, 44);
     sRightStateButton.tag = RIGHTSELECTEDTAG;
     [sRightStateButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_stateBar addSubview:sRightStateButton];

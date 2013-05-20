@@ -15,6 +15,7 @@
     ALAssetsGroup * _assetGroup;
     BOOL _isInitUpload;
     BOOL _isReading;
+    BOOL needReadonce;
 }
 @property(nonatomic,strong)ALAssetsGroup * assetGroup;
 - (id)initWithAssetGroup:(ALAssetsGroup *)AnAssetGroup andViewState:(viewState)state;

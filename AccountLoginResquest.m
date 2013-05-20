@@ -22,7 +22,37 @@
     CFBridgingRelease(theUUID);
     return (NSString *)string;
 }
++ (BOOL)upDateDeviceToken
+{
+    NSString * str = [LoginStateManager deviceToken];
+    if (!str) return NO;
+    NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/device_tokens/add",BASICURL];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    [request addRequestHeader:@"accept" value:@"application/json"];
+    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
+    [request setPostValue:str forKey:@"device_token"];
+    [request startSynchronous];
+    if (request.responseStatusCode == 200) {
+        return YES;
+    }
+    return NO;
+}
 
++ (BOOL)deleteDeviceToken
+{
+    NSString * str = [LoginStateManager deviceToken];
+    if (!str) return NO;
+    NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/device_tokens/delete",BASICURL];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    [request addRequestHeader:@"accept" value:@"application/json"];
+    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
+    [request setPostValue:str forKey:@"device_token"];
+    [request startSynchronous];
+    if (request.responseStatusCode == 200) {
+        return YES;
+    }
+    return NO;
+}
 + (BOOL)resigiterDevice
 {
     NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/devices",BASICURL];
@@ -110,4 +140,5 @@
     }];
     [request startAsynchronous];
 }
+
 @end

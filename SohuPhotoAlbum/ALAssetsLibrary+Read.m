@@ -58,6 +58,7 @@
         [self enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
             if (group == nil)
             {
+                
                 //finished
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //递归读取专辑的照片

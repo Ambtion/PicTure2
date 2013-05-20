@@ -23,8 +23,7 @@
         self.backgroundColor = [UIColor clearColor];
         UIView * view = [[UIView alloc] initWithFrame:self.bounds];
         view.backgroundColor = [UIColor clearColor];
-        
-        _actualView = [[UIImageView alloc] initWithFrame:CGRectMake(-1, -1, self.bounds.size.width + 2, self.bounds.size.height + 2)];
+        _actualView = [[UIImageView alloc] initWithFrame:CGRectMake(-2, -2, self.bounds.size.width + 4, self.bounds.size.height + 4)];
         [view addSubview:_actualView];
         view.clipsToBounds = YES;
         [self addSubview:view];

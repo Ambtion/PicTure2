@@ -20,7 +20,7 @@ typedef enum _imageStatePosition
     
 }imageStatePosition;
 
-@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate>
+@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 {
     UIScrollView * _scrollView;
     ImageScaleView * _fontScaleImage;
@@ -44,7 +44,7 @@ typedef enum _imageStatePosition
 @property(nonatomic,strong)ImageScaleView * rearScaleImage;
 @property(nonatomic,strong)CustomizetionTabBar * tabBar;
 @property(nonatomic,assign)BOOL isLoading;
-
+@property(nonatomic,assign)BOOL isPushView;
 - (int)validPageValue:(NSInteger)value;
 - (void)refreshScrollView;
 

@@ -213,6 +213,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     if (error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
     }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:WRITEIMAGE object:nil];
         [self showPopAlerViewRatherThentasView:NO WithMes:@"图片已保存到本地"];
     }
 }

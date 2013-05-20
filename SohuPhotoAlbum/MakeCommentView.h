@@ -7,21 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HPGrowingTextView.h"
 
 @class MakeCommentView;
 @protocol MakeCommentViewDelegate <NSObject>
 - (void)makeCommentView:(MakeCommentView *)view commentClick:(UIButton *)button;
 @end
-@interface MakeCommentView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate>
-{
-    UIButton * _comentButton;
-    UITextField * _placeHolder;
-    CGFloat startWidth;
-    UIImageView * _commenBgView;
-}
-@property(nonatomic,strong)UITextView * textView;
-@property(nonatomic,assign)NSInteger textCountLimit;
-@property(nonatomic,strong)UIButton * comentButton;
+@interface MakeCommentView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate,HPGrowingTextViewDelegate>
+
 @property(nonatomic,weak )id<MakeCommentViewDelegate> delegte;
+@property(strong,nonatomic)HPGrowingTextView * textView;
+
 - (void)addresignFirTapOnView:(UIView *)view;
 @end

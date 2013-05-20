@@ -16,6 +16,11 @@
 @end
 
 @implementation CommentController
+- (void)dealloc
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self];
+}
 @synthesize sourceId;
 @synthesize imageUrl;
 
@@ -27,6 +32,9 @@
         type = Atype;
         self.imageUrl = bgUrl;
         sourceOwnId = ownID;
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self selector:@selector(commentkeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+        [center addObserver:self selector:@selector(commentkeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     }
     return self;
 }
@@ -48,19 +56,19 @@
     UIImageView * maskImageView = [[UIImageView alloc] initWithFrame:_myBgView.bounds];
     [_myBgView addSubview:maskImageView];
     maskImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    maskImageView.backgroundColor = [UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.5];
+    maskImageView.backgroundColor = [UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.3];
     self.view.clipsToBounds = YES;
     __weak UIImageView * bgViewSelf = _myBgView;
     __weak CommentController * weakSelf = self;
     [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.imageUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
         CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
-//        bgViewSelf.alpha = 0.5;
-        bgViewSelf.frame = (CGRect){0,0,size};
+        bgViewSelf.frame = (CGRect){0, 0,size};
         bgViewSelf.center = CGPointMake(weakSelf.view.bounds.size.width /2.f, weakSelf.view.bounds.size.height /2.f);
     } failure:^(NSError *error) {
         
     }];
 }
+
 - (void)addTableView
 {
     _myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height - 44 - 38) style:UITableViewStylePlain];
@@ -85,9 +93,6 @@
     [self.view addSubview:commentView];
     commentView.delegte = self;
     [commentView addresignFirTapOnView:self.view];
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(commentkeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [center addObserver:self selector:@selector(commentkeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (CGSize)getIdentifyImageSizeWithImageView:(UIImage *)image
@@ -109,7 +114,7 @@
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-        _navBar.normalBar.image = [UIImage imageNamed:@"full_screen_title-bar.png"];
+        _navBar.normalBar.image = [UIImage imageNamed:@"navbarnoline.png"];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         _navBar.nLabelText.text = @"评论";
         _navBar.nLabelText.textColor = [UIColor whiteColor];
@@ -122,38 +127,41 @@
     [super viewWillDisappear:animated];
     [_navBar removeFromSuperview];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
+    [commentView.textView resignFirstResponder];
 }
-
 #pragma mark KeyBord
 - (void)commentkeyboardWillShow:(NSNotification *)notification
 {
     NSDictionary * dic = [notification userInfo];
     CGFloat heigth = [[dic objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
-    [UIView animateWithDuration:0.3 animations:^{
+    NSNumber *duration = [dic objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    [UIView animateWithDuration:[duration doubleValue]?[duration doubleValue] : 0.25 animations:^{
         commentView.frame = CGRectMake(0, self.view.frame.size.height - 38 - heigth, 320, 38);
     }];
 }
 - (void)commentkeyboardWillHide:(NSNotification *)notification
 {
-    [UIView animateWithDuration:0.3 animations:^{
+    NSDictionary * dic = [notification userInfo];
+    NSNumber *duration = [dic objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    [UIView animateWithDuration:[duration doubleValue]?[duration doubleValue] : 0.25 animations:^{
         commentView.frame = CGRectMake(0, self.view.frame.size.height - 38, 320, 38);
     }];
 }
 
 - (void)commetButtonClick:(UIButton *)button
 {
-    if ([EmojiUnit stringContainsEmoji:commentView.textView.text]) {
+    if ([EmojiUnit stringContainsEmoji:commentView.textView.internalTextView.text]) {
         PopAlertView * tip = [[PopAlertView alloc] initWithTitle:@"提示信息" message:@"评论内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [tip show];
         return;
     }
-    [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:[LoginStateManager currentUserId] andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.text success:^(NSString *response) {
+    [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:[LoginStateManager currentUserId] andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.internalTextView.text success:^(NSString *response) {
         [commentView.textView resignFirstResponder];
-        [_dataSourceArray insertObject:[self getCommentSoureWithComment:commentView.textView.text] atIndex:0];
-        commentView.textView.text = nil;
+        [_dataSourceArray insertObject:[self getCommentSoureWithComment:commentView.textView.internalTextView.text] atIndex:0];
+        commentView.textView.internalTextView.text = nil;
         [_myTableView reloadData];
     } failure:^(NSString *error) {
-        
+        [commentView.textView resignFirstResponder];
     }];
 }
 - (CommentCellDeteSource *)getCommentSoureWithComment:(NSString *)comment
@@ -222,21 +230,19 @@
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
         [self doneRefrshLoadingTableViewData];
-        
+
     } failure:^(NSString *error) {
         [self doneRefrshLoadingTableViewData];
     }];
     [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
         userInfo = [response JSONValue];
     } failure:^(NSString *error) {
-        
+        [self addDataSourceWithArray:nil];
     }];
 }
 - (void)addDataSourceWithArray:(NSArray *)array
 {
-    if (array.count)
-        DLog(@"%@",[array objectAtIndex:0]);
-    for (int i = 0; i< array.count; i++)
+    for (int i = 0; i < array.count; i++)
         [_dataSourceArray addObject:[self getCellDataSourceFromInfo:[array objectAtIndex:i]]];
     [_myTableView reloadData];
 }
@@ -297,6 +303,10 @@
     return cell;
 }
 #pragma mark Action
+- (void)backButtonClick:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     if (button.tag == LEFTBUTTON) {

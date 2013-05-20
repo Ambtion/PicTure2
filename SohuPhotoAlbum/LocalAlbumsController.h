@@ -13,5 +13,6 @@
 @interface LocalAlbumsController : LocalBaseController<UITableViewDelegate,UITableViewDataSource,PhotoAlbumCellDelegate>
 {
     BOOL _isReading; //for app bacome background
+    BOOL needReadonce;
 }
 @end

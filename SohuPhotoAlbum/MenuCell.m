@@ -19,6 +19,9 @@
     if (self) {
         
         self.frame = CGRectMake(0, 0, 320, 48);
+        UIImageView * image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"leftMenuHigthed.png"]];
+        image.frame = self.bounds;
+        self.selectedBackgroundView = image;
         leftImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, (self.bounds.size.height - 44)/2.f, 44, 44)];
         [self.contentView addSubview:leftImage];
         labelText = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, 260, 48)];
@@ -29,9 +32,9 @@
         labelText.shadowOffset = CGSizeMake(0, 1);
         [self.contentView addSubview:labelText];
         
-        UIImageView * lineimage = [[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height - 1 , 320, 1)];
-        lineimage.image = [UIImage imageNamed:@"line.png"];
-        [self.contentView addSubview:lineimage];
+//        UIImageView * lineimage = [[UIImageView alloc] initWithFrame:CGRectMake(0,self.bounds.size.height , 320, 1)];
+//        lineimage.image = [UIImage imageNamed:@"line.png"];
+//        [self.contentView addSubview:lineimage];
     }
     return self;
 }

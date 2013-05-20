@@ -28,14 +28,14 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     bgView.image = [UIImage imageNamed:@"menuBackground.png"];
     [self.view addSubview:bgView];
     
-    UIImageView * logoText = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 59, 320, 59)];
+    UIImageView * logoText = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 69, 320, 59)];
     logoText.image = [UIImage imageNamed:@"logoText.png"];
     [self.view addSubview:logoText];
     
     //控制statuBar
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0 ,60.f, rect.size.width, rect.size.height)
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,60.f, rect.size.width, rect.size.height)
                                               style:UITableViewStylePlain];
-    _tableView.separatorColor = [UIColor clearColor];
+    _tableView.separatorStyle = UITableViewCellSelectionStyleNone;
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.scrollEnabled = NO;
     _tableView.dataSource = self;
@@ -45,6 +45,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     
     //三方登陆绑定页面
     _oauthorBindView = [[OauthirizeView alloc] initWithFrame:CGRectMake(0, 48, 320, 0)];
+    _oauthorBindView.frame = CGRectMake(0, -(self.view.frame.size.height- 48) , 320, 0);
     [_oauthorBindView addtarget:self action:@selector(oauthorizeButtonClick:)];
     [self.view addSubview:_oauthorBindView];
     //accoutView
@@ -52,8 +53,8 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     _accountView.delegate = self;
     [self setAccountView];
     [self.view addSubview:_accountView];
+    
 }
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -226,17 +227,25 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 - (void)showOAuthorView
 {
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.3 animations:^{
-        _oauthorBindView.frame = CGRectMake(0, 48, 320, 320);
+    [UIView animateWithDuration:0.2 animations:^{
+        _oauthorBindView.frame = CGRectMake(0, 48, 320, self.view.frame.size.height - 48);
     } completion:^(BOOL finished) {
-        [self.view setUserInteractionEnabled:YES];
+        [UIView animateWithDuration:0.05 animations:^{
+        _oauthorBindView.frame = CGRectMake(0, 40, 320, self.view.frame.size.height - 48);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.05 animations:^{
+                _oauthorBindView.frame = CGRectMake(0, 48, 320, self.view.frame.size.height - 48);
+            } completion:^(BOOL finished) {
+                [self.view setUserInteractionEnabled:YES];
+            }];
+        }];
     }];
 }
 - (void)hideOAuthorView
 {
     [self.view setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.3 animations:^{
-        _oauthorBindView.frame = CGRectMake(0, 48, 320, 0);
+        _oauthorBindView.frame = CGRectMake(0, -(self.view.frame.size.height- 48) , 320, 0);
     } completion:^(BOOL finished) {
         [self.view setUserInteractionEnabled:YES];
     }];

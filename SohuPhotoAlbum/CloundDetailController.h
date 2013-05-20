@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "PhotoDetailBaseController.h"
+#import "ShareBox.h"
+#import "ShareViewController.h"
 
-@interface CloundDetailController : PhotoDetailBaseController<UIActionSheetDelegate>
+#define DELETEPHOTO @"delePhoto"
+
+@interface CloundDetailController : PhotoDetailBaseController<WXApiDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate>
 {
     BOOL _hasMoreAssets;
+    BOOL _hasLessAssets;
+    ShareBox * _shareBox;
+    
 }
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(NSDictionary *)asset;
 @property(nonatomic,strong)NSMutableArray * sectionArray;

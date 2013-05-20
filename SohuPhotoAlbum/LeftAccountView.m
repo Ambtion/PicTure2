@@ -29,7 +29,7 @@
         portraitImageView.layer.borderWidth = 1.f;
         portraitImageView.layer.borderColor = [[UIColor blackColor] CGColor];
         portraitImageView.backgroundColor = [UIColor clearColor];
-        [self addSubview:portraitImageView];        
+        [self addSubview:portraitImageView];     
         CGRect rect = CGRectMake(55, 13, 95, 12.f);
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = portraitImageView.frame;

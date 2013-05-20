@@ -29,6 +29,16 @@
     [super viewWillAppear:animated];
     [self setStatueBar];
 }
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setStatueBar];
+}
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self resetStatueBar];
+}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -36,13 +46,17 @@
 }
 - (void)setStatueBar
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    if (!self.navigationController.navigationBar.isHidden){
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
 }
 - (void)resetStatueBar
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+    if (self.navigationController.navigationBar.isHidden){
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+    }
 }
 
 #pragma mark - 
@@ -50,15 +64,14 @@
 {
     [super viewDidLoad];
     self.wantsFullScreenLayout = YES;
-    
     [self addBgView];
     NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_c95",_bgPhotoUrl]]];
     LocalShareDesView * localView = [[LocalShareDesView alloc] initWithModel:_sharemodel thumbnail:[UIImage imageWithData:data] andDelegate:self offsetY:20.f];
     localView.frame = self.view.bounds;
     localView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:localView];
-    
 }
+
 - (void)addBgView
 {
     self.view.frame = [[UIScreen mainScreen] bounds];
@@ -92,7 +105,6 @@
 #pragma mark DesShareDelegate
 - (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text
 {
-    DLog(@"%@",_delegate);
     if ([_delegate respondsToSelector:@selector(shareViewcontrollerDidShareClick: withDes: shareMode:)]) {
         [_delegate shareViewcontrollerDidShareClick:self withDes:text shareMode:_sharemodel];
         return;

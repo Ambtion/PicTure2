@@ -20,6 +20,27 @@
 
 @implementation RequestManager(private)
 
++ (void)setValueWith:(shareModel)shareMode intoDic:(NSMutableDictionary *)body
+{
+    NSString * shareModeStr = nil;
+    switch (shareMode) {
+        case QQShare:
+            shareModeStr = @"qq";
+            break;
+        case SinaWeiboShare:
+            shareModeStr = @"sina";
+            break;
+        case RenrenShare:
+            shareModeStr = @"renren";
+            break;
+            
+        default:
+            break;
+    }
+    if (!shareModeStr) return;
+    [body setValue:shareModeStr forKey:@"share_to"];
+
+}
 + (NSString *)sourceToString:(source_type)type
 {
     return (type == KSourcePhotos ? @"photos":@"portfolios");
@@ -156,7 +177,6 @@
 #pragma mark -
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId withAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * mmm;
     NSString * str = nil;
     if (token) {
         str = [NSString stringWithFormat:@"%@/portfolios?owner_id=%@&start=%d&count=%d&access_token=%@",BASICURL_V1,ownId,start,count,token];
@@ -177,7 +197,6 @@
 #pragma mark -
 + (void)getAllPhototInStoryWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * mmm;
     NSString * str = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
                       BASICURL_V1,storyId,ownId,start,count];
     [self getSourceWithStringUrl:str success:success failure:failure];
@@ -216,7 +235,7 @@
         str = [NSString stringWithFormat:@"%@/users/%@?access_token=%@",BASICURL_V1,userId,[LoginStateManager currentToken]];
     }else{
         str = [NSString stringWithFormat:@"%@/users/%@",BASICURL_V1,userId];
-
+        
     }
     [self getSourceWithStringUrl:str success:success failure:nil];
 }
@@ -239,45 +258,82 @@
 }
 
 //分享
-+ (void)sharePhtotsWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)createPortfoliosWithDic:(NSDictionary *)dic success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * string = [NSString stringWithFormat:@"%@/photos/share",BASICURL_V1];
-    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
-    [body setValue:token forKey:@"access_token"];
-    [body setValue:sharetoken forKey:@"share_access_token"];
+    NSString * strUrl = [NSString stringWithFormat:@"%@/portfolios",BASICURL_V1];
+    [self postWithURL:strUrl body:dic success:success failure:failure];
+}
++ (void)sharePhotosWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
     NSString * iDsStr = nil;
+    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
     if (photos_Ids.count > 1){
         iDsStr = [photos_Ids componentsJoinedByString:@","];
     }else{
         iDsStr = [photos_Ids lastObject];
     }
     [body setValue:iDsStr forKey:@"photo_ids"];
-    NSString * shareModeStr = nil;
-    switch (shareMode) {
-        case QQShare:
-            shareModeStr = @"qq";
-            break;
-        case SinaWeiboShare:
-            shareModeStr = @"sina";
-            break;
-        case RenrenShare:
-            shareModeStr = @"renren";
-            break;
-        default:
-            break;
-    }
-    if (!shareModeStr) return;
-    [body setValue:shareModeStr forKey:@"share_to"];
-    [body setValue:shareModeStr forKey:@"share_access_token"];
+    [body setValue:token forKey:@"access_token"];
     if (title) {
         [body setValue:title forKey:@"title"];
     }
     if (description) {
         [body setValue:description forKey:@"description"];
     }
+    if (shareMode == SohuShare) {
+        [self createPortfoliosWithDic:body success:success failure:failure];
+        return;
+    }
+    NSString * string = [NSString stringWithFormat:@"%@/photos/share",BASICURL_V1];
+    [body setValue:sharetoken forKey:@"share_access_token"];
+    [self setValueWith:shareMode intoDic:body];
+    [body setValue:sharetoken   forKey:@"share_access_token"];
     [self postWithURL:string body:body success:success failure:failure];
 }
 
+//分享主页
++ (void)shareUserHomeWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * strUrl = [NSString stringWithFormat:@"%@/users/%@/share",BASICURL_V1, ownerId];
+    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
+    [body setValue:token forKey:@"access_token"];
+    [self setValueWith:shareMode intoDic:body];
+    [body setValue:sharetoken   forKey:@"share_access_token"];
+    if (description) {
+        [body setValue:description forKey:@"description"];
+    }
+    [self postWithURL:strUrl body:body success:success failure:failure];
+
+}
+//分享单个作品集
++ (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * strUrl = [NSString stringWithFormat:@"%@/portfolios/%@/share",BASICURL_V1,portfolisId];
+    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
+    [body setValue:token forKey:@"access_token"];
+    [body setValue:ownerId forKey:@"owner_id"];
+    [self setValueWith:shareMode intoDic:body];
+    [body setValue:sharetoken forKey:@"share_access_token"];
+    if (description) {
+        [body setValue:description forKey:@"description"];
+    }
+    [self postWithURL:strUrl body:body success:success failure:failure];
+}
+//分享单张图片
++ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * strURl = [NSString stringWithFormat:@"%@/portfolios/%@/photos/%@/share",BASICURL_V1,portfolisId,photoID];
+    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
+    [body setValue:token forKey:@"access_token"];
+    [body setValue:ownerId forKey:@"owner_id"];
+    [body setValue:sharetoken forKey:@"share_access_token"];
+    [self setValueWith:shareMode intoDic:body];
+    if (description) {
+        [body setValue:description forKey:@"description"];
+    }
+    [self postWithURL:strURl body:body success:success failure:failure];
+}
+//推荐
 + (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * strUrl = [NSString stringWithFormat:@"%@/users/recommend",BASICURL_V1];
@@ -287,7 +343,7 @@
 //反馈
 + (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure
 {
-  
+    
 }
 
 @end
