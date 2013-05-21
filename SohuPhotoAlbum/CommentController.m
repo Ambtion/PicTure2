@@ -155,21 +155,27 @@
         [tip show];
         return;
     }
+    DLog(@"%@ %d",commentView.textView.internalTextView.text,_isLoading);
+    if (_isSending) return;
+    _isSending  = YES;
     [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:[LoginStateManager currentUserId] andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.internalTextView.text success:^(NSString *response) {
-        [commentView.textView resignFirstResponder];
         [_dataSourceArray insertObject:[self getCommentSoureWithComment:commentView.textView.internalTextView.text] atIndex:0];
         commentView.textView.internalTextView.text = nil;
+        [commentView.textView resignFirstResponder];
         [_myTableView reloadData];
+        _isSending  = NO;
     } failure:^(NSString *error) {
         [commentView.textView resignFirstResponder];
+        _isSending  = NO;
     }];
 }
+
 - (CommentCellDeteSource *)getCommentSoureWithComment:(NSString *)comment
 {
     CommentCellDeteSource * dataSource = [[CommentCellDeteSource alloc] init];
     dataSource.portraitUrl = [userInfo objectForKey:@"user_icon"];
     dataSource.userName = [userInfo objectForKey:@"user_nick"];
-    dataSource.userId = [userInfo objectForKey:@"user_id"];
+    dataSource.userId = [NSString stringWithFormat:@"%@",[userInfo objectForKey:@"user_id"]];
     dataSource.commentStr = comment;
     return dataSource;
 }

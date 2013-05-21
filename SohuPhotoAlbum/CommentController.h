@@ -27,7 +27,7 @@ SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,CommentCellDelegate,MakeCo
     source_type type;
     MakeCommentView * commentView;
     NSString * sourceOwnId;
-    
+    BOOL _isSending;
     NSDictionary * userInfo;
 }
 

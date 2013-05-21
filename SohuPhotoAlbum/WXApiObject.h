@@ -206,7 +206,6 @@ enum WXAPISupport {
 
 @end
 
-
 #pragma mark -
 /*! @brief 多媒体消息中包含的图片数据对象
  *

@@ -16,77 +16,79 @@
 }
 @end
 
+//边线为5, 中间线为3
+
 static CGFloat strategy1(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, KWallWidth - KWallOffsetX, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, KWallWidth - 2 * KWallOffsetX, 200)];
     
-    return 208;
+    return 200 + KWallOffsetY ;
 }
 
 static CGFloat strategy2(NSMutableArray * frames)
 {
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 200, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(210, KWallOffsetX, KWallWidth - 210, 200)];
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 208)];
         
-    return 208;
+    return 208 + KWallOffsetY;
 }
 
 static CGFloat strategy3(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(212, KWallOffsetX, 100, 100)];
+    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY, 99, 103)];
     
-    [frames addRect:CGRectMake(212, 110, 100, 100)];
+    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY + 103 + 2, 99, 103)];
     
-    return 210;
+    return KWallOffsetY + 200 + 2;
 }
 
 static CGFloat strategy4(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(212, KWallOffsetX, 100, 202)];
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 208)];
     
-    [frames addRect:CGRectMake(KWallOffsetX, 212, 202, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY + 208 + 3, 208, 100)];
     
-    [frames addRect:CGRectMake(212, 212, 100, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY + 208 + 3, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 100)];
     
-    return 312;
+    return KWallOffsetY + 208 + 3 + 100;
 }
 
 static CGFloat strategy5(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(212, KWallOffsetX, 100, 202)];
-    
-    [frames addRect:CGRectMake(KWallOffsetX, 212, 100, 100)];
-    
-    [frames addRect:CGRectMake(110, 212, 100, 100)];
-    
-    [frames addRect:CGRectMake(212, 212, 100, 100)];;
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 208)];
 
     
-    return 312;
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY + 208 + 3, 102, 100)];
+    
+    [frames addRect:CGRectMake(KWallOffsetX + 105, KWallOffsetY + 208 + 3, 103, 100)];
+    
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY + 208 + 3, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 100)];
+
+    return  KWallOffsetY + 208 + 3 + 100;
 }
 
 static CGFloat strategy6(NSMutableArray *frames)
 {
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetX, 202, 202)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(212, 8, 100, 100)];
+    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY, 99, 103)];
     
-    [frames addRect:CGRectMake(212, 110, 100, 100)];
+    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY + 103 + 2, 99, 103)];
     
-    [frames addRect:CGRectMake(KWallOffsetX, 212, 100, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY + 208 + 3, 102, 100)];
     
-    [frames addRect:CGRectMake(110, 212, 100, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX + 105, KWallOffsetY + 208 + 3, 103, 100)];
     
-    [frames addRect:CGRectMake(212, 212, 100, 100)];;
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY + 208 + 3, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 100)];
     
-    return 312;
+    return KWallOffsetY + 208 + 3 + 100;
     
 }
 

@@ -15,5 +15,5 @@
 @property(strong, nonatomic)PortraitView * portraitImageView;
 @property(strong, nonatomic)UILabel * sname;
 @property(strong, nonatomic)UILabel * nameLabel;
-- (void)refreshUserInfo;
+- (void)refreshUserInfoWithDic:(NSDictionary *)dic;
 @end

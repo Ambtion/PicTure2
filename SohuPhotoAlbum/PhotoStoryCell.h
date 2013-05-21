@@ -12,6 +12,7 @@
 
 @interface PhotoStoryCellDataSource : NSObject
 @property(strong,nonatomic)NSString * photoId;
+@property(strong,nonatomic)NSString * photoShowID;
 @property(strong,nonatomic)NSString * imageUrl;
 @property(nonatomic,assign)CGFloat weigth;
 @property(nonatomic,assign)CGFloat higth;

@@ -87,7 +87,7 @@ static NSString * provider = nil;
     [request setPostValue:@"third_party_code" forKey:@"grant_type"];
     [request setPostValue:CLIENT_ID forKey:@"client_id"];
     [request setPostValue:provider forKey:@"provider"];
-    [request setPostValue:code forKey:@"code"];
+    [request setPostValue:grantcode forKey:@"code"];
     [request setCompletionBlock:^{
         DLog(@"%d %@",[request responseStatusCode],[request responseString]);
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
@@ -115,16 +115,21 @@ static NSString * provider = nil;
 #pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    
     NSString * str = [request.URL absoluteString];
     DLog(@"%@",str);
-    return YES;
-    if ([str rangeOfString:@"http://pp.sohu.com"].length && ![str rangeOfString:@"client_id"].length) {
-        NSRange rang = [str rangeOfString:@"code="];
-        if (rang.length) {
-            code = [[NSString alloc] initWithString:[str substringFromIndex:rang.length + rang.location]];
-            [webView stopLoading];
-            [self loginWithCode];
+    if ([str rangeOfString:@"http://www.sohu.com"].length && [str rangeOfString:@"token"].length) {
+        NSArray * array = [str componentsSeparatedByString:@"&"];
+        for (NSString * str in array) {
+            DLog(@"NNNNNNNN::%@",str);
+            if ([str rangeOfString:@"token"].length) {
+                info_Base64 = [[str componentsSeparatedByString:@"="] lastObject];
+            }
+            if ([str rangeOfString:@"grantcode"].length) {
+                grantcode  = [[str componentsSeparatedByString:@"="] lastObject];
+            }
         }
+        DLog(@"FFFFFF::info_base:%@, grcode:%@",[self decodeBase64:info_Base64],grantcode);
         return NO;
     }
     return YES;

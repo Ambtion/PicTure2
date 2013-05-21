@@ -56,6 +56,8 @@ typedef enum  Soruce_Type source_type;
 //星用户
 + (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
+
+
 //反馈
 + (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure;
 @end

@@ -15,7 +15,7 @@
 #import "AlBumDetailController.h"
 
 @implementation PhotoStoryController
-@synthesize storyID,ownerID;
+@synthesize storyID,ownerID,showID,storyName,storyDes;
 
 - (id)initWithStoryId:(NSString *)AstoryID ownerID:(NSString *)AownerID
 {
@@ -67,12 +67,13 @@
             _titleAccoutView.userId = self.ownerID;
             [_navBar addSubview:_titleAccoutView];
         }
-        [_titleAccoutView refreshUserInfo];
     }
+    [self getuserInfoWithRefresh:NO];
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -87,6 +88,18 @@
 {
     [super viewDidDisappear:animated];
     [_navBar removeFromSuperview];
+}
+- (void)getuserInfoWithRefresh:(BOOL)isRefresh
+{
+    if (_userInfo && !isRefresh) return;
+    [RequestManager getUserInfoWithId:self.ownerID  success:^(NSString *response) {
+        _userInfo = [response JSONValue];
+        if (_titleAccoutView) {
+            [_titleAccoutView refreshUserInfoWithDic:_userInfo];
+        }
+    } failure:^(NSString *error) {
+        
+    }];
 }
 #pragma mark - refresh
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
@@ -141,6 +154,7 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
+    [self getuserInfoWithRefresh:YES];
     [RequestManager getAllPhototInStoryWithOwnerId:self.ownerID stroyId:self.storyID start:0 count:20 success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [_assetArray removeAllObjects];
@@ -180,6 +194,7 @@
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
     dataSource.photoId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
     dataSource.imageUrl = [info objectForKey:@"photo_url"];
+    dataSource.photoShowID = [NSString stringWithFormat:@"%@",[info objectForKey:@"show_id"]];
     dataSource.higth = [[info objectForKey:@"height"] floatValue];
     dataSource.weigth = [[info objectForKey:@"width"] floatValue];
     dataSource.imageDes = [info objectForKey:@"description"];
@@ -191,7 +206,7 @@
         NSDictionary * dic = [commentarray objectAtIndex:i];
         cds.userName =[dic objectForKey:@"user_nick"];
         cds.potraitImage = [dic objectForKey:@"avatar"];
-        cds.shareTime = @"6个小时前";
+        cds.shareTime =[dic objectForKey:@"created_desc"];
         cds.comment = [dic objectForKey:@"content"];
         [array addObject:cds];
     }
@@ -257,6 +272,7 @@
     AlBumDetailController * detailController = [[AlBumDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic];
     detailController.ownerId = self.ownerID;
     detailController.storyID = self.storyID;
+    //    detailController.show
     [self.navigationController pushViewController:detailController animated:YES];
 }
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
@@ -373,7 +389,7 @@
 }
 - (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene
 {
-    [self respImageContentToSence:scene];
+    [self respImageNewsContentToSence:scene];
 }
 - (void)shareBoxViewWriteImageTolocal
 {
@@ -404,53 +420,37 @@
     }
 }
 
-- (void) respImageContentToSence:(enum WXScene)scene
+- (void) respImageNewsContentToSence:(enum WXScene)scene
 {
     //发送内容给微信
     if (_isShareAll) {
-        [self shareAllWithWeixin:scene];
+        [self shareAllSourceWithWeixin:scene];
     }else{
-        [self shareSourceWithWeiXin:scene];
+        [self shareOneSourceWithWeiXin:scene];
     }
 }
-- (void)shareAllWithWeixin:(enum WXScene)scene
 
+- (void)shareAllSourceWithWeixin:(enum WXScene)scene
 {
-    WXMediaMessage *message = [WXMediaMessage message];
-    message.title = @"这是一个图片墙";
-    message.description = @"测试环境好像打不开";
-    PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
-    NSString * photoString = [NSString stringWithFormat:@"%@_w200",[source imageUrl]];
-    NSData* date = [NSData dataWithContentsOfURL:[NSURL URLWithString:photoString]];
-    [message setThumbImage:[UIImage imageWithData:date]];
-    WXWebpageObject *ext = [WXWebpageObject object];
-    ext.webpageUrl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,self.storyID];
-    message.mediaObject = ext;
-    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = scene;
-    [WXApi sendReq:req];
+    NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
+    //    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene];
+    NSString * title = [NSString stringWithFormat:@"分享%@的图集[%@]",[_userInfo objectForKey:@"sname"],self.storyName];
+    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene Title:title des:self.storyDes];
 }
-- (void)shareSourceWithWeiXin:(enum WXScene)scene
+- (void)shareOneSourceWithWeiXin:(enum WXScene)scene
 {
-    WXMediaMessage * message = [WXMediaMessage message];
-    message.title = @"这是一个图片墙";
-    message.description = @"测试环境好像打不开";
-    NSString * photoString = [NSString stringWithFormat:@"%@_w200",[_shareDateSource imageUrl]];
-    NSData* date = [NSData dataWithContentsOfURL:[NSURL URLWithString:photoString]];
-    [message setThumbImage:[UIImage imageWithData:date]];
-    WXWebpageObject *ext = [WXWebpageObject object];
-    ext.webpageUrl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,self.storyID];
-    message.mediaObject = ext;
-    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = scene;
-    [WXApi sendReq:req];
+    //    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,_shareDateSource.photoShowID];
+    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
+    NSString * title = [NSString stringWithFormat:@"分享%@的图片",[_userInfo objectForKey:@"sname"]];
+    [self shareNewsToWeixinWithUrl:contentNews ToSence:scene Title:title des:nil];
 }
--(void) onReq:(BaseReq*)req
+- (void)onResp:(BaseResp *)resp
 {
-    //    DLog(@"%@",req);
+    if (resp.errCode == 0) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送成功"];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
+    }
 }
+
 @end

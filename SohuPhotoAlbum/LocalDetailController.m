@@ -347,10 +347,13 @@
         [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
     }
 }
-
--(void) onReq:(BaseReq*)req
+- (void)onResp:(BaseResp *)resp
 {
-    
+    if (resp.errCode == 0) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送成功"];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
+    }
 }
 - (void) respImageContentToSence:(enum WXScene)scene
 {
@@ -373,18 +376,6 @@
     UIImage * image = [UIImage imageWithCGImage:imageRef];
     return UIImageJPEGRepresentation(image, 0.5);
 }
--(void) onResp:(BaseResp*)resp
-{
-    if([resp isKindOfClass:[SendMessageToWXResp class]])
-    {
-        NSString *strTitle = [NSString stringWithFormat:@"发送结果"];
-        NSString *strMsg = [NSString stringWithFormat:@"发送媒体消息结果:%d %@", resp.errCode,resp.errStr];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-}
-
 #pragma mark UpFailture
 - (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
 {
