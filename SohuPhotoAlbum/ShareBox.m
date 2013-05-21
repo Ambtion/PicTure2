@@ -18,7 +18,6 @@
     showView = view;
     isShowWeixin = showWeiXin;
     isShowWall = showWall;
-//    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"新浪微博",@"人人网",@"腾讯QQ空间", nil];
     UIActionSheet * sheet = [[UIActionSheet alloc] init];
     sheet.delegate = self;
     [sheet addButtonWithTitle:@"新浪分享"];

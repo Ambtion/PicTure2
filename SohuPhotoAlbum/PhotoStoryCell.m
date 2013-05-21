@@ -23,7 +23,7 @@
 
 @implementation PhotoStoryCellDataSource
 
-@synthesize isLiking,photoId,imageUrl,weigth,higth,imageDes,commentInfoArray,allCommentCount;
+@synthesize isLiking,photoId,photoShowID,imageUrl,weigth,higth,imageDes,commentInfoArray,allCommentCount;
 - (CGFloat)lastCellHeigth
 {
     return [self cellHeigth] + 5;
@@ -92,11 +92,6 @@
 }
 - (void)setCountLabel
 {
-//    _commentCount.numberOfLines = 0;
-//    _commentCount.font = [UIFont systemFontOfSize:14];
-//    _commentCount.lineBreakMode = DESLABLELINEBREAK;
-//    _commentCount.backgroundColor = [UIColor clearColor];
-//    _commentCount.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1.f];
     _commentCount.backgroundColor = [UIColor clearColor];
     _commentCount.numberOfLines = 0;
     _commentCount.font = [UIFont systemFontOfSize:14.f];
@@ -111,10 +106,11 @@
     _bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, OFFSETY, 320, 0)];
     [_bgImageView setUserInteractionEnabled:YES];
     _bgImageView.image = [[UIImage imageNamed:@"photoStoryBg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(100, 160, 100, 160)];
+    _bgImageView.backgroundColor = [UIColor whiteColor];
     _photoView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [_photoView setUserInteractionEnabled:YES];
     _photoView.frame = CGRectMake(6, 0, 320 - 12, 20);
-    UITapGestureRecognizer * gesTure = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)    ];
+    UITapGestureRecognizer * gesTure = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     [_photoView addGestureRecognizer:gesTure];
     [_bgImageView addSubview:_photoView];
     [self.contentView addSubview:_bgImageView];
@@ -159,11 +155,6 @@
     __weak UIImageView * photoViewWeak = _photoView;
     __weak PhotoStoryCell * weakSelf = self;
     [_photoView setImageWithURL:[NSURL URLWithString:str] success:^(UIImage *image) {
-//        if (image.size.width <= 308 * 2) {
-//            photoViewWeak.frame = CGRectMake(0, 1, image.size.width /2.f, image.size.height/2.f);
-//        }else{
-//            photoViewWeak.frame = CGRectMake(0, 1, 308 , 308 * image.size.height / image.size.width);
-//        }
         photoViewWeak.frame = CGRectMake(0, 1, 308 , 308 * image.size.height / image.size.width);
         photoViewWeak.center = CGPointMake(160, photoViewWeak.center.y);
         [weakSelf updateAllOhterViewButImageView];

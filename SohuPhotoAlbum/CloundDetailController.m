@@ -104,23 +104,25 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark - Weixin
--(void) onReq:(BaseReq*)req
+- (void)onResp:(BaseResp *)resp
 {
-    
+    if (resp.errCode == 0) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送成功"];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
+    }
 }
 - (void) respImageContentToSence:(enum WXScene)scene
 {
     //发送内容给微信
     NSDictionary * info = [self.assetsArray objectAtIndex:self.curPageNum];
     NSString * thumbUrl = [NSString stringWithFormat:@"%@_w200",[info objectForKey:@"photo_url"]];
-//    NSString * actualUrl = [NSString stringWithFormat:@"%@__w640",[info objectForKey:@"photo_url"]];
     WXMediaMessage *message = [WXMediaMessage message];
     UIImage  * tuumbail = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:thumbUrl]]];
     [message setThumbImage:tuumbail];
     
     WXImageObject *ext = [WXImageObject object];
-    UIImage * actualimage = [self curScaleImage].imageView.image;
-    ext.imageData = UIImageJPEGRepresentation(actualimage, 1.f);
+    ext.imageUrl = [info objectForKey:@"photo_url"];
     message.mediaObject = ext;
     SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;

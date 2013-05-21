@@ -9,10 +9,10 @@
 #import "RequestManager.h"
 #import "UIImageView+WebCache.h"
 
-#define MENUMAXNUMBER 4
+#define MENUMAXNUMBER 5
 
-static NSString *   menuText[4] =   {@"本地相册",@"云备份",@"图片墙",@"星用户"};
-static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png"};
+static NSString *   menuText[5] =   {@"本地相册",@"云备份",@"图片墙",@"星用户",@"通知"};
+static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png",@"hotUser.png"};
 
 @implementation LeftMenuController
 @synthesize localAllController;
@@ -96,7 +96,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return MENUMAXNUMBER;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -115,6 +115,7 @@ static NSString *   image[4]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 {
     cell.backgroundColor = [UIColor clearColor];
 }
+
 #pragma mark Selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

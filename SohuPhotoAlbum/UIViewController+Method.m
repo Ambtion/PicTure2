@@ -232,3 +232,23 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     return [LoginStateManager isLogin] && [[LoginStateManager currentUserId] isEqualToString:ownerID];
 }
 @end
+
+@implementation UIViewController(weixinShare)
+- (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title des:(NSString *)des
+{
+    //发送内容给微信
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = title;
+    message.description = des;
+    [message setThumbImage:[UIImage imageNamed:@"Icon.png"]];
+    WXWebpageObject *ext = [WXWebpageObject object];
+    ext.webpageUrl = url;
+    message.mediaObject = ext;
+    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    
+    [WXApi sendReq:req];
+}
+@end

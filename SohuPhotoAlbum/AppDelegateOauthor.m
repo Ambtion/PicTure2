@@ -62,8 +62,8 @@
 }
 - (BOOL)ssoReturn:(NSURL *)url
 {
-    DLog(@"%@",[url absoluteString]);
-    if ([[url absoluteString] rangeOfString:@"wxd"].location != NSNotFound) {
+    if ([[url absoluteString] rangeOfString:@"wx"].location != NSNotFound) {
+        DLog(@"%@ %@",[url absoluteString],_tempDelegate);
         return  [WXApi handleOpenURL:url delegate:_tempDelegate];
     }
     if ([[url absoluteString] rangeOfString:@"tencent"].location != NSNotFound) {

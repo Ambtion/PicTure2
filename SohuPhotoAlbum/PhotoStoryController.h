@@ -27,13 +27,18 @@
 
     CustomizationNavBar * _navBar;
     TitleAccountView * _titleAccoutView;
+    
     ShareBox * _shareBox;
     BOOL _isShareAll;
     BOOL _isLoading;
     PhotoStoryCellDataSource * _shareDateSource;
     PhotoStoryCell * tempCellForDelete;
+    NSDictionary * _userInfo;
 }
 @property(strong,nonatomic)NSString * ownerID;
 @property(strong,nonatomic)NSString * storyID;
+@property(strong,nonatomic)NSString * storyName;
+@property(strong,nonatomic)NSString * storyDes;
+@property(strong,nonatomic)NSString * showID;
 - (id)initWithStoryId:(NSString *)AstoryID ownerID:(NSString *)AownerID;
 @end

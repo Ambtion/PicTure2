@@ -52,19 +52,19 @@
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
         // view hierachy
         [self addSubview:imageView];
         [self addSubview:textView];
     }
     return self;
 }
+
 #pragma mark 
 - (void)growingTextViewDidClickReturn:(HPGrowingTextView *)growingTextView
 {
-    if ([_delegte respondsToSelector:@selector(makeCommentView:commentClick:)]) {
-        [_delegte makeCommentView:self commentClick:nil];
-    }
+    if (growingTextView.text && ![growingTextView.text isEqualToString:@""])
+        if ([_delegte respondsToSelector:@selector(makeCommentView:commentClick:)])
+            [_delegte makeCommentView:self commentClick:nil];
 }
 #pragma mark - test
 - (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height

@@ -13,10 +13,12 @@
 
 @implementation PhotoWallController
 @synthesize ownerID;
+
 - (void)dealloc
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
+
 - (id)initWithOwnerID:(NSString *)ownID isRootController:(BOOL)isRoot
 {
     self = [super init];
@@ -30,12 +32,14 @@
 {
     
     [super viewDidLoad];
+    
     _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _myTableView.delegate = self;
     _myTableView.dataSource = self;
     _myTableView.separatorColor = [UIColor clearColor];
     _myTableView.backgroundColor = BASEWALLCOLOR;
+
     _myTableView.showsVerticalScrollIndicator = NO;
     _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
     _refresHeadView.delegate = self;
@@ -43,14 +47,14 @@
     [self.view addSubview:_myTableView];
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-//    _myTableView.tableFooterView = _moreFootView;
+    //    _myTableView.tableFooterView = _moreFootView;
     _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 5, 77, 20)];
     [_timelabel setHidden:YES];
     [self.view addSubview:_timelabel];
     
     [self initContainer];
     [self refrshDataFromNetWork];
-  
+    
 }
 - (void)initContainer
 {
@@ -58,11 +62,12 @@
 }
 - (void)addDataSourceWith:(NSArray *)array
 {
-    DLog(@"ownId:%@ %@",ownerID,array);
+    if (array.count)
+        DLog(@"ownId:%@ %@",ownerID,[array lastObject]);
     for (int i = 0; i < array.count; i++) {
         PhotoWallCellDataSource * source = [self getCellDataSourceFromDic:[array objectAtIndex:i]];
         if (source)
-        [_dataSourceArray addObject:source];
+            [_dataSourceArray addObject:source];
     }
     [self resetLabel];
     [_myTableView reloadData];
@@ -71,10 +76,12 @@
 {
     PhotoWallCellDataSource * dataSource = [[PhotoWallCellDataSource alloc] init];
     dataSource.wallId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    dataSource.showId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"show_id"]];
     NSArray * phtotArray = [dic objectForKey:@"photos"];
     if (!phtotArray || !phtotArray.count) return nil;
     dataSource.imageWallInfo = phtotArray;
     dataSource.wallDescription = [dic objectForKey:@"description"];
+    dataSource.stroyName = [dic objectForKey:@"name"];
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
     dataSource.likeCount = [[dic objectForKey:@"like_count"] intValue];
     dataSource.talkCount =[[dic objectForKey:@"comment_num"] intValue];
@@ -115,10 +122,23 @@
             _titleAccoutView.userId = self.ownerID;
             [_navBar addSubview:_titleAccoutView];
         }
-        [_titleAccoutView refreshUserInfo];
     }
+    [self getuserInfoWithRefresh:NO];
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
+}
+- (void)getuserInfoWithRefresh:(BOOL)isRefresh
+{
+    if (_userInfo && !isRefresh) return;
+    [RequestManager getUserInfoWithId:self.ownerID  success:^(NSString *response) {
+        _userInfo = [response JSONValue];
+        DLog(@"%@",_userInfo);
+        if (_titleAccoutView) {
+            [_titleAccoutView refreshUserInfoWithDic:_userInfo];
+        }
+    } failure:^(NSString *error) {
+        
+    }];
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -133,7 +153,7 @@
         _pushView = NO;
     }
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
-
+    
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -165,13 +185,13 @@
     return _isLoading;
 }
 
-- (void)refeshOnce:(id)sender
-{
-    [_refresHeadView refreshImmediately];
-    [self reloadTableViewDataSource];
-    [self resetLabel];
-}
-
+//- (void)refeshOnce:(id)sender
+//{
+//    [_refresHeadView refreshImmediately];
+//    [self reloadTableViewDataSource];
+//    [self resetLabel];
+//}
+//
 #pragma mark - more
 - (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
 {
@@ -198,6 +218,7 @@
     NSString * token = nil;
     if ([LoginStateManager isLogin])
         token = [LoginStateManager currentToken];
+    [self getuserInfoWithRefresh:YES];
     [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID withAccessToken:token start:0 count:20  success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
@@ -317,7 +338,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{    
+{
     PhotoWallCellDataSource * dataSoure = [self dataScourForindexPath:indexPath];
     NSInteger num = [dataSoure numOfCellStragey];
     PhotoWallCell * cell = [tableView dequeueReusableCellWithIdentifier:identify[num]];
@@ -340,8 +361,9 @@
 }
 - (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene
 {
-    [self respImageContentToSence:scene];
+    [self respNewsContentToSence:scene];
 }
+
 - (void)shareBoxViewShareTo:(shareModel)model
 {
     _pushView = YES;
@@ -360,31 +382,22 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }];
 }
-- (void) respImageContentToSence:(enum WXScene)scene
+- (void) respNewsContentToSence:(enum WXScene)scene
 {
-    //发送内容给微信
-    WXMediaMessage *message = [WXMediaMessage message];
-    message.title = @"这是一个图片墙";
-    message.description = @"测试环境好像打不开";
-    PhotoWallCellDataSource * source = [_dataSourceArray objectAtIndex:0];
-    NSString * photoString = [NSString stringWithFormat:@"%@_w200",[[source.imageWallInfo objectAtIndex:0] objectForKey:@"photo_url"]];
-    NSData* date = [NSData dataWithContentsOfURL:[NSURL URLWithString:photoString]];
-    [message setThumbImage:[UIImage imageWithData:date]];
-    WXWebpageObject *ext = [WXWebpageObject object];
-    ext.webpageUrl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@",self.ownerID];
-    DLog(@"%@",ext.webpageUrl);
-    message.mediaObject = ext;
-    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = scene;
-    [WXApi sendReq:req];
+    NSString * contentURl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@",self.ownerID];
+    NSString * title = [NSString stringWithFormat:@"分享%@的图片墙",[_userInfo objectForKey:@"sname"]];
+    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title des:[_userInfo objectForKey:@"user_desc"]];
+    
+}
+- (void)onResp:(BaseResp *)resp
+{
+    if (resp.errCode == 0) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送成功"];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
+    }
 }
 
--(void) onReq:(BaseReq*)req
-{
-//    DLog(@"%@",req);
-}
 #pragma mark Action
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
@@ -451,7 +464,7 @@
             cell.dataSource.likeCount = MAX(cell.dataSource.likeCount, 0);
             [cell updataSubViews];
         } failure:^(NSString *error) {
-                
+            
         }];
     }else{
         [RequestManager likeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
@@ -464,9 +477,13 @@
     }
 }
 - (void)photoWallCell:(PhotoWallCell *)cell photosClick:(id)sender
-{    
+{
     PhotoWallCellDataSource * source = cell.dataSource;
-    [self.navigationController pushViewController:[[PhotoStoryController alloc] initWithStoryId:source.wallId ownerID:self.ownerID] animated:YES];
+    PhotoStoryController * phS = [[PhotoStoryController alloc] initWithStoryId:source.wallId ownerID:self.ownerID];
+    phS.showID = source.showId;
+    phS.storyName = source.stroyName;
+    phS.storyDes = source.wallDescription;
+    [self.navigationController pushViewController:phS animated:YES];
 }
 
 @end

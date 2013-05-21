@@ -197,8 +197,15 @@
 #pragma mark -
 + (void)getAllPhototInStoryWithOwnerId:(NSString *)ownId stroyId:(NSString *)storyId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    NSString * str = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
-                      BASICURL_V1,storyId,ownId,start,count];
+    NSString * str = nil;
+    if (![LoginStateManager isLogin]) {
+        str =  [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
+                BASICURL_V1,storyId,ownId,start,count];
+    }else{
+        str =  [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d&access_token=%@",
+                BASICURL_V1,storyId,ownId,start,count,[LoginStateManager currentToken]];
+    }
+   
     [self getSourceWithStringUrl:str success:success failure:failure];
 }
 +(void)deletePhotoFromStoryWithAccessToken:(NSString *)token stroyid:(NSString *)storyId photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
@@ -340,6 +347,15 @@
     [self getSourceWithStringUrl:strUrl success:success failure:failure];
 }
 
+//通知
++ (void)getNotificationsWithAccessToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+//     GET /notifications
+    NSString * string  = [NSString stringWithFormat:@"%@/notifications",BASICURL_V1];
+//    8.2 GET /notifications  获得当前用户的通知列表。
+//    
+//    8.3 DELETE /notifications/$notification_id  删除当前用户的某一指定通知。
+}
 //反馈
 + (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure
 {

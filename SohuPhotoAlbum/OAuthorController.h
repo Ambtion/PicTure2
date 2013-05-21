@@ -26,7 +26,8 @@ typedef enum{
 @interface OAuthorController : UIViewController<UIWebViewDelegate>
 {
     MBProgressHUD * _alterView;
-    NSString * code;
+    NSString * grantcode;
+    NSString * info_Base64;
 }
 @property(nonatomic,weak)id<OAuthorControllerDelegate> delegate;
 

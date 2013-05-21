@@ -1222,8 +1222,6 @@
 		C5841A0317158A7600588CE5 /* PhotoWallController */ = {
 			isa = PBXGroup;
 			children = (
-				C52F1F481744B985009CC605 /* TitleAccountView.h */,
-				C52F1F491744B985009CC605 /* TitleAccountView.m */,
 				C5841A0617158A8800588CE5 /* PhotoWallController.h */,
 				C5841A0717158A8800588CE5 /* PhotoWallController.m */,
 				C586DCF2171D22A0000A4014 /* PhotoWallCell.h */,
@@ -1232,6 +1230,8 @@
 				C586DCF8171D3E70000A4014 /* ImageViewAdaper.m */,
 				C58A0B68172159F300521715 /* TimeLabelView.h */,
 				C58A0B69172159F300521715 /* TimeLabelView.m */,
+				C52F1F481744B985009CC605 /* TitleAccountView.h */,
+				C52F1F491744B985009CC605 /* TitleAccountView.m */,
 				C58A573A171E8CEE003B6817 /* photoStory */,
 			);
 			name = PhotoWallController;

@@ -32,3 +32,7 @@
 @interface UIViewController(isMine)
 - (BOOL)isMineWithOwnerId:(NSString *)ownerID;
 @end
+
+@interface UIViewController(weixinShare)
+- (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title des:(NSString *)des;
+@end

@@ -32,6 +32,7 @@
     BOOL _isRoot;
     BOOL _pushView;
     PhotoWallCell * tempCellForDelete;
+    NSDictionary * _userInfo;
 }
 @property(nonatomic,strong)NSString * ownerID;
 - (id)initWithOwnerID:(NSString *)ownID isRootController:(BOOL)isRoot;

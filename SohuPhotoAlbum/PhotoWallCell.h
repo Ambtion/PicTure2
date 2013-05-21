@@ -22,6 +22,8 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 @end
 
 @interface PhotoWallCellDataSource : NSObject
+@property(strong,nonatomic)NSString * stroyName;
+@property(strong,nonatomic)NSString * showId;
 @property(strong,nonatomic)NSString * wallId;
 @property(strong,nonatomic)NSArray  * imageWallInfo;
 @property(strong,nonatomic)NSString * wallDescription;
@@ -55,7 +57,7 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
     PhotoWallCellDataSource * _dataSource;
     CountLabel * _countLabel;
     UIButton * _deleteButton;
-    CGFloat heigth;
+    CGFloat imageViewheigth;
 }
 @property(strong,nonatomic)PhotoWallCellDataSource * dataSource;
 @property(weak,nonatomic)id<PhotoWallCellDelegate> delegate;
