@@ -194,11 +194,12 @@
         rect.origin.x = 20.f;
         rect.size.width = 32.f;
         rect.size.height = 22.f;
+        rect.origin.y += 4.f;
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteButton setImage:[UIImage imageNamed:@"WallDeleteButton.png"] forState:UIControlStateNormal];
         [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         _deleteButton.frame = rect;
-        [self.contentView addSubview:_deleteButton];
+        [view.superview addSubview:_deleteButton];
     }
     
 }
