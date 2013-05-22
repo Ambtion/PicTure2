@@ -10,6 +10,7 @@
 #import "PhotoDetailBaseController.h"
 #import "ShareBox.h"
 #import "ShareViewController.h"
+#import "SDImageCache.h"
 
 #define DELETEPHOTO @"delePhoto"
 
@@ -18,7 +19,7 @@
     BOOL _hasMoreAssets;
     BOOL _hasLessAssets;
     ShareBox * _shareBox;
-    
+    SDImageCache * imageCache;
 }
 - (id)initWithAssetsArray:(NSArray *)array andCurAsset:(NSDictionary *)asset;
 @property(nonatomic,strong)NSMutableArray * sectionArray;

@@ -350,7 +350,6 @@
 		C5A87303174776950087C800 /* navbarnoline.png in Resources */ = {isa = PBXBuildFile; fileRef = C5A87302174776950087C800 /* navbarnoline.png */; };
 		C5ACE697174785A40036926A /* leftMenuHigthed.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACE696174785A40036926A /* leftMenuHigthed.png */; };
 		C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */; };
-		C5B76EF71711829E001FCC8C /* LimitCacheForImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF61711829E001FCC8C /* LimitCacheForImage.m */; };
 		C5CDCCC3171FF48400044330 /* sectionIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC2171FF48400044330 /* sectionIcon.png */; };
 		C5CDCCC5171FFF5000044330 /* sectionNo.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC4171FFF5000044330 /* sectionNo.png */; };
 		C5CDCCC7171FFF9100044330 /* section.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC6171FFF9100044330 /* section.png */; };
@@ -877,8 +876,6 @@
 		C5ACE696174785A40036926A /* leftMenuHigthed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftMenuHigthed.png; sourceTree = "<group>"; };
 		C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
-		C5B76EF51711829E001FCC8C /* LimitCacheForImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitCacheForImage.h; sourceTree = "<group>"; };
-		C5B76EF61711829E001FCC8C /* LimitCacheForImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitCacheForImage.m; sourceTree = "<group>"; };
 		C5CDCCC2171FF48400044330 /* sectionIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionIcon.png; sourceTree = "<group>"; };
 		C5CDCCC4171FFF5000044330 /* sectionNo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionNo.png; sourceTree = "<group>"; };
 		C5CDCCC6171FFF9100044330 /* section.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = section.png; sourceTree = "<group>"; };
@@ -995,8 +992,6 @@
 				C591B4B3171BE5810047C496 /* EmojiUnit.m */,
 				C583CF3B1704503A00CD3485 /* CustomizetionTabBar.h */,
 				C583CF3C1704503A00CD3485 /* CustomizetionTabBar.m */,
-				C5B76EF51711829E001FCC8C /* LimitCacheForImage.h */,
-				C5B76EF61711829E001FCC8C /* LimitCacheForImage.m */,
 				C57ED93917028A1900505ECF /* ImageScaleView.h */,
 				C57ED93A17028A1900505ECF /* ImageScaleView.m */,
 				C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */,
@@ -2349,7 +2344,6 @@
 				C584D117170BBF7A00ACCD7C /* LoginViewController.m in Sources */,
 				C584D13B170BC1F100ACCD7C /* EmailTextField.m in Sources */,
 				C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */,
-				C5B76EF71711829E001FCC8C /* LimitCacheForImage.m in Sources */,
 				C583B38017126ABA00EB8F7A /* ALAssetsLibrary+Read.m in Sources */,
 				C583A8491714199B00DAC141 /* ASIAuthenticationDialog.m in Sources */,
 				C583A84A1714199B00DAC141 /* ASIDataCompressor.m in Sources */,
@@ -2493,8 +2487,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2509,8 +2503,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2519,8 +2513,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2535,7 +2529,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7F84228C-A369-43FD-9EB8-AF9A7FBBD764";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

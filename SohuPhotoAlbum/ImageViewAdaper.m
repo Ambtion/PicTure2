@@ -18,6 +18,7 @@
 
 //边线为5, 中间线为3
 
+
 static CGFloat strategy1(NSMutableArray *frames)
 {
     [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, KWallWidth - 2 * KWallOffsetX, 200)];
@@ -29,7 +30,7 @@ static CGFloat strategy2(NSMutableArray * frames)
 {
     [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 208)];
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + KWallOffSet, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + KWallOffSet) - KWallOffsetX, 208)];
         
     return 208 + KWallOffsetY;
 }
@@ -38,57 +39,94 @@ static CGFloat strategy3(NSMutableArray *frames)
 {
     [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY, 99, 103)];
+    CGFloat heigth =  (208 - KWallOffSet)/2.f;
     
-    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY + 103 + 2, 99, 103)];
+    [frames addRect:CGRectMake(208 + KWallOffsetX + KWallOffSet, KWallOffsetY,
+                                KWallWidth - (208 + KWallOffsetX + KWallOffSet) - KWallOffsetX, heigth)];
     
-    return KWallOffsetY + 200 + 2;
+    [frames addRect:CGRectMake(208 + KWallOffsetX + KWallOffSet, KWallOffsetY + heigth + KWallOffSet,
+                               KWallWidth - (208 + KWallOffsetX + KWallOffSet) - KWallOffsetX, heigth)];
+    
+    return KWallOffsetY + 208;
 }
 
 static CGFloat strategy4(NSMutableArray *frames)
 {
+    
     [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 208)];
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + KWallOffSet, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + KWallOffSet) - KWallOffsetX, 208)];
     
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY + 208 + 3, 208, 100)];
+    CGFloat originalY =  KWallOffsetY + 208 + KWallOffSet;
+    CGFloat heigth  = KWallWidth - (KWallOffsetX + 208 + KWallOffSet) - KWallOffsetX;
     
-    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY + 208 + 3, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX,originalY,
+                                208, heigth)];
     
-    return KWallOffsetY + 208 + 3 + 100;
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + KWallOffSet, originalY , heigth, heigth)];
+    
+    return KWallOffsetY + 208 + KWallOffSet + heigth;
 }
 
 static CGFloat strategy5(NSMutableArray *frames)
 {
     [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 208)];
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + KWallOffSet, KWallOffsetY, KWallWidth - (KWallOffsetX + 208 + KWallOffSet) - KWallOffsetX, 208)];
 
     
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY + 208 + 3, 102, 100)];
-    
-    [frames addRect:CGRectMake(KWallOffsetX + 105, KWallOffsetY + 208 + 3, 103, 100)];
-    
-    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY + 208 + 3, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 100)];
+    CGFloat originalY = 208 + KWallOffsetY + KWallOffSet;
+    CGFloat heigth = KWallWidth - (KWallOffsetX + 208 + KWallOffSet) - KWallOffsetX;
+    CGFloat wight = 0.f;
+    CGFloat wight_fix = 0.f;
+    if ((208 - KWallOffSet) % 2) {
+        wight_fix = 1.f;
+        wight = (208 - KWallOffSet - wight_fix)/2.f;
+    }else{
+        wight = (208 - KWallOffSet)/2.f;
+    }
 
-    return  KWallOffsetY + 208 + 3 + 100;
+    [frames addRect:CGRectMake(KWallOffsetX, originalY, wight, heigth)];
+    
+    [frames addRect:CGRectMake(KWallOffsetX + wight + KWallOffSet, originalY, wight_fix + wight, heigth)];
+    
+    
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + KWallOffSet, originalY, heigth, heigth)];
+
+    return  KWallOffsetY + 208 + KWallOffSet + heigth;
 }
 
 static CGFloat strategy6(NSMutableArray *frames)
 {
+    
     [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY, 208, 208)];
     
-    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY, 99, 103)];
+    CGFloat heigth =  (208 - KWallOffSet)/2.f;
+    [frames addRect:CGRectMake(208 + KWallOffsetX + KWallOffSet, KWallOffsetY,
+                               KWallWidth - (208 + KWallOffsetX + KWallOffSet) - KWallOffsetX, heigth)];
     
-    [frames addRect:CGRectMake(208 + KWallOffsetX + 3, KWallOffsetY + 103 + 2, 99, 103)];
+    [frames addRect:CGRectMake(208 + KWallOffsetX + KWallOffSet, KWallOffsetY + heigth + KWallOffSet,
+                               KWallWidth - (208 + KWallOffsetX + KWallOffSet) - KWallOffsetX, heigth)];
     
-    [frames addRect:CGRectMake(KWallOffsetX, KWallOffsetY + 208 + 3, 102, 100)];
     
-    [frames addRect:CGRectMake(KWallOffsetX + 105, KWallOffsetY + 208 + 3, 103, 100)];
+    CGFloat originalY = 208 + KWallOffsetY + KWallOffSet;
+    heigth = KWallWidth - (KWallOffsetX + 208 + KWallOffSet) - KWallOffsetX;
+    CGFloat wight = 0.f;
+    CGFloat wight_fix = 0.f;
+    if ((208 - KWallOffSet) % 2) {
+        wight_fix = 1.f;
+        wight = (208 - KWallOffSet - wight_fix)/2.f;
+    }else{
+        wight = (208 - KWallOffSet)/2.f;
+    }
     
-    [frames addRect:CGRectMake(KWallOffsetX + 208 + 3, KWallOffsetY + 208 + 3, KWallWidth - (KWallOffsetX + 208 + 3) - KWallOffsetX, 100)];
+    [frames addRect:CGRectMake(KWallOffsetX, originalY, wight, heigth)];
     
-    return KWallOffsetY + 208 + 3 + 100;
+    [frames addRect:CGRectMake(KWallOffsetX + wight + KWallOffSet, originalY, wight + wight_fix, heigth)];
+    
+    [frames addRect:CGRectMake(KWallOffsetX + 208 + KWallOffSet, originalY, heigth, heigth)];
+    
+    return KWallOffsetY + 208 + KWallOffSet + heigth;
     
 }
 

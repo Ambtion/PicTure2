@@ -61,7 +61,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationItem setHidesBackButton:YES animated:NO];
+//    [self.navigationItem setHidesBackButton:YES animated:NO];
     if (!_cusBar){
         
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];

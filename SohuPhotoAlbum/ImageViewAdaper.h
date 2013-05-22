@@ -10,6 +10,7 @@
 #define     KWallOffsetX    5
 #define     KWallOffsetY    5
 #define     KWallWidth      320
+#define     KWallOffSet     1
 
 @interface ImageViewAdaper : NSObject
 

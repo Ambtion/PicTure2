@@ -15,7 +15,7 @@
 #import "AlBumDetailController.h"
 
 @implementation PhotoStoryController
-@synthesize storyID,ownerID,showID,storyName,storyDes;
+@synthesize storyID,ownerID,showID,storyName,storyDes,userInfo = _userInfo;
 
 - (id)initWithStoryId:(NSString *)AstoryID ownerID:(NSString *)AownerID
 {
@@ -53,7 +53,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationItem setHidesBackButton:YES];
+//    [self.navigationItem setHidesBackButton:YES];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
@@ -77,7 +77,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.navigationItem setHidesBackButton:YES];
+//    [self.navigationItem setHidesBackButton:YES];
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -91,7 +91,10 @@
 }
 - (void)getuserInfoWithRefresh:(BOOL)isRefresh
 {
-    if (_userInfo && !isRefresh) return;
+    if (_userInfo && !isRefresh){
+        [_titleAccoutView refreshUserInfoWithDic:_userInfo];
+        return;
+    }
     [RequestManager getUserInfoWithId:self.ownerID  success:^(NSString *response) {
         _userInfo = [response JSONValue];
         if (_titleAccoutView) {

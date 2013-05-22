@@ -21,7 +21,7 @@
         _isHidingBar = NO;
         _isInit = YES;
         _isRotating = NO;
-        self.cache = [[LimitCacheForImage alloc] init];
+        self.cache = [[SDImageCache alloc] init];
         self.curPageNum = [array indexOfObject:asset];
         self.assetsArray = [array copy];
         self.group = group;
@@ -111,27 +111,30 @@
 {
     [super setImageView:scaleView imageFromAsset:asset];
     UIImageView * imageView = scaleView.imageView;
-    UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
+//    UIImage * image = [self getImageFromCacheWithKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
+    UIImage * image = [self.cache imageFromKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
     }
     imageView.image = image;
 }
-- (UIImage *)getImageFromCacheWithKey:(id)aKey
-{
-    NSData * imageData = [self.cache objectForKey:aKey];
-    return [UIImage imageWithData:imageData];
-}
+//- (UIImage *)getImageFromCacheWithKey:(id)aKey
+//{
+//    NSData * imageData = [self.cache objectForKey:aKey];
+//    return [UIImage imageWithData:imageData];
+//}
 
 #pragma mark - GetActualImage
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
     UIImageView * imageView = scaleView.imageView;
-    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
+//    UIImage * image = [self getImageFromCacheWithKey:[[[asset defaultRepresentation] url] absoluteString]];
+    UIImage * image = [self.cache imageFromKey:[[[(ALAsset * )asset defaultRepresentation] url] absoluteString]];
     if (!image) {
         image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:orientation];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
+//            [self.cache setObject:UIImagePNGRepresentation(image) forKey:[[[asset defaultRepresentation] url] absoluteString]];
+            [self.cache storeImage:image forKey:[[[asset defaultRepresentation] url] absoluteString]];
         });
     }
     imageView.image = image;
@@ -195,10 +198,11 @@
             break;
     }
 }
+
 #pragma mark Action
 - (AppDelegate *)Appdelegate
 {
-    return [[UIApplication sharedApplication] delegate];
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 - (void)upPicture:(shareModel)model
@@ -376,17 +380,11 @@
     UIImage * image = [UIImage imageWithCGImage:imageRef];
     return UIImageJPEGRepresentation(image, 0.5);
 }
+
 #pragma mark UpFailture
 - (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
 {
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
-}
-#pragma mark cache Manager
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    DLog(@"%s",__FUNCTION__);
-    [self.cache clear];
 }
 @end

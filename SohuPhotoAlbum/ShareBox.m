@@ -93,7 +93,7 @@
 #pragma mark Action
 - (AppDelegate *)Appdelegate
 {
-    return [[UIApplication sharedApplication] delegate];
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 -(void)weixinUploadPic

@@ -17,6 +17,8 @@
 
 #import "CloundDetailController.h"
 #import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
+
 #import "RequestManager.h"
 #import "AppDelegate.h"
 
@@ -122,7 +124,16 @@
     [message setThumbImage:tuumbail];
     
     WXImageObject *ext = [WXImageObject object];
-    ext.imageUrl = [info objectForKey:@"photo_url"];
+    NSString * photoUrl = [info objectForKey:@"photo_url"];
+    if (!imageCache)
+        imageCache  = [[SDImageCache alloc] init];
+    
+    UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",photoUrl]];
+    if (image) {
+        ext.imageData = UIImageJPEGRepresentation(image, 0.5);
+    }else{
+        ext.imageUrl = photoUrl;
+    }
     message.mediaObject = ext;
     SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;

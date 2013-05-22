@@ -190,16 +190,10 @@
         _countLabel = [[CountLabel alloc] initIconLabeWithFrame:CGRectMake(view.frame.size.width + view.frame.origin.x - 30, view.frame.size.height + view.frame.origin.y - 30, 22, 22)];
         [self setCountLabelProperty:_countLabel];
         [view.superview addSubview:_countLabel];
-//        CGRect rect = [self.contentView convertRect:_countLabel.frame fromView:view];
-//        rect.origin.x = 20.f;
-//        rect.size.width = 32.f;
-//        rect.size.height = 22.f;
-//        rect.origin.y += 4.f;
         CGRect rect = _countLabel.frame;
         rect.origin.x = 20.f;
         rect.size.width = 32.f;
         rect.size.height = 22.f;
-        rect.origin.y += 4.f;
 
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteButton setImage:[UIImage imageNamed:@"WallDeleteButton.png"] forState:UIControlStateNormal];

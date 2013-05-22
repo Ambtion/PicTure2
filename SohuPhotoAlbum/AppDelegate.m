@@ -36,7 +36,7 @@
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
     
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
-    
+    nav.delegate = self;
     self.window.rootViewController = nav;
     self.assetsLibrary = [[ALAssetsLibrary alloc] init];
     [self.window makeKeyAndVisible];
@@ -52,7 +52,16 @@
 //      UIRemoteNotificationTypeSound)];
     return YES;
 }
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [viewController.navigationItem setHidesBackButton:YES];
+}
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [viewController.navigationItem setHidesBackButton:YES];
+}
 
+#pragma mark notification
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"

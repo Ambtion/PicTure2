@@ -62,7 +62,7 @@
         [self.navigationController.navigationBar addSubview:_cusBar];
     //界面出现,bar恢复normal状态
     [self setViewState:NomalState];
-    [self.navigationItem setHidesBackButton:YES animated:NO];
+//    [self.navigationItem setHidesBackButton:YES animated:NO];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
     
     if (needReadonce) {

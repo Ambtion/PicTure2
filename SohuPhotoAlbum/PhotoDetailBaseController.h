@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "ImageScaleView.h"
 #import "CustomizationNavBar.h"
-#import "LimitCacheForImage.h"
 #import "CustomizetionTabBar.h"
 
 typedef enum _imageStatePosition

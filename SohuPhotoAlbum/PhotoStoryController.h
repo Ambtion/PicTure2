@@ -40,5 +40,6 @@
 @property(strong,nonatomic)NSString * storyName;
 @property(strong,nonatomic)NSString * storyDes;
 @property(strong,nonatomic)NSString * showID;
+@property(strong,nonatomic)NSDictionary * userInfo;
 - (id)initWithStoryId:(NSString *)AstoryID ownerID:(NSString *)AownerID;
 @end

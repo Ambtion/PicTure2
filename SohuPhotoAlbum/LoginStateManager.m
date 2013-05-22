@@ -79,7 +79,7 @@
 }
 + (void)logout
 {
-    [AccountLoginResquest deleteDeviceToken];
+//    [AccountLoginResquest deleteDeviceToken];
     [self removeDataForKey:[self currentUserId]];
     [self removeDataForKey:USER_ID];
 }

@@ -102,8 +102,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationItem setHidesBackButton:YES];
-    
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLabelText setText:@"图片墙"];
@@ -126,13 +124,13 @@
     [self getuserInfoWithRefresh:NO];
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
+//    [self.navigationItem setHidesBackButton:YES];
 }
 - (void)getuserInfoWithRefresh:(BOOL)isRefresh
 {
     if (_userInfo && !isRefresh) return;
     [RequestManager getUserInfoWithId:self.ownerID  success:^(NSString *response) {
         _userInfo = [response JSONValue];
-        DLog(@"%@",_userInfo);
         if (_titleAccoutView) {
             [_titleAccoutView refreshUserInfoWithDic:_userInfo];
         }
@@ -140,11 +138,11 @@
         
     }];
 }
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.navigationItem setHidesBackButton:YES];
-}
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    [self.navigationItem setHidesBackButton:YES];
+//}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -153,7 +151,6 @@
         _pushView = NO;
     }
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
-    
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -483,6 +480,7 @@
     phS.showID = source.showId;
     phS.storyName = source.stroyName;
     phS.storyDes = source.wallDescription;
+    phS.userInfo = _userInfo;
     [self.navigationController pushViewController:phS animated:YES];
 }
 

@@ -18,6 +18,7 @@
     }
     return self;
 }
+
 - (id)initWithImage:(UIImage *)image
 {
     if (self = [super initWithImage:image]) {
@@ -52,6 +53,7 @@
     [actV startAnimating];
     [logo setHidden:NO];
 }
+
 - (void)stopLoading
 {
     [actV stopAnimating];
