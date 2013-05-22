@@ -340,6 +340,7 @@
     }
     [self postWithURL:strURl body:body success:success failure:failure];
 }
+
 //推荐
 + (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -347,15 +348,16 @@
     [self getSourceWithStringUrl:strUrl success:success failure:failure];
 }
 
-//通知
-+ (void)getNotificationsWithAccessToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
-{
-//     GET /notifications
-    NSString * string  = [NSString stringWithFormat:@"%@/notifications",BASICURL_V1];
-//    8.2 GET /notifications  获得当前用户的通知列表。
-//    
-//    8.3 DELETE /notifications/$notification_id  删除当前用户的某一指定通知。
-}
+////通知
+//+ (void)getNotificationsWithAccessToken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+//{
+////     GET /notifications
+//    NSString * string  = [NSString stringWithFormat:@"%@/notifications",BASICURL_V1];
+////    8.2 GET /notifications  获得当前用户的通知列表。
+////    
+////    8.3 DELETE /notifications/$notification_id  删除当前用户的某一指定通知。
+//}
+
 //反馈
 + (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure
 {
