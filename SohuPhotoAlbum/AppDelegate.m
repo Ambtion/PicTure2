@@ -46,10 +46,10 @@
     [MobClick startWithAppkey:UM_APP_KEY];
     
     
-    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeAlert |
-      UIRemoteNotificationTypeBadge |
-      UIRemoteNotificationTypeSound)];
+//    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
+//     (UIRemoteNotificationTypeAlert |
+//      UIRemoteNotificationTypeBadge |
+//      UIRemoteNotificationTypeSound)];
     return YES;
 }
 

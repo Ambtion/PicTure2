@@ -51,6 +51,7 @@ static NSString * const Images3[3] = {@"footViewtalk3.png",@"footViewunlike3.png
 }
 - (void)setLikeStateTolike:(BOOL)isLike
 {
+    DLog(@"hide:%d like:%d",ishiddenDelete,isLike);
     if (ishiddenDelete) {
         if (isLike){
             [_likeButton setImage:[UIImage imageNamed:@"footViewlike3.png"] forState:UIControlStateNormal];

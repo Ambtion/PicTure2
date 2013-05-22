@@ -182,12 +182,13 @@
 - (void)addSoruceFromArray:(NSArray *)array
 {
     if (array.count)
-        NSLog(@"%@",[array lastObject]);
+        NSLog(@"%@",[array objectAtIndex:0]);
     [_assetArray addObjectsFromArray:array];
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
     [_myTableView reloadData];
 }
+
 - (PhotoStoryCellDataSource *)getdataSourceFromInfo:(NSDictionary *)info
 {
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
