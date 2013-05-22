@@ -437,15 +437,16 @@
 {
     NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
     //    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene];
-    NSString * title = [NSString stringWithFormat:@"分享%@的图集[%@]",[_userInfo objectForKey:@"sname"],self.storyName];
-    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene Title:title des:self.storyDes];
+    NSString * title = [NSString stringWithFormat:@"分享%@的图集[%@]",[_userInfo objectForKey:@"user_nick"],self.storyName];
+    PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
+    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene Title:title photoUrl:[source imageUrl] des:self.storyDes];
 }
 - (void)shareOneSourceWithWeiXin:(enum WXScene)scene
 {
     //    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,_shareDateSource.photoShowID];
     NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
-    NSString * title = [NSString stringWithFormat:@"分享%@的图片",[_userInfo objectForKey:@"sname"]];
-    [self shareNewsToWeixinWithUrl:contentNews ToSence:scene Title:title des:nil];
+    NSString * title = [NSString stringWithFormat:@"分享%@的图片",[_userInfo objectForKey:@"user_nick"]];
+    [self shareNewsToWeixinWithUrl:contentNews ToSence:scene Title:title photoUrl:[_shareDateSource imageUrl] des:_shareDateSource.imageDes];
 }
 - (void)onResp:(BaseResp *)resp
 {

@@ -382,8 +382,10 @@
 - (void) respNewsContentToSence:(enum WXScene)scene
 {
     NSString * contentURl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@",self.ownerID];
-    NSString * title = [NSString stringWithFormat:@"分享%@的图片墙",[_userInfo objectForKey:@"sname"]];
-    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title des:[_userInfo objectForKey:@"user_desc"]];
+    NSString * title = [NSString stringWithFormat:@"分享%@的图片墙",[_userInfo objectForKey:@"user_nick"]];
+    PhotoWallCellDataSource * source = [_dataSourceArray objectAtIndex:0];
+    NSString * photoUrl = [[[source imageWallInfo] objectAtIndex:0] objectForKey:@"photo_url"];
+    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title photoUrl:photoUrl des:[_userInfo objectForKey:@"user_desc"]];
     
 }
 - (void)onResp:(BaseResp *)resp

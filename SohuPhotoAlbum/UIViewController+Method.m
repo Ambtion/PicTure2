@@ -234,13 +234,17 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 @end
 
 @implementation UIViewController(weixinShare)
-- (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title des:(NSString *)des
+- (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title photoUrl:(NSString *)photoUrl des:(NSString *)des
 {
     //发送内容给微信
     WXMediaMessage *message = [WXMediaMessage message];
     message.title = title;
     message.description = des;
-    [message setThumbImage:[UIImage imageNamed:@"Icon.png"]];
+    if (photoUrl) {
+        [message setThumbData:[self getImgaeDateWithUrl:photoUrl]];
+    }else{
+        [message setThumbImage:[UIImage imageNamed:@"Icon.png"]];
+    }
     WXWebpageObject *ext = [WXWebpageObject object];
     ext.webpageUrl = url;
     message.mediaObject = ext;
@@ -250,5 +254,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     req.scene = scene;
     
     [WXApi sendReq:req];
+}
+- (NSData *)getImgaeDateWithUrl:(NSString *)string
+{
+    NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
+    return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
 @end
