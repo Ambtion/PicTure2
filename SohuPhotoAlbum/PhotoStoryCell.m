@@ -31,32 +31,30 @@
 - (CGFloat)cellHeigth
 {
     CGFloat heigth =  OFFSETY + 1; //biView Offset;
-
+    
     heigth += 308  * higth / weigth; //等宽缩放
     
     if (!imageDes ||[imageDes isKindOfClass:[NSNull class]] || [imageDes isEqualToString:@""]){
         imageDes = nil;
     }else{
         CGSize size = [imageDes sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
-        heigth +=  5; //desOffset
+        heigth += (OFFSETY + 5); //desOffset
         heigth += size.height; //des
     }
     
     //comment
-    if (commentInfoArray.count){
+    if (commentInfoArray.count)
         heigth += 5.f;  // desview->commnetView
-        for (int i = 0; i < MIN(3, commentInfoArray.count); i++) {
-            StoryCommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
-            heigth += [dataSoure commetViewheigth];
-        }
+    for (int i = 0; i < MIN(3, commentInfoArray.count); i++) {
+        StoryCommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
+        heigth += [dataSoure commetViewheigth];
+    }
+    if (!MIN(3, commentInfoArray.count)){ //评论内容不存在
+        heigth += 40;
+    }else{
         heigth += 30; //comment Account
         heigth += 40; //footView
-        
-    }else{
-        heigth += 5;
-        heigth += 40;
     }
-    
     return heigth; //边界
 }
 
@@ -77,7 +75,6 @@
     }
     return self;
 }
-
 #pragma mark - SetLabel
 - (void)setDesLabelPerporty:(UILabel *)label
 {
@@ -85,7 +82,7 @@
     label.numberOfLines = 0;
     label.font = DESLABELFONT;
     label.lineBreakMode = DESLABLELINEBREAK;
-    label.backgroundColor = [UIColor redColor];
+    label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:102.f/255 green:102.f/255 blue:102.f/255 alpha:1.f];
 }
 - (void)setCountLabel
@@ -96,15 +93,15 @@
     _commentCount.lineBreakMode = DESLABLELINEBREAK;
     CGFloat color = 180.f/255.f;
     _commentCount.textColor = [UIColor colorWithRed:color green:color blue:color alpha:1.f];
-    
 }
+
 #pragma mark - InitSubViews
 - (void)initAllSubViewsWithHiddenDeleButton:(BOOL)ishidden
 {
     _bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, OFFSETY, 320, 0)];
     [_bgImageView setUserInteractionEnabled:YES];
     _bgImageView.image = [[UIImage imageNamed:@"photoStoryBg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(100, 160, 100, 160)];
-    _bgImageView.backgroundColor = [UIColor clearColor];
+    _bgImageView.backgroundColor = [UIColor whiteColor];
     _photoView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [_photoView setUserInteractionEnabled:YES];
     _photoView.frame = CGRectMake(6, 0, 320 - 12, 20);
@@ -115,16 +112,14 @@
     
     _desLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self setDesLabelPerporty:_desLabel];
-    [_bgImageView addSubview:_desLabel];
-//    [self.contentView addSubview:_desLabel];
+    [self.contentView addSubview:_desLabel];
     for (int i = 0; i < 3; i++) {
         StoryCommentView * view  =[[StoryCommentView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
         view.tag = i;
         [view addtarget:self action:@selector(commentViewClick:)];
         UITapGestureRecognizer * gesTure = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentPortraitView:)];
         [view.portraitView addGestureRecognizer:gesTure];
-//        [self.contentView addSubview:view];
-        [_bgImageView addSubview:view];
+        [self.contentView addSubview:view];
         [_commentArray addObject:view];
     }
     
@@ -134,14 +129,11 @@
     _commentCount = [[UILabel alloc] initWithFrame:imageview.bounds];
     [self setCountLabel];
     [imageview addSubview:_commentCount];
-    [_bgImageView addSubview:imageview];
-//    [self.contentView addSubview:imageview];
+    [self.contentView addSubview:imageview];
     
     _footView = [[StoryFootView alloc] initWitFrame:CGRectMake(0, 0, 320, 40) thenHiddenDeleteButton:ishidden];
     _footView.delegate = self;
-//    [self.contentView addSubview:_footView];
-    [_bgImageView addSubview:_footView];
-    
+    [self.contentView addSubview:_footView];
 }
 #pragma mark - DataSource
 - (void)setDataSource:(PhotoStoryCellDataSource *)dataSource
@@ -151,6 +143,7 @@
         [self updateAllSubViewsFrames];
     }
 }
+
 - (void)updateAllSubViewsFrames
 {
     
@@ -172,13 +165,13 @@
     [self.contentView setHidden:NO];
     _desLabel.text = [_dataSource imageDes];
     CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
-    
-    CGFloat offsetDes = size.height ? 5 : 0;
-    _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.frame.size.height + _photoView.frame.origin.y + offsetDes , size.width, size.height);
+    CGFloat offsetDes = size.width ? OFFSETY + 5 : 0;
+    _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + _bgImageView.frame.origin.y
+                                 +_photoView.frame.origin.y +offsetDes , size.width, size.height);
     //设置图片位置
-//    _bgImageView.frame = CGRectMake(0, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 10);
+    _bgImageView.frame = CGRectMake(0, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 10);
     //commentSize
-
+    
     for (StoryCommentView * view in _commentArray)
         [view setHidden:YES];
     
@@ -202,24 +195,25 @@
                 [self setFootViewWithView:view2];
             }
         }
-        
     }else{
         [_commentCount.superview setHidden:YES];
-        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y + 5,320, _footView.frame.size.height);
+        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y ,320, _footView.frame.size.height);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
-
+    //    if (_dataSource.isLiking) {
+    //        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton1.png"] forState:UIControlStateNormal];
+    //    }else{
+    //        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton.png"] forState:UIControlStateNormal];
+    //    }
     [_footView setLikeStateTolike:_dataSource.isLiking];
-    _bgImageView.frame = CGRectMake(_bgImageView.frame.origin.x, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _footView.frame.size.height + _footView.frame.origin.y);
     DLog(@"MMM::%f %f",_footView.frame.size.height + _footView.frame.origin.y,[_dataSource cellHeigth]);
-
 }
 - (void)setFootViewWithView:(UIView *)view
 {
     //commetCount
     [_commentCount.superview setHidden:NO];
     _commentCount.superview.frame = CGRectMake(0, view.frame.size.height + view.frame.origin.y, 320, 30);
-    _commentCount.frame = CGRectMake(OFFSETY + 10, 4, 320, 21);
+    _commentCount.frame = CGRectMake(OFFSETY + 10,4, 320, 21);
     _footView.frame = CGRectMake(0, _commentCount.superview.frame.size.height + _commentCount.superview.frame.origin.y,320, _footView.frame.size.height);
 }
 - (CGSize)sizeOfLabel:(UILabel *)label containSize:(CGSize)containSize
@@ -232,6 +226,7 @@
     if ([_delegate respondsToSelector:@selector(photoStoryCell:footViewClickAtIndex:)])
         [_delegate photoStoryCell:self footViewClickAtIndex:index];
 }
+
 #pragma mark - TapGesture
 - (void)tapGesture:(UIGestureRecognizer *)gesture
 {

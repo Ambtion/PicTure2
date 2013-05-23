@@ -343,7 +343,7 @@
         cell = [[PhotoWallCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifierNum:num];
         cell.delegate = self;
         cell.dataSource = dataSoure;
-        [cell resetImageWithAnimation:YES];
+//        [cell resetImageWithAnimation:YES];
     }
     cell.dataSource = dataSoure;
     return cell;
