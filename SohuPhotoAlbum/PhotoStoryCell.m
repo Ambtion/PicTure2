@@ -38,20 +38,20 @@
         imageDes = nil;
     }else{
         CGSize size = [imageDes sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
-        heigth += (OFFSETY + 5); //desOffset
+        heigth +=  5 ; //desOffset
         heigth += size.height; //des
+        heigth +=  5; //des下边界
     }
     
-    //comment
-    if (commentInfoArray.count)
-        heigth += 5.f;  // desview->commnetView
-    for (int i = 0; i < MIN(3, commentInfoArray.count); i++) {
-        StoryCommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
-        heigth += [dataSoure commetViewheigth];
-    }
+    
     if (!MIN(3, commentInfoArray.count)){ //评论内容不存在
         heigth += 40;
     }else{
+        //comment
+        for (int i = 0; i < MIN(3, commentInfoArray.count); i++) {
+            StoryCommentViewDataSource * dataSoure = [commentInfoArray objectAtIndex:i];
+            heigth += [dataSoure commetViewheigth];
+        }
         heigth += 30; //comment Account
         heigth += 40; //footView
     }
@@ -112,28 +112,30 @@
     
     _desLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self setDesLabelPerporty:_desLabel];
-    [self.contentView addSubview:_desLabel];
+    //    [self.contentView addSubview:_desLabel];
+    [_bgImageView addSubview:_desLabel];
     for (int i = 0; i < 3; i++) {
         StoryCommentView * view  =[[StoryCommentView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
         view.tag = i;
         [view addtarget:self action:@selector(commentViewClick:)];
         UITapGestureRecognizer * gesTure = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentPortraitView:)];
         [view.portraitView addGestureRecognizer:gesTure];
-        [self.contentView addSubview:view];
+        [_bgImageView addSubview:view];
         [_commentArray addObject:view];
     }
     
     UIImageView * imageview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
     imageview.backgroundColor = [UIColor clearColor];
-    imageview.image = [[UIImage imageNamed:@"commentViewbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 160, 5, 160)];
+    //    imageview.image = [[UIImage imageNamed:@"commentViewbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 160, 10, 160)];
+    imageview.image =[UIImage imageNamed:@"accountLabelbg.png"];
     _commentCount = [[UILabel alloc] initWithFrame:imageview.bounds];
     [self setCountLabel];
     [imageview addSubview:_commentCount];
-    [self.contentView addSubview:imageview];
+    [_bgImageView  addSubview:imageview];
     
     _footView = [[StoryFootView alloc] initWitFrame:CGRectMake(0, 0, 320, 40) thenHiddenDeleteButton:ishidden];
     _footView.delegate = self;
-    [self.contentView addSubview:_footView];
+    [_bgImageView addSubview:_footView];
 }
 #pragma mark - DataSource
 - (void)setDataSource:(PhotoStoryCellDataSource *)dataSource
@@ -145,32 +147,19 @@
 }
 
 - (void)updateAllSubViewsFrames
-{
-    
+{    
     NSString * str = [NSString stringWithFormat:@"%@_w640",[_dataSource imageUrl]];
-    __weak UIImageView * photoViewWeak = _photoView;
-    __weak PhotoStoryCell * weakSelf = self;
-    [_photoView setImageWithURL:[NSURL URLWithString:str] success:^(UIImage *image) {
-        photoViewWeak.frame = CGRectMake(0, 1, 308 , 308 * image.size.height / image.size.width);
-        photoViewWeak.center = CGPointMake(160, photoViewWeak.center.y);
-        [weakSelf updateAllOhterViewButImageView];
-    } failure:^(NSError *error) {
-        photoViewWeak.frame = CGRectMake((photoViewWeak.frame.size.width - 320)/2.f, 1, 320, 320);
-        photoViewWeak.center = CGPointMake(160, photoViewWeak.center.y);
-    }];
-    //_desLabel Size
+    _photoView.frame = CGRectMake(6, 1, 308, 308 * _dataSource.higth / _dataSource.weigth);
+    [_photoView setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
+    [self updateAllOhterViewButImageView];
 }
 - (void)updateAllOhterViewButImageView
 {
     [self.contentView setHidden:NO];
     _desLabel.text = [_dataSource imageDes];
     CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
-    CGFloat offsetDes = size.width ? OFFSETY + 5 : 0;
-    _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + _bgImageView.frame.origin.y
-                                 +_photoView.frame.origin.y +offsetDes , size.width, size.height);
-    //设置图片位置
-    _bgImageView.frame = CGRectMake(0, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _photoView.frame.size.height + _desLabel.frame.size.height + 10);
-    //commentSize
+    CGFloat offsetDes = size.height ? OFFSETY + 5 : 0;
+    _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + _photoView.frame.origin.y + offsetDes , size.width, size.height);
     
     for (StoryCommentView * view in _commentArray)
         [view setHidden:YES];
@@ -178,15 +167,17 @@
     if (_dataSource.commentInfoArray && _dataSource.commentInfoArray.count) {
         StoryCommentView * view = [_commentArray objectAtIndex:0];
         view.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:0]; //计算view.frame
-        view.frame = CGRectMake(view.frame.origin.x, _desLabel.frame.size.height + _desLabel.frame.origin.y + 5, view.frame.size.width, view.frame.size.height);
+        view.frame = CGRectMake(view.frame.origin.x, _desLabel.frame.size.height + _desLabel.frame.origin.y + offsetDes, view.frame.size.width, view.frame.size.height);
         [view setHidden:NO];
         [self setFootViewWithView:view];
         if (_dataSource.commentInfoArray.count > 1){
+            
             StoryCommentView * view1 = [_commentArray objectAtIndex:1];
             view1.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:1];
             view1.frame = CGRectMake(view1.frame.origin.x, view.frame.size.height + view.frame.origin.y, view1.frame.size.width, view1.frame.size.height);
             [view1 setHidden:NO];
             [self setFootViewWithView:view1];
+
             if (_dataSource.commentInfoArray.count > 2){
                 StoryCommentView * view2 = [_commentArray objectAtIndex:2];
                 view2.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:2];
@@ -196,24 +187,20 @@
             }
         }
     }else{
+        
         [_commentCount.superview setHidden:YES];
         _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y ,320, _footView.frame.size.height);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
-    //    if (_dataSource.isLiking) {
-    //        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton1.png"] forState:UIControlStateNormal];
-    //    }else{
-    //        [_footView.likeButton setImage:[UIImage imageNamed:@"storylikeButton.png"] forState:UIControlStateNormal];
-    //    }
     [_footView setLikeStateTolike:_dataSource.isLiking];
-    DLog(@"MMM::%f %f",_footView.frame.size.height + _footView.frame.origin.y,[_dataSource cellHeigth]);
+    _bgImageView.frame = CGRectMake(0, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _footView.frame.origin.y + _footView.frame.size.height - 10);
 }
 - (void)setFootViewWithView:(UIView *)view
 {
     //commetCount
     [_commentCount.superview setHidden:NO];
     _commentCount.superview.frame = CGRectMake(0, view.frame.size.height + view.frame.origin.y, 320, 30);
-    _commentCount.frame = CGRectMake(OFFSETY + 10,4, 320, 21);
+    _commentCount.frame = CGRectMake(OFFSETY + 10,4, 280, 21);
     _footView.frame = CGRectMake(0, _commentCount.superview.frame.size.height + _commentCount.superview.frame.origin.y,320, _footView.frame.size.height);
 }
 - (CGSize)sizeOfLabel:(UILabel *)label containSize:(CGSize)containSize
@@ -246,4 +233,34 @@
     if ([_delegate respondsToSelector:@selector(photoStoryCell:commentClickAtIndex:)])
         [_delegate photoStoryCell:self commentClickAtIndex:path];
 }
+
+#pragma mark - Animation
+- (void)resetImageWithAnimation:(BOOL)animation
+{
+    
+    CABasicAnimation * animationTr = [CABasicAnimation animationWithKeyPath:@"transform"];
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = 1.0 / -1000;
+    //this would rotate object on an axis of x = 0, y = 1, z = -0.3f. It is "Z" here which would
+    transform = CATransform3DRotate(transform, roundf(45.f), 1, 0,  - 0.2);
+    animationTr.fromValue = [NSValue valueWithCATransform3D:transform];
+    
+    animationTr.toValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DIdentity, roundf(0), 0, 0, 0)];
+    animationTr.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    CABasicAnimation * animationRec = [CABasicAnimation animationWithKeyPath:@"position"];
+    animationRec.fromValue = [NSValue valueWithCGPoint:CGPointMake(_bgImageView.layer.position.x + 100, _bgImageView.layer.position.y + 200)];
+    animationRec.toValue = [NSValue valueWithCGPoint:_bgImageView.layer.position];
+    animationRec.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    CAAnimationGroup * group = [CAAnimationGroup animation];
+    group.animations = [NSArray arrayWithObjects:animationRec,animationTr, nil];
+    [_bgImageView.layer addAnimation:group forKey:@""];
+    CABasicAnimation * animationBac = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
+    animationBac.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animationBac.fromValue = [UIColor colorWithRed:1.f green:1.f blue:1.f alpha:0.5];
+    animationBac.toValue = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
+    [self.contentView.layer addAnimation:animationBac forKey:@""];
+}
+
+
 @end

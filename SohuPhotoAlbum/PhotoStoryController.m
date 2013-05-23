@@ -254,8 +254,10 @@
     if (!cell) {
         cell = [[PhotoStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str thenHiddeDeleteButton:![self isMineWithOwnerId:self.ownerID]];
         cell.delegate  = self;
+        cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
     }
     cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
+    [cell resetImageWithAnimation:YES];
     return cell;
 }
 #pragma mark Action

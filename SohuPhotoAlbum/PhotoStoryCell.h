@@ -44,5 +44,6 @@
 @property(strong,nonatomic)PhotoStoryCellDataSource * dataSource;
 @property(weak,nonatomic)id<PhotoStoryCellDelegate> delegate;
 - (void)updateAllSubViewsFrames;
+- (void)resetImageWithAnimation:(BOOL)animation;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier thenHiddeDeleteButton:(BOOL)isHidden;
 @end
