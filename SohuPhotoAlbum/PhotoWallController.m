@@ -370,6 +370,7 @@
     NSString * photoString = [NSString stringWithFormat:@"%@",[[source.imageWallInfo objectAtIndex:0] objectForKey:@"photo_url"]];
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:photoString andDelegate:self] animated:YES];
 }
+
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
 {
     //分享
@@ -381,6 +382,7 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }];
 }
+
 - (void) respNewsContentToSence:(enum WXScene)scene
 {
     NSString * contentURl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@",self.ownerID];
