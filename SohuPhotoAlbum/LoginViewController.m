@@ -148,7 +148,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
     if (!_navBar) {
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         _navBar.normalBar.image = [UIImage imageNamed:@"Login_Bar.png"];

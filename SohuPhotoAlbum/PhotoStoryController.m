@@ -57,7 +57,7 @@
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-        [_navBar.nLabelText setText:@"图片墙"];
+        [_navBar.nLabelText setText:[NSString stringWithFormat:@"图片集(%@)",self.storyName]];
         [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
     if (![self isMineWithOwnerId:self.ownerID]) {
@@ -194,6 +194,7 @@
 
 - (PhotoStoryCellDataSource *)getdataSourceFromInfo:(NSDictionary *)info
 {
+    
     PhotoStoryCellDataSource * dataSource = [[PhotoStoryCellDataSource alloc] init];
     dataSource.photoId = [NSString stringWithFormat:@"%@",[info objectForKey:@"id"]];
     dataSource.imageUrl = [info objectForKey:@"photo_url"];
@@ -348,11 +349,11 @@
 #pragma mark Deleget
 - (void)showDeleteView
 {
-    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)popAlertView:(AHAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
         [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] stroyid:self.storyID photoId:[[tempCellForDelete dataSource] photoId]success:^(NSString *response) {
@@ -360,8 +361,9 @@
             NSIndexPath * path = [_myTableView  indexPathForCell:tempCellForDelete];
             [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
             [_myTableView reloadData];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
         } failure:^(NSString *error) {
-            
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
         }];
     }
 }

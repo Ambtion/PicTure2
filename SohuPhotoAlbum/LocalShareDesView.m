@@ -44,7 +44,7 @@
 {
     UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, _offsetY, 320, 44)];
     headView.backgroundColor = [UIColor clearColor];
-//    headView.image = [UIImage imageNamed:@"desViewBar.png"];
+    //    headView.image = [UIImage imageNamed:@"desViewBar.png"];
     headView.image = [UIImage imageNamed:@"navbarnoline.png"];
     [headView setUserInteractionEnabled:YES];
     UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -73,20 +73,22 @@
     [_contentView setUserInteractionEnabled:YES];
     _contentView.image = [[UIImage imageNamed:@"contentBgView.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(90, 124, 124, 90)];
     _contentView.backgroundColor = [UIColor clearColor];
-    _contentTextView = [[UITextView alloc] initWithFrame:CGRectMake(10, 5, _contentView.frame.size.width - 20, _contentView.frame.size.height - 50)];
+    
+    _contentTextView = [[UITextView alloc] initWithFrame:CGRectMake(10, 5, _contentView.frame.size.width - 20, _contentView.frame.size.height - 55)];
+    
     _contentTextView.backgroundColor  = [UIColor clearColor];
     _contentTextView.font = [UIFont systemFontOfSize:16.f];
     _contentTextView.autoresizingMask =  UIViewAutoresizingFlexibleHeight;
     _contentTextView.delegate = self;
     
     [_contentView addSubview:_contentTextView];
+    
     _textcount = [[UILabel alloc] initWithFrame:CGRectMake(_contentView.frame.size.width - 100, _contentView.frame.size.height - 45, 100, 40)];
     _textcount.backgroundColor = [UIColor clearColor];
     _textcount.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _textcount.textAlignment = UITextAlignmentCenter;
     _textcount.text = @"0/140";
     [_contentView addSubview:_textcount];
-    
     
     _porTraitView = [[PortraitView alloc] initWithFrame:CGRectMake(10, _contentView.frame.size.height - 45, 40, 40)];
     _porTraitView.imageView.image = thumbnail;
@@ -99,7 +101,6 @@
     [_contentView addSubview:_porTraitView];
     [self addSubview:_contentView];
     [_contentTextView  becomeFirstResponder];
-    _contentTextView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
 }
 
 - (void)setLabelProperty:(UILabel *)label
@@ -108,13 +109,13 @@
     label.textColor = [UIColor blackColor];
     switch (_model) {
         case QQShare:
-            label.text = @"腾讯QQ空间上传";
+            label.text = @"分享到腾讯QQ空间";
             break;
         case RenrenShare:
-            label.text = @"人人校内分享";
+            label.text = @"分享到人人网";
             break;
         case SinaWeiboShare:
-            label.text = @"新浪微博分享";
+            label.text = @"分享到新浪微博";
             break;
         case SohuShare:
             label.text = @"分享到图片墙";
@@ -156,6 +157,7 @@
 }
 
 #pragma mark TextViewDelegate
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     NSUInteger newLength = [textView.text length] + [text length] - range.length;
@@ -175,6 +177,7 @@
         //        if (_placeHolder.hidden)
         //            [_placeHolder setHidden:NO];
     }
+    _textcount.text = [NSString stringWithFormat:@"%d/%d",[textView.text length],DESC_COUNT_LIMIT];
 }
 
 

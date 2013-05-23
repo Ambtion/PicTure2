@@ -342,6 +342,8 @@
     if (cell == nil) {
         cell = [[PhotoWallCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifierNum:num];
         cell.delegate = self;
+        cell.dataSource = dataSoure;
+        [cell resetImageWithAnimation:YES];
     }
     cell.dataSource = dataSoure;
     return cell;
@@ -429,11 +431,11 @@
 #pragma mark  Delete
 - (void)showDeleteView
 {
-    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
         //若出现,这是个人页面

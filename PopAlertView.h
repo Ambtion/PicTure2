@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AHAlertView.h"
 
-@interface PopAlertView : UIAlertView
-
+@class PopAlertView;
+@protocol PopAlertViewDeleagte <NSObject>
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+@end
+@interface PopAlertView : NSObject
+{
+    id<PopAlertViewDeleagte> _delegate;
+    AHAlertView * alert;
+}
+- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<PopAlertViewDeleagte>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitle;
+- (void)show;
 @end

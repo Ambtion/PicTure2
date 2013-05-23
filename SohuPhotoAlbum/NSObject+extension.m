@@ -14,7 +14,7 @@
 - (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage
 {
     if (isPopView) {
-        PopAlertView * popA = [[PopAlertView alloc] initWithTitle:mesage message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        PopAlertView * popA = [[PopAlertView alloc] initWithTitle:nil message:mesage delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [popA show];
     }else{
         ToastAlertView * alertView = [[ToastAlertView alloc] initWithTitle:mesage];
@@ -25,7 +25,7 @@
 + (void)objectPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage
 {
     if (isPopView) {
-        PopAlertView * popA = [[PopAlertView alloc] initWithTitle:mesage message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        PopAlertView * popA = [[PopAlertView alloc] initWithTitle:nil message:mesage delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [popA show];
     }else{
         ToastAlertView * alertView = [[ToastAlertView alloc] initWithTitle:mesage];
@@ -62,7 +62,7 @@
 }
 - (void)showNetWorkAlertView
 {
-    PopAlertView * alerView = [[PopAlertView alloc] initWithTitle:@"通知" message:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil];
+    PopAlertView * alerView = [[PopAlertView alloc] initWithTitle:nil message:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil];
     [alerView show];
     [[UploadTaskManager currentManager] cancelAllOperation];
 }

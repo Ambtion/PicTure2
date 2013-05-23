@@ -63,4 +63,5 @@ static  NSString * const identify[7] = {@"__0",@"__1",@"__2",@"__3",@"__4",@"__5
 @property(weak,nonatomic)id<PhotoWallCellDelegate> delegate;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifierNum:(NSInteger)reuseIdentifiernum;
 - (void)updataSubViews;
+- (void)resetImageWithAnimation:(BOOL)animation;
 @end

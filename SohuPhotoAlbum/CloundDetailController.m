@@ -66,7 +66,7 @@
 #pragma mark  Delete
 - (void)showDeletePhotoesView
 {
-    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
 }
@@ -98,7 +98,7 @@
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
 {
     NSString * phtotId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
-    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:nil  optionalTitle:@"title" desc:des success:^(NSString *response) {
+    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:nil  optionalTitle:nil desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];

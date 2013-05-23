@@ -7,7 +7,6 @@
 //
 
 #import "FeedBackController.h"
-#import "PopAlertView.h"
 #import "EmojiUnit.h"
 
 #define DESC_COUNT_LIMIT 200
@@ -31,7 +30,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -47,7 +45,7 @@
 - (void)saveButton:(UIButton *)button
 {
     if ([EmojiUnit stringContainsEmoji:_textView.text]) {
-        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:@"提示信息" message:@"反馈内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:nil message:@"反馈内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [tip show];
         return;
     }
@@ -68,6 +66,7 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"反馈失败"];
     }else{
         [self showPopAlerViewRatherThentasView:NO WithMes:@"成功提交,感谢您的反馈"];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 #pragma mark -
@@ -80,6 +79,7 @@
     imageView.image = nil;
     [self.view addSubview:imageView];
     _bavBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+    _bavBar.nLabelText.text = @"意见反馈";
     [self.view addSubview:_bavBar];
     UILabel * titleLabel = [[UILabel alloc] init];
     titleLabel.frame = CGRectMake(5, 50, 160, 18);

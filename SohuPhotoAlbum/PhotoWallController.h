@@ -18,7 +18,7 @@
 #import "ShareBox.h"
 
 @interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,      SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate,
-            UIActionSheetDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate>
+            UIActionSheetDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte>
 {
     UITableView * _myTableView;
     EGORefreshTableHeaderView * _refresHeadView;

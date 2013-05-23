@@ -64,12 +64,12 @@
 #pragma mark notification
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"
-                                                    message:notification.alertBody
-                                                   delegate:nil
-                                          cancelButtonTitle:@"确定"
-                                          otherButtonTitles:nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"
+//                                                    message:notification.alertBody
+//                                                   delegate:nil
+//                                          cancelButtonTitle:@"确定"
+//                                          otherButtonTitles:nil];
+//    [alert show];
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {

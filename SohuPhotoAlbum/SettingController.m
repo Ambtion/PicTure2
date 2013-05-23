@@ -15,7 +15,7 @@
 
 #define maxRow 8
 
-static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi环境上传",@"压缩上传图片",@"清除缓存",@"意见反馈",@"为搜狐相册打分",@"检查新版本"};
+static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi环境上传",@"压缩上传图片",@"清除缓存",@"意见反馈",@"为相机伴侣打分",@"检查新版本"};
 
 @implementation SettingController
 @synthesize isChangeLoginState;
@@ -223,7 +223,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 {
     switch (indexPath.row) {
         case 4: //清除缓冲
-            _cache = [[PopAlertView alloc] initWithTitle:@"确认清除缓存" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+            _cache = [[PopAlertView alloc] initWithTitle:nil message:@"确认清除缓存" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
             [_cache show];
             break;
         case 5: //反馈
@@ -241,7 +241,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 }
 
 #pragma mark AlertDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (_cache == alertView && buttonIndex == 1)
         [CacheManager removeCacheOfImage];
@@ -304,7 +304,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
         }else{
             str  = [NSString stringWithFormat:@"图片上传中,确定登出?"];
         }
-        _loginView = [[PopAlertView alloc] initWithTitle:str message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+        _loginView = [[PopAlertView alloc] initWithTitle:nil message:str delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
         [_loginView show];
     }
 }

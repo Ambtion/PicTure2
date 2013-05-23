@@ -150,7 +150,7 @@
 - (void)commetButtonClick:(UIButton *)button
 {
     if ([EmojiUnit stringContainsEmoji:commentView.textView.internalTextView.text]) {
-        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:@"提示信息" message:@"评论内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        PopAlertView * tip = [[PopAlertView alloc] initWithTitle:nil message:@"评论内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [tip show];
         return;
     }

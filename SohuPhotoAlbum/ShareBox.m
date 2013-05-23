@@ -20,7 +20,7 @@
     isShowWall = showWall;
     UIActionSheet * sheet = [[UIActionSheet alloc] init];
     sheet.delegate = self;
-    [sheet addButtonWithTitle:@"新浪分享"];
+    [sheet addButtonWithTitle:@"新浪微博"];
     [sheet addButtonWithTitle:@"人人网"];
     [sheet addButtonWithTitle:@"腾讯QQ空间"];
     sheet.actionSheetStyle = UIBarStyleBlackTranslucent;

@@ -14,7 +14,6 @@
 #import "TaskUnit.h"
 #import "DataBaseManager.h"
 #import "URLLibaray.h"
-#import "PopAlertView.h"
 
 @class AlbumTaskList;
 @protocol AlbumTaskListDelegate <NSObject>

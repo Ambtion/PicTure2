@@ -54,13 +54,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
+    [self.navigationItem setHidesBackButton:YES];
     if (!_navBar) {
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         _navBar.normalBar.image = [UIImage imageNamed:@"Login_Bar.png"];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     }
     [self.navigationController.navigationBar addSubview:_navBar];
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.navigationItem setHidesBackButton:YES];
 }
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
@@ -95,7 +100,7 @@
     _mailBindTextField.backgroundColor = [UIColor clearColor];
     _mailBindTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
-
+    
     
     _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 146-offset, 190, 22)];
     _passwordTextField.font = [UIFont systemFontOfSize:15];
@@ -127,7 +132,7 @@
     
     _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _registerButton.frame = CGRectMake(35, 270, 250, 40);
-
+    
     [_registerButton setImage:[UIImage imageNamed:@"doneRegister.png"] forState:UIControlStateNormal];
     [_registerButton addTarget:self action:@selector(doRegister) forControlEvents:UIControlEventTouchUpInside];
     
@@ -141,12 +146,12 @@
     [self.view addSubview:_readDealButton];
     [self.view addSubview:_registerButton];
     
-//    //后退按钮
-//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    backButton.frame = CGRectMake(0, 0, 44, 44);
-//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-//    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:backButton];
+    //    //后退按钮
+    //    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    backButton.frame = CGRectMake(0, 0, 44, 44);
+    //    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    //    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    //    [self.view addSubview:backButton];
     
     UIImageView * sohu2003 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sohu-2013.png"]];
     CGRect rect = CGRectMake(0, 0, 320, 10);
@@ -189,7 +194,7 @@
 - (void)mailBindDidEndOnExit
 {
     [_passwordTextField becomeFirstResponder];
-
+    
 }
 - (void)usernameDidEndOnExit
 {
@@ -220,7 +225,7 @@
     [AccountLoginResquest resigiterWithuseName:username password:password nickName:nil sucessBlock:^(NSDictionary *response) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [AccountLoginResquest sohuLoginWithuseName:username password:password sucessBlock:^(NSDictionary * response) {
-                 [LoginStateManager loginUserId:[response objectForKey:@"user_id"] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
+                [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
                 [self backhome];
             } failtureSucess:^(NSString *error) {
                 [self stopWait];

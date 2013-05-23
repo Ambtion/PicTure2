@@ -19,7 +19,7 @@ typedef enum _imageStatePosition
     
 }imageStatePosition;
 
-@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
+@interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate,UIActionSheetDelegate,PopAlertViewDeleagte>
 {
     UIScrollView * _scrollView;
     ImageScaleView * _fontScaleImage;

@@ -113,7 +113,7 @@
         
         self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
         [_normalBar addSubview:nLabelImage];
-        self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 150, 44)];
+        self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
         self.nLabelText.backgroundColor = [UIColor clearColor];
         self.nLabelText.textColor = [UIColor blackColor];
         [_normalBar addSubview:nLabelText];
@@ -129,7 +129,7 @@
     [_stateBar setUserInteractionEnabled:YES];
     _stateBar.image = [UIImage imageNamed:@"navbar.png"];
     
-    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 150, 44)];
+    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
     self.sLabelText.backgroundColor = [UIColor clearColor];
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];

@@ -16,6 +16,9 @@
 #define DESLABELMAXSIZE     (CGSize){298,1000}
 #define DESLABLELINEBREAK   NSLineBreakByWordWrapping
 
+double radians(float degrees) {
+    return ( degrees * 3.14159265 ) / 180.0;
+}
 
 @implementation NSObject(string)
 
@@ -251,8 +254,35 @@
     }else{
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
     }
-    _backImageView.frame = CGRectMake(0, OFFSETY, 320, _footView.frame.size.height + _footView.frame.origin.y);
+    _backImageView.frame = CGRectMake(0, OFFSETY, 320, _footView.frame.size.height + _footView.frame.origin.y);;
     DLog(@"%f %f",[self.dataSource getCellHeigth], _backImageView.frame.size.height + _backImageView.frame.origin.y);
+}
+
+- (void)resetImageWithAnimation:(BOOL)animation
+{
+    CABasicAnimation * animationTr = [CABasicAnimation animationWithKeyPath:@"transform"];
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = 1.0 / -1000;
+    //this would rotate object on an axis of x = 0, y = 1, z = -0.3f. It is "Z" here which would
+    transform = CATransform3DRotate(transform, roundf(45.f), 1, 0,  -0.2);
+    animationTr.fromValue = [NSValue valueWithCATransform3D:transform];
+    
+    animationTr.toValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DIdentity, roundf(0), 0, 0, 0)];
+    animationTr.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    CABasicAnimation * animationRec = [CABasicAnimation animationWithKeyPath:@"position"];
+    animationRec.fromValue = [NSValue valueWithCGPoint:CGPointMake(_backImageView.layer.position.x + 50, _backImageView.layer.position.y + 100)];
+    animationRec.toValue = [NSValue valueWithCGPoint:_backImageView.layer.position];
+    animationRec.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    CAAnimationGroup * group = [CAAnimationGroup animation];
+    group.animations = [NSArray arrayWithObjects:animationRec,animationTr, nil];
+    [_backImageView.layer addAnimation:group forKey:@""];
+    
+    CABasicAnimation * animationBac = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
+    animationBac.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animationBac.fromValue = [UIColor colorWithRed:1.f green:1.f blue:1.f alpha:0.5];
+    animationBac.toValue = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
+    [self.contentView.layer addAnimation:animationBac forKey:@""];
 }
 #pragma mark ActionFunction
 - (void)handleGesture:(id)sender
