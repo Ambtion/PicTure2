@@ -12,12 +12,12 @@
 @class ShareViewController;
 @protocol ShareViewControllerDelegate <NSObject>
 @optional
-- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model;
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model;
 @end
 
 @interface ShareViewController : UIViewController<LocalShareDesViewDelegate>
 {
-    shareModel _sharemodel;
+    KShareModel _sharemodel;
     UIImageView * _myBgView;
 }
 @property(nonatomic,strong)NSString * bgPhotoUrl;
@@ -25,6 +25,6 @@
 @property(nonatomic,strong)NSString * storyId;
 @property(nonatomic,strong)NSArray * photosArray;
 @property(weak,nonatomic)id<ShareViewControllerDelegate> delegate;
-- (id)initWithModel:(shareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete;
+- (id)initWithModel:(KShareModel)model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete;
 
 @end

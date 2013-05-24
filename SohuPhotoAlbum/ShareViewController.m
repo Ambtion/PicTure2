@@ -14,7 +14,7 @@
 @synthesize ownerId,storyboard,photosArray;
 @synthesize delegate = _delegate;
 
-- (id)initWithModel:(shareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete
+- (id)initWithModel:(KShareModel )model bgPhotoUrl:(NSString *)bgPhotoUrl andDelegate:(id<ShareViewControllerDelegate>)Adelegete
 {
     self = [super init];
     if (self) {
@@ -103,7 +103,7 @@
     return rect.size;
 }
 #pragma mark DesShareDelegate
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(KShareModel)model withDes:(NSString *)text
 {
     if ([_delegate respondsToSelector:@selector(shareViewcontrollerDidShareClick: withDes: shareMode:)]) {
         [_delegate shareViewcontrollerDidShareClick:self withDes:text shareMode:_sharemodel];

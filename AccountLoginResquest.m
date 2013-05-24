@@ -70,6 +70,23 @@
     }
     return NO;
 }
++ (BOOL)setBindingInfo
+{
+    NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/devices",BASICURL];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    [request addRequestHeader:@"accept" value:@"application/json"];
+    [request setPostValue:[LoginStateManager currentToken] forKey:@"access_token"];
+    [request setPostValue:[[UIDevice currentDevice] name] forKey:@"device_name"];
+    [request setPostValue:[[UIDevice currentDevice] model] forKey:@"device_model"];
+    [request setPostValue:[self getUUID] forKey:@"device_serial_number"];
+    [request startSynchronous];
+    if (request.responseStatusCode == 200) {
+        NSNumber * num = [[[request responseString] JSONValue] objectForKey:@"device_id"];
+        [LoginStateManager storeDeviceID:num];
+        return YES;
+    }
+    return NO;
+}
 
 + (void)sohuLoginWithuseName:(NSString *)useName password:(NSString *)password sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {

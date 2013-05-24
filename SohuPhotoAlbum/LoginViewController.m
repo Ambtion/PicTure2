@@ -214,6 +214,7 @@
 {
     [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
     [AccountLoginResquest resigiterDevice];
+    [AccountLoginResquest setBindingInfo];
 //    [AccountLoginResquest upDateDeviceToken];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
@@ -235,19 +236,19 @@
 #pragma mark OAuthor
 - (void)sinaLogin:(UIButton*)button
 {
-    [self presentWithControlleByLoginMode:LoginModelSina];
+    [self presentWithControlleByLoginMode:SinaWeiboShare];
 }
 - (void)qqLogin:(UIButton *)button
 {
-    [self presentWithControlleByLoginMode:LoginModelQQ];
+    [self presentWithControlleByLoginMode:QQShare];
 }
 - (void)renrenLogin:(UIButton *)button
 {
-    [self presentWithControlleByLoginMode:LoginModelRenRen];
+    [self presentWithControlleByLoginMode:RenrenShare];
 }
-- (void)presentWithControlleByLoginMode:(LoginModel)model
+- (void)presentWithControlleByLoginMode:(KShareModel)model
 {
-    OAuthorController * atcq = [[OAuthorController alloc] initWithMode:model];
+    OAuthorController * atcq = [[OAuthorController alloc] initWithMode:model ViewModel:LoginModelView];
     atcq.delegate = self;
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:atcq];
     [self presentModalViewController:nav animated:YES];

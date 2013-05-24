@@ -12,14 +12,14 @@
 
 @protocol ShareBoxDelegate <NSObject>
 @optional
-- (void)shareBoxViewShareTo:(shareModel)model;
+- (void)shareBoxViewShareTo:(KShareModel)model;
 - (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene;
 - (void)shareBoxViewWriteImageTolocal;
 @end
 @interface ShareBox : NSObject<UIActionSheetDelegate>
 {
     UIView * showView;
-    shareModel model;
+    KShareModel model;
     UIActionSheet * weixinAtion;
     BOOL isShowWeixin;
     BOOL isShowWall;

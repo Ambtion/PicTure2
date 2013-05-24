@@ -7,29 +7,31 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import "URLLibaray.h"
 
-typedef enum{
-    LoginModelSina = 0,
-    LoginModelQQ,
-    LoginModelRenRen
-}LoginModel;
+typedef enum {
+    BingModelView,
+    LoginModelView
+}ViewShowModel;
+
 
 @class OAuthorController;
 @protocol OAuthorControllerDelegate <NSObject>
 @optional
 - (void)oauthorController:(OAuthorController *)controller loginSucessInfo:(NSDictionary *)dic;
 - (void)oauthorController:(OAuthorController *)controlle  loginFailture:(NSString *)error;
+- (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic;
+- (void)oauthorController:(OAuthorController *)controlle  bindFailture:(NSString *)error;
 @end
 
 @interface OAuthorController : UIViewController<UIWebViewDelegate>
 {
     MBProgressHUD * _alterView;
     NSString * grantcode;
-    NSString * info_Base64;
+    NSString * state;
+    ViewShowModel viewModel;
+    KShareModel shareModel;
 }
 @property(nonatomic,weak)id<OAuthorControllerDelegate> delegate;
-
-- (id)initWithMode:(LoginModel)loginMode;
+- (id)initWithMode:(KShareModel)hareModel ViewModel:(ViewShowModel)model;
 @end

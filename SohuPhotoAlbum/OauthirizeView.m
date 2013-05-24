@@ -38,7 +38,7 @@
         
         self.renrenButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.renrenButton.frame = CGRectMake(qqButton.frame.origin.x + qqButton.frame.size.width + offsetX,offsetY, width, width);
-        self.qqButton.tag = 1002;
+        self.renrenButton.tag = 1002;
         [self addSubview:self.renrenButton];
         [self updataButtonState];
     }

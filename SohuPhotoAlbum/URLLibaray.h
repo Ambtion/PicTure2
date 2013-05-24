@@ -25,10 +25,8 @@
 
 #define CLIENT_SECRET @"47ae8860-2f8d-36c3-be99-3ebba8f1e7e7"
 
-#define WEIBOOAUTHOR2URL @"http://plus.sohu.com/spassport/bind/mobile/40000001/weibo?fru=http://pp.sohu.com&state=abcdefg&ru=www.sohu.com&forcelogin=true"
+#define WEIBOOAUTHOR2URL @"http://pp.sohu.com/auth/mobile/weibo"
 
-//#define WEIBOOAUTHOR2URL @"https://api.weibo.com/oauth2/authorize?display=mobile&response_type=code&redirect_uri=http://pp.sohu.com/users/auth/weibo/callback/aHR0cDovL3BwLnNvaHUuY29tLw!!&client_id=992243007"
+#define QQOAUTHOR2URL   @"http://pp.sohu.com/auth/mobile/qq"
 
-#define QQOAUTHOR2URL  @"https://graph.qq.com/oauth2.0/authorize?scope=get_user_info&response_type=code&redirect_uri=http://pp.sohu.com/users/auth/qq/callback/aHR0cDovL3BwLnNvaHUuY29tLz91c2VySWQ9NDEz&client_id=100319476"
-
-#define RENRENAUTHOR2URL @"https://graph.renren.com/oauth/authorize?response_type=code&redirect_uri=http://pp.sohu.com/users/auth/renren/callback&display=popup&client_id=ed8838c335d146319b6612a3026190ae"
+#define RENRENAUTHOR2URL  @"http://pp.sohu.com/auth/mobile/renren"

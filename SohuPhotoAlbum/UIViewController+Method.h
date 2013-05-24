@@ -19,6 +19,7 @@
 
 @interface UIViewController (Private)
 - (void)showLoginViewWithMethodNav:(BOOL)isNav;
+- (void)showBingViewWithShareModel:(KShareModel)model delegate:(id)Adelegete andShowWithNav:(BOOL)isNav;
 @end
 
 @interface UIViewController(writeImage)

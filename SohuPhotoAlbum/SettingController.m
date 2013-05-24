@@ -250,6 +250,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
         isChangeLoginState = YES;
         [[UploadTaskManager currentManager] cancelAllOperation];
         [LoginStateManager logout];
+        [self cancelLogin:nil];
     }
 }
 
@@ -294,7 +295,16 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
     return [results JSONValue];
 }
+- (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic
+{
+
+}
+- (void)oauthorController:(OAuthorController *)controlle bindFailture:(NSString *)error
+{
+    
+}
 #pragma mark Login
+
 - (void)loginOut:(id)sender
 {
     if ([LoginStateManager isLogin]){

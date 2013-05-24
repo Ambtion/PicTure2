@@ -388,7 +388,7 @@
         [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:YES OnView:self.view];
     }
 }
-- (void)shareBoxViewShareTo:(shareModel)model
+- (void)shareBoxViewShareTo:(KShareModel)model
 {
     //    _pushView = YES;
     PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
@@ -408,7 +408,7 @@
     [self writePicToAlbumWith:bgPhotoUrl];
 }
 #pragma mark -
-- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     if (_isShareAll) {
         //分享

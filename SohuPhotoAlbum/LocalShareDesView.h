@@ -11,14 +11,14 @@
 
 @class LocalShareDesView;
 @protocol LocalShareDesViewDelegate <NSObject>
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text;
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(KShareModel)model withDes:(NSString *)text;
 @optional
 - (void)localShareDesViewcancelShare:(LocalShareDesView *)view;
 @end
 @interface LocalShareDesView : UIImageView<UITextViewDelegate>
 {
     UIImageView * _thumbNailView;
-    shareModel  _model;
+    KShareModel  _model;
     UIButton * _shareButton;
     UIImageView * _contentView;
     UITextView * _contentTextView;
@@ -27,6 +27,6 @@
     CGFloat _offsetY;
 }
 @property(weak,nonatomic) id<LocalShareDesViewDelegate> delegate;
-- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;
-- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY;
+- (id)initWithModel:(KShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;
+- (id)initWithModel:(KShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY;
 @end

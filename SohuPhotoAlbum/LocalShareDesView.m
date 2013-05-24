@@ -19,11 +19,11 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete
+- (id)initWithModel:(KShareModel)model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete
 {
     return [self initWithModel:model thumbnail:thumbnail andDelegate:Adelegete offsetY:20.f];
 }
-- (id)initWithModel:(shareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY
+- (id)initWithModel:(KShareModel)model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete offsetY:(CGFloat)offsetY
 {
     self = [super initWithFrame:[[UIScreen mainScreen] bounds]];
     if (self) {

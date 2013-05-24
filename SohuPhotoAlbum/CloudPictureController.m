@@ -466,7 +466,7 @@
 }
 
 #pragma mark Share
-- (void)shareBoxViewShareTo:(shareModel)model
+- (void)shareBoxViewShareTo:(KShareModel)model
 {
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[selectedArray objectAtIndex:0] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
@@ -475,7 +475,7 @@
     [self respImageContentToSence:scene];
 }
 
-- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:nil  optionalTitle:nil desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];

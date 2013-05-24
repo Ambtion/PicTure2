@@ -41,17 +41,17 @@ typedef enum  Soruce_Type source_type;
 + (void)unlikeWithSourceId:(NSString *)sourceID source:(source_type)type OwnerID:(NSString *)ownId Accesstoken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //分享
-+ (void)sharePhotosWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)sharePhotosWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //分享主页
-+ (void)shareUserHomeWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)shareUserHomeWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //分享单个作品集
-+ (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 
 //分享单张图片
-+ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
 //星用户
 + (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;

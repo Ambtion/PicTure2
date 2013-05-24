@@ -20,6 +20,9 @@
 + (void)resigiterWithuseName:(NSString *)useName password:(NSString *)password nickName:(NSString *)nick sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture;
 + (BOOL)resigiterDevice;
 
++ (BOOL)setBindingInfo;
+
+#pragma DeviceToken For Push
 + (BOOL)upDateDeviceToken;
 
 + (BOOL)deleteDeviceToken;

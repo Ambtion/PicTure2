@@ -36,6 +36,7 @@
     //fix tabBar
     [self.tabBar.loadButton setImage:[UIImage imageNamed:@"TabBarUpLoad.png"] forState:UIControlStateNormal];
     [self.tabBar.deleteButton setHidden:YES];
+    [self.tabBar.shareButton setHidden:YES];
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
@@ -169,7 +170,7 @@
     [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:NO OnView:self.view];
 }
 
-- (void)shareBoxViewShareTo:(shareModel)model
+- (void)shareBoxViewShareTo:(KShareModel)model
 {
     [self upPicture:model];
 }
@@ -179,7 +180,7 @@
 }
 
 #pragma mark - ShareWithDes
-- (void)localShareDesView:(LocalShareDesView *)view shareTo:(shareModel)model withDes:(NSString *)text
+- (void)localShareDesView:(LocalShareDesView *)view shareTo:(KShareModel)model withDes:(NSString *)text
 {
     [UIView animateWithDuration:0.2 animations:^{
         [view removeFromSuperview];
@@ -205,7 +206,7 @@
     return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-- (void)upPicture:(shareModel)model
+- (void)upPicture:(KShareModel)model
 {
     switch (model) {
         case SinaWeiboShare:

@@ -363,7 +363,7 @@
     [self respNewsContentToSence:scene];
 }
 
-- (void)shareBoxViewShareTo:(shareModel)model
+- (void)shareBoxViewShareTo:(KShareModel)model
 {
     _pushView = YES;
     PhotoWallCellDataSource * source = [_dataSourceArray objectAtIndex:0];
@@ -371,7 +371,7 @@
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:photoString andDelegate:self] animated:YES];
 }
 
-- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     //分享
     [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:@"abc" desc:des success:^(NSString *response) {

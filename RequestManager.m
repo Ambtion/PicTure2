@@ -20,7 +20,7 @@
 
 @implementation RequestManager(private)
 
-+ (void)setValueWith:(shareModel)shareMode intoDic:(NSMutableDictionary *)body
++ (void)setValueWith:(KShareModel)shareMode intoDic:(NSMutableDictionary *)body
 {
     NSString * shareModeStr = nil;
     switch (shareMode) {
@@ -271,7 +271,7 @@
     NSString * strUrl = [NSString stringWithFormat:@"%@/portfolios",BASICURL_V1];
     [self postWithURL:strUrl body:dic success:success failure:failure];
 }
-+ (void)sharePhotosWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)sharePhotosWithAccesstoken:(NSString *)token photoIDs:(NSArray *)photos_Ids share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken optionalTitle:(NSString *)title desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * iDsStr = nil;
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -300,7 +300,7 @@
 }
 
 //分享主页
-+ (void)shareUserHomeWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)shareUserHomeWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * strUrl = [NSString stringWithFormat:@"%@/users/%@/share",BASICURL_V1, ownerId];
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -314,7 +314,7 @@
 
 }
 //分享单个作品集
-+ (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * strUrl = [NSString stringWithFormat:@"%@/portfolios/%@/share",BASICURL_V1,portfolisId];
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -328,7 +328,7 @@
     [self postWithURL:strUrl body:body success:success failure:failure];
 }
 //分享单张图片
-+ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(shareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * strURl = [NSString stringWithFormat:@"%@/portfolios/%@/photos/%@/share",BASICURL_V1,portfolisId,photoID];
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];

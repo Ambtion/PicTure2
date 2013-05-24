@@ -6,22 +6,17 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
+//share
+typedef enum __shareModel {
+    SinaWeiboShare,
+    RenrenShare,
+    WeixinShare,
+    QQShare,
+    SohuShare,
+    NoShare,
+}KShareModel;
 
-#define ___DEBUG 1
 
-#ifndef PROJECTCONFIG
-#define PROJECTCONFIG
-
-#ifdef ___DEBUG
-#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#   define DLog(...)
-#endif
-
-#endif
-
-#define LOCALBACKGORUNDCOLOR [UIColor colorWithRed:255.f/255 green:255.f/255 blue:255.f/255 alpha:1.f]
-#define BASEWALLCOLOR [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f]
 
 #import "IIViewDeckController.h"
 //alert
@@ -35,12 +30,22 @@
 #import "LoginViewController.h"
 #import "UploadTaskManager.h"
 
-//share
-typedef enum __shareModel {
-    SinaWeiboShare,
-    RenrenShare,
-    WeixinShare,
-    QQShare,
-    SohuShare,
-    NoShare,
-}shareModel;
+#define ___DEBUG 1
+
+#ifndef PROJECTCONFIG
+#define PROJECTCONFIG
+
+#ifdef ___DEBUG
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#   define DLog(...)
+#endif
+
+#define LOCALBACKGORUNDCOLOR [UIColor colorWithRed:255.f/255 green:255.f/255 blue:255.f/255 alpha:1.f]
+#define BASEWALLCOLOR [UIColor colorWithRed:229.f/255 green:229.f/255 blue:229.f/255 alpha:1.f]
+
+#endif
+
+
+
+

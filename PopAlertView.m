@@ -10,6 +10,7 @@
 
 
 @implementation PopAlertView
+@synthesize userinfo;
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<PopAlertViewDeleagte>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitle
 {
     if (self = [super init]) {

@@ -193,6 +193,17 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         [self presentModalViewController:loginView animated:YES];
     }
 }
+- (void)showBingViewWithShareModel:(KShareModel)model delegate:(id<OAuthorControllerDelegate>)Adelegete andShowWithNav:(BOOL)isNav
+{
+    OAuthorController * ouatuor = [[OAuthorController alloc] initWithMode:model ViewModel:BingModelView];
+    ouatuor.delegate = Adelegete;
+    if (isNav) {
+        [self.navigationController pushViewController:ouatuor animated:YES];
+
+    }else{
+        [self presentModalViewController:[[UINavigationController alloc] initWithRootViewController:ouatuor] animated:YES];
+    }
+}
 @end
 
 @implementation UIViewController(writeImage)

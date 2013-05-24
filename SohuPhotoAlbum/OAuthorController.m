@@ -21,22 +21,23 @@ static NSString * provider = nil;
 @synthesize delegate = _delegate;
 
 
-- (id)initWithMode:(LoginModel)loginMode
+- (id)initWithMode:(KShareModel)AshareModel ViewModel:(ViewShowModel)model
 {
     self = [super init];
     if (self) {
-        switch (loginMode) {
-            case 0: //weibo
+        viewModel = model;
+        switch (AshareModel) {
+            case SinaWeiboShare: //weibo
                 url_string = WEIBOOAUTHOR2URL;
                 title = @"微博登录";
                 provider = @"weibo";
                 break;
-            case 1: //qq
+            case QQShare: //qq
                 url_string = QQOAUTHOR2URL;
                 title = @"QQ登录";
                 provider = @"qq";
                 break;
-            case 2: //renren
+            case RenrenShare: //renren
                 url_string = RENRENAUTHOR2URL;
                 title = @"人人登录";
                 provider = @"renren";
@@ -75,18 +76,19 @@ static NSString * provider = nil;
     if (self.navigationController.presentingViewController) {
         [self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
     }
-   
+    if ([_delegate respondsToSelector:@selector(oauthorController:bindFailture:)])
+        [_delegate oauthorController:self bindFailture:nil];
 }
 
 - (void)loginWithCode
 {
-    
-    NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
+     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setPostValue:@"third_party_code" forKey:@"grant_type"];
     [request setPostValue:CLIENT_ID forKey:@"client_id"];
     [request setPostValue:provider forKey:@"provider"];
+    [request setPostValue:state forKey:@"state"];
     [request setPostValue:grantcode forKey:@"code"];
     [request setCompletionBlock:^{
         DLog(@"%d %@",[request responseStatusCode],[request responseString]);
@@ -94,10 +96,6 @@ static NSString * provider = nil;
             if ([_delegate respondsToSelector:@selector(oauthorController:loginSucessInfo:)])
                 [_delegate oauthorController:self loginSucessInfo:[[request responseString] JSONValue]];
             
-        }else if ([request responseStatusCode] == 403) {
-            if ([_delegate respondsToSelector:@selector(loginFailture:)]) {
-                [_delegate performSelector:@selector(loginFailture:) withObject:@"账号或密码不正确"];
-            }
         }else{
             if ([_delegate respondsToSelector:@selector(loginFailture:)]) {
                 [_delegate performSelector:@selector(loginFailture:) withObject:[NSString stringWithFormat:@"%d,未知错误",[request responseStatusCode]]];
@@ -111,25 +109,32 @@ static NSString * provider = nil;
     }];
     [request startAsynchronous];
 }
-
+- (void)bingWithCode
+{
+    
+}
 #pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     
     NSString * str = [request.URL absoluteString];
-    DLog(@"%@",str);
-    if ([str rangeOfString:@"http://www.sohu.com"].length && [str rangeOfString:@"token"].length) {
+    str  = [[str componentsSeparatedByString:@"?"] lastObject];
+    if ([str rangeOfString:@"grantcode"].length && [str rangeOfString:@"token="].length) {
         NSArray * array = [str componentsSeparatedByString:@"&"];
         for (NSString * str in array) {
-            DLog(@"NNNNNNNN::%@",str);
-            if ([str rangeOfString:@"token"].length) {
-                info_Base64 = [[str componentsSeparatedByString:@"="] lastObject];
+            if ([str rangeOfString:@"state"].length) {
+                state = [[str componentsSeparatedByString:@"="] lastObject];
             }
             if ([str rangeOfString:@"grantcode"].length) {
                 grantcode  = [[str componentsSeparatedByString:@"="] lastObject];
             }
         }
-        DLog(@"FFFFFF::info_base:%@, grcode:%@",[self decodeBase64:info_Base64],grantcode);
+        if (viewModel == LoginModelView) {
+            
+            [self loginWithCode];
+        }else{
+            [self bingWithCode];
+        }
         return NO;
     }
     return YES;
@@ -145,7 +150,6 @@ static NSString * provider = nil;
 #pragma alertView
 -(void)waitForMomentsWithTitle:(NSString*)str
 {
-//    if (_alterView.superview) return;
     if (!_alterView) {
         _alterView = [[MBProgressHUD alloc] initWithView:self.view];
         _alterView.animationType = MBProgressHUDAnimationZoomOut;
@@ -156,7 +160,6 @@ static NSString * provider = nil;
 }
 -(void)stopWait
 {
-    DLog(@"%s",__FUNCTION__);
     [_alterView hide:YES];
 }
 

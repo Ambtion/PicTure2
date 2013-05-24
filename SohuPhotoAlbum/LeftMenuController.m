@@ -170,7 +170,6 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         [self.viewDeckController toggleLeftViewAnimated:NO];
     }
 }
-
 #pragma mark -  AccoutViewDelgate
 - (void)accountView:(LeftAccountView *)acountView fullScreenClick:(id)sender
 {
@@ -185,6 +184,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 - (void)resetLeftMenu
 {
     [self setAccountView];
+    [self hideOAuthorView];
     _selectPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [_tableView selectRowAtIndexPath:_selectPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     self.viewDeckController.centerController = self.localAllController;
@@ -219,10 +219,53 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:sc];
     [self presentModalViewController:nav animated:YES];
 }
+
 #pragma mark oauthorize Action
 - (void)oauthorizeButtonClick:(UIButton *)button
 {
-    DLog(@"%d",button.tag);
+    if (button.tag == 1000) { //sina
+        if([LoginStateManager isSinaBind]){
+            PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
+            view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:SinaWeiboShare] forKey:@"sharModel"];
+        }else{
+            [self showBingViewWithShareModel:SinaWeiboShare delegate:self andShowWithNav:NO];
+        }
+    }
+    if (button.tag == 1001) { //qq
+        if([LoginStateManager isQQBing]){
+            PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
+            view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:QQShare] forKey:@"sharModel"];
+        }else{
+            [self showBingViewWithShareModel:QQShare delegate:self andShowWithNav:NO];
+        }
+    }
+    if (button.tag == 1002) { //qq
+        if([LoginStateManager isRenrenBind]){
+            PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
+            view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:RenrenShare] forKey:@"sharModel"];
+        }else{
+            [self showBingViewWithShareModel:RenrenShare delegate:self andShowWithNav:NO];
+        }
+    }
+    [_oauthorBindView updataButtonState];
+}
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [self unbind:[[alertView.userinfo objectForKey:@"sharModel"] intValue]];
+    }
+}
+
+- (void)unbind:(KShareModel)model
+{
+    
+}
+- (void)oauthorController:(OAuthorController *)controlle bindFailture:(NSString *)error
+{
+    if (error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+    }
+    [self.viewDeckController toggleLeftViewAnimated:NO];
 }
 #pragma mark OauthorViews
 - (void)showOAuthorView

@@ -89,13 +89,13 @@
 {
     [self respImageContentToSence:scene];
 }
-- (void)shareBoxViewShareTo:(shareModel)model
+- (void)shareBoxViewShareTo:(KShareModel)model
 {
     //三方分享
     self.isPushView = YES;
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
-- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(shareModel)model
+- (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     NSString * phtotId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
     [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:nil  optionalTitle:nil desc:des success:^(NSString *response) {

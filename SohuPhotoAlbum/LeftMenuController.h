@@ -21,7 +21,7 @@
 #import "SettingController.h"
 #import "MenuCell.h"
 
-@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,LeftAccountViewDelegate,SettingControllerDelegate>
+@interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,LeftAccountViewDelegate,SettingControllerDelegate,OAuthorControllerDelegate,PopAlertViewDeleagte>
 {
     UITableView * _tableView;
     LeftAccountView * _accountView;
