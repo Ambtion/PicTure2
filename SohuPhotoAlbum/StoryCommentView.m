@@ -46,8 +46,7 @@
         self.backgroundColor = [UIColor clearColor];
         UIImageView * bgImageView = [[UIImageView alloc] initWithFrame:self.bounds];
         bgImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-//        bgImageView.image = [[UIImage imageNamed:@"commentViewbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 160, 10, 160)];
-        bgImageView.image = [UIImage imageNamed:@"commentViewbg.png"];
+        bgImageView.image = [[UIImage imageNamed:@"commentViewbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 160, 10, 160)];
         [self addSubview:bgImageView];
         self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(OFFSETX, OFFSETY, 38, 38)];
         portraitView.layer.cornerRadius = 5.f;

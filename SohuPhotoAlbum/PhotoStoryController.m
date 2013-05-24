@@ -182,6 +182,7 @@
         [self doneMoreLoadingTableViewData];
     }];
 }
+
 - (void)addSoruceFromArray:(NSArray *)array
 {
     if (array.count)
@@ -208,6 +209,7 @@
     for (int i = 0; i < commentarray.count; i++) {
         StoryCommentViewDataSource * cds = [[StoryCommentViewDataSource alloc] init];
         NSDictionary * dic = [commentarray objectAtIndex:i];
+        cds.userId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"user_id"]];
         cds.userName =[dic objectForKey:@"user_nick"];
         cds.potraitImage = [dic objectForKey:@"avatar"];
         cds.shareTime =[dic objectForKey:@"created_desc"];
@@ -254,10 +256,10 @@
     if (!cell) {
         cell = [[PhotoStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str thenHiddeDeleteButton:![self isMineWithOwnerId:self.ownerID]];
         cell.delegate  = self;
-        cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
+//        cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
     }
     cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
-    [cell resetImageWithAnimation:YES];
+//    [cell resetImageWithAnimation:YES];
     return cell;
 }
 #pragma mark Action
@@ -307,10 +309,12 @@
     //最多3条评论
     if (index.row == 0) {
         NSString * ownerId = [[[[cell dataSource] commentInfoArray] objectAtIndex:index.section] userId];
+        NSLog(@"%@",ownerId);
         PhotoWallController * wall = [[PhotoWallController alloc] initWithOwnerID:ownerId isRootController:NO];
         [self.navigationController pushViewController:wall animated:YES];
         return;
     }
+    
     //评论
     [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[cell.dataSource photoId] andSoruceType:KSourcePhotos withBgImageURL:cell.dataSource.imageUrl WithOwnerID:self.ownerID] animated:YES];
 }

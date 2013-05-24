@@ -126,8 +126,7 @@
     
     UIImageView * imageview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
     imageview.backgroundColor = [UIColor clearColor];
-    //    imageview.image = [[UIImage imageNamed:@"commentViewbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 160, 10, 160)];
-    imageview.image =[UIImage imageNamed:@"accountLabelbg.png"];
+    imageview.image = [[UIImage imageNamed:@"commentViewbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 160, 10, 160)];
     _commentCount = [[UILabel alloc] initWithFrame:imageview.bounds];
     [self setCountLabel];
     [imageview addSubview:_commentCount];
@@ -235,6 +234,7 @@
 }
 
 #pragma mark - Animation
+
 - (void)resetImageWithAnimation:(BOOL)animation
 {
     
@@ -261,6 +261,5 @@
     animationBac.toValue = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
     [self.contentView.layer addAnimation:animationBac forKey:@""];
 }
-
 
 @end

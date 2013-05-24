@@ -197,7 +197,7 @@ double radians(float degrees) {
         rect.origin.x = 20.f;
         rect.size.width = 32.f;
         rect.size.height = 22.f;
-
+        
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteButton setImage:[UIImage imageNamed:@"WallDeleteButton.png"] forState:UIControlStateNormal];
         [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -269,12 +269,14 @@ double radians(float degrees) {
     
     animationTr.toValue = [NSValue valueWithCATransform3D:CATransform3DRotate(CATransform3DIdentity, roundf(0), 0, 0, 0)];
     animationTr.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    
     CABasicAnimation * animationRec = [CABasicAnimation animationWithKeyPath:@"position"];
     animationRec.fromValue = [NSValue valueWithCGPoint:CGPointMake(_backImageView.layer.position.x + 50, _backImageView.layer.position.y + 100)];
     animationRec.toValue = [NSValue valueWithCGPoint:_backImageView.layer.position];
     animationRec.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     CAAnimationGroup * group = [CAAnimationGroup animation];
+    group.duration = 0.5;
+    [[UIDevice currentDevice] model];
+    
     group.animations = [NSArray arrayWithObjects:animationRec,animationTr, nil];
     [_backImageView.layer addAnimation:group forKey:@""];
     
