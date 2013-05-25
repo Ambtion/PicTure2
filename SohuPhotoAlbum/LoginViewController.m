@@ -58,6 +58,7 @@
     _usernameTextField.returnKeyType = UIReturnKeyNext;
     _usernameTextField.placeholder = @"通行证";
     _usernameTextField.backgroundColor = [UIColor clearColor];
+    _usernameTextField.text = [[LoginStateManager lastUserName] copy];
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
@@ -195,6 +196,7 @@
         [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
+    [LoginStateManager storelastName:_usernameTextField.text];
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];
@@ -266,7 +268,6 @@
 }
 - (void)oauthorController:(OAuthorController *)controlle loginFailture:(NSString *)error
 {
-    DLog();
     [self showError:error];
 }
 #pragma mark resiteruseinfo

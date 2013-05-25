@@ -151,7 +151,7 @@ static NSString * provider = nil;
         default:
             break;
     }
-
+    
     url_s = [url_s stringByAppendingFormat:@"?state=%@&access_token=%@&token=%@",state,sohu_accessToken,sohu_token];
     DLog(@"%@",url_s);
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
@@ -175,7 +175,6 @@ static NSString * provider = nil;
 #pragma mark handle bingInfo
 - (void)handleBingInfo:(NSDictionary *)info
 {
-    DLog(@"%@ %@ %d",info,[LoginStateManager currentToken],shareModel);
     if ([info objectForKey:@"code"] && [[info objectForKey:@"code"] intValue] == 0) {
         [AccountLoginResquest setBindingInfo];
         if (self.navigationController && self.navigationController.presentingViewController) {
@@ -198,7 +197,6 @@ static NSString * provider = nil;
             [_delegate oauthorController:self bindFailture:@"绑定失败"];
         }
     }
-    
 }
 
 #pragma mark webViewDelegate
@@ -220,9 +218,13 @@ static NSString * provider = nil;
         }
         return NO;
     }
-    
+    if ([str isEqualToString:@"http://pp.sohu.com/auth/mobile/failure"]) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"绑定失败"];
+        return NO;
+    }
     return YES;
 }
+
 - (NSDictionary *)putMasWithString:(NSString *)string
 {
     NSArray * array = [string componentsSeparatedByString:@"&"];

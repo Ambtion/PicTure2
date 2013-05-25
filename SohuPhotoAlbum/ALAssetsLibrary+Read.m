@@ -42,7 +42,7 @@
                 });
                 return ;
             }
-            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] hasSuffix:@"Photo Stream"])
+            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"我的照片流"])
                 [assetGroups addObject:group];
         } failureBlock:^(NSError *error) {
             failture(error);
@@ -67,8 +67,8 @@
                 return ;
             }
             //filter group
-            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] hasSuffix:@"Photo Stream"])
-                [assetGroups addObject:group];       
+            if ([group numberOfAssets] && ![[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"我的照片流"])
+                [assetGroups addObject:group];
         } failureBlock:^(NSError *error) {
             failture(error);
         }];

@@ -45,8 +45,7 @@
     [DataBaseManager defaultDataBaseManager];
     //umeng
     [MobClick startWithAppkey:UM_APP_KEY];
-    
-    
+
 //    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
 //     (UIRemoteNotificationTypeAlert |
 //      UIRemoteNotificationTypeBadge |
@@ -88,14 +87,14 @@
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
-    NSLog(@"token:%@",token);
+    DLog(@"token:%@",token);
     [LoginStateManager storeDeviceToken:token];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     NSString *str = [NSString stringWithFormat: @"Error: %@", error];
-    NSLog(@"%@",str);
+    DLog(@"%@",str);
 }
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary  *)userInfo {

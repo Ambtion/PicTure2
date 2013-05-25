@@ -20,6 +20,8 @@
 + (NSString *)currentToken;
 + (NSString *)refreshToken;
 
++ (NSString *)lastUserName;
++ (void)storelastName:(NSString *)userName;
 
 + (BOOL)isSinaBind;
 + (void)storeSinaTokenInfo:(NSDictionary *)info;

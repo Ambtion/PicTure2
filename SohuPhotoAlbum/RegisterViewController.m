@@ -91,18 +91,18 @@
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110-offset, 190, 22) ];
-    _mailBindTextField.font = [UIFont systemFontOfSize:15];
-    _mailBindTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
-    _mailBindTextField.returnKeyType = UIReturnKeyNext;
-    _mailBindTextField.placeholder = @"绑定邮箱";
-    _mailBindTextField.delegate = self;
-    _mailBindTextField.backgroundColor = [UIColor clearColor];
-    _mailBindTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
+//    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110 -offset, 190, 22) ];
+//    _mailBindTextField.font = [UIFont systemFontOfSize:15];
+//    _mailBindTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
+//    _mailBindTextField.returnKeyType = UIReturnKeyNext;
+//    _mailBindTextField.placeholder = @"绑定邮箱";
+//    _mailBindTextField.delegate = self;
+//    _mailBindTextField.backgroundColor = [UIColor clearColor];
+//    _mailBindTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-    
-    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 146-offset, 190, 22)];
+    offset += 30.f;
+    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 146 - offset , 190, 22)];
     _passwordTextField.font = [UIFont systemFontOfSize:15];
     _passwordTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _passwordTextField.returnKeyType = UIReturnKeyDone;
@@ -139,7 +139,7 @@
     [self.view addSubview:_backgroundImageView];
     [self.view addSubview:_backgroundControl];
     [self.view addSubview:_usernameTextField];
-    [self.view addSubview:_mailBindTextField];
+//    [self.view addSubview:_mailBindTextField];
     [self.view addSubview:_passwordTextField];
     [self.view addSubview:_displayPasswordButton];
     [self.view addSubview:_dealPassButton];
@@ -189,7 +189,7 @@
 {
     [_usernameTextField resignFirstResponder];
     [_passwordTextField resignFirstResponder];
-    [_mailBindTextField resignFirstResponder];
+//    [_mailBindTextField resignFirstResponder];
 }
 - (void)mailBindDidEndOnExit
 {
@@ -198,7 +198,8 @@
 }
 - (void)usernameDidEndOnExit
 {
-    [_mailBindTextField becomeFirstResponder];
+//    [_mailBindTextField becomeFirstResponder];
+    [_passwordTextField becomeFirstResponder];
 }
 
 - (void)checkBoxClicked
@@ -206,8 +207,8 @@
     [self allTextFieldsResignFirstResponder:nil];
     _displayPasswordButton.selected = !_displayPasswordButton.selected;
     _passwordTextField.secureTextEntry = !_displayPasswordButton.selected;
-    
 }
+
 - (void)doRegister
 {
     if (!_usernameTextField.text || [_usernameTextField.text isEqualToString:@""]) {

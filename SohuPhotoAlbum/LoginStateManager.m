@@ -10,7 +10,7 @@
 
 #define USER_ID             @"__USER_ID__"
 #define DEVICE_TOKEN        @"__device_token__"
-
+#define LASTUSERNAME        @"__last_usrName__"
 #define USER_TOKEN          @"__USER_TOKEN__"
 #define REFRESH_TOKEN       @"__REFRESH_TOKEN__"
 #define DEVICEDID           @"__DEVICEDID__"
@@ -71,6 +71,14 @@
 
 @implementation LoginStateManager
 
++ (NSString *)lastUserName
+{
+    return [self dataForKey:LASTUSERNAME];
+}
++ (void)storelastName:(NSString *)userName
+{
+    [self storeData:userName forKey:LASTUSERNAME];
+}
 + (BOOL)isLogin
 {
     return [self dataForKey:USER_ID] != nil;

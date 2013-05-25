@@ -159,7 +159,7 @@
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    NSLog(@"requestFailed:NNNN::%s, %d, %@",__FUNCTION__,[request responseStatusCode],[request error]);
+    DLog(@"requestFailed:NNNN::%s, %d, %@",__FUNCTION__,[request responseStatusCode],[request error]);
     [request cancel];
     [request clearDelegatesAndCancel];
     NSDictionary * dic = [request userInfo];

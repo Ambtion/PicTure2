@@ -327,6 +327,7 @@
 		C58CB466171FF1DE00DB85B3 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CB465171FF1DE00DB85B3 /* delete.png */; };
 		C58CCCF31750C87E00AC542F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CCCF21750C87D00AC542F /* Default@2x.png */; };
 		C58CCCF51750C88800AC542F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CCCF41750C88700AC542F /* Default-568h@2x.png */; };
+		C58CCD231750D8FE00AC542F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C58CCD211750D8FE00AC542F /* InfoPlist.strings */; };
 		C58DC1531705416A00E97E8C /* upload_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1501705416A00E97E8C /* upload_pic.png */; };
 		C58DC1541705416A00E97E8C /* check_box_select_image.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1511705416A00E97E8C /* check_box_select_image.png */; };
 		C58DC38D17433AC8000DAC1D /* upload.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC38817433AC8000DAC1D /* upload.png */; };
@@ -372,7 +373,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4AC030ED1750D42F00510DF6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		B89A47001743C0E500CA16DC /* DetailTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailTextView.h; sourceTree = "<group>"; };
 		B89A47011743C0E500CA16DC /* DetailTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailTextView.m; sourceTree = "<group>"; };
 		B89A47031743C0F200CA16DC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -851,6 +851,7 @@
 		C58CCCF21750C87D00AC542F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C58CCCF41750C88700AC542F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		C58CCCF61750C8B300AC542F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		C58CCD241750D94500AC542F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C58DC1501705416A00E97E8C /* upload_pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_pic.png; sourceTree = "<group>"; };
 		C58DC1511705416A00E97E8C /* check_box_select_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_box_select_image.png; sourceTree = "<group>"; };
 		C58DC38817433AC8000DAC1D /* upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload.png; sourceTree = "<group>"; };
@@ -1482,6 +1483,7 @@
 		C588B0AE17003032006BBC34 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C58CCD211750D8FE00AC542F /* InfoPlist.strings */,
 				C58773FB1716AC7000799730 /* Projectconfig.h */,
 				C588B0AF17003032006BBC34 /* SohuPhotoAlbum-Info.plist */,
 				C588B0B317003032006BBC34 /* main.m */,
@@ -2308,6 +2310,7 @@
 				C58A75FE174E0F4E00D32D61 /* custom-cancel-higthed@2x.png in Resources */,
 				C58CCCF31750C87E00AC542F /* Default@2x.png in Resources */,
 				C58CCCF51750C88800AC542F /* Default-568h@2x.png in Resources */,
+				C58CCD231750D8FE00AC542F /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2471,13 +2474,11 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-
 /* Begin PBXVariantGroup section */
-		C588B0B017003032006BBC34 /* InfoPlist.strings */ = {
+		C58CCD211750D8FE00AC542F /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C588B0B117003032006BBC34 /* en */,
-				4AC030ED1750D42F00510DF6 /* zh-Hans */,
+				C58CCD241750D94500AC542F /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2605,7 +2606,7 @@
 				C588B0C017003032006BBC34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C588B0C117003032006BBC34 /* Build configuration list for PBXNativeTarget "SohuPhotoAlbum" */ = {
 			isa = XCConfigurationList;
@@ -2614,7 +2615,7 @@
 				C588B0C317003032006BBC34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

@@ -119,8 +119,8 @@
 {
     //发送内容给微信
     NSDictionary * info = [self.assetsArray objectAtIndex:self.curPageNum];
-    NSString * thumbUrl = [NSString stringWithFormat:@"%@_w200",[info objectForKey:@"photo_url"]];
-    WXMediaMessage *message = [WXMediaMessage message];
+    NSString * thumbUrl = [NSString stringWithFormat:@"%@_c100",[info objectForKey:@"photo_url"]];
+    WXMediaMessage * message = [WXMediaMessage message];
     UIImage  * tuumbail = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:thumbUrl]]];
     [message setThumbImage:tuumbail];
     
@@ -128,7 +128,6 @@
     NSString * photoUrl = [info objectForKey:@"photo_url"];
     if (!imageCache)
         imageCache  = [[SDImageCache alloc] init];
-    
     UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",photoUrl]];
     if (image) {
         ext.imageData = UIImageJPEGRepresentation(image, 0.5);

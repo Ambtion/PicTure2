@@ -58,7 +58,7 @@
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         
-        [_navBar.nLabelText setText:(self.storyName && ![self.storyName isEqualToString:@""]) ?[NSString stringWithFormat:@"图片集(%@)",self.storyName]: @"图片集" ];
+        [_navBar.nLabelText setText:(self.storyName && ![self.storyName isEqualToString:@""]) ?[NSString stringWithFormat:@"%@",self.storyName]: @"图片集" ];
         [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
     if (![self isMineWithOwnerId:self.ownerID]) {
@@ -281,6 +281,10 @@
 }
 - (void)photoStoryCell:(PhotoStoryCell *)cell footViewClickAtIndex:(NSInteger)index
 {
+    if (![LoginStateManager isLogin]) {
+        [self showLoginViewWithMethodNav:YES];
+        return;
+    }
     switch (index) {
         case 0: //评论
             [self.navigationController pushViewController:[[CommentController alloc] initWithSourceId:[[cell dataSource] photoId] andSoruceType:KSourcePhotos withBgImageURL:[[cell dataSource] imageUrl] WithOwnerID:self.ownerID] animated:YES];
@@ -300,8 +304,10 @@
             break;
     }
 }
+
 -(void)photoStoryCell:(PhotoStoryCell *)cell commentClickAtIndex:(NSIndexPath *)index
 {
+    
     //最多3条评论
     if (index.row == 0) {
         NSString * ownerId = [[[[cell dataSource] commentInfoArray] objectAtIndex:index.section] userId];
