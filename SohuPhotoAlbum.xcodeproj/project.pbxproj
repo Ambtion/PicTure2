@@ -373,6 +373,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4AC030ED1750D42F00510DF6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		B89A47001743C0E500CA16DC /* DetailTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailTextView.h; sourceTree = "<group>"; };
 		B89A47011743C0E500CA16DC /* DetailTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailTextView.m; sourceTree = "<group>"; };
 		B89A47031743C0F200CA16DC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -2091,6 +2092,7 @@
 			knownRegions = (
 				en,
 				English,
+				"zh-Hans",
 			);
 			mainGroup = C588B09B17003032006BBC34;
 			productRefGroup = C588B0A517003032006BBC34 /* Products */;
@@ -2472,6 +2474,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C588B0B117003032006BBC34 /* en */,
+				4AC030ED1750D42F00510DF6 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
