@@ -178,12 +178,9 @@
 		C588B0A817003032006BBC34 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A717003032006BBC34 /* UIKit.framework */; };
 		C588B0AA17003032006BBC34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0A917003032006BBC34 /* Foundation.framework */; };
 		C588B0AC17003032006BBC34 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0AB17003032006BBC34 /* CoreGraphics.framework */; };
-		C588B0B217003032006BBC34 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C588B0B017003032006BBC34 /* InfoPlist.strings */; };
 		C588B0B417003032006BBC34 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0B317003032006BBC34 /* main.m */; };
 		C588B0B817003032006BBC34 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0B717003032006BBC34 /* AppDelegate.m */; };
 		C588B0BA17003032006BBC34 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0B917003032006BBC34 /* Default.png */; };
-		C588B0BC17003032006BBC34 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0BB17003032006BBC34 /* Default@2x.png */; };
-		C588B0BE17003032006BBC34 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0BD17003032006BBC34 /* Default-568h@2x.png */; };
 		C588B0CC1700305B006BBC34 /* IIWrapController.m in Sources */ = {isa = PBXBuildFile; fileRef = C588B0C91700305B006BBC34 /* IIWrapController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C588B0CD1700305B006BBC34 /* LeftSideViewIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C588B0CA1700305B006BBC34 /* LeftSideViewIcon.png */; };
 		C588B0CF170036FB006BBC34 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C588B0CE170036FB006BBC34 /* QuartzCore.framework */; };
@@ -328,6 +325,8 @@
 		C58CB461171FE48900DB85B3 /* sinanobind.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CB45B171FE48900DB85B3 /* sinanobind.png */; };
 		C58CB462171FE48900DB85B3 /* sina.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CB45C171FE48900DB85B3 /* sina.png */; };
 		C58CB466171FF1DE00DB85B3 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CB465171FF1DE00DB85B3 /* delete.png */; };
+		C58CCCF31750C87E00AC542F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CCCF21750C87D00AC542F /* Default@2x.png */; };
+		C58CCCF51750C88800AC542F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CCCF41750C88700AC542F /* Default-568h@2x.png */; };
 		C58DC1531705416A00E97E8C /* upload_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1501705416A00E97E8C /* upload_pic.png */; };
 		C58DC1541705416A00E97E8C /* check_box_select_image.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC1511705416A00E97E8C /* check_box_select_image.png */; };
 		C58DC38D17433AC8000DAC1D /* upload.png in Resources */ = {isa = PBXBuildFile; fileRef = C58DC38817433AC8000DAC1D /* upload.png */; };
@@ -625,7 +624,6 @@
 		C588B0A917003032006BBC34 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C588B0AB17003032006BBC34 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C588B0AF17003032006BBC34 /* SohuPhotoAlbum-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SohuPhotoAlbum-Info.plist"; sourceTree = "<group>"; };
-		C588B0B117003032006BBC34 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C588B0B317003032006BBC34 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C588B0B517003032006BBC34 /* SohuPhotoAlbum-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SohuPhotoAlbum-Prefix.pch"; sourceTree = "<group>"; };
 		C588B0B617003032006BBC34 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -849,6 +847,9 @@
 		C58CB45B171FE48900DB85B3 /* sinanobind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sinanobind.png; sourceTree = "<group>"; };
 		C58CB45C171FE48900DB85B3 /* sina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sina.png; sourceTree = "<group>"; };
 		C58CB465171FF1DE00DB85B3 /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
+		C58CCCF21750C87D00AC542F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		C58CCCF41750C88700AC542F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		C58CCCF61750C8B300AC542F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C58DC1501705416A00E97E8C /* upload_pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_pic.png; sourceTree = "<group>"; };
 		C58DC1511705416A00E97E8C /* check_box_select_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_box_select_image.png; sourceTree = "<group>"; };
 		C58DC38817433AC8000DAC1D /* upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload.png; sourceTree = "<group>"; };
@@ -1408,6 +1409,9 @@
 		C588B09B17003032006BBC34 = {
 			isa = PBXGroup;
 			children = (
+				C58CCCF61750C8B300AC542F /* Default.png */,
+				C58CCCF21750C87D00AC542F /* Default@2x.png */,
+				C58CCCF41750C88700AC542F /* Default-568h@2x.png */,
 				C5891014174A150300B90E28 /* Icon@2x.png */,
 				C5891012174A150000B90E28 /* Icon.png */,
 				C588B0AD17003032006BBC34 /* SohuPhotoAlbum */,
@@ -1479,7 +1483,6 @@
 			children = (
 				C58773FB1716AC7000799730 /* Projectconfig.h */,
 				C588B0AF17003032006BBC34 /* SohuPhotoAlbum-Info.plist */,
-				C588B0B017003032006BBC34 /* InfoPlist.strings */,
 				C588B0B317003032006BBC34 /* main.m */,
 				C588B0B517003032006BBC34 /* SohuPhotoAlbum-Prefix.pch */,
 				C588B0B917003032006BBC34 /* Default.png */,
@@ -2107,10 +2110,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C588B0B217003032006BBC34 /* InfoPlist.strings in Resources */,
 				C588B0BA17003032006BBC34 /* Default.png in Resources */,
-				C588B0BC17003032006BBC34 /* Default@2x.png in Resources */,
-				C588B0BE17003032006BBC34 /* Default-568h@2x.png in Resources */,
 				C588B0CD1700305B006BBC34 /* LeftSideViewIcon.png in Resources */,
 				C5022661170301A700B77FC9 /* list.png in Resources */,
 				C502266A170301B600B77FC9 /* grid-view.png in Resources */,
@@ -2304,6 +2304,8 @@
 				C58A75FC174E0F4E00D32D61 /* custom-button-higthed@2x.png in Resources */,
 				C58A75FD174E0F4E00D32D61 /* custom-cancel-higthed.png in Resources */,
 				C58A75FE174E0F4E00D32D61 /* custom-cancel-higthed@2x.png in Resources */,
+				C58CCCF31750C87E00AC542F /* Default@2x.png in Resources */,
+				C58CCCF51750C88800AC542F /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2466,17 +2468,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		C588B0B017003032006BBC34 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C588B0B117003032006BBC34 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		C588B0BF17003032006BBC34 /* Debug */ = {

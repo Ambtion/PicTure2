@@ -36,6 +36,7 @@
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
     
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
+//    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbarnoline.png"] forBarMetrics:UIBarMetricsDefault];
     nav.delegate = self;
     self.window.rootViewController = nav;
     self.assetsLibrary = [[ALAssetsLibrary alloc] init];
@@ -50,6 +51,12 @@
 //     (UIRemoteNotificationTypeAlert |
 //      UIRemoteNotificationTypeBadge |
 //      UIRemoteNotificationTypeSound)];
+//    NSDictionary * dic = [[NSBundle mainBundle] infoDictionary];
+//    NSString *bundleId = [dic  objectForKey: @"CFBundleIdentifier"];
+//    NSUserDefaults *appUserDefaults = [[NSUserDefaults alloc] init];
+//    NSDictionary * cacheDic = [appUserDefaults persistentDomainForName: bundleId];
+//    NSLog(@"cacheDic::%@",cacheDic);
+
     return YES;
 }
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated

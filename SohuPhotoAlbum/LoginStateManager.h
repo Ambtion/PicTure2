@@ -22,13 +22,20 @@
 
 
 + (BOOL)isSinaBind;
-+ (NSString *)sinaToken;
++ (void)storeSinaTokenInfo:(NSDictionary *)info;
+//+ (NSDictionary *)sinaTokenInfo;
+
 
 + (BOOL)isQQBing;
-+ (NSString *)qqToken;
++ (void)storeQQTokenInfo:(NSDictionary *)info;
+//+ (NSDictionary *)qqTokenInfo;
 
 + (BOOL)isRenrenBind;
-+ (NSString *)renrenToken;
++ (void)storeRenRenTokenInfo:(NSDictionary *)info;
+//+ (NSDictionary *)renrenTokenInfo;
+
++ (NSDictionary *)getTokenInfo:(KShareModel)model;
++ (void)unbind:(KShareModel)model;
 
 + (void)storeDeviceID:(NSNumber *)deviceId;
 + (long long)deviceId;

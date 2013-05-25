@@ -83,6 +83,7 @@
     CGPoint point = [gestureRecognizer locationInView:self];
     return !(CGRectContainsPoint(accessory.frame, point) || CGRectContainsPoint(setting.frame, point));
 }
+
 - (void)handleGestureOnAllView:(id)sender
 {
     if ([_delegate respondsToSelector:@selector(accountView:fullScreenClick:)]) {

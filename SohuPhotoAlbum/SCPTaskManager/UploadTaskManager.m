@@ -194,12 +194,8 @@ static UploadTaskManager * sharedTaskManager = nil;
 }
 - (void)removeAlbunInfo:(NSString  *)albumId
 {
-    for (AlbumTaskList * task in _taskList) {
-        if ([task.albumId isEqualToString:albumId]) {
-            return;
-        }
-    }
-    [_taskDic removeObjectForKey:albumId];
+    if (albumId)
+        [_taskDic removeObjectForKey:albumId];
 }
 - (void)gotoNext
 {
@@ -219,26 +215,27 @@ static UploadTaskManager * sharedTaskManager = nil;
 }
 - (void)cancelOperationWithAlbumID:(NSString *)albumID
 {
-//    NSLog(@"Operation cancel");
     if ([self.curTask.albumId isEqualToString:albumID]) {
         [self.curTask.currentTask.request cancel];
         [self.curTask.currentTask.request clearDelegatesAndCancel];
         [self.taskList removeObject:self.curTask];
         [self albumTaskQueneFinished:nil];
-        return;
+        if (self.taskList.count)
+            [self gotoNext];
     }
     for (AlbumTaskList * tss in _taskList) {
         if ([tss.albumId isEqualToString:albumID]) [self.taskList removeObject:tss];
     }
 }
+
 - (void)cancelAllOperation
 {
     [self.curTask.currentTask.request cancel];
     [self.curTask.currentTask.request clearDelegatesAndCancel];
     [self.taskList removeAllObjects];
     [self albumTaskQueneFinished:nil];
-
 }
+
 - (void)cancelupLoadWithAlbumID:(NSString *)albumId WithUnit:(NSArray *)unitArray
 {
     if ([self.curTask.albumId isEqualToString:albumId]) {
@@ -275,11 +272,11 @@ static UploadTaskManager * sharedTaskManager = nil;
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMUPLOADOVER object:nil userInfo:[_taskDic objectForKey:self.curTask.albumId]];
+    [self removeAlbunInfo:self.curTask.albumId];
     if (!albumTaskList) return;
     [_taskList removeObjectAtIndex:0];
-    [self removeAlbunInfo:self.curTask.albumId];
     self.curTask = nil;
-    if (_taskList.count) {
+    if (_taskList.count){
         [self gotoNext];
     }else{
         isAutoUploading = NO;
@@ -294,7 +291,6 @@ static UploadTaskManager * sharedTaskManager = nil;
     if (requset && [requset responseString] && [[requset responseString] JSONValue])
         [dic setObject:[[requset responseString] JSONValue] forKey:@"RequsetInfo"];
     [[NSNotificationCenter defaultCenter] postNotificationName:ALBUMTASKCHANGE object:nil userInfo:dic];
-    
 }
 - (void)albumTask:(AlbumTaskList *)albumTaskList requsetFailed:(ASIHTTPRequest *)requset
 {

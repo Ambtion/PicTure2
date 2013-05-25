@@ -36,6 +36,16 @@
     return [[[NSUserDefaults standardUserDefaults] objectForKey:[LoginStateManager currentUserId]] copy] ;
 }
 
++ (void)userDefoultRemoveValeuForKey:(NSString *)key
+{
+    if (!key) return;
+    NSUserDefaults * userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary * userinfo = [NSMutableDictionary dictionaryWithDictionary:[self valueForUserinfo]];
+    if (!userinfo) userinfo = [NSMutableDictionary dictionaryWithCapacity:0];
+    [userinfo removeObjectForKey:key];
+    [userDefault setObject:userinfo forKey:[LoginStateManager currentUserId]];
+    [userDefault synchronize];
+}
 #pragma mark - StoreDefaults
 + (void)storeData:(NSString *)data forKey:(NSString *)key
 {
@@ -79,7 +89,7 @@
 }
 + (void)logout
 {
-//    [AccountLoginResquest deleteDeviceToken];
+    //    [AccountLoginResquest deleteDeviceToken];
     [self removeDataForKey:[self currentUserId]];
     [self removeDataForKey:USER_ID];
 }
@@ -98,31 +108,83 @@
 {
     return [[[self valueForUserinfo] objectForKey:REFRESH_TOKEN] copy];
 }
+
 + (BOOL)isSinaBind
 {
     return [[self valueForUserinfo] objectForKey:SINA_TOKEN] ? YES:NO;
 }
-+ (NSString *)sinaToken
++ (void)storeSinaTokenInfo:(NSDictionary *)info
 {
-    return [[[self valueForUserinfo] objectForKey:SINA_TOKEN] copy];
+    [self userDefoultStoreValue:info forKey:SINA_TOKEN];
+}
+
++ (NSDictionary *)sinaTokenInfo
+{
+    return [[self valueForUserinfo] objectForKey:SINA_TOKEN];
 }
 
 + (BOOL)isQQBing
 {
     return [[self valueForUserinfo] objectForKey:QQ_TOKEN]?YES : NO;
 }
-+ (NSString *)qqToken
++ (void)storeQQTokenInfo:(NSDictionary *)info
 {
-    return [[[self valueForUserinfo] objectForKey:QQ_TOKEN] copy];
+    [self userDefoultStoreValue:info forKey:QQ_TOKEN];
 }
+
++ (NSDictionary *)qqTokenInfo
+{
+    return [[self valueForUserinfo] objectForKey:QQ_TOKEN];
+}
+
 + (BOOL)isRenrenBind
 {
     return [[self valueForUserinfo] objectForKey:RENREN_TOKEN]? YES:NO;
 }
-
-+ (NSString *)renrenToken
++ (void)storeRenRenTokenInfo:(NSDictionary *)info
 {
-    return [[[self valueForUserinfo] objectForKey:RENREN_TOKEN] copy];
+    [self userDefoultStoreValue:info forKey:RENREN_TOKEN];
+}
+
++ (NSDictionary *)renrenTokenInfo
+{
+    return [[self valueForUserinfo] objectForKey:RENREN_TOKEN];
+}
+
++ (NSDictionary *)getTokenInfo:(KShareModel)model
+{
+    switch (model) {
+        case QQShare:
+            return [self qqTokenInfo];
+            break;
+        case RenrenShare:
+            return [self renrenTokenInfo];
+            break;
+        case SinaWeiboShare:
+            return [self sinaTokenInfo];
+            break;
+        default:
+            break;
+    }
+    return nil;
+}
++ (void)unbind:(KShareModel)model
+{
+    NSString * str = nil;
+    switch (model) {
+        case SinaWeiboShare:
+            str = SINA_TOKEN;
+            break;
+        case QQShare:
+            str = QQ_TOKEN;
+            break;
+        case RenrenShare:
+            str = RENREN_TOKEN;
+            break;
+        default:
+            break;
+    }
+    [self userDefoultRemoveValeuForKey:str];
 }
 
 #pragma mark Device

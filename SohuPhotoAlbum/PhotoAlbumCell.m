@@ -115,6 +115,7 @@
         [_rightImgae.superview setHidden:YES];
     }
 }
+
 - (void)setCoutLabelFrame:(CountLabel *)label WithNumber:(NSInteger)num
 {
     [label setText:[NSString stringWithFormat:@" %d ", num]];

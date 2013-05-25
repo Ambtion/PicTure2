@@ -70,13 +70,6 @@
     [portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
     sname.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
     nameLabel.text = [dic objectForKey:@"user_nick"];
-//    [RequestManager getUserInfoWithId:self.userId success:^(NSString *response) {
-//        NSDictionary * dic = [response JSONValue];
-//        [portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
-//        sname.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
-//        nameLabel.text = [dic objectForKey:@"user_nick"];    } failure:^(NSString *error) {
-//        
-//    }];
 }
 
 @end

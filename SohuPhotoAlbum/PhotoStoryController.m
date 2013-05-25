@@ -57,7 +57,8 @@
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-        [_navBar.nLabelText setText:[NSString stringWithFormat:@"图片集(%@)",self.storyName]];
+        
+        [_navBar.nLabelText setText:(self.storyName && ![self.storyName isEqualToString:@""]) ?[NSString stringWithFormat:@"图片集(%@)",self.storyName]: @"图片集" ];
         [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
     }
     if (![self isMineWithOwnerId:self.ownerID]) {
@@ -74,11 +75,6 @@
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
-}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -412,7 +408,7 @@
 {
     if (_isShareAll) {
         //分享
-        [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:@"abc" desc:des success:^(NSString *response) {
+        [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         } failure:^(NSString *error) {
@@ -421,7 +417,7 @@
             
         }];
     }else{
-        [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:@"abc" desc:des success:^(NSString *response) {
+        [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         } failure:^(NSString *error) {

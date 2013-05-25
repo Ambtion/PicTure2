@@ -235,6 +235,7 @@
             [self showLoginViewWithMethodNav:YES];
             return;
         }
+        [self setCusBarLableState];
         [self setViewState:UPloadState];
     }
     if (button.tag == CANCELBUTTONTAG) {
@@ -264,11 +265,14 @@
     }else if([selectedArray containsObject:asset]){
         [selectedArray removeObject:asset];
     }
+    [self setCusBarLableState];
+}
+- (void)setCusBarLableState
+{
     if (selectedArray.count) {
         [_cusBar.sLabelText setText:[NSString stringWithFormat:@"已选择%d张照片",selectedArray.count]];
     }else{
         [_cusBar.sLabelText setText:SLABELTEXT];
     }
 }
-
 @end

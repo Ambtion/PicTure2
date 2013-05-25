@@ -108,19 +108,7 @@ double radians(float degrees) {
 }
 - (CGFloat)getLastCellHeigth
 {
-    if (imageWallInfo.count) {
-        CGFloat heigth = [ImageViewAdaper setFramesinToArray:nil byImageCount:MIN([imageWallInfo count] , 6)];
-        heigth +=OFFSETY; //图片描述
-        self.wallDescription = [NSObject isString:self.wallDescription];
-        CGSize size = [wallDescription sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
-        //offset 缺省为0;
-        heigth += size.height; //desLabel
-        heigth +=OFFSETY; //描述footView
-        heigth += FOOTVIEWHEIGTH;
-        heigth +=OFFSETY; //下边界
-        return heigth;
-    }
-    return 0.f;
+    return [self getCellHeigth] + 10.f;
 }
 - (NSInteger)numOfCellStragey
 {
@@ -243,21 +231,26 @@ double radians(float degrees) {
     }
     
     _footView.shareTimeLabel.text = [NSString stringWithFormat:@"分享于%@",[[[_dataSource shareTime] componentsSeparatedByString:@"-"] lastObject]];
-    _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
-    _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
+//    _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
+//    _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
     _countLabel.text = [NSString stringWithFormat:@"%d",_dataSource.photoCount];
     [_deleteButton setHidden:![_dataSource isMine]];
     
+    [self updataLikeState];
+    _backImageView.frame = CGRectMake(0, OFFSETY, 320, _footView.frame.size.height + _footView.frame.origin.y);;
+    DLog(@"%f %f",[self.dataSource getCellHeigth], _backImageView.frame.size.height + _backImageView.frame.origin.y);
+}
+- (void)updataLikeState
+{
     if (_dataSource.isLiking) {
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon1.png"] forState:UIControlStateNormal];
         
     }else{
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
     }
-    _backImageView.frame = CGRectMake(0, OFFSETY, 320, _footView.frame.size.height + _footView.frame.origin.y);;
-    DLog(@"%f %f",[self.dataSource getCellHeigth], _backImageView.frame.size.height + _backImageView.frame.origin.y);
+    _footView.talkContLabel.text = [NSString stringWithFormat:@"%d",_dataSource.talkCount];
+    _footView.likeCountLabel.text = [NSString stringWithFormat:@"%d",_dataSource.likeCount];
 }
-
 - (void)resetImageWithAnimation:(BOOL)animation
 {
     CABasicAnimation * animationTr = [CABasicAnimation animationWithKeyPath:@"transform"];

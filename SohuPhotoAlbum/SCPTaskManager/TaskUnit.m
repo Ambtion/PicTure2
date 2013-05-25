@@ -48,8 +48,8 @@
         _fulldata = [self fullData];
     NSData * data = [_fulldata copy];
     DLog(@"original data: %f",[data length]/(1024 * 1024.f));
+    NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
     if (isUploadJPEGImage) {
-        NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
         CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
         CGImageRef imageRef = nil;
         if ([[self.asset.defaultRepresentation UTI] hasSuffix:@"png"]) {
@@ -59,10 +59,10 @@
         }
         UIImage * image = [UIImage imageWithCGImage:imageRef];
         data = UIImageJPEGRepresentation(image, 0.2);
-        if (dic){
-            [self fixinfoDic:dic];
-            data = [self writeExif:dic intoImage:data];
-        }
+    }
+    if (dic){
+        [self fixinfoDic:dic];
+        data = [self writeExif:dic intoImage:data];
     }
     DLog(@"cpmpre afterWrite:when upload: %f M",[data length]/(1024 * 1024.f));
     return data;

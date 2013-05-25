@@ -85,9 +85,39 @@
             }
             break;
     }
+    [self bindToModel];
+}
+- (void)bindToModel
+{
+    switch (model) {
+        case SinaWeiboShare:
+            if (![LoginStateManager isSinaBind]) {
+                [(UIViewController *)_delegate showBingViewWithShareModel:SinaWeiboShare delegate:self andShowWithNav:NO];
+                return;
+            }
+            break;
+        case QQShare:
+            if (![LoginStateManager isQQBing]) {
+                [(UIViewController *)_delegate showBingViewWithShareModel:QQShare delegate:self andShowWithNav:NO];
+                return;
+            }
+            break;
+        case RenrenShare:
+            if (![LoginStateManager isRenrenBind]) {
+                [(UIViewController *)_delegate showBingViewWithShareModel:RenrenShare delegate:self andShowWithNav:NO];
+                return;
+            }
+            break;
+        default:
+            break;
+    }
     if ([_delegate respondsToSelector:@selector(shareBoxViewShareTo:)])
         [_delegate shareBoxViewShareTo:model];
     
+}
+- (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic
+{
+    [self bindToModel];
 }
 
 #pragma mark Action

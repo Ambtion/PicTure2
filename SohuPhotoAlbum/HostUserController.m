@@ -35,9 +35,7 @@
     
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
-//    self.myTableView.tableFooterView = _moreFootView;
     selectedArray = [NSMutableArray arrayWithCapacity:0];
-    //dataSource
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
 }
@@ -84,11 +82,6 @@
 {
     return _isLoading;
 }
-//- (void)refeshOnce:(id)sender
-//{
-//    [_refresHeadView refreshImmediately];
-//    [self reloadTableViewDataSource];
-//}
 
 #pragma mark - more
 - (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
@@ -113,7 +106,6 @@
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-//    [self performSelector:@selector(doneRefrshLoadingTableViewData) withObject:nil afterDelay:3];
     [RequestManager getRecomendusersWithsuccess:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"users"]];
@@ -125,7 +117,7 @@
 }
 - (void)getMoreFromNetWork
 {
-    [self performSelector:@selector(doneMoreLoadingTableViewData) withObject:nil afterDelay:3];
+    [self doneMoreLoadingTableViewData];
 }
 - (void)addDataSourceWithArray:(NSArray *)array
 {

@@ -240,19 +240,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     }
 }
 
-#pragma mark AlertDelegate
-- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (_cache == alertView && buttonIndex == 1)
-        [CacheManager removeCacheOfImage];
-    //
-    if (_loginView == alertView && buttonIndex == 1) {
-        isChangeLoginState = YES;
-        [[UploadTaskManager currentManager] cancelAllOperation];
-        [LoginStateManager logout];
-        [self cancelLogin:nil];
-    }
-}
 
 #pragma mark Rating
 - (void)rating
@@ -318,4 +305,18 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
         [_loginView show];
     }
 }
+#pragma mark AlertDelegate
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (_cache == alertView && buttonIndex == 1)
+        [CacheManager removeCacheOfImage];
+    //
+    if (_loginView == alertView && buttonIndex == 1) {
+        isChangeLoginState = YES;
+        [[UploadTaskManager currentManager] cancelAllOperation];
+        [LoginStateManager logout];
+        [self cancelLogin:nil];
+    }
+}
+
 @end

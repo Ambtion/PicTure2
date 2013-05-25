@@ -124,7 +124,6 @@
     [self getuserInfoWithRefresh:NO];
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
-//    [self.navigationItem setHidesBackButton:YES];
 }
 - (void)getuserInfoWithRefresh:(BOOL)isRefresh
 {
@@ -138,11 +137,7 @@
         
     }];
 }
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
-//}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -224,6 +219,7 @@
         [self doneRefrshLoadingTableViewData];
     }];
 }
+
 - (void)getMoreFromNetWork
 {
     if (_dataSourceArray.count % 20 != 0) {
@@ -374,7 +370,7 @@
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     //分享
-    [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:@"abc" desc:des success:^(NSString *response) {
+    [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
         [self.navigationController popViewControllerAnimated:YES];
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     } failure:^(NSString *error) {
@@ -465,7 +461,7 @@
             cell.dataSource.isLiking = NO;
             cell.dataSource.likeCount--;
             cell.dataSource.likeCount = MAX(cell.dataSource.likeCount, 0);
-            [cell updataSubViews];
+            [cell updataLikeState];
         } failure:^(NSString *error) {
             
         }];
@@ -473,7 +469,7 @@
         [RequestManager likeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
             cell.dataSource.isLiking = YES;
             cell.dataSource.likeCount ++;
-            [cell updataSubViews];
+            [cell updataLikeState];
         } failure:^(NSString *error) {
             
         }];

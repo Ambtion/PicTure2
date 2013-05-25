@@ -22,6 +22,7 @@ typedef enum {
 - (void)oauthorController:(OAuthorController *)controlle  loginFailture:(NSString *)error;
 - (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic;
 - (void)oauthorController:(OAuthorController *)controlle  bindFailture:(NSString *)error;
+- (void)oauthorControllerCancel:(OAuthorController *)controlle;
 @end
 
 @interface OAuthorController : UIViewController<UIWebViewDelegate>
@@ -29,6 +30,8 @@ typedef enum {
     MBProgressHUD * _alterView;
     NSString * grantcode;
     NSString * state;
+    NSString *  sohu_token;
+    NSString * sohu_accessToken;
     ViewShowModel viewModel;
     KShareModel shareModel;
 }

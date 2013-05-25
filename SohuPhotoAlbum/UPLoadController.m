@@ -24,7 +24,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
+    //    [self.navigationItem setHidesBackButton:YES];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -111,23 +111,15 @@
 {
     //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskStart:) name:ALBUMTUPLOADSTART object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumChange:) name:ALBUMTASKCHANGE object:nil];
-    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskOver:) name:ALBUMUPLOADOVER object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumTaskOver:) name:ALBUMUPLOADOVER object:nil];
 }
 
 - (void)removeObserverOnCenter
 {
     //    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTUPLOADSTART  object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMTASKCHANGE object:nil];
-    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMUPLOADOVER  object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALBUMUPLOADOVER  object:nil];
 }
-//- (void)albumTaskStart:(NSNotification *)notification
-//{
-//    DLog(@"albumstart");
-//}
-//- (void)albumTaskOver:(NSNotification *)notification
-//{
-//    DLog(@"Finished");
-//}
 - (void)albumChange:(NSNotification *)notification
 {
     NSDictionary * dic = [notification userInfo];
@@ -135,6 +127,7 @@
 }
 - (void)updataProgessViewProgessWithDic:(NSDictionary *)dic
 {
+    DLog(@"%@",dic);
     NSInteger total = [[dic objectForKey:@"Total"] intValue];
     NSInteger finish = [[dic objectForKey:@"Finish"] intValue];
     CGFloat pro = (CGFloat)((CGFloat)finish / (CGFloat)total);

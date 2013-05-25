@@ -30,3 +30,10 @@
 #define QQOAUTHOR2URL   @"http://pp.sohu.com/auth/mobile/qq"
 
 #define RENRENAUTHOR2URL  @"http://pp.sohu.com/auth/mobile/renren"
+
+
+#define WEIBOBIND @"http://pp.sohu.com/bind/mobile/weibo"
+
+#define QQBING   @"http://pp.sohu.com/bind/mobile/qq"
+
+#define RENRENBING  @"http://pp.sohu.com/bind/mobile/renren"

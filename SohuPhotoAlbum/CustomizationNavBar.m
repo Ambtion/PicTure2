@@ -85,7 +85,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[self upLoadimageView] setHidden:NO];
         [[self upLoadimageView] startAnimating];
-    });}
+    });
+}
 @end
 @implementation CustomizationNavBar
 @synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
@@ -133,7 +134,7 @@
     self.sLabelText.backgroundColor = [UIColor clearColor];
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];
-
+    
     sLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sLeftButton.frame = CGRectMake(0, 0, 44, 44);
     sLeftButton.tag = CANCELBUTTONTAG;
@@ -164,7 +165,7 @@
     
 }
 
-#pragma mark - 
+#pragma mark -
 - (void)switchBarStateToUpload:(BOOL)isUploadState
 {
     if (isUploadState) {

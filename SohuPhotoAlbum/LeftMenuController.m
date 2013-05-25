@@ -145,7 +145,6 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
             HostUserController * hs = [[HostUserController alloc] init];
             self.viewDeckController.centerController = hs;
         }
-        //        self.view.userInteractionEnabled = YES;
     }];
 }
 
@@ -223,31 +222,35 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 #pragma mark oauthorize Action
 - (void)oauthorizeButtonClick:(UIButton *)button
 {
-    if (button.tag == 1000) { //sina
+    if (button.tag == 1000) {
         if([LoginStateManager isSinaBind]){
-            PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
-            view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:SinaWeiboShare] forKey:@"sharModel"];
+            [self showPopViewForunbindWith:SinaWeiboShare];
         }else{
             [self showBingViewWithShareModel:SinaWeiboShare delegate:self andShowWithNav:NO];
         }
     }
-    if (button.tag == 1001) { //qq
+    if (button.tag == 1001) {  
         if([LoginStateManager isQQBing]){
-            PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
-            view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:QQShare] forKey:@"sharModel"];
+            [self showPopViewForunbindWith:QQShare];
         }else{
             [self showBingViewWithShareModel:QQShare delegate:self andShowWithNav:NO];
         }
     }
-    if (button.tag == 1002) { //qq
+    if (button.tag == 1002) {  
         if([LoginStateManager isRenrenBind]){
-            PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
-            view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:RenrenShare] forKey:@"sharModel"];
+            [self showPopViewForunbindWith:RenrenShare];
         }else{
             [self showBingViewWithShareModel:RenrenShare delegate:self andShowWithNav:NO];
         }
     }
     [_oauthorBindView updataButtonState];
+}
+
+- (void)showPopViewForunbindWith:(KShareModel)model
+{
+    PopAlertView * view  = [[PopAlertView alloc] initWithTitle:nil message:@"取消绑定?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定"];
+    view.userinfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:model] forKey:@"sharModel"];
+    [view show];
 }
 - (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -258,24 +261,44 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 
 - (void)unbind:(KShareModel)model
 {
-    
+    BOOL isUnbing = [AccountLoginResquest unBinging:model];
+    if (isUnbing) {
+        [LoginStateManager unbind:model];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"解除绑定"];
+    }else{
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"解除失败"];
+    }
+    [_oauthorBindView  updataButtonState];
 }
+
 - (void)oauthorController:(OAuthorController *)controlle bindFailture:(NSString *)error
 {
+    [self.viewDeckController toggleLeftViewAnimated:NO];
     if (error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
     }
     [self.viewDeckController toggleLeftViewAnimated:NO];
 }
+- (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic
+{
+    
+    [self.viewDeckController toggleLeftViewAnimated:NO];
+    [_oauthorBindView updataButtonState];
+}
+- (void)oauthorControllerCancel:(OAuthorController *)controlle
+{
+    [self.viewDeckController toggleLeftViewAnimated:NO];
+}
 #pragma mark OauthorViews
 - (void)showOAuthorView
 {
+    [_oauthorBindView  updataButtonState];
     [self.view setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.2 animations:^{
         _oauthorBindView.frame = CGRectMake(0, 48, 320, self.view.frame.size.height - 48);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.05 animations:^{
-        _oauthorBindView.frame = CGRectMake(0, 40, 320, self.view.frame.size.height - 48);
+            _oauthorBindView.frame = CGRectMake(0, 40, 320, self.view.frame.size.height - 48);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.05 animations:^{
                 _oauthorBindView.frame = CGRectMake(0, 48, 320, self.view.frame.size.height - 48);
@@ -285,6 +308,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         }];
     }];
 }
+
 - (void)hideOAuthorView
 {
     [self.view setUserInteractionEnabled:NO];

@@ -22,6 +22,7 @@
 
 + (BOOL)setBindingInfo;
 
++ (BOOL)unBinging:(KShareModel)shareModel;
 #pragma DeviceToken For Push
 + (BOOL)upDateDeviceToken;
 

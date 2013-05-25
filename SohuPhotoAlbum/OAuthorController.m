@@ -26,25 +26,50 @@ static NSString * provider = nil;
     self = [super init];
     if (self) {
         viewModel = model;
-        switch (AshareModel) {
-            case SinaWeiboShare: //weibo
-                url_string = WEIBOOAUTHOR2URL;
-                title = @"微博登录";
-                provider = @"weibo";
-                break;
-            case QQShare: //qq
-                url_string = QQOAUTHOR2URL;
-                title = @"QQ登录";
-                provider = @"qq";
-                break;
-            case RenrenShare: //renren
-                url_string = RENRENAUTHOR2URL;
-                title = @"人人登录";
-                provider = @"renren";
-                break;
-            default:
-                break;
+        shareModel = AshareModel;
+        if (viewModel == BingModelView) {
+            switch (shareModel) {
+                case SinaWeiboShare: //weibo
+                    url_string = WEIBOBIND;
+                    title = @"微博登录";
+                    provider = @"weibo";
+                    break;
+                case QQShare: //qq
+                    url_string = QQBING;
+                    title = @"QQ登录";
+                    provider = @"qq";
+                    break;
+                case RenrenShare: //renren
+                    url_string = RENRENBING;
+                    title = @"人人登录";
+                    provider = @"renren";
+                    break;
+                default:
+                    break;
+            }
+            url_string = [url_string stringByAppendingFormat:@"?access_token=%@",[LoginStateManager currentToken]];
+        }else{
+            switch (shareModel) {
+                case SinaWeiboShare: //weibo
+                    url_string = WEIBOOAUTHOR2URL;
+                    title = @"微博登录";
+                    provider = @"weibo";
+                    break;
+                case QQShare: //qq
+                    url_string = QQOAUTHOR2URL;
+                    title = @"QQ登录";
+                    provider = @"qq";
+                    break;
+                case RenrenShare: //renren
+                    url_string = RENRENAUTHOR2URL;
+                    title = @"人人登录";
+                    provider = @"renren";
+                    break;
+                default:
+                    break;
+            }
         }
+        DLog(@"%@",url_string);
     }
     return self;
 }
@@ -76,13 +101,13 @@ static NSString * provider = nil;
     if (self.navigationController.presentingViewController) {
         [self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
     }
-    if ([_delegate respondsToSelector:@selector(oauthorController:bindFailture:)])
-        [_delegate oauthorController:self bindFailture:nil];
+    if ([_delegate respondsToSelector:@selector(oauthorControllerCancel:)])
+        [_delegate oauthorControllerCancel:self];
 }
 
 - (void)loginWithCode
 {
-     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
+    NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setPostValue:@"third_party_code" forKey:@"grant_type"];
@@ -112,7 +137,70 @@ static NSString * provider = nil;
 - (void)bingWithCode
 {
     
+    NSString * url_s = nil;
+    switch (shareModel) {
+        case QQShare:
+            url_s  = @"http://pp.sohu.com/bind/mobile/qq/callback";
+            break;
+        case SinaWeiboShare:
+            url_s  = @"http://pp.sohu.com/bind/mobile/weibo/callback";
+            break;
+        case RenrenShare:
+            url_s  = @"http://pp.sohu.com/bind/mobile/renren/callback";
+            break;
+        default:
+            break;
+    }
+
+    url_s = [url_s stringByAppendingFormat:@"?state=%@&access_token=%@&token=%@",state,sohu_accessToken,sohu_token];
+    DLog(@"%@",url_s);
+    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    [request addRequestHeader:@"accept" value:@"application/json"];
+    [request setRequestMethod:@"GET"];
+    [request setCompletionBlock:^{
+        DLog(@"%@",[request responseString]);
+        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
+            [self handleBingInfo:[[request responseString] JSONValue]];
+        }else{
+            
+        }
+    }];
+    [request setFailedBlock:^{
+        
+    }];
+    [request startAsynchronous];
+    
 }
+
+#pragma mark handle bingInfo
+- (void)handleBingInfo:(NSDictionary *)info
+{
+    DLog(@"%@ %@ %d",info,[LoginStateManager currentToken],shareModel);
+    if ([info objectForKey:@"code"] && [[info objectForKey:@"code"] intValue] == 0) {
+        [AccountLoginResquest setBindingInfo];
+        if (self.navigationController && self.navigationController.presentingViewController) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        if (self.navigationController.presentingViewController) {
+            [self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
+        }
+        if ([_delegate respondsToSelector:@selector(oauthorController:bingSucessInfo:)]) {
+            [_delegate oauthorController:self bingSucessInfo:nil];
+        }
+    }else{
+        if (self.navigationController && self.navigationController.presentingViewController) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        if (self.navigationController.presentingViewController) {
+            [self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
+        }
+        if ([_delegate respondsToSelector:@selector(oauthorController:bindFailture:)]) {
+            [_delegate oauthorController:self bindFailture:@"绑定失败"];
+        }
+    }
+    
+}
+
 #pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -120,24 +208,32 @@ static NSString * provider = nil;
     NSString * str = [request.URL absoluteString];
     str  = [[str componentsSeparatedByString:@"?"] lastObject];
     if ([str rangeOfString:@"grantcode"].length && [str rangeOfString:@"token="].length) {
-        NSArray * array = [str componentsSeparatedByString:@"&"];
-        for (NSString * str in array) {
-            if ([str rangeOfString:@"state"].length) {
-                state = [[str componentsSeparatedByString:@"="] lastObject];
-            }
-            if ([str rangeOfString:@"grantcode"].length) {
-                grantcode  = [[str componentsSeparatedByString:@"="] lastObject];
-            }
-        }
+        NSDictionary * dic = [self putMasWithString:str];
+        grantcode  = [dic objectForKey:@"grantcode"];
+        sohu_accessToken = [dic objectForKey:@"accesstoken"];
+        sohu_token = [dic objectForKey:@"token"];
+        state = [dic objectForKey:@"state"];
         if (viewModel == LoginModelView) {
-            
             [self loginWithCode];
         }else{
             [self bingWithCode];
         }
         return NO;
     }
+    
     return YES;
+}
+- (NSDictionary *)putMasWithString:(NSString *)string
+{
+    NSArray * array = [string componentsSeparatedByString:@"&"];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithCapacity:0];
+    for (NSString * str in array) {
+        NSRange rang = [str rangeOfString:@"="];
+        NSString * key  = [str substringToIndex:rang.location];
+        NSString * value = [str substringFromIndex:rang.length + rang.location];
+        [dic setValue:value forKey:key];
+    }
+    return dic;
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {

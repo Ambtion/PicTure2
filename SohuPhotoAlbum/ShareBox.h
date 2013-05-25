@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RequestManager.h"
-
+#import "OAuthorController.h"
 
 @protocol ShareBoxDelegate <NSObject>
 @optional
@@ -16,7 +16,7 @@
 - (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene;
 - (void)shareBoxViewWriteImageTolocal;
 @end
-@interface ShareBox : NSObject<UIActionSheetDelegate>
+@interface ShareBox : NSObject<UIActionSheetDelegate,OAuthorControllerDelegate>
 {
     UIView * showView;
     KShareModel model;

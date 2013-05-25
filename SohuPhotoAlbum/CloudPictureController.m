@@ -470,6 +470,7 @@
 {
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[selectedArray objectAtIndex:0] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
+
 - (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene
 {
     [self respImageContentToSence:scene];
@@ -477,7 +478,7 @@
 
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
-    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:nil  optionalTitle:nil desc:des success:^(NSString *response) {
+    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] optionalTitle:[[NSDate date] description] desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         [selectedArray removeAllObjects];
         [self setViewState:NomalState];
