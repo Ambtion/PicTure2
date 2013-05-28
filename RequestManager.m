@@ -454,7 +454,7 @@
 {
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://upload.api.weibo.com/2/statuses/upload.json"]];
     [request setPostValue:[[LoginStateManager getTokenInfo:SinaWeiboShare] objectForKey:@"access_token"] forKey:@"access_token"];
-    if (!des || [des isEqualToString:@""])  des = @"#搜狐相机助手#";
+    if (!des || [des isEqualToString:@""])  des = @"#搜狐相机伴侣#";
     [request setPostValue:des forKey:@"status"];
     [request setPostValue:@0 forKey:@"visible"];
     NSData * data  = UIImageJPEGRepresentation(image, compress);
