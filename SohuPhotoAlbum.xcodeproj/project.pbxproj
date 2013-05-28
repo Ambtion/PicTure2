@@ -15,6 +15,7 @@
 		C502266C170301B600B77FC9 /* timeline-view.png in Resources */ = {isa = PBXBuildFile; fileRef = C5022665170301B600B77FC9 /* timeline-view.png */; };
 		C502266F170301B600B77FC9 /* localAlbums.png in Resources */ = {isa = PBXBuildFile; fileRef = C5022668170301B600B77FC9 /* localAlbums.png */; };
 		C5022672170319C800B77FC9 /* LocalBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5022671170319C800B77FC9 /* LocalBaseController.m */; };
+		C50EA9AB1753A25900D78F71 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CCCF61750C8B300AC542F /* Default.png */; };
 		C51D26541744C5BD0044FCD0 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C51D26501744C5BD0044FCD0 /* libMobClickLibrary.a */; };
 		C51D26551744C5BD0044FCD0 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C51D26511744C5BD0044FCD0 /* libUMFeedback.a */; };
 		C51D265C1744E3470044FCD0 /* footbgView3.png in Resources */ = {isa = PBXBuildFile; fileRef = C51D265B1744E3460044FCD0 /* footbgView3.png */; };
@@ -2311,6 +2312,7 @@
 				C58CCCF31750C87E00AC542F /* Default@2x.png in Resources */,
 				C58CCCF51750C88800AC542F /* Default-568h@2x.png in Resources */,
 				C58CCD231750D8FE00AC542F /* InfoPlist.strings in Resources */,
+				C50EA9AB1753A25900D78F71 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2497,8 +2499,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2513,7 +2515,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2AE7838E-2C02-4B92-94FC-18D555228968";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7F84228C-A369-43FD-9EB8-AF9A7FBBD764";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2529,8 +2532,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2538,7 +2541,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2AE7838E-2C02-4B92-94FC-18D555228968";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7F84228C-A369-43FD-9EB8-AF9A7FBBD764";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2564,8 +2568,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
+				PROVISIONING_PROFILE = "2AE7838E-2C02-4B92-94FC-18D555228968";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2AE7838E-2C02-4B92-94FC-18D555228968";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2590,8 +2594,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "11CF6553-14E4-4D8B-9E49-A4FAE3C09198";
+				PROVISIONING_PROFILE = "2AE7838E-2C02-4B92-94FC-18D555228968";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2AE7838E-2C02-4B92-94FC-18D555228968";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

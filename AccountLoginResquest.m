@@ -77,8 +77,9 @@
     __block ASIHTTPRequest * request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request startSynchronous];
     if (request.responseStatusCode == 200) {
-
+        
         NSDictionary * dic = [request.responseString JSONValue];
+        DLog(@"%@",dic);
         NSDictionary * dataInfo = [dic objectForKey:@"data"];
         NSArray * keys = [dataInfo allKeys];
         for (int i = 0; i < keys.count ; i ++ ) {

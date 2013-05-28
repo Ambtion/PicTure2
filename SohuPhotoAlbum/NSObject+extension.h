@@ -24,5 +24,5 @@
 #pragma mark NetWourkState
 - (NetworkStatus)netWorkStatues;
 - (void)showNetWorkAlertView;
-- (void)postNotification;
+- (void)postNotificationWithStr:(NSString *)str;
 @end

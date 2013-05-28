@@ -13,7 +13,6 @@
 #import "DataBaseManager.h"
 #import "Projectconfig.h"
 #import "UploadTaskManager.h"
-
 #import "UMAppKey.h"
 
 @implementation AppDelegate
@@ -55,7 +54,7 @@
 //    NSUserDefaults *appUserDefaults = [[NSUserDefaults alloc] init];
 //    NSDictionary * cacheDic = [appUserDefaults persistentDomainForName: bundleId];
 //    NSLog(@"cacheDic::%@",cacheDic);
-
+    
     return YES;
 }
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -90,7 +89,6 @@
     DLog(@"token:%@",token);
     [LoginStateManager storeDeviceToken:token];
 }
-
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     NSString *str = [NSString stringWithFormat: @"Error: %@", error];

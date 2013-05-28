@@ -82,7 +82,7 @@
     return NO;
 }
 
-+ (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [request addRequestHeader:@"accept" value:@"application/json"];
@@ -114,25 +114,27 @@
         if (failure)
             failure(REQUSETFAILERROR);
     }];
-    [request startAsynchronous];
-    
+    if (asy)
+        [request startAsynchronous];
+    else
+        [request startSynchronous];
 }
 #pragma mark GET
-+ (void)getSourceWithStringUrl:(NSString * )strUrl success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getSourceWithStringUrl:(NSString * )strUrl asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    [self getWithUrlStr:strUrl andMethod:@"GET" body:nil success:success failure:failure];
+    [self getWithUrlStr:strUrl andMethod:@"GET" body:nil asynchronou:asy success:success failure:failure];
 }
 
 #pragma mark POST
 + (void)postWithURL:(NSString *)strUrl body:(NSDictionary *)body success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    [self getWithUrlStr:strUrl andMethod:@"POST" body:body success:success failure:failure];
+    [self getWithUrlStr:strUrl andMethod:@"POST" body:body asynchronou:YES success:success failure:failure];
 }
 
 #pragma mark DELETE
 + (void)deleteSoruce:(NSString * )strUrl success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    [self getWithUrlStr:strUrl andMethod:@"DELETE" body:nil success:success failure:failure];
+    [self getWithUrlStr:strUrl andMethod:@"DELETE" body:nil asynchronou:YES success:success failure:failure];
 }
 @end
 
@@ -140,24 +142,20 @@
 @implementation RequestManager
 
 //时间轴获取
-+ (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
++ (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    //    http://dev.pp.sohu.com/api/v1/sync_photos/infos?access_token=e16dac12-9c69-3288-b710-ea2aefd76a0f&before=2013-05-08
     NSString *  str = nil;
     if (beforeTime) {
         str =  [NSString stringWithFormat:@"%@/sync_photos/infos?access_token=%@&before=%@",BASICURL_V1,token,beforeTime];
     }else{
         str =  [NSString stringWithFormat:@"%@/sync_photos/infos?access_token=%@",BASICURL_V1,token];
     }
-    [self getSourceWithStringUrl:str success:success failure:failure];
+    [self getSourceWithStringUrl:str asynchronou:asy success:success  failure:failure];
 }
 + (void)getTimePhtotWithAccessToken:(NSString *)token day:(NSString *)days success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    //http://dev.pp.sohu.com/api/v1/sync_photos?access_token=e16dac12-9c69-3288-b710-ea2aefd76a0f&day=2013-05-07
     NSString * str = [NSString stringWithFormat:@"%@/sync_photos?access_token=%@&day=%@",BASICURL_V1,token,days];
-    DLog(@"%@",str);
-    [self getSourceWithStringUrl:str success:success failure:failure];
-    
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
 }
 + (void)deletePhotosWithaccessToken:(NSString *)token	photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -184,7 +182,7 @@
     }else{
         str = [NSString stringWithFormat:@"%@/portfolios?owner_id=%@&start=%d&count=%d",BASICURL_V1,ownId,start,count];
     }
-    [self getSourceWithStringUrl:str success:success failure:failure];
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
 }
 
 +(void)deleteStoryFromWallWithaccessToken:(NSString *)token StoryId:(NSString *)storyId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
@@ -208,7 +206,7 @@
                       BASICURL_V1,storyId,ownId,start,count];
 
     }
-    [self getSourceWithStringUrl:str success:success failure:failure];
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
 }
 +(void)deletePhotoFromStoryWithAccessToken:(NSString *)token stroyid:(NSString *)storyId photoId:(NSString *)photoId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -224,7 +222,7 @@
     page++;
     NSString * soure = (type == KSourcePhotos ? @"photos":@"portfolios");
     NSString * str = [NSString stringWithFormat:@"%@/%@/%@/comments?page=%d",BASICURL_V1,soure,srouceId,page];
-    [self getSourceWithStringUrl:str success:success failure:failure];
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
 }
 + (void)postCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId onwerID:(NSString *)ownerId andAccessToken:(NSString *)token comment:(NSString *)comment success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -246,7 +244,7 @@
         str = [NSString stringWithFormat:@"%@/users/%@",BASICURL_V1,userId];
         
     }
-    [self getSourceWithStringUrl:str success:success failure:nil];
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:nil];
 }
 
 //喜欢
@@ -347,7 +345,7 @@
 + (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * strUrl = [NSString stringWithFormat:@"%@/users/recommend",BASICURL_V1];
-    [self getSourceWithStringUrl:strUrl success:success failure:failure];
+    [self getSourceWithStringUrl:strUrl asynchronou:YES success:success failure:failure];
 }
 
 ////通知

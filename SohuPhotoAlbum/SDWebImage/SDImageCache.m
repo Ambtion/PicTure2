@@ -16,7 +16,7 @@
 static SDImageCache *instance;
 
 static NSInteger cacheMaxCacheAge = 60*60*24*7; // 1 week
-static natural_t minFreeMemLeft = 1024 * 1024 * 12; // reserve 12MB RAM
+static natural_t minFreeMemLeft = 1024 * 1024 * 20; // reserve 12MB RAM
 
 // inspired by http://stackoverflow.com/questions/5012886/knowing-available-ram-on-an-ios-device
 
@@ -37,7 +37,6 @@ static natural_t get_free_memory(void)
         NSLog(@"Failed to fetch vm statistics");
         return 0;
     }
-    
     /* Stats in bytes */
     natural_t mem_free = vm_stat.free_count * pagesize;
     return mem_free;

@@ -28,12 +28,12 @@
 }
 - (void)setSubViews
 {
-    logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"moren1.png"]];
-    logo.frame = CGRectMake(0, 0, 141/2.f,139/2.f);
-    logo.center = CGPointMake(self.frame.size.width/ 2.f, self.frame.size.height/2.f);
-    logo.backgroundColor = [UIColor clearColor];
-    [logo setHidden:YES];
-    [self addSubview:logo];
+//    logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"moren1.png"]];
+//    logo.frame = CGRectMake(0, 0, 141/2.f,139/2.f);
+//    logo.center = CGPointMake(self.frame.size.width/ 2.f, self.frame.size.height/2.f);
+//    logo.backgroundColor = [UIColor clearColor];
+//    [logo setHidden:YES];
+//    [self addSubview:logo];
     
     actV = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     actV.alpha = 0.6;
@@ -51,13 +51,13 @@
 - (void)startLoading
 {
     [actV startAnimating];
-    [logo setHidden:NO];
+//    [logo setHidden:NO];
 }
 
 - (void)stopLoading
 {
     [actV stopAnimating];
-    [logo setHidden:YES];
+//    [logo setHidden:YES];
 }
 
 @end

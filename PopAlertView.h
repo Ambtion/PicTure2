@@ -11,6 +11,7 @@
 
 @class PopAlertView;
 @protocol PopAlertViewDeleagte <NSObject>
+@optional
 - (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 @end
 @interface PopAlertView : NSObject

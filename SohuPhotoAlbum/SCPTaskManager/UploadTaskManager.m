@@ -30,12 +30,11 @@ static UploadTaskManager * sharedTaskManager = nil;
 #pragma mark - AutonUploadPic
 - (BOOL)isAutoUploading
 {
-    return isAutoUploading;
+    return self.taskList.count;
 }
 
 - (void)autoUploadAssets:(NSMutableArray *)array ToTaskIncludeAssetThatUploaded:(BOOL)isUploadAll
 {
-    isAutoUploading = YES;
     NSMutableArray * taskArray = [NSMutableArray arrayWithCapacity:0];
     for (ALAsset * asset in array) {
         if (!isUploadAll) {
@@ -279,7 +278,6 @@ static UploadTaskManager * sharedTaskManager = nil;
     if (_taskList.count){
         [self gotoNext];
     }else{
-        isAutoUploading = NO;
         NSLog(@"All operation Over");
     }
 }

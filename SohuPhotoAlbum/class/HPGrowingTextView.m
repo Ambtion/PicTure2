@@ -214,7 +214,6 @@
     
 	//size of content, so we can set the frame of self
     if (textView.text && ![textView.text isEqualToString:@""]) {
-        DLog(@"MMMMM:%@",textView.text);
         placeLabel.text  = nil;
     }else{
         placeLabel.text = PLACETEXT;
@@ -502,11 +501,11 @@
 	}
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range
  replacementText:(NSString *)atext {
 	
+    
     if ([atext hasSuffix:@"\n"]) {
         if ([delegate respondsToSelector:@selector(growingTextViewDidClickReturn:)]) {
             [delegate growingTextViewDidClickReturn:self];
@@ -530,7 +529,7 @@
 			}
 		}
 	}
-	
+    
 	return YES;
 	
     

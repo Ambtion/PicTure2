@@ -74,8 +74,8 @@
     _passwordTextField.placeholder = @"密码";
     _passwordTextField.backgroundColor = [UIColor clearColor];
     
-//    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
-//     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEnd];
+    //    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    //     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEnd];
     
     //注册
     UIButton *  registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -95,7 +95,7 @@
     forgetPassWord.backgroundColor = [UIColor clearColor];
     [forgetPassWord addTarget:self action:@selector(forgetPassWord:) forControlEvents:UIControlEventTouchUpInside];
     
-       
+    
     [self.view addSubview:_backgroundControl];
     [self.view addSubview:_usernameTextField];
     [self.view addSubview:_passwordTextField];
@@ -103,12 +103,12 @@
     [self.view addSubview:loginButton];
     [self.view  addSubview:forgetPassWord];
     
-//    //返回按钮
-//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    backButton.frame = CGRectMake(0, 0, 44, 44);
-//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-//    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:backButton];
+    //    //返回按钮
+    //    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    backButton.frame = CGRectMake(0, 0, 44, 44);
+    //    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    //    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
+    //    [self.view addSubview:backButton];
     
     //第三方登录
     CGFloat buttonY = 67 - offsetY;
@@ -216,8 +216,8 @@
 {
     [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
     [AccountLoginResquest resigiterDevice];
-    [AccountLoginResquest setBindingInfo];
-//    [AccountLoginResquest upDateDeviceToken];
+    //    [AccountLoginResquest setBindingInfo];
+    //    [AccountLoginResquest upDateDeviceToken];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
     
@@ -240,6 +240,7 @@
 {
     [self presentWithControlleByLoginMode:SinaWeiboShare];
 }
+
 - (void)qqLogin:(UIButton *)button
 {
     [self presentWithControlleByLoginMode:QQShare];
@@ -248,6 +249,7 @@
 {
     [self presentWithControlleByLoginMode:RenrenShare];
 }
+
 - (void)presentWithControlleByLoginMode:(KShareModel)model
 {
     OAuthorController * atcq = [[OAuthorController alloc] initWithMode:model ViewModel:LoginModelView];
@@ -265,6 +267,21 @@
 {
     [self dismissModalViewControllerAnimated:NO];
     [self handleLoginInfo:dic];
+    [self handleInfoWithshareModel:controller.shareModel infoDic:dic];
+//    NSDictionary * third_dic = [NSDictionary dictionaryWithObject:[dic objectForKey:@"third_access_token"] forKey:@"access_token"];
+//    switch (controller.shareModel) {
+//        case QQShare:
+//            [LoginStateManager storeQQTokenInfo:third_dic];
+//            break;
+//        case SinaWeiboShare:
+//            [LoginStateManager storeSinaTokenInfo:third_dic];
+//            break;
+//        case RenrenShare:
+//            [LoginStateManager storeRenRenTokenInfo:third_dic];;
+//            break;
+//        default:
+//            break;
+//    }
 }
 - (void)oauthorController:(OAuthorController *)controlle loginFailture:(NSString *)error
 {

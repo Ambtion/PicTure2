@@ -88,14 +88,11 @@
     if (needReadonce) {
         [self readAlbum];
         needReadonce = NO;
-    }
-}
-- (void)viewDidAppear:(BOOL)animated
-{
-    if (self.assetsArray.count) {
+    }else{
         [self autoUplaodPic];
     }
 }
+
 #pragma mark - ReadData
 - (void)albumDidwriteImage:(NSNotification *)notification
 {
@@ -109,17 +106,24 @@
 {
     if (_isReading) return;
     _isReading = YES;
-        [self initDataContainer];
-    [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
-        [self autoUplaodPic];
-        [self prepareDataWithTimeOrder];
-    } failture:^(NSError *error) {
-        
-    }];
+    [self initDataContainer];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self prepareDataWithTimeOrder];
+                    [self autoUplaodPic];
+                });
+            } failture:^(NSError *error) {
+                
+            }];
+        }
+    });
+    
 }
 - (void)autoUplaodPic
 {
-    //自动上传
+    
     if ([LoginStateManager isLogin] && [PerfrenceSettingManager isAutoUpload]) {
         if (![[UploadTaskManager currentManager] isAutoUploading]) {
             [[UploadTaskManager currentManager] autoUploadAssets:self.assetsArray ToTaskIncludeAssetThatUploaded:NO];
@@ -156,6 +160,7 @@
 }
 - (NSInteger)numberofPhtotsWithSection:(NSInteger)section
 {
+    if (!self.dataSourceArray.count) return 0;
     NSArray * array = [self.dataSourceArray objectAtIndex:section];
     PhotoesCellDataSource * source = [array lastObject];
     NSInteger number = [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] * 4;
@@ -168,7 +173,6 @@
     }
     return number;
 }
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.dataSourceArray.count;

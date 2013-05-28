@@ -106,7 +106,7 @@
 #pragma mark - refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil success:^(NSString *response) {
+    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil asynchronou:YES  success:^(NSString *response) {
         [self initDataContainer];
         [self.assetsSection addObjectsFromArray:[[response JSONValue] objectForKey:@"days"]];
         [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];
@@ -121,7 +121,7 @@
 {
 
     NSString * time = [[self.assetsSection lastObject] objectForKey:@"day"];
-    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time success:^(NSString *response) {
+    [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time asynchronou:YES  success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"days"];
         DLog(@"%@",array);
         if (array && array.count) {
@@ -478,7 +478,7 @@
 
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
-    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] optionalTitle:[[NSDate date] description] desc:des success:^(NSString *response) {
+    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] optionalTitle:nil desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         [selectedArray removeAllObjects];
         [self setViewState:NomalState];

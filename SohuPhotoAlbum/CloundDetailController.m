@@ -72,7 +72,7 @@
 }
 
 - (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{    
+{
     if (buttonIndex == 1) {
         NSString * photoId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[NSArray arrayWithObject:photoId]success:^(NSString *response) {
@@ -96,10 +96,11 @@
     self.isPushView = YES;
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
+
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     NSString * phtotId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
-    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:nil  optionalTitle:nil desc:des success:^(NSString *response) {
+    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"]  optionalTitle:nil desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
@@ -185,10 +186,10 @@
 #pragma mark GetMoreAssets
 - (void)getMoreAssetsAfterCurNum
 {
-    if (!_hasMoreAssets) return;
+    
+    if (!_hasMoreAssets || self.isLoading) return;
     NSString * lefttime = [self getRithtTime];
     self.isLoading = YES;
-    
     if (lefttime) {
         [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:lefttime success:^(NSString *response) {
             NSArray * array = [[response JSONValue] objectForKey:@"photos"];
@@ -203,8 +204,9 @@
             self.isLoading = NO;
         }];
     }else{
+        
         NSString * time = [[self.sectionArray lastObject] objectForKey:@"day"];
-        [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time success:^(NSString *response) {
+        [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:time asynchronou:YES success:^(NSString *response) {
             NSArray * array = [[response JSONValue] objectForKey:@"days"];
             if (array && array.count) {
                 [self.sectionArray addObjectsFromArray:array];
@@ -217,7 +219,7 @@
             self.isLoading = NO;
         }];
     }
-
+    
 }
 - (void)getMoreAssetsBeforeCurNum
 {
@@ -252,7 +254,7 @@
         leftBoundsDays--;
         return [dic objectForKey:@"day"];
     }
-   return nil;
+    return nil;
 }
 - (NSString *)getRithtTime
 {

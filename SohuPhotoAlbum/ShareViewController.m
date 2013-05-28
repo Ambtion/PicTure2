@@ -82,14 +82,16 @@
     __weak UIImageView * bgViewSelf = _myBgView;
     __weak ShareViewController * weakSelf = self;
     
-    [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.bgPhotoUrl]] placeholderImage:[UIImage imageNamed:@"1.png"] success:^(UIImage *image) {
+    [_myBgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@_w640",self.bgPhotoUrl]] placeholderImage:nil success:^(UIImage *image) {
         CGSize size = [weakSelf getIdentifyImageSizeWithImageView:image];
         bgViewSelf.frame = (CGRect){0,0,size};
         bgViewSelf.center = CGPointMake(weakSelf.view.bounds.size.width /2.f, weakSelf.view.bounds.size.height /2.f);
     } failure:^(NSError *error) {
-        
+        [weakSelf showPopAlerViewRatherThentasView:NO WithMes:@"访问资源不存在"];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
 }
+
 - (CGSize)getIdentifyImageSizeWithImageView:(UIImage *)image
 {
     if (!image) return CGSizeZero;

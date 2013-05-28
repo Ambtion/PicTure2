@@ -66,7 +66,7 @@
     [alerView show];
     [[UploadTaskManager currentManager] cancelAllOperation];
 }
-- (void)postNotification
+- (void)postNotificationWithStr:(NSString *)str
 {
     DLog(@"%s",__FUNCTION__);
     //chuagjian一个本地推送

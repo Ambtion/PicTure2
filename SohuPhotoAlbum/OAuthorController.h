@@ -27,14 +27,16 @@ typedef enum {
 
 @interface OAuthorController : UIViewController<UIWebViewDelegate>
 {
-    MBProgressHUD * _alterView;
-    NSString * grantcode;
+    MBProgressHUD * _progessView;
     NSString * state;
+    NSString * code;
+    NSString * grantcode;
     NSString *  sohu_token;
     NSString * sohu_accessToken;
     ViewShowModel viewModel;
     KShareModel shareModel;
 }
 @property(nonatomic,weak)id<OAuthorControllerDelegate> delegate;
+@property(assign,nonatomic)KShareModel shareModel;
 - (id)initWithMode:(KShareModel)hareModel ViewModel:(ViewShowModel)model;
 @end

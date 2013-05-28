@@ -17,6 +17,7 @@
 #define CONTENTOFFSETX
     
 @implementation MakeCommentView
+
 @synthesize delegte = _delegte;
 @synthesize textView;
 - (id)initWithFrame:(CGRect)frame
@@ -96,10 +97,10 @@
     [textView resignFirstResponder];
 }
 
-- (void)buttonClick:(UIButton *)button
-{
-    if ([_delegte respondsToSelector:@selector(makeCommentView:commentClick:)]) {
-        [_delegte makeCommentView:self commentClick:button];
-    }
-}
+//- (void)buttonClick:(UIButton *)button
+//{
+//    if ([_delegte respondsToSelector:@selector(makeCommentView:commentClick:)]) {
+//        [_delegte makeCommentView:self commentClick:button];
+//    }
+//}
 @end

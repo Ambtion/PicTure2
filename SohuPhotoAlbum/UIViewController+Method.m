@@ -125,7 +125,7 @@
 #pragma mark Srot
 - (NSMutableArray *)sortArrayByTime:(NSMutableArray *)array
 {
-   return [[array sortedArrayUsingFunction:sort context:nil] mutableCopy];
+    return [[array sortedArrayUsingFunction:sort context:nil] mutableCopy];
 }
 NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 {
@@ -199,10 +199,33 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     ouatuor.delegate = Adelegete;
     if (isNav) {
         [self.navigationController pushViewController:ouatuor animated:YES];
-
+        
     }else{
         [self presentModalViewController:[[UINavigationController alloc] initWithRootViewController:ouatuor] animated:YES];
     }
+}
+#pragma alertView
+- (MBProgressHUD *)waitForMomentsWithTitle:(NSString*)str withView:(UIView *)view
+{
+    
+    MBProgressHUD * progressView = [[MBProgressHUD alloc] initWithView:self.view];
+    progressView.animationType = MBProgressHUDAnimationZoomOut;
+    progressView.labelText = str;
+    [self.view addSubview:progressView];
+    [progressView show:YES];
+    return progressView;
+    
+}
+-(void)stopWaitProgressView:(MBProgressHUD *)view
+{
+    if (view)
+        [view removeFromSuperview];
+    else
+        for (UIView * view in self.view.subviews) {
+            if ([view isKindOfClass:[MBProgressHUD class]]) {
+                [view removeFromSuperview];
+            }
+        }
 }
 @end
 
@@ -210,17 +233,20 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 
 - (void)writePicToAlbumWith:(NSString *)imageStr
 {
+    [self waitForMomentsWithTitle:@"保存到本地..." withView:self.view];
     UIImageView * view = [[UIImageView alloc] init];
     [view setImageWithURL:[NSURL URLWithString:imageStr] success:^(UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
         });
     } failure:^(NSError *error) {
+        [self stopWaitProgressView:nil];
         [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
     }];
 }
 - (void)image: (UIImage *) image didFinishSavingWithError:(NSError *)error contextInfo: (void *) contextInfo
 {
+    [self stopWaitProgressView:nil];
     if (error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
     }else{
@@ -245,6 +271,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 @end
 
 @implementation UIViewController(weixinShare)
+
 - (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title photoUrl:(NSString *)photoUrl des:(NSString *)des
 {
     //发送内容给微信
@@ -266,9 +293,32 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     
     [WXApi sendReq:req];
 }
+
 - (NSData *)getImgaeDateWithUrl:(NSString *)string
 {
     NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
+
+@end
+
+@implementation UIViewController(Login)
+- (void)handleInfoWithshareModel:(KShareModel)shareModel infoDic:(NSDictionary *)dic
+{
+    NSDictionary * third_dic = [NSDictionary dictionaryWithObject:[dic objectForKey:@"third_access_token"] forKey:@"access_token"];
+    switch (shareModel) {
+        case QQShare:
+            [LoginStateManager storeQQTokenInfo:third_dic];
+            break;
+        case SinaWeiboShare:
+            [LoginStateManager storeSinaTokenInfo:third_dic];
+            break;
+        case RenrenShare:
+            [LoginStateManager storeRenRenTokenInfo:third_dic];;
+            break;
+        default:
+            break;
+    }
+}
+
 @end

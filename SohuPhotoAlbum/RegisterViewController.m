@@ -102,7 +102,7 @@
 //    [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     offset += 30.f;
-    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 146 - offset , 190, 22)];
+    _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 142 - offset , 190, 22)];
     _passwordTextField.font = [UIFont systemFontOfSize:15];
     _passwordTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _passwordTextField.returnKeyType = UIReturnKeyDone;
@@ -271,13 +271,13 @@
     size.height += keyboardSize.height;
     view.contentSize = size;
     
-    CGPoint point = view.contentOffset;
-    point.y = 118;
+//    CGPoint point = view.contentOffset;
+//    point.y = 118;
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.view cache:YES];
-    view.contentOffset = point;
+//    view.contentOffset = point;
     [UIView commitAnimations];
 }
 

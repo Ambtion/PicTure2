@@ -26,11 +26,11 @@ SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,CommentCellDelegate,MakeCo
     BOOL _isLoading;
     source_type type;
     MakeCommentView * commentView;
-    NSString * sourceOwnId;
     BOOL _isSending;
     NSDictionary * userInfo;
 }
 
+@property(nonatomic,strong)NSString * ownerId;
 @property(nonatomic,strong)NSString * sourceId;
 @property(nonatomic,strong)NSString * imageUrl;
 - (id)initWithSourceId:(NSString *)AsourceId andSoruceType:(source_type)Atype withBgImageURL:(NSString * )bgUrl WithOwnerID:(NSString *)ownID;

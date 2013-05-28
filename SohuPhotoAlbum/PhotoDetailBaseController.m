@@ -291,7 +291,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - ScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
-    if (_isAnimating || !_assetsArray.count || isLoading)  return;
+    if (_isAnimating || !_assetsArray.count)  return;
        if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
         [self upCusTitle];

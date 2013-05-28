@@ -45,24 +45,29 @@
 
 - (void)addTaskUnitToQuene
 {
-    if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
-    self.currentTask.request = [self getUploadRequest:[self currentTask].asset];
-    NSData * imageData = [self.currentTask imageDataFromAsset];
-    if ([imageData length] > UPLOADIMAGESIZE) {
-        [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
-        [self requestFailed:self.currentTask.request];
-        return ;
-    }else{
-        [self.currentTask.request setPostBody:[imageData mutableCopy]];
-        [self.currentTask.request startAsynchronous];
-    }
-    return;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            if (!self.currentTask) self.currentTask = [self.taskList objectAtIndex:0];
+            self.currentTask.request = [self getUploadRequest:[self currentTask].asset];
+            NSData * imageData = [self.currentTask imageDataFromAsset];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([imageData length] > UPLOADIMAGESIZE) {
+                    [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
+                    [self requestFailed:self.currentTask.request];
+                }else{
+                    [self.currentTask.request setPostBody:[imageData mutableCopy]];
+                    [self.currentTask.request startAsynchronous];
+                }
+            });
+        }
+    });
 }
 
 - (void)startNextTaskUnit
 {
     [self addTaskUnitToQuene];
 }
+
 - (void)go
 {
     [self startNextTaskUnit];
@@ -111,7 +116,6 @@
     if ([_delegate respondsToSelector:@selector(albumTask:requsetFinish:)]) {
         [_delegate performSelector:@selector(albumTask:requsetFinish:) withObject:self withObject:request];
     }
-    
     //开始下一任务
     self.currentTask = nil;
     [self startToNext];
@@ -189,11 +193,15 @@
     if (self.taskList.count) {
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
             if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
-                [self postNotification];
+                [self postNotificationWithStr:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传"];
+//                [self postNotification]
                 [self endBackgroundUpdateTask];
                 [[UploadTaskManager currentManager] cancelAllOperation];
             }else{
                 [self beginBackgroundUpdateTask];
+                if ([UIApplication sharedApplication].backgroundTimeRemaining < 20.f) {
+                    [self postNotificationWithStr:@"程序将被终止,请重新打开保证后台上传"];
+                }
                 [self startNextTaskUnit];
             }
         }else{
@@ -215,6 +223,7 @@
 
 - (ASIFormDataRequest *)getUploadRequest:(ALAsset *)asset
 {
+
     //    http://pp.sohu.com/upload/api/sync
     NSString * photoName = [[asset defaultRepresentation] filename];
     NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync?device=%lld&access_token=%@&filename=%@",BASICURL,[LoginStateManager deviceId],[LoginStateManager  currentToken],photoName];

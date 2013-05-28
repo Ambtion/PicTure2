@@ -16,13 +16,16 @@
 @end
 
 @implementation CommentController
+
+@synthesize ownerId;
+@synthesize sourceId;
+@synthesize imageUrl;
+
 - (void)dealloc
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center removeObserver:self];
 }
-@synthesize sourceId;
-@synthesize imageUrl;
 
 - (id)initWithSourceId:(NSString *)AsourceId andSoruceType:(source_type)Atype withBgImageURL:(NSString * )bgUrl WithOwnerID:(NSString *)ownID
 {
@@ -31,7 +34,7 @@
         self.sourceId = AsourceId;
         type = Atype;
         self.imageUrl = bgUrl;
-        sourceOwnId = ownID;
+        self.ownerId = ownID;
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(commentkeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         [center addObserver:self selector:@selector(commentkeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -149,15 +152,16 @@
 
 - (void)commetButtonClick:(UIButton *)button
 {
+    
     if ([EmojiUnit stringContainsEmoji:commentView.textView.internalTextView.text]) {
         PopAlertView * tip = [[PopAlertView alloc] initWithTitle:nil message:@"评论内容不能包含特殊字符或表情" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [tip show];
         return;
     }
-    DLog(@"%@ %d",commentView.textView.internalTextView.text,_isLoading);
+    DLog(@"LLLLL:%@ %d",commentView.textView.internalTextView.text,_isLoading);
     if (_isSending) return;
     _isSending  = YES;
-    [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:[LoginStateManager currentUserId] andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.internalTextView.text success:^(NSString *response) {
+    [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:self.ownerId andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.internalTextView.text success:^(NSString *response) {
         [_dataSourceArray insertObject:[self getCommentSoureWithComment:commentView.textView.internalTextView.text] atIndex:0];
         commentView.textView.internalTextView.text = nil;
         [commentView.textView resignFirstResponder];

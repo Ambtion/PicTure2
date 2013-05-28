@@ -19,7 +19,7 @@ static NSString * provider = nil;
 @end
 @implementation OAuthorController
 @synthesize delegate = _delegate;
-
+@synthesize shareModel;
 
 - (id)initWithMode:(KShareModel)AshareModel ViewModel:(ViewShowModel)model
 {
@@ -30,17 +30,17 @@ static NSString * provider = nil;
         if (viewModel == BingModelView) {
             switch (shareModel) {
                 case SinaWeiboShare: //weibo
-                    url_string = WEIBOBIND;
+                    url_string = [NSString stringWithFormat:@"%@/bind/mobile/weibo",BASICURL];
                     title = @"微博登录";
                     provider = @"weibo";
                     break;
                 case QQShare: //qq
-                    url_string = QQBING;
+                    url_string = [NSString stringWithFormat:@"%@/bind/mobile/qq",BASICURL];
                     title = @"QQ登录";
                     provider = @"qq";
                     break;
                 case RenrenShare: //renren
-                    url_string = RENRENBING;
+                    url_string = [NSString stringWithFormat:@"%@/bind/mobile/renren",BASICURL];
                     title = @"人人登录";
                     provider = @"renren";
                     break;
@@ -51,17 +51,17 @@ static NSString * provider = nil;
         }else{
             switch (shareModel) {
                 case SinaWeiboShare: //weibo
-                    url_string = WEIBOOAUTHOR2URL;
+                    url_string = [NSString stringWithFormat:@"%@/auth/mobile/weibo",BASICURL];
                     title = @"微博登录";
                     provider = @"weibo";
                     break;
                 case QQShare: //qq
-                    url_string = QQOAUTHOR2URL;
+                    url_string = [NSString stringWithFormat:@"%@/auth/mobile/qq",BASICURL];
                     title = @"QQ登录";
                     provider = @"qq";
                     break;
                 case RenrenShare: //renren
-                    url_string = RENRENAUTHOR2URL;
+                    url_string = [NSString stringWithFormat:@"%@/auth/mobile/renren",BASICURL];
                     title = @"人人登录";
                     provider = @"renren";
                     break;
@@ -69,7 +69,7 @@ static NSString * provider = nil;
                     break;
             }
         }
-        DLog(@"%@",url_string);
+        DLog(@"bingURL :: %@",url_string);
     }
     return self;
 }
@@ -90,7 +90,7 @@ static NSString * provider = nil;
     webView.scrollView.bounces = NO;
     webView.delegate = self;
     [self.view addSubview:webView];
-    [self waitForMomentsWithTitle:@"加载中..."];
+    _progessView  = [self waitForMomentsWithTitle:@"加载中..." withView:self.view];
 }
 
 - (void)webviewCancelLogin:(id)sender
@@ -107,6 +107,7 @@ static NSString * provider = nil;
 
 - (void)loginWithCode
 {
+    
     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
@@ -115,12 +116,13 @@ static NSString * provider = nil;
     [request setPostValue:provider forKey:@"provider"];
     [request setPostValue:state forKey:@"state"];
     [request setPostValue:grantcode forKey:@"code"];
+    [request setPostValue:sohu_token forKey:@"token"];
+    
     [request setCompletionBlock:^{
         DLog(@"%d %@",[request responseStatusCode],[request responseString]);
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
             if ([_delegate respondsToSelector:@selector(oauthorController:loginSucessInfo:)])
                 [_delegate oauthorController:self loginSucessInfo:[[request responseString] JSONValue]];
-            
         }else{
             if ([_delegate respondsToSelector:@selector(loginFailture:)]) {
                 [_delegate performSelector:@selector(loginFailture:) withObject:[NSString stringWithFormat:@"%d,未知错误",[request responseStatusCode]]];
@@ -136,7 +138,7 @@ static NSString * provider = nil;
 }
 - (void)bingWithCode
 {
-    
+    DLog(@"");
     NSString * url_s = nil;
     switch (shareModel) {
         case QQShare:
@@ -152,18 +154,16 @@ static NSString * provider = nil;
             break;
     }
     
-    url_s = [url_s stringByAppendingFormat:@"?state=%@&access_token=%@&token=%@",state,sohu_accessToken,sohu_token];
-    DLog(@"%@",url_s);
+//    url_s = [url_s stringByAppendingFormat:@"?state=%@&access_token=%@&token=%@",state,sohu_accessToken,sohu_token];
+    url_s  = [url_s stringByAppendingFormat:@"?state=%@&code=%@",state,code];
+    DLog(@"bingWithCode:%@",url_s);
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:@"GET"];
     [request setCompletionBlock:^{
-        DLog(@"%@",[request responseString]);
-        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
-            [self handleBingInfo:[[request responseString] JSONValue]];
-        }else{
-            
-        }
+        [self handleBingInfo:request];
+//        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 )
+//            [self handleBingInfo:[[request responseString] JSONValue]];
     }];
     [request setFailedBlock:^{
         
@@ -173,10 +173,13 @@ static NSString * provider = nil;
 }
 
 #pragma mark handle bingInfo
-- (void)handleBingInfo:(NSDictionary *)info
+- (void)handleBingInfo:(ASIFormDataRequest *)request
 {
-    if ([info objectForKey:@"code"] && [[info objectForKey:@"code"] intValue] == 0) {
-        [AccountLoginResquest setBindingInfo];
+    DLog(@"requestValue %@ %d",[[request responseString] JSONValue],[request responseStatusCode]);
+//    if ([info objectForKey:@"code"] && [[info objectForKey:@"code"] intValue] == 0) {
+    if (request.responseStatusCode == 200) {
+//        [AccountLoginResquest setBindingInfo];
+        [self handleInfoWithshareModel:shareModel infoDic:[[request responseString] JSONValue]];
         if (self.navigationController && self.navigationController.presentingViewController) {
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -204,13 +207,15 @@ static NSString * provider = nil;
 {
     
     NSString * str = [request.URL absoluteString];
-    str  = [[str componentsSeparatedByString:@"?"] lastObject];
-    if ([str rangeOfString:@"grantcode"].length && [str rangeOfString:@"token="].length) {
+    NSLog(@"all 302 ::%@",str);
+    if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/bind/mobile/"]) {
+        str  = [[str componentsSeparatedByString:@"?"] lastObject];
         NSDictionary * dic = [self putMasWithString:str];
-        grantcode  = [dic objectForKey:@"grantcode"];
-        sohu_accessToken = [dic objectForKey:@"accesstoken"];
-        sohu_token = [dic objectForKey:@"token"];
+//        grantcode  = [dic objectForKey:@"grantcode"];
+//        sohu_accessToken = [dic objectForKey:@"accesstoken"];
+//        sohu_token = [dic objectForKey:@"token"];
         state = [dic objectForKey:@"state"];
+        code = [dic objectForKey:@"code"];
         if (viewModel == LoginModelView) {
             [self loginWithCode];
         }else{
@@ -235,30 +240,16 @@ static NSString * provider = nil;
         NSString * value = [str substringFromIndex:rang.length + rang.location];
         [dic setValue:value forKey:key];
     }
+    DLog(@"%@",dic);
     return dic;
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [self stopWait];
+    [self stopWaitProgressView:_progessView];
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    [self stopWait];
-}
-#pragma alertView
--(void)waitForMomentsWithTitle:(NSString*)str
-{
-    if (!_alterView) {
-        _alterView = [[MBProgressHUD alloc] initWithView:self.view];
-        _alterView.animationType = MBProgressHUDAnimationZoomOut;
-        _alterView.labelText = str;
-        [self.view addSubview:_alterView];
-    }
-    [_alterView show:YES];
-}
--(void)stopWait
-{
-    [_alterView hide:YES];
+    [self stopWaitProgressView:_progessView];
 }
 
 @end

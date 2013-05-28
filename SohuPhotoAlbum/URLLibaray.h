@@ -6,7 +6,7 @@
 //
 //
 
-//#define DEV 1
+#define DEV 1
 
 #ifdef DEV
 
@@ -20,19 +20,7 @@
 
 #endif
 
+
 #define CLIENT_ID @"355d0ee5-d1dc-3cd3-bdc6-76d729f61655"
 
 #define CLIENT_SECRET @"47ae8860-2f8d-36c3-be99-3ebba8f1e7e7"
-
-#define WEIBOOAUTHOR2URL @"http://pp.sohu.com/auth/mobile/weibo"
-
-#define QQOAUTHOR2URL   @"http://pp.sohu.com/auth/mobile/qq"
-
-#define RENRENAUTHOR2URL  @"http://pp.sohu.com/auth/mobile/renren"
-
-
-#define WEIBOBIND @"http://pp.sohu.com/bind/mobile/weibo"
-
-#define QQBING   @"http://pp.sohu.com/bind/mobile/qq"
-
-#define RENRENBING  @"http://pp.sohu.com/bind/mobile/renren"

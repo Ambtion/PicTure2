@@ -7,6 +7,7 @@
 //
 
 #import "LoginStateManager.h"
+#import "DataBaseManager.h"
 
 #define USER_ID             @"__USER_ID__"
 #define DEVICE_TOKEN        @"__device_token__"
@@ -42,7 +43,8 @@
     NSUserDefaults * userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary * userinfo = [NSMutableDictionary dictionaryWithDictionary:[self valueForUserinfo]];
     if (!userinfo) userinfo = [NSMutableDictionary dictionaryWithCapacity:0];
-    [userinfo removeObjectForKey:key];
+    if ([[userinfo allKeys] containsObject:key])
+        [userinfo removeObjectForKey:key];
     [userDefault setObject:userinfo forKey:[LoginStateManager currentUserId]];
     [userDefault synchronize];
 }
@@ -60,7 +62,6 @@
     NSString * data = [defaults objectForKey:key];
     return data;
 }
-
 + (void)removeDataForKey:(NSString *)key
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -97,8 +98,9 @@
 }
 + (void)logout
 {
-    //    [AccountLoginResquest deleteDeviceToken];
-    [self removeDataForKey:[self currentUserId]];
+//    [AccountLoginResquest deleteDeviceToken];
+//    [self removeDataForKey:[self currentUserId]];
+//    [self unbindAll];
     [self removeDataForKey:USER_ID];
 }
 
@@ -175,6 +177,12 @@
             break;
     }
     return nil;
+}
++ (void)unbindAll
+{
+    [self unbind:QQShare];
+    [self unbind:RenrenShare];
+    [self unbind:SinaWeiboShare];
 }
 + (void)unbind:(KShareModel)model
 {

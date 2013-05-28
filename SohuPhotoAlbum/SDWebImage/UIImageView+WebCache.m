@@ -72,6 +72,7 @@
         self.image = image;
     [self setNeedsLayout];
 }
+
 - (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImageinCache:(UIImage *)image
 {
     self.image = image;
@@ -84,17 +85,6 @@
     self.image = image;
     [self setNeedsDisplay];
     return;
-    [UIView transitionWithView:self duration:0.1 options:UIViewAnimationOptionCurveEaseInOut |
-                   UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                    animations:^{
-                        if (image) {
-                            self.image = image;
-                        }
-                        
-                   } completion:^(BOOL finished) {
-        
-    }];
-    [self setNeedsLayout];
 }
 
 @end

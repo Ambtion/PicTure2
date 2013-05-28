@@ -390,14 +390,14 @@
         [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:YES OnView:self.view];
     }
 }
+
 - (void)shareBoxViewShareTo:(KShareModel)model
 {
     //    _pushView = YES;
     PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
-    if (_isShareAll) {
-        source = _shareDateSource;
-    }
-    NSString * photoString = [NSString stringWithFormat:@"%@",[source imageUrl]];
+    if (_isShareAll)
+         _shareDateSource = source;
+    NSString * photoString = [NSString stringWithFormat:@"%@",[_shareDateSource imageUrl]];
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:photoString andDelegate:self] animated:YES];
 }
 - (void)shareBoxViewWeiXinShareToScene:(enum WXScene)scene

@@ -37,36 +37,37 @@
 
 - (NSData*)imageDataFromAsset
 {
-    //确保登陆
-    BOOL  isUploadJPEGImage = NO;
-    if ([LoginStateManager isLogin]){
-        isUploadJPEGImage = [PerfrenceSettingManager isUploadJPEGImage];
-    }else{
-        return nil;
-    }
-    if (!_fulldata)
-        _fulldata = [self fullData];
-    NSData * data = [_fulldata copy];
-    DLog(@"original data: %f",[data length]/(1024 * 1024.f));
-    NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
-    if (isUploadJPEGImage) {
-        CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
-        CGImageRef imageRef = nil;
-        if ([[self.asset.defaultRepresentation UTI] hasSuffix:@"png"]) {
-            imageRef = CGImageCreateWithPNGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+    @autoreleasepool {
+        //确保登陆
+        BOOL  isUploadJPEGImage = NO;
+        if ([LoginStateManager isLogin]){
+            isUploadJPEGImage = [PerfrenceSettingManager isUploadJPEGImage];
         }else{
-            imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+            return nil;
         }
-        UIImage * image = [UIImage imageWithCGImage:imageRef];
-        data = UIImageJPEGRepresentation(image, 0.2);
+        NSData * data  = [self fullData];
+        DLog(@"original data: %f",[data length]/(1024 * 1024.f));
+        NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
+        if (isUploadJPEGImage) {
+            CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+            CGImageRef imageRef = nil;
+            if ([[self.asset.defaultRepresentation UTI] hasSuffix:@"png"]) {
+                imageRef = CGImageCreateWithPNGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+            }else{
+                imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
+            }
+            UIImage * image = [UIImage imageWithCGImage:imageRef];
+            data = UIImageJPEGRepresentation(image, 0.1);
+        }
+        if (dic){
+            [self fixinfoDic:dic];
+            data = [self writeExif:dic intoImage:data];
+        }
+        DLog(@"cpmpre afterWrite:when upload: %f M",[data length]/(1024 * 1024.f));
+        return data;
     }
-    if (dic){
-        [self fixinfoDic:dic];
-        data = [self writeExif:dic intoImage:data];
-    }
-    DLog(@"cpmpre afterWrite:when upload: %f M",[data length]/(1024 * 1024.f));
-    return data;
 }
+
 - (NSString *)stringFromdate:(NSDate *)date
 {
     //转化日期格式
@@ -93,11 +94,11 @@
         NSLog(@"%@",self.asset.defaultRepresentation.UTI);
         return UIImagePNGRepresentation(image);
     }
-    return UIImageJPEGRepresentation(image, 0.5);
-//    Byte *buffer = (Byte*)malloc(defaultRep.size);
-//    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-//    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-//    return data;
+    return UIImageJPEGRepresentation(image, 0.8);
+    //    Byte *buffer = (Byte*)malloc(defaultRep.size);
+    //    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
+    //    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+    //    return data;
 }
 
 - (NSDictionary *)infoDic

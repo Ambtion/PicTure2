@@ -18,7 +18,6 @@
 {
     NSMutableArray * _taskList;
     NSMutableDictionary * _taskDic;
-    BOOL isAutoUploading;
 }
 @property (nonatomic,strong)AlbumTaskList * curTask;
 @property (nonatomic,strong)NSMutableArray * taskList;

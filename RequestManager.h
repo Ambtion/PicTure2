@@ -17,7 +17,7 @@ typedef enum  Soruce_Type source_type;
 @interface RequestManager : NSObject
 
 //时间轴相册
-+ (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 + (void)getTimePhtotWithAccessToken:(NSString *)token day:(NSString *)days success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 + (void)deletePhotosWithaccessToken:(NSString *)token photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 

@@ -17,7 +17,8 @@
 
 + (DataBaseManager *)defaultDataBaseManager;
 
-- (BOOL)insertPhotoURLIntoTable:(NSURL *)photoURL;   //插入数据
-- (BOOL)deletePhotoURLFromTable:(NSURL *)photoURL;   //删除数据
-- (BOOL)hasPhotoURL:(NSURL *)photoURL;               //查找数据
+- (BOOL)deleteAllPhotoPhotosURL;                        //清空数据
+- (BOOL)insertPhotoURLIntoTable:(NSURL *)photoURL;      //插入数据
+- (BOOL)deletePhotoURLFromTable:(NSURL *)photoURL;      //删除数据
+- (BOOL)hasPhotoURL:(NSURL *)photoURL;                  //查找数据
 @end
