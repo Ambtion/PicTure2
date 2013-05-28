@@ -44,7 +44,6 @@
     [DataBaseManager defaultDataBaseManager];
     //umeng
     [MobClick startWithAppkey:UM_APP_KEY];
-    
     //    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
     //     (UIRemoteNotificationTypeAlert |
     //      UIRemoteNotificationTypeBadge |

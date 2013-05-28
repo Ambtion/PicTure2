@@ -8,6 +8,7 @@
 
 #import "ShareViewController.h"
 #import "UIImageView+WebCache.h"
+#import "EmojiUnit.h"
 
 @implementation ShareViewController
 @synthesize bgPhotoUrl = _bgPhotoUrl;
@@ -107,6 +108,10 @@
 #pragma mark DesShareDelegate
 - (void)localShareDesView:(LocalShareDesView *)view shareTo:(KShareModel)model withDes:(NSString *)text
 {
+    if ([EmojiUnit stringContainsEmoji:text]) {
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"描述含有非法字符"];
+        return;
+    }
     if ([_delegate respondsToSelector:@selector(shareViewcontrollerDidShareClick: withDes: shareMode:)]) {
         [_delegate shareViewcontrollerDidShareClick:self withDes:text shareMode:_sharemodel];
         return;

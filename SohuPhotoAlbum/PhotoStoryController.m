@@ -416,7 +416,6 @@
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     if (_isShareAll) {
-//        //分享
         [RequestManager sharePortFoliosWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
@@ -428,7 +427,6 @@
         NSString * str = [NSString stringWithFormat:@"%@_w640",[_shareDateSource imageUrl]];
         SDImageCache * cache = [[SDImageCache alloc] init];
         UIImage * image = [cache imageFromKey:str];
-//        NSAssert(image == nil, @"image must not nil");
         [RequestManager sharePhoto:image share_to:model desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
