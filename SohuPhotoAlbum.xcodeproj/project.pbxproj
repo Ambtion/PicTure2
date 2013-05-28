@@ -345,6 +345,8 @@
 		C598F49C1754D40A0006A379 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C598F49B1754D40A0006A379 /* Default.png */; };
 		C598F49E1754D40F0006A379 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C598F49D1754D40F0006A379 /* Default@2x.png */; };
 		C598F4A01754D4140006A379 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C598F49F1754D4140006A379 /* Default-568h@2x.png */; };
+		C598F4AB175505B50006A379 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = C598F4A9175505B50006A379 /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C598F4AC175505B50006A379 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C598F4AA175505B50006A379 /* README.md */; };
 		C59F0F221732189B005F890C /* CommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = C59F0F211732189B005F890C /* CommentController.m */; };
 		C59F0F2517321ADC005F890C /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C59F0F2417321ADB005F890C /* CommentCell.m */; };
 		C59F0F2717321E98005F890C /* commentbgView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C59F0F2617321E98005F890C /* commentbgView@2x.png */; };
@@ -873,6 +875,9 @@
 		C598F49B1754D40A0006A379 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C598F49D1754D40F0006A379 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C598F49F1754D4140006A379 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		C598F4A8175505B50006A379 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
+		C598F4A9175505B50006A379 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
+		C598F4AA175505B50006A379 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		C59F0F201732189B005F890C /* CommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentController.h; sourceTree = "<group>"; };
 		C59F0F211732189B005F890C /* CommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentController.m; sourceTree = "<group>"; };
 		C59F0F2317321ADB005F890C /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
@@ -1492,6 +1497,7 @@
 		C588B0C41700304A006BBC34 /* external */ = {
 			isa = PBXGroup;
 			children = (
+				C598F4A7175505B50006A379 /* Open_UDID */,
 				C56323D717475CE900685951 /* HPGrowingTextView */,
 				C51D264F1744C5BD0044FCD0 /* Umeng */,
 				C5841A0A17158B1000588CE5 /* EGORefreshTableHeaderView */,
@@ -1976,6 +1982,16 @@
 			name = catory;
 			sourceTree = "<group>";
 		};
+		C598F4A7175505B50006A379 /* Open_UDID */ = {
+			isa = PBXGroup;
+			children = (
+				C598F4A8175505B50006A379 /* OpenUDID.h */,
+				C598F4A9175505B50006A379 /* OpenUDID.m */,
+				C598F4AA175505B50006A379 /* README.md */,
+			);
+			path = Open_UDID;
+			sourceTree = "<group>";
+		};
 		C59F0F1F1732183C005F890C /* commentView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2305,6 +2321,7 @@
 				C598F49C1754D40A0006A379 /* Default.png in Resources */,
 				C598F49E1754D40F0006A379 /* Default@2x.png in Resources */,
 				C598F4A01754D4140006A379 /* Default-568h@2x.png in Resources */,
+				C598F4AC175505B50006A379 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2463,6 +2480,7 @@
 				C56323DD17475CE900685951 /* HPTextViewInternal.m in Sources */,
 				C589100F1749BD9A00B90E28 /* ShareBox.m in Sources */,
 				C58A75E9174E03DF00D32D61 /* AHAlertView.m in Sources */,
+				C598F4AB175505B50006A379 /* OpenUDID.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2544,8 +2562,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2560,8 +2578,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				PROVISIONING_PROFILE = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2570,8 +2588,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2586,8 +2604,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				PROVISIONING_PROFILE = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -89,8 +89,8 @@
 }
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    NSString *str = [NSString stringWithFormat: @"Error: %@", error];
-    DLog(@"%@",str);
+//    NSString *str = [NSString stringWithFormat: @"Error: %@", error];
+//    DLog(@"%@",str);
 }
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary  *)userInfo {

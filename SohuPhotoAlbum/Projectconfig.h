@@ -16,8 +16,6 @@ typedef enum __shareModel {
     NoShare,
 }KShareModel;
 
-
-
 #import "IIViewDeckController.h"
 //alert
 #import "NSObject+extension.h"
@@ -30,7 +28,7 @@ typedef enum __shareModel {
 #import "LoginViewController.h"
 #import "UploadTaskManager.h"
 
-#define ___DEBUG 1
+//#define ___DEBUG 1
 
 #ifndef PROJECTCONFIG
 #define PROJECTCONFIG

@@ -10,6 +10,7 @@
 #import "ASIFormDataRequest.h"
 #import "LoginStateManager.h"
 #import "JSON.h"
+#import "OpenUDID.h"
 
 #define CLIENT_ID @"355d0ee5-d1dc-3cd3-bdc6-76d729f61655"
 
@@ -17,10 +18,12 @@
 
 + (NSString *)getUUID
 {
-    CFUUIDRef theUUID = CFUUIDCreate(NULL);
-    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-    CFBridgingRelease(theUUID);
-    return (NSString *)string;
+//    CFUUIDRef theUUID = CFUUIDCreate(NULL);
+//    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+//    CFBridgingRelease(theUUID);
+//    return (NSString *)string;
+//    return [[[NSUserDefaults standardUserDefaults] objectForKey:@"OpenUDID"] objectForKey:@"OpenUDID"];
+    return [OpenUDID value];
 }
 + (BOOL)upDateDeviceToken
 {
