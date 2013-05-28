@@ -380,6 +380,7 @@
 #pragma mark Share
 - (void)showShareViewIsAllshare:(BOOL)isShareAll
 {
+    
     _isShareAll = isShareAll;
     if (!_shareBox) {
         _shareBox = [[ShareBox alloc] init];
@@ -407,6 +408,7 @@
 }
 - (void)shareBoxViewWriteImageTolocal
 {
+    
     NSString * bgPhotoUrl = [_shareDateSource imageUrl];
     [self writePicToAlbumWith:bgPhotoUrl];
 }
@@ -440,6 +442,7 @@
 #pragma mark share
 - (void) respImageNewsContentToSence:(enum WXScene)scene
 {
+    DLog(@"%d",_isShareAll);
     //发送内容给微信
     if (_isShareAll) {
         [self shareAllSourceWithWeixin:scene];
@@ -452,25 +455,23 @@
 {
     NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
     //    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene];
-    NSString * title = [NSString stringWithFormat:@"分享%@的图集[%@]",[_userInfo objectForKey:@"user_nick"],self.storyName];
+    
+    NSString * title = [NSString stringWithFormat:@"分享%@的图集",[_userInfo objectForKey:@"user_nick"]];
+    if (self.storyName && ![self.storyName isEqualToString:@""]) title = [title stringByAppendingFormat:@"[%@]",self.storyName];
     PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
     [self shareNewsToWeixinWithUrl:commentNews ToSence:scene Title:title photoUrl:[source imageUrl] des:self.storyDes];
 }
 - (void)shareOneSourceWithWeiXin:(enum WXScene)scene
 {
-    //    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,_shareDateSource.photoShowID];
-//    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
-//    NSString * title = [NSString stringWithFormat:@"分享%@的图片",[_userInfo objectForKey:@"user_nick"]];
-//    [self shareNewsToWeixinWithUrl:contentNews ToSence:scene Title:title photoUrl:[_shareDateSource imageUrl] des:_shareDateSource.imageDes];
     [self shareImageToWeixinWithUrl:[_shareDateSource imageUrl] ToSence:scene];
 }
 
 - (void)onResp:(BaseResp *)resp
 {
     if (resp.errCode == 0) {
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送成功"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     }else{
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }
 }
 

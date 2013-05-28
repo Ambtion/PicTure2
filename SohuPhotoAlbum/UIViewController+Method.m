@@ -309,7 +309,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     WXMediaMessage * message = [WXMediaMessage message];
     UIImage  * tuumbail = [UIImage imageWithData:[self getImgaeDateWithUrl:imageURL]];
     [message setThumbImage:tuumbail];
-    
     WXImageObject *ext = [WXImageObject object];
     SDImageCache * imageCache  = [[SDImageCache alloc] init];
     UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",imageURL]];

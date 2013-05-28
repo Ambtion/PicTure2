@@ -396,9 +396,9 @@
 - (void)onResp:(BaseResp *)resp
 {
     if (resp.errCode == 0) {
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送成功"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     }else{
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }
 }
 

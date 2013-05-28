@@ -209,7 +209,7 @@ static NSString * provider = nil;
 {
     
     NSString * str = [request.URL absoluteString];
-    NSLog(@"all 302 ::%@",str);
+    DLog(@"all 302 ::%@",str);
     NSString * baseUrl = [[str componentsSeparatedByString:@"?"] objectAtIndex:0];
     if ( [baseUrl hasPrefix:@"http://pp.sohu.com/bind/mobile/"] && [baseUrl hasSuffix:@"callback"]) {
         str  = [[str componentsSeparatedByString:@"?"] lastObject];

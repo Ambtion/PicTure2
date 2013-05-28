@@ -59,6 +59,7 @@
         [manager downloadWithURL:url delegate:self options:options success:success failure:failure];
     }
 }
+
 #endif
 
 - (void)cancelCurrentImageLoad
@@ -81,7 +82,7 @@
 
 - (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image
 {
-    NSString * webImgaeAniamtion;
+//    NSString * webImgaeAniamtion;
     self.image = image;
     [self setNeedsDisplay];
     return;
