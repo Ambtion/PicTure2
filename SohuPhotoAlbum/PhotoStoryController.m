@@ -413,26 +413,37 @@
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     if (_isShareAll) {
-        //分享
-        [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
+//        //分享
+//        [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
+//            [self.navigationController popViewControllerAnimated:YES];
+//            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+//        } failure:^(NSString *error) {
+//            [self.navigationController popViewControllerAnimated:YES];
+//            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
+//            
+//        }];
+        [RequestManager sharePortFoliosWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         } failure:^(NSString *error) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
-            
         }];
     }else{
-        [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
-            [self.navigationController popViewControllerAnimated:YES];
-            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-        } failure:^(NSString * error) {
-            [self.navigationController popViewControllerAnimated:YES];
-            [self showPopAlerViewRatherThentasView:NO WithMes:error];
-        }];
+        
+//        [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
+//            [self.navigationController popViewControllerAnimated:YES];
+//            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+//        } failure:^(NSString * error) {
+//            [self.navigationController popViewControllerAnimated:YES];
+//            [self showPopAlerViewRatherThentasView:NO WithMes:error];
+//        }];
+        
     }
 }
 
+
+#pragma mark share
 - (void) respImageNewsContentToSence:(enum WXScene)scene
 {
     //发送内容给微信
@@ -466,5 +477,6 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"发送失败"];
     }
 }
+
 
 @end

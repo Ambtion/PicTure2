@@ -270,8 +270,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 @end
 
-@implementation UIViewController(weixinShare)
-
+@implementation UIViewController(share)
+- (AppDelegate *)Appdelegate
+{
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 - (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title photoUrl:(NSString *)photoUrl des:(NSString *)des
 {
     //发送内容给微信
@@ -298,6 +301,36 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 {
     NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
+}
+
+- (void)sinaUploadPic:(UIImage *)image WithDes:(NSString *)des delegate:(id)delegate
+{
+    [[self Appdelegate] sinaLoginWithDelegate:delegate];
+    //uplaod image
+    [[[self Appdelegate] sinaweibo] requestWithURL:@"statuses/upload.json"
+                                            params:[NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                    des, @"status",
+                                                    image, @"pic", nil]
+                                        httpMethod:@"POST"
+                                          delegate:delegate];
+}
+- (void)renrenUPlaodPicWithDes:(NSString *)des image:(NSData *)imageData
+{
+    ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
+    [request setPostValue:@"1.0"forKey:@"v"];
+    [request setPostValue:[[LoginStateManager getTokenInfo:RenrenShare] objectForKey:@"access_token"] forKey:@"access_token"];
+    [request setPostValue:@"JSON" forKey:@"format"];
+    [request setPostValue:@"photos.upload" forKey:@"method"];
+    [request setPostValue:@"1" forKey:@"file"];
+    [request setPostValue:des forKey:@"caption"];
+    [request setData:imageData forKey:@"upload"];
+    [request startAsynchronous];
+    [request setCompletionBlock:^{
+        DLog(@"%@",[request responseString]);
+    }];
+    [request setFailedBlock:^{
+        DLog(@"%@",[request responseString]);
+    }];
 }
 
 @end

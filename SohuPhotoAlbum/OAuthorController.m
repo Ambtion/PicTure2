@@ -157,7 +157,6 @@ static NSString * provider = nil;
     }
     
     url_s  = [url_s stringByAppendingFormat:@"?state=%@&code=%@",state,code];
-    DLog(@"bingWithCode:%@",url_s);
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:@"GET"];

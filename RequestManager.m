@@ -40,7 +40,7 @@
     }
     if (!shareModeStr) return;
     [body setValue:shareModeStr forKey:@"share_to"];
-
+    
 }
 + (NSString *)sourceToString:(source_type)type
 {
@@ -205,12 +205,12 @@
     NSString * str = nil;
     if ([LoginStateManager isLogin]) {
         str  = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d&&access_token=%@",
-                      BASICURL_V1,storyId,ownId,start,count,[LoginStateManager currentToken]];
-
+                BASICURL_V1,storyId,ownId,start,count,[LoginStateManager currentToken]];
+        
     }else{
         str = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d",
-                      BASICURL_V1,storyId,ownId,start,count];
-
+               BASICURL_V1,storyId,ownId,start,count];
+        
     }
     [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
 }
@@ -315,12 +315,14 @@
     if (description) {
         [body setValue:description forKey:@"description"];
     }
+    DLog(@"%@",strUrl);
     [self postWithURL:strUrl body:body success:success failure:failure];
-
+    
 }
 //分享单个作品集
 + (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
+    
     NSString * strUrl = [NSString stringWithFormat:@"%@/portfolios/%@/share",BASICURL_V1,portfolisId];
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
     [body setValue:token forKey:@"access_token"];
@@ -345,6 +347,7 @@
         [body setValue:description forKey:@"description"];
     }
     [self postWithURL:strURl body:body success:success failure:failure];
+    
 }
 
 //推荐
@@ -360,7 +363,7 @@
 ////     GET /notifications
 //    NSString * string  = [NSString stringWithFormat:@"%@/notifications",BASICURL_V1];
 ////    8.2 GET /notifications  获得当前用户的通知列表。
-////    
+////
 ////    8.3 DELETE /notifications/$notification_id  删除当前用户的某一指定通知。
 //}
 
@@ -370,4 +373,107 @@
     
 }
 
+
+//三方分享
++ (void)sharePhoto:(UIImage *)image share_to:(KShareModel)shareMode   desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    CGFloat cpmpress = 1.f;
+    switch (shareMode) {
+        case QQShare:
+            [self sharePhoto:image ToQQwithDes:description compressionQuality:cpmpress success:success failure:failure];
+            break;
+        case RenrenShare:
+            [self sharePhoto:image ToRenRenwithDes:description compressionQuality:cpmpress success:success failure:failure];
+            break;
+        case SinaWeiboShare:
+            [self sharePhoto:image ToSinawithDes:description compressionQuality:cpmpress success:success failure:failure];
+            break;
+        default:
+            break;
+    }
+}
++ (void)sharePhoto:(UIImage*)image ToQQwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://graph.qq.com/photo/upload_pic"]];
+    [request setPostValue:[[LoginStateManager getTokenInfo:QQShare] objectForKey:@"access_token"] forKey:@"access_token"];
+    [request setPostValue:@"100319476" forKey:@"oauth_consumer_key"];
+    [request setPostValue:[[LoginStateManager getTokenInfo:QQShare] objectForKey:@"openid"] forKey:@"openid"];
+    [request setPostValue:@1 forKey:@"mobile"];
+    [request setPostValue:des forKey:@"photodesc"];
+    NSData * data = UIImageJPEGRepresentation(image, compress);
+    [request setData:data forKey:@"picture"];
+    [request startAsynchronous];
+    [request setCompletionBlock:^{
+        NSInteger ret = [[[[request responseString] JSONValue] objectForKey:@"ret"] integerValue];
+        if (!ret) {
+            success(nil);
+        }else if( (ret>= 100013 && ret >= 100016) || ret == 9016 ||
+                 ret == 9017 || ret == 9018 || ret == 9094 || ret == 41003){
+            failure(@"token失效,请重新认证");
+        }else{
+            failure(@"分享失败");
+        }
+    }];
+    [request setFailedBlock:^{
+        failure(@"连接失败,请重新分享");
+    }];
+}
++ (void)sharePhoto:(UIImage*)image ToRenRenwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    //renren
+    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
+    [request setPostValue:@"1.0"forKey:@"v"];
+    [request setPostValue:[[LoginStateManager getTokenInfo:RenrenShare] objectForKey:@"access_token"] forKey:@"access_token"];
+    [request setPostValue:@"JSON" forKey:@"format"];
+    [request setPostValue:@"photos.upload" forKey:@"method"];
+    [request setPostValue:des forKey:@"caption"];
+    NSData * data = UIImageJPEGRepresentation(image, compress);
+    [request setData:data withFileName:@"1.jpg" andContentType:@"image/jpg" forKey:@"upload"];
+    [request startAsynchronous];
+    [request setCompletionBlock:^{
+        NSDictionary * dic = [[request responseString] JSONValue];
+        NSNumber *errorCode = [dic objectForKey:@"error_code"];
+        if (!errorCode) {
+            success(nil);
+        }else{
+            NSInteger code = [errorCode integerValue];
+            if (code == 2001 || code == 2002) {
+                failure(@"token失效,请重新认证");
+            }else{
+                failure(@"分享失败");
+            }
+        }
+    }];
+    [request setFailedBlock:^{
+        failure(@"连接失败,请重新分享");
+    }];
+}
++ (void)sharePhoto:(UIImage*)image ToSinawithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://upload.api.weibo.com/2/statuses/upload.json"]];
+    [request setPostValue:[[LoginStateManager getTokenInfo:SinaWeiboShare] objectForKey:@"access_token"] forKey:@"access_token"];
+    if (!des || [des isEqualToString:@""])  des = @"#搜狐相机助手#";
+    [request setPostValue:des forKey:@"status"];
+    [request setPostValue:@0 forKey:@"visible"];
+    NSData * data  = UIImageJPEGRepresentation(image, compress);
+    [request setData:data forKey:@"pic"];
+    [request startAsynchronous];
+    [request setCompletionBlock:^{
+        NSDictionary * dic = [[request responseString] JSONValue];
+        NSNumber *errorCode = [dic objectForKey:@"error_code"];
+        if (!errorCode) {
+            success(nil);
+        }else{
+            NSInteger code = [errorCode integerValue];
+            if ((code >= 21314 && code <= 21319 )|| code == 21327 || code == 21332) {
+                failure(@"token失效,请重新认证");
+            }else{
+                failure(@"分享失败");
+            }
+        }
+    }];
+    [request setFailedBlock:^{
+        failure(@"连接失败,请重新分享");
+    }];
+}
 @end

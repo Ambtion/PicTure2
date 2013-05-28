@@ -99,14 +99,25 @@
 
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
-    NSString * phtotId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
-    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"]  optionalTitle:nil desc:des success:^(NSString *response) {
+    
+//    NSString * phtotId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
+//    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"]  optionalTitle:nil desc:des success:^(NSString *response) {
+//        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+//    } failure:^(NSString *error) {
+//        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+//    }];
+    NSString * photoUrl = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"]];
+    if (!imageCache)
+        imageCache  = [[SDImageCache alloc] init];
+    UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",photoUrl]];
+    [RequestManager sharePhoto:image share_to:model desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
     }];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 #pragma mark - Weixin
 - (void)onResp:(BaseResp *)resp
 {

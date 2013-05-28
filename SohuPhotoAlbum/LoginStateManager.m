@@ -98,9 +98,9 @@
 }
 + (void)logout
 {
-//    [AccountLoginResquest deleteDeviceToken];
-//    [self removeDataForKey:[self currentUserId]];
-//    [self unbindAll];
+    //    [AccountLoginResquest deleteDeviceToken];
+    //    [self removeDataForKey:[self currentUserId]];
+    //    [self unbindAll];
     [self removeDataForKey:USER_ID];
 }
 
@@ -139,7 +139,21 @@
 }
 + (void)storeQQTokenInfo:(NSDictionary *)info
 {
-    [self userDefoultStoreValue:info forKey:QQ_TOKEN];
+    NSString * openid = [self getQQopenIdWithAccess_token:[info objectForKey:@"access_token"]];
+    NSMutableDictionary * dic = [info mutableCopy];
+    [dic setObject:openid forKey:@"openid"];
+    [self userDefoultStoreValue:dic forKey:QQ_TOKEN];
+}
++ (NSString *)getQQopenIdWithAccess_token:(NSString *)token
+{
+    NSString * url = [NSString stringWithFormat:@"https://graph.qq.com/oauth2.0/me?access_token=%@",token];
+    ASIHTTPRequest * getOpneUid = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+    [getOpneUid startSynchronous];
+    NSString * finalStr = [getOpneUid responseString];
+    finalStr = [finalStr substringFromIndex:9];
+    finalStr = [finalStr substringToIndex:[finalStr length] - 4];
+    DLog(@"%@ %@",finalStr,[finalStr JSONValue]);
+    return [[finalStr JSONValue] objectForKey:@"openid"];
 }
 
 + (NSDictionary *)qqTokenInfo

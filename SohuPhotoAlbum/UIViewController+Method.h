@@ -38,8 +38,9 @@
 - (BOOL)isMineWithOwnerId:(NSString *)ownerID;
 @end
 
-@interface UIViewController(weixinShare)
+@interface UIViewController(share)
 - (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title photoUrl:(NSString *)photoUrl des:(NSString *)des;
+
 @end
 
 @interface UIViewController(Login)

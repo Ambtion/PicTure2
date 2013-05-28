@@ -231,7 +231,7 @@
 }
 - (void)showError:(NSString *)error
 {
-    [self showPopAlerViewRatherThentasView:YES WithMes:error];
+    [self showPopAlerViewRatherThentasView:NO WithMes:error];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginFailtureWithinfo:)])
         [_delegate loginViewController:self loginFailtureWithinfo:error];
 }

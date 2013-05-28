@@ -49,7 +49,6 @@ typedef enum  Soruce_Type source_type;
 //分享单个作品集
 + (void)sharePortFoliosWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
-
 //分享单张图片
 + (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 
@@ -60,4 +59,7 @@ typedef enum  Soruce_Type source_type;
 
 //反馈
 + (void)feedBackWithidea:(NSString *)idea success:(void (^) (NSString * response))success failure:(void (^) (NSString * error))failure;
+
+//三方分享
++ (void)sharePhoto:(UIImage *)image share_to:(KShareModel)shareMode   desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 @end

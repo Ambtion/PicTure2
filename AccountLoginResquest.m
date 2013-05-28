@@ -53,6 +53,7 @@
     }
     return NO;
 }
+
 + (BOOL)resigiterDevice
 {
     NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/devices",BASICURL];
@@ -62,6 +63,7 @@
     [request setPostValue:[[UIDevice currentDevice] name] forKey:@"device_name"];
     [request setPostValue:[[UIDevice currentDevice] model] forKey:@"device_model"];
     [request setPostValue:[self getUUID] forKey:@"device_serial_number"];
+    [request setPostValue:@1 forKey:@"device_type"];
     [request startSynchronous];
     if (request.responseStatusCode == 200) {
         NSNumber * num = [[[request responseString] JSONValue] objectForKey:@"device_id"];

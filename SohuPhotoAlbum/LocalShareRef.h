@@ -31,8 +31,8 @@
 
 //RenRenRef
 #import "Renren.h"
-#define kAPP_ID     @"230742"
-#define kAPI_Key    @"43202cb428c84f399ba5f73576916efc"
+#define kAPP_ID     @"216751"
+#define kAPI_Key    @"ed8838c335d146319b6612a3026190ae"
 
 //Weixin
 #import "WXApi.h"
