@@ -422,7 +422,6 @@
 + (void)sharePhoto:(UIImage*)image ToRenRenwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     //renren
-    DLog(@"");
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
     [request setPostValue:@"1.0"forKey:@"v"];
     [request setPostValue:[[LoginStateManager getTokenInfo:RenrenShare] objectForKey:@"access_token"] forKey:@"access_token"];
@@ -438,6 +437,7 @@
         if (!errorCode) {
             success(nil);
         }else{
+            DLog(@"%@",dic);
             NSInteger code = [errorCode integerValue];
             if (code == 2001 || code == 2002) {
                 failure(@"token失效,请重新认证");
@@ -450,6 +450,7 @@
         failure(@"连接失败,请重新分享");
     }];
 }
+
 + (void)sharePhoto:(UIImage*)image ToSinawithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://upload.api.weibo.com/2/statuses/upload.json"]];

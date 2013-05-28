@@ -55,7 +55,7 @@
             _shareBox = [[ShareBox alloc] init];
             _shareBox.delegate = self;
         }
-        [_shareBox showShareViewWithWeixinShow:YES photoWall:YES andWriteImage:NO OnView:self.view];
+        [_shareBox showShareViewWithWeixinShow:YES photoWall:NO andWriteImage:YES OnView:self.view];
     }
     if (button.tag == TABBARLOADPIC){        //下载图片
         NSString * strUrl = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"]];
@@ -89,13 +89,17 @@
 {
     [self respImageContentToSence:scene];
 }
+
 - (void)shareBoxViewShareTo:(KShareModel)model
 {
     //三方分享
     self.isPushView = YES;
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"] andDelegate:self] animated:YES];
 }
-
+- (void)shareBoxViewWriteImageTolocal
+{
+    [self writePicToAlbumWith:[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"]];
+}
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     

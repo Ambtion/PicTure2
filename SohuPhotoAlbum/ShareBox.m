@@ -113,8 +113,8 @@
     }
     if ([_delegate respondsToSelector:@selector(shareBoxViewShareTo:)])
         [_delegate shareBoxViewShareTo:model];
-    
 }
+
 - (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic
 {
     [self bindToModel];
@@ -129,7 +129,7 @@
 -(void)weixinUploadPic
 {
     if ([WXApi isWXAppInstalled]) {
-        weixinAtion = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
+        weixinAtion = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
         [weixinAtion showInView:showView];
     }else{
         [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
@@ -138,7 +138,7 @@
 
 - (void)showInvalidTokenOrOpenIDMessageWithMes:(NSString *)Amessage
 {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
 }
 @end
