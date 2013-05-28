@@ -422,6 +422,7 @@
 + (void)sharePhoto:(UIImage*)image ToRenRenwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     //renren
+    DLog(@"");
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
     [request setPostValue:@"1.0"forKey:@"v"];
     [request setPostValue:[[LoginStateManager getTokenInfo:RenrenShare] objectForKey:@"access_token"] forKey:@"access_token"];

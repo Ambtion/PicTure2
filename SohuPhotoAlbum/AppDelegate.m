@@ -35,7 +35,7 @@
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
     
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
-//    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbarnoline.png"] forBarMetrics:UIBarMetricsDefault];
+    //    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbarnoline.png"] forBarMetrics:UIBarMetricsDefault];
     nav.delegate = self;
     self.window.rootViewController = nav;
     self.assetsLibrary = [[ALAssetsLibrary alloc] init];
@@ -44,17 +44,16 @@
     [DataBaseManager defaultDataBaseManager];
     //umeng
     [MobClick startWithAppkey:UM_APP_KEY];
-
-//    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
-//     (UIRemoteNotificationTypeAlert |
-//      UIRemoteNotificationTypeBadge |
-//      UIRemoteNotificationTypeSound)];
+    
+    //    [[UIApplication sharedApplication]  registerForRemoteNotificationTypes:
+    //     (UIRemoteNotificationTypeAlert |
+    //      UIRemoteNotificationTypeBadge |
+    //      UIRemoteNotificationTypeSound)];
 //    NSDictionary * dic = [[NSBundle mainBundle] infoDictionary];
 //    NSString *bundleId = [dic  objectForKey: @"CFBundleIdentifier"];
 //    NSUserDefaults *appUserDefaults = [[NSUserDefaults alloc] init];
 //    NSDictionary * cacheDic = [appUserDefaults persistentDomainForName: bundleId];
-//    NSLog(@"cacheDic::%@",cacheDic);
-    
+//    DLog(@"cacheDic::%@",cacheDic);
     return YES;
 }
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -69,12 +68,12 @@
 #pragma mark notification
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"
-//                                                    message:notification.alertBody
-//                                                   delegate:nil
-//                                          cancelButtonTitle:@"确定"
-//                                          otherButtonTitles:nil];
-//    [alert show];
+    //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"
+    //                                                    message:notification.alertBody
+    //                                                   delegate:nil
+    //                                          cancelButtonTitle:@"确定"
+    //                                          otherButtonTitles:nil];
+    //    [alert show];
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
@@ -97,11 +96,11 @@
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary  *)userInfo {
     
-//    NSLog(@"%@",[userInfo allKeys]);
-//    NSLog(@"%@",userInfo);
-//    UIAlertView * alterview = [[UIAlertView alloc] initWithTitle:@"通知" message:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"] delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"详细", nil];
-//    [alterview show];
-//    application.applicationIconBadgeNumber -= 1;
+    //    NSLog(@"%@",[userInfo allKeys]);
+    //    NSLog(@"%@",userInfo);
+    //    UIAlertView * alterview = [[UIAlertView alloc] initWithTitle:@"通知" message:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"] delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"详细", nil];
+    //    [alterview show];
+    //    application.applicationIconBadgeNumber -= 1;
 }
 
 @end

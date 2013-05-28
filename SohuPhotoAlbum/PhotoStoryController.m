@@ -428,7 +428,7 @@
         NSString * str = [NSString stringWithFormat:@"%@_w640",[_shareDateSource imageUrl]];
         SDImageCache * cache = [[SDImageCache alloc] init];
         UIImage * image = [cache imageFromKey:str];
-        NSAssert(image == nil, @"image must not nil");
+//        NSAssert(image == nil, @"image must not nil");
         [RequestManager sharePhoto:image share_to:model desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
@@ -453,9 +453,7 @@
 
 - (void)shareAllSourceWithWeixin:(enum WXScene)scene
 {
-    NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
-    //    [self shareNewsToWeixinWithUrl:commentNews ToSence:scene];
-    
+    NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];    
     NSString * title = [NSString stringWithFormat:@"分享%@的图集",[_userInfo objectForKey:@"user_nick"]];
     if (self.storyName && ![self.storyName isEqualToString:@""]) title = [title stringByAppendingFormat:@"[%@]",self.storyName];
     PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];

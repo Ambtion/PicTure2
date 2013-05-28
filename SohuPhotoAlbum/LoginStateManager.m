@@ -43,8 +43,8 @@
     NSUserDefaults * userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary * userinfo = [NSMutableDictionary dictionaryWithDictionary:[self valueForUserinfo]];
     if (!userinfo) userinfo = [NSMutableDictionary dictionaryWithCapacity:0];
-    if ([[userinfo allKeys] containsObject:key])
-        [userinfo removeObjectForKey:key];
+//    if ([[userinfo allKeys] containsObject:key])
+    [userinfo removeObjectForKey:key];
     [userDefault setObject:userinfo forKey:[LoginStateManager currentUserId]];
     [userDefault synchronize];
 }
@@ -152,7 +152,6 @@
     NSString * finalStr = [getOpneUid responseString];
     finalStr = [finalStr substringFromIndex:9];
     finalStr = [finalStr substringToIndex:[finalStr length] - 4];
-    DLog(@"%@ %@",finalStr,[finalStr JSONValue]);
     return [[finalStr JSONValue] objectForKey:@"openid"];
 }
 
