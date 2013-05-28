@@ -13,6 +13,7 @@
 #import "PhotoWallController.h"
 #import "UIImageView+WebCache.h"
 #import "AlBumDetailController.h"
+#import "SDImageCache.h"
 
 @implementation PhotoStoryController
 @synthesize storyID,ownerID,showID,storyName,storyDes,userInfo = _userInfo;
@@ -87,7 +88,7 @@
 }
 - (void)getuserInfoWithRefresh:(BOOL)isRefresh
 {
-    if (_userInfo && !isRefresh){
+    if (!isRefresh){
         [_titleAccoutView refreshUserInfoWithDic:_userInfo];
         return;
     }
@@ -414,14 +415,6 @@
 {
     if (_isShareAll) {
 //        //分享
-//        [RequestManager shareUserHomeWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
-//            [self.navigationController popViewControllerAnimated:YES];
-//            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-//        } failure:^(NSString *error) {
-//            [self.navigationController popViewControllerAnimated:YES];
-//            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
-//            
-//        }];
         [RequestManager sharePortFoliosWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
@@ -430,18 +423,19 @@
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
         }];
     }else{
-        
-//        [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
-//            [self.navigationController popViewControllerAnimated:YES];
-//            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-//        } failure:^(NSString * error) {
-//            [self.navigationController popViewControllerAnimated:YES];
-//            [self showPopAlerViewRatherThentasView:NO WithMes:error];
-//        }];
-        
+        NSString * str = [NSString stringWithFormat:@"%@_w640",[_shareDateSource imageUrl]];
+        SDImageCache * cache = [[SDImageCache alloc] init];
+        UIImage * image = [cache imageFromKey:str];
+        NSAssert(image == nil, @"image must not nil");
+        [RequestManager sharePhoto:image share_to:model desc:des success:^(NSString *response) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
+        } failure:^(NSString *error) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self showPopAlerViewRatherThentasView:NO WithMes:error];
+        }];
     }
 }
-
 
 #pragma mark share
 - (void) respImageNewsContentToSence:(enum WXScene)scene
@@ -465,10 +459,12 @@
 - (void)shareOneSourceWithWeiXin:(enum WXScene)scene
 {
     //    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/p%@",self.ownerID,_shareDateSource.photoShowID];
-    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
-    NSString * title = [NSString stringWithFormat:@"分享%@的图片",[_userInfo objectForKey:@"user_nick"]];
-    [self shareNewsToWeixinWithUrl:contentNews ToSence:scene Title:title photoUrl:[_shareDateSource imageUrl] des:_shareDateSource.imageDes];
+//    NSString * contentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
+//    NSString * title = [NSString stringWithFormat:@"分享%@的图片",[_userInfo objectForKey:@"user_nick"]];
+//    [self shareNewsToWeixinWithUrl:contentNews ToSence:scene Title:title photoUrl:[_shareDateSource imageUrl] des:_shareDateSource.imageDes];
+    [self shareImageToWeixinWithUrl:[_shareDateSource imageUrl] ToSence:scene];
 }
+
 - (void)onResp:(BaseResp *)resp
 {
     if (resp.errCode == 0) {

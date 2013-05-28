@@ -11,6 +11,7 @@
 #import "CloudPictureCell.h"
 #import "PhotoesCell.h"
 #import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
 
 @implementation UIViewController (Method)
 #pragma mark Data divideAssettByDayTime
@@ -302,37 +303,28 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
-
-- (void)sinaUploadPic:(UIImage *)image WithDes:(NSString *)des delegate:(id)delegate
+- (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene
 {
-    [[self Appdelegate] sinaLoginWithDelegate:delegate];
-    //uplaod image
-    [[[self Appdelegate] sinaweibo] requestWithURL:@"statuses/upload.json"
-                                            params:[NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                                    des, @"status",
-                                                    image, @"pic", nil]
-                                        httpMethod:@"POST"
-                                          delegate:delegate];
+    //发送内容给微信
+    WXMediaMessage * message = [WXMediaMessage message];
+    UIImage  * tuumbail = [UIImage imageWithData:[self getImgaeDateWithUrl:imageURL]];
+    [message setThumbImage:tuumbail];
+    
+    WXImageObject *ext = [WXImageObject object];
+    SDImageCache * imageCache  = [[SDImageCache alloc] init];
+    UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",imageURL]];
+    if (image) {
+        ext.imageData = UIImageJPEGRepresentation(image, 0.5);
+    }else{
+        ext.imageUrl = imageURL;
+    }
+    message.mediaObject = ext;
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    [WXApi sendReq:req];
 }
-- (void)renrenUPlaodPicWithDes:(NSString *)des image:(NSData *)imageData
-{
-    ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
-    [request setPostValue:@"1.0"forKey:@"v"];
-    [request setPostValue:[[LoginStateManager getTokenInfo:RenrenShare] objectForKey:@"access_token"] forKey:@"access_token"];
-    [request setPostValue:@"JSON" forKey:@"format"];
-    [request setPostValue:@"photos.upload" forKey:@"method"];
-    [request setPostValue:@"1" forKey:@"file"];
-    [request setPostValue:des forKey:@"caption"];
-    [request setData:imageData forKey:@"upload"];
-    [request startAsynchronous];
-    [request setCompletionBlock:^{
-        DLog(@"%@",[request responseString]);
-    }];
-    [request setFailedBlock:^{
-        DLog(@"%@",[request responseString]);
-    }];
-}
-
 @end
 
 @implementation UIViewController(Login)

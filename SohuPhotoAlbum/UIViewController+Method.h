@@ -40,7 +40,7 @@
 
 @interface UIViewController(share)
 - (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title photoUrl:(NSString *)photoUrl des:(NSString *)des;
-
+- (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene;
 @end
 
 @interface UIViewController(Login)

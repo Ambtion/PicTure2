@@ -135,7 +135,6 @@
     return NO;
 }
 
-
 + (void)sohuLoginWithuseName:(NSString *)useName password:(NSString *)password sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {
     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];

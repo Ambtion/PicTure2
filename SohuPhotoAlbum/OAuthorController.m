@@ -155,7 +155,6 @@ static NSString * provider = nil;
         default:
             break;
     }
-    
     url_s  = [url_s stringByAppendingFormat:@"?state=%@&code=%@",state,code];
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
@@ -181,7 +180,8 @@ static NSString * provider = nil;
 //    if ([info objectForKey:@"code"] && [[info objectForKey:@"code"] intValue] == 0) {
     if (request.responseStatusCode == 200) {
 //        [AccountLoginResquest setBindingInfo];
-        [self handleInfoWithshareModel:shareModel infoDic:[[request responseString] JSONValue]];
+        if ([[[request responseString] JSONValue] objectForKey:@"third_access_token"])
+            [self handleInfoWithshareModel:shareModel infoDic:[[request responseString] JSONValue]];
         if (self.navigationController && self.navigationController.presentingViewController) {
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -210,7 +210,8 @@ static NSString * provider = nil;
     
     NSString * str = [request.URL absoluteString];
     NSLog(@"all 302 ::%@",str);
-    if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/bind/mobile/"]) {
+    NSString * baseUrl = [[str componentsSeparatedByString:@"?"] objectAtIndex:0];
+    if ( [baseUrl hasPrefix:@"http://pp.sohu.com/bind/mobile/"] && [baseUrl hasSuffix:@"callback"]) {
         str  = [[str componentsSeparatedByString:@"?"] lastObject];
         NSDictionary * dic = [self putMasWithString:str];
         state = [dic objectForKey:@"state"];

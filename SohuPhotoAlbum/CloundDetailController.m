@@ -17,7 +17,6 @@
 
 #import "CloundDetailController.h"
 #import "UIImageView+WebCache.h"
-#import "SDImageCache.h"
 
 #import "RequestManager.h"
 #import "AppDelegate.h"
@@ -100,12 +99,6 @@
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     
-//    NSString * phtotId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
-//    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[NSArray arrayWithObject:phtotId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"]  optionalTitle:nil desc:des success:^(NSString *response) {
-//        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-//    } failure:^(NSString *error) {
-//        [self showPopAlerViewRatherThentasView:NO WithMes:error];
-//    }];
     NSString * photoUrl = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"photo_url"]];
     if (!imageCache)
         imageCache  = [[SDImageCache alloc] init];
@@ -129,29 +122,8 @@
 }
 - (void) respImageContentToSence:(enum WXScene)scene
 {
-    //发送内容给微信
     NSDictionary * info = [self.assetsArray objectAtIndex:self.curPageNum];
-    NSString * thumbUrl = [NSString stringWithFormat:@"%@_c100",[info objectForKey:@"photo_url"]];
-    WXMediaMessage * message = [WXMediaMessage message];
-    UIImage  * tuumbail = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:thumbUrl]]];
-    [message setThumbImage:tuumbail];
-    
-    WXImageObject *ext = [WXImageObject object];
-    NSString * photoUrl = [info objectForKey:@"photo_url"];
-    if (!imageCache)
-        imageCache  = [[SDImageCache alloc] init];
-    UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",photoUrl]];
-    if (image) {
-        ext.imageData = UIImageJPEGRepresentation(image, 0.5);
-    }else{
-        ext.imageUrl = photoUrl;
-    }
-    message.mediaObject = ext;
-    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = scene;
-    [WXApi sendReq:req];
+    [self shareImageToWeixinWithUrl:[info objectForKey:@"photo_url"]ToSence:scene];
 }
 
 #pragma mark OverLoad

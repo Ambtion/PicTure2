@@ -334,21 +334,22 @@
     }
     [self postWithURL:strUrl body:body success:success failure:failure];
 }
-//分享单张图片
-+ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
-{
-    NSString * strURl = [NSString stringWithFormat:@"%@/portfolios/%@/photos/%@/share",BASICURL_V1,portfolisId,photoID];
-    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
-    [body setValue:token forKey:@"access_token"];
-    [body setValue:ownerId forKey:@"owner_id"];
-    [body setValue:sharetoken forKey:@"share_access_token"];
-    [self setValueWith:shareMode intoDic:body];
-    if (description) {
-        [body setValue:description forKey:@"description"];
-    }
-    [self postWithURL:strURl body:body success:success failure:failure];
-    
-}
+////分享单张图片
+//+ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+//{
+//    
+//    NSString * strURl = [NSString stringWithFormat:@"%@/portfolios/%@/photos/%@/share",BASICURL_V1,portfolisId,photoID];
+//    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
+//    [body setValue:token forKey:@"access_token"];
+//    [body setValue:ownerId forKey:@"owner_id"];
+//    [body setValue:sharetoken forKey:@"share_access_token"];
+//    [self setValueWith:shareMode intoDic:body];
+//    if (description) {
+//        [body setValue:description forKey:@"description"];
+//    }
+//    [self postWithURL:strURl body:body success:success failure:failure];
+//    
+//}
 
 //推荐
 + (void)getRecomendusersWithsuccess:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure

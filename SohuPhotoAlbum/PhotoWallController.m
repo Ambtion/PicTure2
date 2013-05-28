@@ -124,10 +124,15 @@
     [self getuserInfoWithRefresh:NO];
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
+    
 }
+
 - (void)getuserInfoWithRefresh:(BOOL)isRefresh
 {
-    if (_userInfo && !isRefresh) return;
+    if (!isRefresh){
+        [_titleAccoutView refreshUserInfoWithDic:_userInfo];
+        return;
+    }
     [RequestManager getUserInfoWithId:self.ownerID  success:^(NSString *response) {
         _userInfo = [response JSONValue];
         if (_titleAccoutView) {
