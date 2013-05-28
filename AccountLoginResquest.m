@@ -124,7 +124,7 @@
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:string]];
     [request setRequestMethod:@"DELETE"];
     [request addRequestHeader:@"accept" value:@"application/json"];
-    [request startSynchronous];
+    [request startAsynchronous];
     if (request.responseStatusCode == 200) {
         if ([request responseString] && [[[[request responseString] JSONValue] objectForKey:@"code"] intValue] == 0) {
             return YES;

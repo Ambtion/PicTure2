@@ -58,9 +58,7 @@
         self.isLoading = NO;
     } failure:^(NSString *error) {
         self.isLoading = NO;
-
     }];
-
 }
 - (void)getMoreAssetsBeforeCurNum
 {

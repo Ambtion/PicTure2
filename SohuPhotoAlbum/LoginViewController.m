@@ -204,7 +204,7 @@
     [hud show:YES];
     [AccountLoginResquest sohuLoginWithuseName:useName password:passWord sucessBlock:^(NSDictionary *response) {
         [hud hide:YES];
-        [self handleLoginInfo:response];
+        [self handleLoginInfo:response ouathor:NO];
     } failtureSucess:^(NSString *error) {
         [hud hide:YES];
         [self showError:error];
@@ -212,12 +212,13 @@
 }
 
 #pragma mark Handle Login Result
-- (void)handleLoginInfo:(NSDictionary *)response
+- (void)handleLoginInfo:(NSDictionary *)response ouathor:(BOOL)oauthorLogin
 {
     [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
     [AccountLoginResquest resigiterDevice];
-    //    [AccountLoginResquest setBindingInfo];
-    //    [AccountLoginResquest upDateDeviceToken];
+    if (oauthorLogin)
+        [AccountLoginResquest setBindingInfo];
+//    [AccountLoginResquest upDateDeviceToken];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
         [_delegate loginViewController:self loginSucessWithinfo:response];
     
@@ -266,7 +267,7 @@
 - (void)oauthorController:(OAuthorController *)controller loginSucessInfo:(NSDictionary *)dic
 {
     [self dismissModalViewControllerAnimated:NO];
-    [self handleLoginInfo:dic];
+    [self handleLoginInfo:dic ouathor:YES];
     [self handleInfoWithshareModel:controller.shareModel infoDic:dic];
 //    NSDictionary * third_dic = [NSDictionary dictionaryWithObject:[dic objectForKey:@"third_access_token"] forKey:@"access_token"];
 //    switch (controller.shareModel) {

@@ -375,7 +375,7 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     } failure:^(NSString *error) {
         [self.navigationController popViewControllerAnimated:YES];
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
     }];
 }
 

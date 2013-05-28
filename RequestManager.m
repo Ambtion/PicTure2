@@ -14,9 +14,10 @@
 #import "UMAppKey.h"
 
 #define TIMEOUT 10.f
-#define REQUSETFAILERROR @"当前网络不给力,请稍后重试"
-#define REQUSETSOURCEFIAL @"访问的资源不存在"
-#define REFRESHFAILTURE @"登录过期,请重新登录"
+#define REQUSETFAILERROR    @"当前网络不给力,请稍后重试"
+#define REQUSETSOURCEFIAL   @"访问的资源不存在"
+#define REFRESHFAILTURE     @"登录过期,请重新登录"
+#define INVISABLETOKEN      @"token过期,请重新绑定"
 
 @implementation RequestManager(private)
 
@@ -100,7 +101,12 @@
                 [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETSOURCEFIAL];
                 if (failure)
                     failure(REQUSETSOURCEFIAL);
-            }else{
+            }else if(code == 407){
+                [self objectPopAlerViewRatherThentasView:NO WithMes:INVISABLETOKEN];
+                if (failure)
+                    failure(REQUSETSOURCEFIAL);
+            }
+            else{
                 [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
                 if (failure)
                     failure(REQUSETFAILERROR);

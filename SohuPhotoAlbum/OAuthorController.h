@@ -30,9 +30,9 @@ typedef enum {
     MBProgressHUD * _progessView;
     NSString * state;
     NSString * code;
-    NSString * grantcode;
     NSString *  sohu_token;
-    NSString * sohu_accessToken;
+//    NSString * grantcode;
+//    NSString * sohu_accessToken;
     ViewShowModel viewModel;
     KShareModel shareModel;
 }

@@ -426,9 +426,9 @@
         [RequestManager sharePhotoWithAccesstoken:[LoginStateManager currentToken] ownerId:self.ownerID portfilosId:self.storyID photoId:[_shareDateSource photoId] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] desc:des success:^(NSString *response) {
             [self.navigationController popViewControllerAnimated:YES];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
-        } failure:^(NSString *error) {
+        } failure:^(NSString * error) {
             [self.navigationController popViewControllerAnimated:YES];
-            [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
+            [self showPopAlerViewRatherThentasView:NO WithMes:error];
         }];
     }
 }

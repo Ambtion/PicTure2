@@ -48,6 +48,8 @@ static NSString * provider = nil;
                     break;
             }
             url_string = [url_string stringByAppendingFormat:@"?access_token=%@",[LoginStateManager currentToken]];
+            DLog(@"bindURL :: %@",url_string);
+
         }else{
             switch (shareModel) {
                 case SinaWeiboShare: //weibo
@@ -68,8 +70,8 @@ static NSString * provider = nil;
                 default:
                     break;
             }
+            DLog(@"oauthor :: %@",url_string);
         }
-        DLog(@"bingURL :: %@",url_string);
     }
     return self;
 }
@@ -115,7 +117,7 @@ static NSString * provider = nil;
     [request setPostValue:CLIENT_ID forKey:@"client_id"];
     [request setPostValue:provider forKey:@"provider"];
     [request setPostValue:state forKey:@"state"];
-    [request setPostValue:grantcode forKey:@"code"];
+    [request setPostValue:code forKey:@"code"];
     [request setPostValue:sohu_token forKey:@"token"];
     
     [request setCompletionBlock:^{
@@ -124,14 +126,14 @@ static NSString * provider = nil;
             if ([_delegate respondsToSelector:@selector(oauthorController:loginSucessInfo:)])
                 [_delegate oauthorController:self loginSucessInfo:[[request responseString] JSONValue]];
         }else{
-            if ([_delegate respondsToSelector:@selector(loginFailture:)]) {
-                [_delegate performSelector:@selector(loginFailture:) withObject:[NSString stringWithFormat:@"%d,未知错误",[request responseStatusCode]]];
+            if ([_delegate respondsToSelector:@selector(oauthorController:loginFailture:)]) {
+                [_delegate oauthorController:self loginFailture:@"授权失败"];
             }
         }
     }];
     [request setFailedBlock:^{
-        if ([_delegate respondsToSelector:@selector(loginFailture:)]) {
-            [_delegate performSelector:@selector(loginFailture:) withObject:@"连接失败"];
+        if ([_delegate respondsToSelector:@selector(oauthorController:loginFailture:)]) {
+            [_delegate oauthorController:self loginFailture:@"连接失败"];
         }
     }];
     [request startAsynchronous];
@@ -142,19 +144,18 @@ static NSString * provider = nil;
     NSString * url_s = nil;
     switch (shareModel) {
         case QQShare:
-            url_s  = @"http://pp.sohu.com/bind/mobile/qq/callback";
+            url_s  = [NSString stringWithFormat:@"%@/bind/mobile/qq/callback",BASICURL];
             break;
         case SinaWeiboShare:
-            url_s  = @"http://pp.sohu.com/bind/mobile/weibo/callback";
+            url_s  = [NSString stringWithFormat:@"%@/bind/mobile/weibo/callback",BASICURL];
             break;
         case RenrenShare:
-            url_s  = @"http://pp.sohu.com/bind/mobile/renren/callback";
+            url_s  = [NSString stringWithFormat:@"%@/bind/mobile/renren/callback",BASICURL];
             break;
         default:
             break;
     }
     
-//    url_s = [url_s stringByAppendingFormat:@"?state=%@&access_token=%@&token=%@",state,sohu_accessToken,sohu_token];
     url_s  = [url_s stringByAppendingFormat:@"?state=%@&code=%@",state,code];
     DLog(@"bingWithCode:%@",url_s);
     __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
@@ -166,7 +167,9 @@ static NSString * provider = nil;
 //            [self handleBingInfo:[[request responseString] JSONValue]];
     }];
     [request setFailedBlock:^{
-        
+        if ([_delegate respondsToSelector:@selector(oauthorController:bindFailture:)]) {
+            [_delegate oauthorController:self bindFailture:@"连接失败"];
+        }
     }];
     [request startAsynchronous];
     
@@ -211,16 +214,18 @@ static NSString * provider = nil;
     if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/bind/mobile/"]) {
         str  = [[str componentsSeparatedByString:@"?"] lastObject];
         NSDictionary * dic = [self putMasWithString:str];
-//        grantcode  = [dic objectForKey:@"grantcode"];
-//        sohu_accessToken = [dic objectForKey:@"accesstoken"];
-//        sohu_token = [dic objectForKey:@"token"];
         state = [dic objectForKey:@"state"];
         code = [dic objectForKey:@"code"];
-        if (viewModel == LoginModelView) {
-            [self loginWithCode];
-        }else{
-            [self bingWithCode];
-        }
+        [self bingWithCode];
+        return NO;
+    }
+    if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/oauth2/access_token"]) {
+        str  = [[str componentsSeparatedByString:@"?"] lastObject];
+        NSDictionary * dic = [self putMasWithString:str];
+        state = [dic objectForKey:@"state"];
+        code = [dic objectForKey:@"grantcode"];
+        sohu_token = [dic objectForKey:@"token"];
+        [self loginWithCode];
         return NO;
     }
     if ([str isEqualToString:@"http://pp.sohu.com/auth/mobile/failure"]) {

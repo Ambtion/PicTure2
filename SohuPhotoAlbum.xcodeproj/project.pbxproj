@@ -15,7 +15,6 @@
 		C502266C170301B600B77FC9 /* timeline-view.png in Resources */ = {isa = PBXBuildFile; fileRef = C5022665170301B600B77FC9 /* timeline-view.png */; };
 		C502266F170301B600B77FC9 /* localAlbums.png in Resources */ = {isa = PBXBuildFile; fileRef = C5022668170301B600B77FC9 /* localAlbums.png */; };
 		C5022672170319C800B77FC9 /* LocalBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5022671170319C800B77FC9 /* LocalBaseController.m */; };
-		C50EA9AB1753A25900D78F71 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C58CCCF61750C8B300AC542F /* Default.png */; };
 		C51D26541744C5BD0044FCD0 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C51D26501744C5BD0044FCD0 /* libMobClickLibrary.a */; };
 		C51D26551744C5BD0044FCD0 /* libUMFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C51D26511744C5BD0044FCD0 /* libUMFeedback.a */; };
 		C51D265C1744E3470044FCD0 /* footbgView3.png in Resources */ = {isa = PBXBuildFile; fileRef = C51D265B1744E3460044FCD0 /* footbgView3.png */; };
@@ -2312,7 +2311,6 @@
 				C58CCCF31750C87E00AC542F /* Default@2x.png in Resources */,
 				C58CCCF51750C88800AC542F /* Default-568h@2x.png in Resources */,
 				C58CCD231750D8FE00AC542F /* InfoPlist.strings in Resources */,
-				C50EA9AB1753A25900D78F71 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

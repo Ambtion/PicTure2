@@ -261,7 +261,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 
 - (void)unbind:(KShareModel)model
 {
-//    BOOL isUnbing = [AccountLoginResquest unBinging:model];
+//    [AccountLoginResquest unBinging:model];
     BOOL isUnbing = YES;
     if (isUnbing) {
         [LoginStateManager unbind:model];
