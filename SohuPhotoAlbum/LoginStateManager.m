@@ -101,6 +101,11 @@
     //    [AccountLoginResquest deleteDeviceToken];
     //    [self removeDataForKey:[self currentUserId]];
     //    [self unbindAll];
+    NSHTTPCookie *cookie;
+    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (cookie in [storage cookies]) {
+        [storage deleteCookie:cookie];
+    }
     [self removeDataForKey:USER_ID];
 }
 

@@ -76,7 +76,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     }else{
         [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
             NSDictionary * dic = [response JSONValue];
-            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
+            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]]];
             _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
             _accountView.nameLabel.text = [dic objectForKey:@"user_nick"];
         } failure:^(NSString *error) {

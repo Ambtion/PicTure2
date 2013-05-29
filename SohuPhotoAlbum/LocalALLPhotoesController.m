@@ -195,6 +195,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    DLog(@"%@ offset %f",indexPath , tableView.contentSize.height);
     static NSString * cellId = @"photoCELLId";
     PhotoesCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {

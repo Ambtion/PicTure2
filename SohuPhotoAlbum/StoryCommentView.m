@@ -77,7 +77,7 @@
 - (void)updateLabel
 {
    //布局规则
-    [portraitView setImageWithURL:[NSURL URLWithString:_dataScoure.potraitImage] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
+    [portraitView setImageWithURL:[NSURL URLWithString:_dataScoure.potraitImage]];
     NSString * str = [NSString stringWithFormat:@"%@:  %@",[_dataScoure userName],[_dataScoure comment]];
     [userName setText:str WithFont:CommentLABELFONT AndColor:CommentColor];
     CGSize aSize = [str sizeWithFont:CommentLABELFONT constrainedToSize:CommentLABELMAXSIZE lineBreakMode:CommentLABLELINEBREAK];

@@ -88,7 +88,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - ReloadSubViews
 - (void)reloadAllSubViews
 {
-    
     [self initSubViews];
     [self setScrollViewProperty];
     [self refreshScrollView];
@@ -476,8 +475,8 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - handleGuesture
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
 {
+    if (!CGAffineTransformIsIdentity([self getTransfrom])) return;
     if (_isHidingBar) {
-        
         [self.tabBar showBarWithAnimation:YES];
     }else{
         [self.tabBar hideBarWithAnimation:YES];

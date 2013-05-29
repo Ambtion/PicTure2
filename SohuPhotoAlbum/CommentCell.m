@@ -84,8 +84,7 @@
 }
 - (void)updateViews
 {
-//    porViews.imageView.image = [UIImage imageNamed:@"nicheng.png"];
-    [porViews.imageView setImageWithURL:[NSURL URLWithString:_dataSource.portraitUrl] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
+    [porViews.imageView setImageWithURL:[NSURL URLWithString:_dataSource.portraitUrl]];
     nameLabel.text = [NSString stringWithFormat:@"%@:",_dataSource.userName];
     CGSize size = [_dataSource.commentStr sizeWithFont:TEXTFONT constrainedToSize:CGSizeMake(220, 10000) lineBreakMode:NSLineBreakByWordWrapping];
     CGRect rect = CGRectMake(68, 35 + OFFSETY, size.width, size.height);

@@ -68,7 +68,7 @@
 - (void)refreshUserInfoWithDic:(NSDictionary *)dic
 {
     DLog(@"");
-    [portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]] placeholderImage:[UIImage imageNamed:@"nicheng.png"]];
+    [portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]]];
     sname.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
     nameLabel.text = [dic objectForKey:@"user_nick"];
 }
