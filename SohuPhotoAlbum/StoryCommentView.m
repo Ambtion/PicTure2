@@ -64,6 +64,7 @@
     }
     return self;
 }
+
 - (void)setLabelproperty:(UILabel *)label
 {
     label.backgroundColor = [UIColor clearColor];

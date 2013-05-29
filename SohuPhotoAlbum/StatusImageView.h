@@ -15,6 +15,7 @@
     BOOL isShowStatus;
     BOOL isUpload;
 }
+
 @property(nonatomic,getter=isSelected) BOOL selected;
 @property(nonatomic,readonly)BOOL isShowStatus;
 @property(nonatomic,strong)UIImageView * statueImage;

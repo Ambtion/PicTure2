@@ -168,7 +168,14 @@
 #pragma mark - GetActualImage
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
-    
+//    [scaleView.imageView startLoading];
+//    __weak ImageScaleView * weakImage = scaleView;
+//    NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
+//    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image){
+//        [weakImage.imageView stopLoading];
+//    } failure:^(NSError *error) {
+//        [weakImage.imageView stopLoading];
+//    }];
 }
 #pragma mark GetMoreAssets
 - (void)getMoreAssetsAfterCurNum

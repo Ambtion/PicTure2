@@ -63,9 +63,7 @@
 
 - (void)setDataSource:(CloudPictureCellDataSource *)dataSource
 {
-    if (_dataSource != dataSource) {
-        _dataSource = dataSource;
-    }
+    _dataSource = dataSource;
     [self updataViews];
 }
 - (void)updataViews

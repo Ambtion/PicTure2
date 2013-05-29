@@ -95,14 +95,14 @@
 - (void)resetImageViewTohide
 {
     [self resetStatusImageToHidden];
-    [_actualView.layer setBorderWidth:0.0f];
+//    [_actualView.layer setBorderWidth:0.0f];
 }
 - (void)shouldShowAcutalViewLayer:(BOOL)isShow
 {
     if (isShow || _actualView.image) {
-        [_actualView.layer setBorderWidth:BorderWidth];
+//        [_actualView.layer setBorderWidth:BorderWidth];
     }else{
-        [_actualView.layer setBorderWidth:0.0f];
+//        [_actualView.layer setBorderWidth:0.0f];
     }
 }
 
@@ -111,10 +111,10 @@
 {
     if (!image) {
         [self setUserInteractionEnabled:NO];
-        _actualView.layer.borderWidth = 0.f;
+//        _actualView.layer.borderWidth = 0.f;
     }else{
         [self setUserInteractionEnabled:YES];
-        _actualView.layer.borderWidth = BorderWidth;
+//        _actualView.layer.borderWidth = BorderWidth;
     }
     _actualView.image = image;
 }
