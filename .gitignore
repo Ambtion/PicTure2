@@ -10,5 +10,5 @@ DerivedData/
 !default.mode2v3
 !default.perspectivev3
 xcuserdata
-!xcshareddata
 *.moved-aside
+*.xcodeproj/
