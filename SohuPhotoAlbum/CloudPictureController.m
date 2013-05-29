@@ -294,15 +294,17 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * cellId = @"photoCELLId";
-    CloudPictureCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[CloudPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        cell.delegate = self;
-    }
+    CloudPictureCellDataSource * source = nil;
     if (indexPath.section < self.dataSourceArray.count
         && indexPath.row < [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count])
-        cell.dataSource = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        source = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    CloudPictureCell * cell = [tableView dequeueReusableCellWithIdentifier:cloudIdentify[[source sourceNumber]]];
+    if (!cell) {
+        cell = [[CloudPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[source sourceNumber]];
+        cell.delegate = self;
+    }
+    cell.dataSource = source;
     if (_viewState != NomalState){
         [cell showCellSelectedStatus];
         [cell cloudPictureCellisShow:[selectedArray containsObject:cell.dataSource.firstDic] selectedDic:cell.dataSource.firstDic];
@@ -316,6 +318,7 @@
 }
 
 #pragma mark View LifeCircle
+
 - (void)cloudDetailDidDeletePhoto:(NSNotification*)notification
 {
     _shouldRefreshOnce = YES;

@@ -14,7 +14,20 @@
 
 @implementation CloudPictureCellDataSource
 @synthesize firstDic,secoundDic,thridDic,lastDic;
-
+- (NSInteger)sourceNumber
+{
+    NSInteger number = 0;
+    if (firstDic)
+        number++;
+    if (secoundDic)
+        number++;
+    if (thridDic)
+        number++;
+    if (lastDic)
+        number++;
+    return number;
+    
+}
 - (CGFloat)cellHigth
 {
     return CELLHIGTH;
@@ -37,10 +50,13 @@
 
 @synthesize delegate = _delegate;
 @synthesize dataSource = _dataSource;
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSInteger)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:style reuseIdentifier:cloudIdentify[reuseIdentifier]];
     if (self) {
+        sourceNumber = reuseIdentifier;
+        cache = [[SDImageCache alloc] init];
         self.frame = CGRectMake(0, 0, 320, CELLHIGTH);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self initSubViews];
@@ -51,7 +67,7 @@
 {
     StatusImageView * imageView;
     CGRect frame = CGRectMake(4, 5, 75, 75);
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < sourceNumber; i++) {
         imageView = [[StatusImageView alloc] initWithFrame:frame];
         imageView.tag = 1000 + i;
         [self.contentView addSubview:imageView];
@@ -80,8 +96,15 @@
     if (dic) {
         //设置图片
         if ([dic allKeys].count) {
+            
             canBeOperated = YES;
             NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
+            UIImage * image = [cache imageFromKey:strUrl];
+            if (image) {
+                //获取同步保证图片实时更替
+                [imageView setImage:image];
+                return;
+            }
             __weak StatusImageView* weakSelf = imageView;
             UIImageView * AimageView = [[UIImageView alloc] init];
             [AimageView setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:[UIImage imageNamed:@"moren.png"] success:^(UIImage *image) {
