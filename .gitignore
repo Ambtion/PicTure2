@@ -11,4 +11,8 @@ DerivedData/
 !default.perspectivev3
 xcuserdata
 *.moved-aside
+*.xcworkspace
+xcuserdata
+
 SohuPhotoAlbum.xcodeproj/
+SohuPhotoAlbum.xcodeproj/*
