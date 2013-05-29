@@ -50,10 +50,11 @@
 
 - (void)getMoreAssetsAfterCurNum
 {
-    DLog(@"%s",__FUNCTION__);
-    if (self.assetsArray.count % 20)  return;
+    if (self.assetsArray.count % 20 || self.isLoading)  return;
     self.isLoading = YES;
+//    DLog(@"FFFFFFF::%d",self.assetsArray.count);
     [RequestManager getAllPhototInStoryWithOwnerId:self.ownerId stroyId:self.storyID start:[self.assetsArray count] count:20 success:^(NSString *response) {
+//        DLog(@"%d ::%@",[[self assetsArray] count],[response JSONValue]);
         [self.assetsArray addObjectsFromArray:[[response JSONValue] objectForKey:@"photos"]];
         self.isLoading = NO;
     } failure:^(NSString *error) {
@@ -62,6 +63,6 @@
 }
 - (void)getMoreAssetsBeforeCurNum
 {
-
+    
 }
 @end

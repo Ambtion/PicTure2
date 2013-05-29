@@ -204,7 +204,7 @@
 {
     NSString * str = nil;
     if ([LoginStateManager isLogin]) {
-        str  = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d&&access_token=%@",
+        str  = [NSString stringWithFormat:@"%@/portfolios/%@/photos?owner_id=%@&start=%d&count=%d&access_token=%@",
                 BASICURL_V1,storyId,ownId,start,count,[LoginStateManager currentToken]];
         
     }else{

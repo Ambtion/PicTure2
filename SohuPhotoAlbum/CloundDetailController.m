@@ -155,9 +155,18 @@
 - (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset
 {
     [super setImageView:scaleView imageFromAsset:asset];
+   
+    NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
+    if(!imageCache) imageCache = [[SDImageCache alloc] init];
+    UIImage * image = [imageCache imageFromKey:strUrl];
+    if (image) {
+        //保证同步...
+        scaleView.imageView.image = image;
+        return;
+    }
+    
     [scaleView.imageView startLoading];
     __weak ImageScaleView * weakImage = scaleView;
-    NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
     [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image){
         [weakImage.imageView stopLoading];
     } failure:^(NSError *error) {
