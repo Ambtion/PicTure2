@@ -20,7 +20,7 @@
 + (BOOL)WifiLimitedAutoUpload;
 + (void)setWifiLimited:(BOOL)ture;
 
-+ (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key;
-+ (id)unarchiveObjectWithDataWithKey:(NSString *)key;
+//+ (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key;
+//+ (id)unarchiveObjectWithDataWithKey:(NSString *)key;
 
 @end

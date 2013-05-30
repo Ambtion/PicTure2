@@ -7,9 +7,14 @@
 //
 
 #import "CacheManager.h"
+#import "ASIHTTPRequest.h"
 
 @implementation CacheManager
-
++ (void)removeAllCache
+{
+    [ASIHTTPRequest clearSession];
+    [self removeCacheOfImage];
+}
 + (void)removeCacheOfImage
 {
     NSFileManager * manager  = [NSFileManager defaultManager];

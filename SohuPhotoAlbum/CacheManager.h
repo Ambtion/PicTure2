@@ -11,5 +11,5 @@
 
 @interface CacheManager : NSObject
 
-+ (void)removeCacheOfImage;
++ (void)removeAllCache;
 @end

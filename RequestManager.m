@@ -8,12 +8,15 @@
 
 #import "RequestManager.h"
 #import "ASIFormDataRequest.h"
+#import "ASIDownloadCache.h"
 #import "LoginStateManager.h"
 #import "PopAlertView.h"
 #import "URLLibaray.h"
 #import "UMAppKey.h"
+#import "Reachability.h"
 
 #define TIMEOUT 10.f
+
 #define REQUSETFAILERROR    @"当前网络不给力,请稍后重试"
 #define REQUSETSOURCEFIAL   @"访问的资源不存在"
 #define REFRESHFAILTURE     @"登录过期,请重新登录"
@@ -49,27 +52,26 @@
 
 + (void)refreshToken:(NSInteger)requsetStatusCode withblock:(void (^) (NSString * error))failure
 {
+    
     NSString * str = [NSString stringWithFormat:@"%@/oauth2/access_token?grant_type=refresh_token",BASICURL_V1];
-    __weak  ASIFormDataRequest  *  request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:str]];
-    [request setPostValue:CLIENT_ID forKey:@"client_id"];
-    [request setPostValue:CLIENT_SECRET forKey:@"client_secret"];
-    [request setPostValue:[LoginStateManager refreshToken] forKey:@"refresh_token"];
-    [request setCompletionBlock:^{
-        if ([request responseStatusCode] == 200) {
-            NSDictionary * dic = [[request responseString] JSONValue];
-            [LoginStateManager refreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"access_token"]] RefreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"refresh_token"]]];
+    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
+    [body setObject:CLIENT_ID forKey:@"client_id"];
+    [body setObject:CLIENT_SECRET forKey:@"client_secret"];
+    [body setObject:[LoginStateManager refreshToken] forKey:@"refresh_token"];
+    [self getWithUrlStr:str andMethod:@"POST" body:body asynchronou:YES success:^(NSString *response) {
+        NSDictionary * dic = [response JSONValue];
+        if ([dic objectForKey:@"access_token"]) {
+             [LoginStateManager refreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"access_token"]] RefreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"refresh_token"]]];
         }else{
+            [LoginStateManager logout];
             if (failure)
                 failure(REFRESHFAILTURE);
-            [LoginStateManager logout];
         }
-    }];
-    
-    [request setFailedBlock:^{
-        failure(REFRESHFAILTURE);
+    } failure:^(NSString *error) {
         [LoginStateManager logout];
+        if (failure)
+            failure(REFRESHFAILTURE);
     }];
-    [request startAsynchronous];
 }
 
 + (BOOL)handlerequsetStatucode:(NSInteger)requsetCode withblock:(void (^) (NSString * error))failure
@@ -83,11 +85,35 @@
     return NO;
 }
 
+//网络连接状态
++ (NetworkStatus)netWorkStatues
+{
+    Reachability * reachability;
+    NetworkStatus  status;
+    reachability = [Reachability reachabilityForLocalWiFi];
+    status       = [reachability currentReachabilityStatus];
+    return  status;
+}
++ (BOOL)isConnecting
+{
+    return [self netWorkStatues] != NotReachable;
+}
+
 + (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    __block __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    
+    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    
+    [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]]; //开启缓冲
+    if (![self isConnecting]) {
+        [request setCachePolicy:ASIDontLoadCachePolicy];
+    }else{
+        [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy];
+    }
+    [request setCacheStoragePolicy:ASICacheForSessionDurationCacheStoragePolicy];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:method];
+    [request setTimeOutSeconds:TIMEOUT];
     [request setStringEncoding:NSUTF8StringEncoding];
     for (id key in [body allKeys])
         [request setPostValue:[body objectForKey:key] forKey:key];

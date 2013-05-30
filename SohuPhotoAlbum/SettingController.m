@@ -254,7 +254,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 {
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
     NSNumber *currentVersion = [infoDic objectForKey:@"VersionCode"];
-    
     NSDictionary * dic = [self getAppInfoFromNet];
     NSNumber * newVersion = [dic objectForKey:@"versionCode"];
     
@@ -282,14 +281,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
     return [results JSONValue];
 }
-- (void)oauthorController:(OAuthorController *)controller bingSucessInfo:(NSDictionary *)dic
-{
 
-}
-- (void)oauthorController:(OAuthorController *)controlle bindFailture:(NSString *)error
-{
-    
-}
 #pragma mark Login
 
 - (void)loginOut:(id)sender
@@ -309,7 +301,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 - (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (_cache == alertView && buttonIndex == 1)
-        [CacheManager removeCacheOfImage];
+        [CacheManager removeAllCache];
     //
     if (_loginView == alertView && buttonIndex == 1) {
         isChangeLoginState = YES;

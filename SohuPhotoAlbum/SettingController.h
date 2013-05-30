@@ -14,7 +14,7 @@
 @protocol SettingControllerDelegate <NSObject>
 - (void)settingControllerDidDisappear:(SettingController *)controller;
 @end
-@interface SettingController : UIViewController<UITableViewDataSource,UITableViewDelegate,MySettingCellDelegate,PopAlertViewDeleagte,OAuthorControllerDelegate>
+@interface SettingController : UIViewController<UITableViewDataSource,UITableViewDelegate,MySettingCellDelegate,PopAlertViewDeleagte>
 {
     UITableView * _myTableView;
     UIImageView * _navBar;

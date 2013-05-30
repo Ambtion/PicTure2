@@ -76,22 +76,22 @@
 }
 
 #pragma mark -
-+ (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key
-{
-    NSMutableData * data = [[NSMutableData alloc] init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:object forKey:key];
-    [archiver finishEncoding];
-    [[NSUserDefaults standardUserDefaults] setValue:data forKey:key];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-+ (id)unarchiveObjectWithDataWithKey:(NSString *)key
-{
-    NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-    NSMutableArray * arDataSource = nil;
-    arDataSource = [unarchiver decodeObjectForKey:key];
-    [unarchiver finishDecoding];
-    return arDataSource;
-}
+//+ (void)archivedDataWithRootObject:(id)object withKey:(NSString *)key
+//{
+//    NSMutableData * data = [[NSMutableData alloc] init];
+//    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+//    [archiver encodeObject:object forKey:key];
+//    [archiver finishEncoding];
+//    [[NSUserDefaults standardUserDefaults] setValue:data forKey:key];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//}
+//+ (id)unarchiveObjectWithDataWithKey:(NSString *)key
+//{
+//    NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+//    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+//    NSMutableArray * arDataSource = nil;
+//    arDataSource = [unarchiver decodeObjectForKey:key];
+//    [unarchiver finishDecoding];
+//    return arDataSource;
+//}
 @end
