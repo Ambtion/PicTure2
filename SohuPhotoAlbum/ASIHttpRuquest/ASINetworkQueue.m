@@ -80,9 +80,6 @@
 {
 	uploadProgressDelegate = newDelegate;
 	[self resetProgressDelegate:&uploadProgressDelegate];
-    if ([self uploadProgressDelegate]) {
-		[ASIHTTPRequest updateProgressIndicator:&uploadProgressDelegate withProgress:[self bytesUploadedSoFar] ofTotal:[self totalBytesToUpload]];
-	}
 
 }
 

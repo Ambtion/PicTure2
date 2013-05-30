@@ -1392,7 +1392,7 @@ static NSOperationQueue *sharedQueue = nil;
 			streamSuccessfullyOpened = YES;
 		}
 	}
-    
+	
 	// Here, we'll close the stream that was previously using this connection, if there was one
 	// We've kept it open until now (when we've just opened a new stream) so that the new stream can make use of the old connection
 	// http://lists.apple.com/archives/Macnetworkprog/2006/Mar/msg00119.html
@@ -1495,6 +1495,7 @@ static NSOperationQueue *sharedQueue = nil;
 	}
 	return NO;
 }
+
 - (void)checkRequestStatus
 {
 	// We won't let the request cancel while we're updating progress / checking for a timeout
@@ -4555,7 +4556,7 @@ static NSOperationQueue *sharedQueue = nil;
 		}
 	}
 	#if DEBUG_THROTTLING
-	ASI_DEBUG_LOG(@"[THROTTLING] ===Used: %lu bytes of bandwidth in last measurement period===",bandwidthUsedInLastSecond);
+	ASI_DEBUG_LOG(@"[THROTTLING] ===Used: %u bytes of bandwidth in last measurement period===",bandwidthUsedInLastSecond);
 	#endif
 	[bandwidthUsageTracker addObject:[NSNumber numberWithUnsignedLong:bandwidthUsedInLastSecond]];
 	[bandwidthMeasurementDate release];
@@ -4941,6 +4942,7 @@ static NSOperationQueue *sharedQueue = nil;
 	[completionBlock release];
 	completionBlock = [aCompletionBlock copy];
 }
+
 - (void)setFailedBlock:(ASIBasicBlock)aFailedBlock
 {
 	[failureBlock release];
@@ -5120,6 +5122,4 @@ static NSOperationQueue *sharedQueue = nil;
 @synthesize PACFileData;
 
 @synthesize isSynchronous;
-
-
 @end
