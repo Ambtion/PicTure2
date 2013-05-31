@@ -102,8 +102,7 @@
 + (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     
-    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
-    
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]]; //开启缓冲
     if (![self isConnecting]) {
         [request setCachePolicy:ASIDontLoadCachePolicy];
@@ -118,11 +117,12 @@
     [request setStringEncoding:NSUTF8StringEncoding];
     for (id key in [body allKeys])
         [request setPostValue:[body objectForKey:key] forKey:key];
+    __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
-        DLog(@"url :%@ code :%d",request.url,[request responseStatusCode]);
-        NSInteger code = [request responseStatusCode];
+        DLog(@"url :%@ code :%d",request.url,[weakSelf responseStatusCode]);
+        NSInteger code = [weakSelf responseStatusCode];
         if ([self handlerequsetStatucode:code withblock:failure]) {
-            success([request responseString]);
+            success([weakSelf responseString]);
         }else{
             if (code == 404) {
                 [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETSOURCEFIAL];
@@ -141,8 +141,8 @@
         }
     }];
     [request setFailedBlock:^{
-        DLog(@"failturl :%@ :%d %@",request.url,[request responseStatusCode],[request responseString]);
-        if (![self handlerequsetStatucode:[request responseStatusCode] withblock:failure]) return;
+        DLog(@"failturl :%@ :%d %@",request.url,[weakSelf responseStatusCode],[weakSelf responseString]);
+        if (![self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
         [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
         if (failure)
             failure(REQUSETFAILERROR);
@@ -422,7 +422,8 @@
 }
 + (void)sharePhoto:(UIImage*)image ToQQwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://graph.qq.com/photo/upload_pic"]];
+    
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://graph.qq.com/photo/upload_pic"]];
     [request setPostValue:[[LoginStateManager getTokenInfo:QQShare] objectForKey:@"access_token"] forKey:@"access_token"];
     [request setPostValue:@"100319476" forKey:@"oauth_consumer_key"];
     [request setPostValue:[[LoginStateManager getTokenInfo:QQShare] objectForKey:@"openid"] forKey:@"openid"];
@@ -430,9 +431,10 @@
     [request setPostValue:des forKey:@"photodesc"];
     NSData * data = UIImageJPEGRepresentation(image, compress);
     [request setData:data forKey:@"picture"];
-    [request startAsynchronous];
+    __weak ASIFormDataRequest * weakSelf = request;
+
     [request setCompletionBlock:^{
-        NSInteger ret = [[[[request responseString] JSONValue] objectForKey:@"ret"] integerValue];
+        NSInteger ret = [[[[weakSelf responseString] JSONValue] objectForKey:@"ret"] integerValue];
         if (!ret) {
             success(nil);
         }else if( (ret>= 100013 && ret >= 100016) || ret == 9016 ||
@@ -445,11 +447,13 @@
     [request setFailedBlock:^{
         failure(@"连接失败,请重新分享");
     }];
+    [request startAsynchronous];
+
 }
 + (void)sharePhoto:(UIImage*)image ToRenRenwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     //renren
-    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://api.renren.com/restserver.do"]];
     [request setPostValue:@"1.0"forKey:@"v"];
     [request setPostValue:[[LoginStateManager getTokenInfo:RenrenShare] objectForKey:@"access_token"] forKey:@"access_token"];
     [request setPostValue:@"JSON" forKey:@"format"];
@@ -457,9 +461,9 @@
     [request setPostValue:des forKey:@"caption"];
     NSData * data = UIImageJPEGRepresentation(image, compress);
     [request setData:data withFileName:@"1.jpg" andContentType:@"image/jpg" forKey:@"upload"];
-    [request startAsynchronous];
+    __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
-        NSDictionary * dic = [[request responseString] JSONValue];
+        NSDictionary * dic = [[weakSelf responseString] JSONValue];
         NSNumber *errorCode = [dic objectForKey:@"error_code"];
         if (!errorCode) {
             success(nil);
@@ -476,20 +480,22 @@
     [request setFailedBlock:^{
         failure(@"连接失败,请重新分享");
     }];
+    [request startAsynchronous];
+
 }
 
 + (void)sharePhoto:(UIImage*)image ToSinawithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
-    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://upload.api.weibo.com/2/statuses/upload.json"]];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://upload.api.weibo.com/2/statuses/upload.json"]];
     [request setPostValue:[[LoginStateManager getTokenInfo:SinaWeiboShare] objectForKey:@"access_token"] forKey:@"access_token"];
     if (!des || [des isEqualToString:@""])  des = @"#搜狐相机伴侣#";
     [request setPostValue:des forKey:@"status"];
     [request setPostValue:@0 forKey:@"visible"];
     NSData * data  = UIImageJPEGRepresentation(image, compress);
     [request setData:data forKey:@"pic"];
-    [request startAsynchronous];
+    __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
-        NSDictionary * dic = [[request responseString] JSONValue];
+        NSDictionary * dic = [[weakSelf responseString] JSONValue];
         NSNumber *errorCode = [dic objectForKey:@"error_code"];
         if (!errorCode) {
             success(nil);
@@ -505,5 +511,7 @@
     [request setFailedBlock:^{
         failure(@"连接失败,请重新分享");
     }];
+    [request startAsynchronous];
+
 }
 @end

@@ -183,7 +183,7 @@
 - (void)addSoruceFromArray:(NSArray *)array
 {
     if (array.count)
-        NSLog(@"%@",[array objectAtIndex:0]);
+        DLog(@"%@",[array objectAtIndex:0]);
     [_assetArray addObjectsFromArray:array];
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
@@ -312,7 +312,7 @@
     //最多3条评论
     if (index.row == 0) {
         NSString * ownerId = [[[[cell dataSource] commentInfoArray] objectAtIndex:index.section] userId];
-        NSLog(@"%@",ownerId);
+        DLog(@"%@",ownerId);
         PhotoWallController * wall = [[PhotoWallController alloc] initWithOwnerID:ownerId isRootController:NO];
         [self.navigationController pushViewController:wall animated:YES];
         return;

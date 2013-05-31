@@ -261,7 +261,7 @@
 }
 - (void)request:(SinaWeiboRequest *)request didFailWithError:(NSError *)error
 {
-    NSLog(@"%@",error);
+    DLog(@"%@",error);
     [self showInvalidTokenOrOpenIDMessageWithMes:[error description]];
 }
 
