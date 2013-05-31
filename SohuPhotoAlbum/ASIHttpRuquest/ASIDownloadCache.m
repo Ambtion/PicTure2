@@ -21,6 +21,7 @@ static NSArray *fileExtensionsToHandleAsHTML = nil;
 - (NSString *)pathToFile:(NSString *)file;
 @end
 
+
 @implementation ASIDownloadCache
 
 + (void)initialize

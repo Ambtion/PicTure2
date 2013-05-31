@@ -7,12 +7,12 @@
 //
 
 #import "CacheManager.h"
-#import "ASIHTTPRequest.h"
+#import "ASIDownloadCache.h"
 
 @implementation CacheManager
 + (void)removeAllCache
 {
-    [ASIHTTPRequest clearSession];
+    [[ASIDownloadCache sharedCache] clearCachedResponsesForStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [self removeCacheOfImage];
 }
 + (void)removeCacheOfImage

@@ -85,6 +85,7 @@
         return;
     }
     @autoreleasepool {
+        
         [[tempAssetGroups lastObject] setAssetsFilter:[ALAssetsFilter allPhotos]];
         [[tempAssetGroups lastObject] enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
          {

@@ -107,10 +107,11 @@
     [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]]; //开启缓冲
     if (![self isConnecting]) {
         [request setCachePolicy:ASIDontLoadCachePolicy];
+        [self objectPopAlerViewRatherThentasView:NO WithMes:@"网络已断开"];
     }else{
         [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy];
     }
-    [request setCacheStoragePolicy:ASICacheForSessionDurationCacheStoragePolicy];
+    [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:method];
     [request setTimeOutSeconds:TIMEOUT];
