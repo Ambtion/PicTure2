@@ -269,24 +269,27 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    photoAssert(nil);
     return [self getSectionView:section withImageCount:[[[_assetsSection objectAtIndex:section] objectForKey:@"count"] intValue] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[[self.assetsSection objectAtIndex:section] objectForKey:@"day"]];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _assetsSection.count;
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (!self.assetSectionisShow.count) return 0;
+    photoAssert(0);
     return [[self.assetSectionisShow objectAtIndex:section] boolValue] ? [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count]: 0;
 }
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundColor = LOCALBACKGORUNDCOLOR;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.dataSourceArray.count) return 0;
+    photoAssert(0.f);
     if (indexPath.row == [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
         return [CloudPictureCellDataSource cellLastHigth];
     }

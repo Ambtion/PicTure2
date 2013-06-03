@@ -2563,7 +2563,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: luo ziyang (J8PX8W78GE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: luo ziyang (J8PX8W78GE)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2580,7 +2580,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "438DFF42-A239-4F75-B3BD-8688E347544C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "438DFF42-A239-4F75-B3BD-8688E347544C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2591,7 +2591,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: luo ziyang (J8PX8W78GE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: luo ziyang (J8PX8W78GE)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2608,7 +2608,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "438DFF42-A239-4F75-B3BD-8688E347544C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "438DFF42-A239-4F75-B3BD-8688E347544C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

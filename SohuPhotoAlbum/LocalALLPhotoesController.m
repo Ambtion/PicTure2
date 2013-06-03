@@ -119,8 +119,8 @@
             }];
         }
     });
-    
 }
+
 - (void)autoUplaodPic
 {
     
@@ -130,6 +130,7 @@
         }
     }
 }
+
 #pragma mark -  DataSort
 - (void)prepareDataWithTimeOrder
 {
@@ -140,9 +141,11 @@
     [self.myTableView reloadData];
     _isReading = NO;
 }
+
 #pragma mark - SectionClick
 - (void)handleTapInSection:(UITapGestureRecognizer *)gesture
 {
+    photoAssert();
     NSNumber * num = [self.assetSectionisShow objectAtIndex:[gesture view].tag];
     BOOL isShow = ![num boolValue];
     [self.assetSectionisShow replaceObjectAtIndex:[gesture view].tag withObject:[NSNumber numberWithBool:isShow]];
@@ -156,11 +159,11 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    photoAssert(nil);
     return [self getSectionView:section withImageCount:[self numberofPhtotsWithSection:section] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
 }
 - (NSInteger)numberofPhtotsWithSection:(NSInteger)section
 {
-    if (!self.dataSourceArray.count) return 0;
     NSArray * array = [self.dataSourceArray objectAtIndex:section];
     PhotoesCellDataSource * source = [array lastObject];
     NSInteger number = [(NSMutableArray *)[self.dataSourceArray objectAtIndex:section] count] * 4;

@@ -146,6 +146,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.navigationItem setHidesBackButton:YES];
     if (!_pushView) {
         [_navBar removeFromSuperview];
         _pushView = NO;
@@ -154,7 +155,7 @@
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+//    [super viewWillDisappear:animated];
     [_navBar removeFromSuperview];
 }
 #pragma mark - refresh

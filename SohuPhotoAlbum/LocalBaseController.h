@@ -18,6 +18,9 @@ typedef enum ViewState {
     DeleteState
 }viewState;
 
+#define  photoAssert(a)     if (!self.dataSourceArray.count) return a
+
+
 @interface LocalBaseController : UIViewController<CusNavigationBarDelegate,UPLoadControllerDelegate>
 {
     CustomizationNavBar * _cusBar;

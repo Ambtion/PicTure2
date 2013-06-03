@@ -79,6 +79,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.navigationItem setHidesBackButton:YES];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
 - (void)viewDidDisappear:(BOOL)animated

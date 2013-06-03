@@ -128,6 +128,7 @@ double radians(float degrees) {
     if (reuseIdentifiernum > 6 || reuseIdentifiernum < 1) return nil;
     self = [super initWithStyle:style reuseIdentifier:identify[reuseIdentifiernum]];
     if (self) {
+        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         _backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
         _backImageView.image = [[UIImage imageNamed:@"new_paper_wall.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 160, 50, 50)];
@@ -158,6 +159,7 @@ double radians(float degrees) {
     _wallDesLabel.textColor = [UIColor colorWithRed:102.f/255.f green:102.f/255.f blue:102.f/255.f alpha:1.f];
     _wallDesLabel.backgroundColor = [UIColor clearColor];
 }
+
 - (void)setFramesWithIndentify:(NSInteger)identifyNum
 {
     [_imageViewArray removeAllObjects];

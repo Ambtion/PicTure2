@@ -33,7 +33,6 @@
     
     deckViewController.navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
-    
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
     //    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbarnoline.png"] forBarMetrics:UIBarMetricsDefault];
     nav.delegate = self;
@@ -57,14 +56,16 @@
 }
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    [viewController.navigationItem setHidesBackButton:YES];
+    if (![viewController.navigationItem hidesBackButton])
+        [viewController.navigationItem setHidesBackButton:YES];
 }
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    [viewController.navigationItem setHidesBackButton:YES];
+    if (![viewController.navigationItem hidesBackButton])
+        [viewController.navigationItem setHidesBackButton:YES];
 }
 
-#pragma mark notification
+#pragma mark Notification
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒"
