@@ -56,13 +56,11 @@
 }
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    if (![viewController.navigationItem hidesBackButton])
-        [viewController.navigationItem setHidesBackButton:YES];
+    [viewController.navigationItem setHidesBackButton:YES];
 }
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    if (![viewController.navigationItem hidesBackButton])
-        [viewController.navigationItem setHidesBackButton:YES];
+    [viewController.navigationItem setHidesBackButton:YES];
 }
 
 #pragma mark Notification

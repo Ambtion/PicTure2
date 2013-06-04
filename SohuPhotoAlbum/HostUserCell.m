@@ -21,13 +21,13 @@
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleGray;
         _portraitView = [[PortraitView alloc] initWithFrame:CGRectMake(10, 10, 42, 42)];
-//        _portraitView.layer.cornerRadius = 21.f;
-//        _portraitView.clipsToBounds = YES;
-//        _portraitView.layer.cornerRadius = 5.f;
-//        _portraitView.layer.borderWidth = 1.f;
-//        _portraitView.layer.shouldRasterize = YES;
-//        _portraitView.layer.masksToBounds = YES;
-//        _portraitView.layer.borderColor = [[UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.f] CGColor];
+        _portraitView.layer.cornerRadius = 21.f;
+        _portraitView.clipsToBounds = YES;
+        _portraitView.layer.cornerRadius = 5.f;
+        _portraitView.layer.borderWidth = 1.f;
+        _portraitView.layer.shouldRasterize = NO;
+        _portraitView.layer.masksToBounds = YES;
+        _portraitView.layer.borderColor = [[UIColor colorWithRed:210/255.f green:210/255.f blue:210/255.f alpha:1.f] CGColor];
         _portraitView.backgroundColor = [UIColor clearColor];
         
         [self.contentView addSubview:_portraitView];
