@@ -45,7 +45,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     
     //三方登陆绑定页面
     _oauthorBindView = [[OauthirizeView alloc] initWithFrame:CGRectMake(0, 48, 320, 0)];
-    _oauthorBindView.frame = CGRectMake(0, -(self.view.frame.size.height- 48) , 320, 0);
+    _oauthorBindView.frame = CGRectMake(0, -(self.view.frame.size.height - 48) , 320, 0);
     [_oauthorBindView addtarget:self action:@selector(oauthorizeButtonClick:)];
     [self.view addSubview:_oauthorBindView];
     //accoutView
@@ -299,7 +299,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         _oauthorBindView.frame = CGRectMake(0, 48, 320, self.view.frame.size.height - 48);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.05 animations:^{
-            _oauthorBindView.frame = CGRectMake(0, 40, 320, self.view.frame.size.height - 48);
+            _oauthorBindView.frame = CGRectMake(0, 40, 320, self.view.frame.size.height - 48 );
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.05 animations:^{
                 _oauthorBindView.frame = CGRectMake(0, 48, 320, self.view.frame.size.height - 48);

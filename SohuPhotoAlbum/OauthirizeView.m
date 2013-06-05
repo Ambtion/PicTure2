@@ -40,6 +40,16 @@
         self.renrenButton.frame = CGRectMake(qqButton.frame.origin.x + qqButton.frame.size.width + offsetX,offsetY, width, width);
         self.renrenButton.tag = 1002;
         [self addSubview:self.renrenButton];
+        
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake((320 - 44 - 100)/2.f, - 30, 100, 20)];
+        label.backgroundColor = [UIColor clearColor];
+        label.textColor = [UIColor colorWithRed:26.f/255 green:26.f/255 blue:26.f/255 alpha:1.f];
+        label.textColor = [UIColor blackColor];
+        label.font = [UIFont systemFontOfSize:12.f];
+        label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        label.textAlignment = UITextAlignmentCenter;
+        label.text = [NSString stringWithFormat:@"V%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+        [self addSubview:label];
         [self updataButtonState];
     }
     return self;

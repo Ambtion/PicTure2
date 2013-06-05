@@ -73,6 +73,7 @@
 }
 - (void)addViews
 {
+    
     CGFloat offset = 44.f;
     _checked = [[UIImage imageNamed:@"check_box_select.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 22, 0, 0)];
     _noChecked = [[UIImage imageNamed:@"check_box_no_select.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 22, 0, 0)];
@@ -81,7 +82,7 @@
     _backgroundControl = [[UIControl alloc] initWithFrame:_backgroundImageView.bounds];
     [_backgroundControl addTarget:self action:@selector(allTextFieldsResignFirstResponder:) forControlEvents:UIControlEventTouchDown];
     
-	_usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 74-offset, 190, 22) ];
+	_usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 74 - offset, 190 - 73, 22) ];
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
@@ -91,15 +92,15 @@
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-//    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110 -offset, 190, 22) ];
-//    _mailBindTextField.font = [UIFont systemFontOfSize:15];
-//    _mailBindTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
-//    _mailBindTextField.returnKeyType = UIReturnKeyNext;
-//    _mailBindTextField.placeholder = @"绑定邮箱";
-//    _mailBindTextField.delegate = self;
-//    _mailBindTextField.backgroundColor = [UIColor clearColor];
-//    _mailBindTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//    [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
+    //    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110 -offset, 190, 22) ];
+    //    _mailBindTextField.font = [UIFont systemFontOfSize:15];
+    //    _mailBindTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
+    //    _mailBindTextField.returnKeyType = UIReturnKeyNext;
+    //    _mailBindTextField.placeholder = @"绑定邮箱";
+    //    _mailBindTextField.delegate = self;
+    //    _mailBindTextField.backgroundColor = [UIColor clearColor];
+    //    _mailBindTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    //    [_mailBindTextField addTarget:self action:@selector(mailBindDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     offset += 30.f;
     _passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 142 - offset , 190, 22)];
@@ -139,7 +140,7 @@
     [self.view addSubview:_backgroundImageView];
     [self.view addSubview:_backgroundControl];
     [self.view addSubview:_usernameTextField];
-//    [self.view addSubview:_mailBindTextField];
+    //    [self.view addSubview:_mailBindTextField];
     [self.view addSubview:_passwordTextField];
     [self.view addSubview:_displayPasswordButton];
     [self.view addSubview:_dealPassButton];
@@ -189,7 +190,7 @@
 {
     [_usernameTextField resignFirstResponder];
     [_passwordTextField resignFirstResponder];
-//    [_mailBindTextField resignFirstResponder];
+    //    [_mailBindTextField resignFirstResponder];
 }
 - (void)mailBindDidEndOnExit
 {
@@ -198,7 +199,7 @@
 }
 - (void)usernameDidEndOnExit
 {
-//    [_mailBindTextField becomeFirstResponder];
+    //    [_mailBindTextField becomeFirstResponder];
     [_passwordTextField becomeFirstResponder];
 }
 
@@ -222,11 +223,10 @@
     [self allTextFieldsResignFirstResponder:nil];
     [self waitForMomentsWithTitle:@"注册中"];
     NSString * username = [NSString stringWithFormat:@"%@@sohu.com",_usernameTextField.text];
-//    NSString * username = [NSString stringWithFormat:@"%@",_usernameTextField.text];
     NSString * password = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     [AccountLoginResquest resigiterWithuseName:username password:password nickName:nil sucessBlock:^(NSDictionary *response) {
         dispatch_async(dispatch_get_main_queue(), ^{
-    
+            
             [AccountLoginResquest sohuLoginWithuseName:username password:password sucessBlock:^(NSDictionary * response) {
                 [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
                 [self backhome];
@@ -272,12 +272,12 @@
     CGSize size = view.bounds.size;
     size.height += keyboardSize.height;
     view.contentSize = size;
-//    CGPoint point = view.contentOffset;
-//    point.y = 118;
+    //    CGPoint point = view.contentOffset;
+    //    point.y = 118;
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.view cache:YES];
-//    view.contentOffset = point;
+    //    view.contentOffset = point;
     [UIView commitAnimations];
 }
 

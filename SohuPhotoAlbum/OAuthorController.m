@@ -119,8 +119,8 @@ static NSString * provider = nil;
     [request setPostValue:state forKey:@"state"];
     [request setPostValue:code forKey:@"code"];
     [request setPostValue:sohu_token forKey:@"token"];
-    __weak ASIFormDataRequest * weakSelf = request;
     
+    __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
         DLog(@"%d %@",[weakSelf responseStatusCode],[weakSelf responseString]);
         if ([weakSelf responseStatusCode]>= 200 && [weakSelf responseStatusCode] <= 300 ) {
@@ -162,6 +162,7 @@ static NSString * provider = nil;
     [request setRequestMethod:@"GET"];
     __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
+        
         [self handleBingInfo:weakSelf];
         //        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 )
         //            [self handleBingInfo:[[request responseString] JSONValue]];
@@ -207,6 +208,7 @@ static NSString * provider = nil;
 #pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    
     NSString * str = [request.URL absoluteString];
     DLog(@"all 302 ::%@",str);
     NSString * baseUrl = [[str componentsSeparatedByString:@"?"] objectAtIndex:0];
@@ -218,13 +220,15 @@ static NSString * provider = nil;
         [self bingWithCode];
         return NO;
     }
-    if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/oauth2/access_token"]) {
-        
+    
+    if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/oauth2/access_token"]){
         str  = [[str componentsSeparatedByString:@"?"] lastObject];
+//        DLog(@"%@",str);
         NSDictionary * dic = [self putMasWithString:str];
         state = [dic objectForKey:@"state"];
         code = [dic objectForKey:@"grantcode"];
         sohu_token = [dic objectForKey:@"token"];
+        DLog(@"");
         [self loginWithCode];
         return NO;
     }
@@ -241,8 +245,8 @@ static NSString * provider = nil;
     NSArray * array = [string componentsSeparatedByString:@"&"];
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithCapacity:0];
     for (NSString * str in array) {
-        if ([str isEqualToString:@""] || ![str hasPrefix:@"="])
-                                                        continue;
+        if ([str isEqualToString:@""])
+                continue;
         NSRange rang = [str rangeOfString:@"="];
         NSString * key  = [str substringToIndex:rang.location];
         NSString * value = [str substringFromIndex:rang.length + rang.location];
