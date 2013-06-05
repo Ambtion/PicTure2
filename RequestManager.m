@@ -50,18 +50,30 @@
     return (type == KSourcePhotos ? @"photos":@"portfolios");
 }
 
-+ (void)refreshToken:(NSInteger)requsetStatusCode withblock:(void (^) (NSString * error))failure
+
++ (BOOL)handlerequsetStatucode:(NSInteger)requsetCode withblock:(void (^) (NSString * error))failure
 {
     
+    if (requsetCode >= 200 && requsetCode <= 300) return YES;
+    if (requsetCode == 401) {
+        [self refreshTokenWithblock:failure];
+        return NO;
+    }
+    return NO;
+}
+
++ (void)refreshTokenWithblock:(void (^) (NSString * error))failure
+{
+    if (![LoginStateManager currentToken]) return;
     NSString * str = [NSString stringWithFormat:@"%@/oauth2/access_token?grant_type=refresh_token",BASICURL_V1];
     NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
     [body setObject:CLIENT_ID forKey:@"client_id"];
     [body setObject:CLIENT_SECRET forKey:@"client_secret"];
-    [body setObject:[LoginStateManager refreshToken] forKey:@"refresh_token"];
+    [body setObject:[LoginStateManager currentToken] forKey:@"refresh_token"];
     [self getWithUrlStr:str andMethod:@"POST" body:body asynchronou:YES success:^(NSString *response) {
         NSDictionary * dic = [response JSONValue];
         if ([dic objectForKey:@"access_token"]) {
-             [LoginStateManager refreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"access_token"]] RefreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"refresh_token"]]];
+            [LoginStateManager refreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"access_token"]] RefreshToken:[NSString stringWithFormat:@"%@",[dic objectForKey:@"refresh_token"]]];
         }else{
             [LoginStateManager logout];
             if (failure)
@@ -74,43 +86,11 @@
     }];
 }
 
-+ (BOOL)handlerequsetStatucode:(NSInteger)requsetCode withblock:(void (^) (NSString * error))failure
-{
-    
-    if (requsetCode >= 200 && requsetCode <= 300) return YES;
-    if (requsetCode == 401) {
-        [self refreshToken:401 withblock:failure];
-        return NO;
-    }
-    return NO;
-}
-
-////网络连接状态
-//+ (NetworkStatus)netWorkStatues
-//{
-//    Reachability * reachability;
-//    NetworkStatus  status;
-//    reachability = [Reachability reachabilityForLocalWiFi];
-//    status       = [reachability currentReachabilityStatus];
-//    return  status;
-//}
-//
-//+ (BOOL)isConnecting
-//{
-//    return [self netWorkStatues] != NotReachable;
-//}
-
 + (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]]; //开启缓冲
-//    if (![self isConnecting]) {
-//        [request setCachePolicy:ASIDontLoadCachePolicy];
-////        [self objectPopAlerViewRatherThentasView:NO WithMes:@"网络已断开"];
-//    }else{
-//        [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy];
-//    }
     [request setCachePolicy:ASIFallbackToCacheIfLoadFailsCachePolicy];
     [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [request addRequestHeader:@"accept" value:@"application/json"];

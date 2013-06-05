@@ -62,4 +62,5 @@ typedef enum  Soruce_Type source_type;
 
 //三方分享
 + (void)sharePhoto:(UIImage *)image share_to:(KShareModel)shareMode   desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
+
 @end
