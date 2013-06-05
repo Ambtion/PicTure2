@@ -253,7 +253,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 -(void)onCheckVersion
 {
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
-    NSNumber *currentVersion = [infoDic objectForKey:@"VersionCode"];
+    NSNumber * currentVersion = [infoDic objectForKey:@"VersionCode"];
     NSDictionary * dic = [self getAppInfoFromNet];
     NSNumber * newVersion = [dic objectForKey:@"versionCode"];
     
