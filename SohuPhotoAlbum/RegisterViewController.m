@@ -222,9 +222,11 @@
     [self allTextFieldsResignFirstResponder:nil];
     [self waitForMomentsWithTitle:@"注册中"];
     NSString * username = [NSString stringWithFormat:@"%@@sohu.com",_usernameTextField.text];
+//    NSString * username = [NSString stringWithFormat:@"%@",_usernameTextField.text];
     NSString * password = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     [AccountLoginResquest resigiterWithuseName:username password:password nickName:nil sucessBlock:^(NSDictionary *response) {
         dispatch_async(dispatch_get_main_queue(), ^{
+    
             [AccountLoginResquest sohuLoginWithuseName:username password:password sucessBlock:^(NSDictionary * response) {
                 [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
                 [self backhome];
@@ -270,10 +272,8 @@
     CGSize size = view.bounds.size;
     size.height += keyboardSize.height;
     view.contentSize = size;
-    
 //    CGPoint point = view.contentOffset;
 //    point.y = 118;
-    
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.view cache:YES];

@@ -157,11 +157,14 @@
 {
     return 28.f;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     photoAssert(nil);
+    if (!self.assetSectionisShow.count || !self.assetsSection) return nil;
     return [self getSectionView:section withImageCount:[self numberofPhtotsWithSection:section] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[self.assetsSection objectAtIndex:section]];
 }
+
 - (NSInteger)numberofPhtotsWithSection:(NSInteger)section
 {
     NSArray * array = [self.dataSourceArray objectAtIndex:section];
@@ -176,6 +179,7 @@
     }
     return number;
 }
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.dataSourceArray.count;

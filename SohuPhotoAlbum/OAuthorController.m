@@ -49,7 +49,7 @@ static NSString * provider = nil;
             }
             url_string = [url_string stringByAppendingFormat:@"?access_token=%@",[LoginStateManager currentToken]];
             DLog(@"bindURL :: %@",url_string);
-
+            
         }else{
             switch (shareModel) {
                 case SinaWeiboShare: //weibo
@@ -111,7 +111,7 @@ static NSString * provider = nil;
 {
     
     NSString * url_s = [NSString stringWithFormat:@"%@/oauth2/access_token",BASICURL];
-    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setPostValue:@"third_party_code" forKey:@"grant_type"];
     [request setPostValue:CLIENT_ID forKey:@"client_id"];
@@ -119,12 +119,13 @@ static NSString * provider = nil;
     [request setPostValue:state forKey:@"state"];
     [request setPostValue:code forKey:@"code"];
     [request setPostValue:sohu_token forKey:@"token"];
+    __weak ASIFormDataRequest * weakSelf = request;
     
     [request setCompletionBlock:^{
-        DLog(@"%d %@",[request responseStatusCode],[request responseString]);
-        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
+        DLog(@"%d %@",[weakSelf responseStatusCode],[weakSelf responseString]);
+        if ([weakSelf responseStatusCode]>= 200 && [weakSelf responseStatusCode] <= 300 ) {
             if ([_delegate respondsToSelector:@selector(oauthorController:loginSucessInfo:)])
-                [_delegate oauthorController:self loginSucessInfo:[[request responseString] JSONValue]];
+                [_delegate oauthorController:self loginSucessInfo:[[weakSelf responseString] JSONValue]];
         }else{
             if ([_delegate respondsToSelector:@selector(oauthorController:loginFailture:)]) {
                 [_delegate oauthorController:self loginFailture:@"授权失败"];
@@ -156,13 +157,14 @@ static NSString * provider = nil;
             break;
     }
     url_s  = [url_s stringByAppendingFormat:@"?state=%@&code=%@",state,code];
-    __weak ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
+    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:@"GET"];
+    __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
-        [self handleBingInfo:request];
-//        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 )
-//            [self handleBingInfo:[[request responseString] JSONValue]];
+        [self handleBingInfo:weakSelf];
+        //        if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 )
+        //            [self handleBingInfo:[[request responseString] JSONValue]];
     }];
     [request setFailedBlock:^{
         if ([_delegate respondsToSelector:@selector(oauthorController:bindFailture:)]) {
@@ -170,16 +172,14 @@ static NSString * provider = nil;
         }
     }];
     [request startAsynchronous];
-    
 }
 
 #pragma mark handle bingInfo
 - (void)handleBingInfo:(ASIFormDataRequest *)request
 {
     DLog(@"requestValue %@ %d",[[request responseString] JSONValue],[request responseStatusCode]);
-//    if ([info objectForKey:@"code"] && [[info objectForKey:@"code"] intValue] == 0) {
     if (request.responseStatusCode == 200) {
-//        [AccountLoginResquest setBindingInfo];
+        //        [AccountLoginResquest setBindingInfo];
         if ([[[request responseString] JSONValue] objectForKey:@"third_access_token"])
             [self handleInfoWithshareModel:shareModel infoDic:[[request responseString] JSONValue]];
         if (self.navigationController && self.navigationController.presentingViewController) {
@@ -207,11 +207,10 @@ static NSString * provider = nil;
 #pragma mark webViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    
     NSString * str = [request.URL absoluteString];
     DLog(@"all 302 ::%@",str);
     NSString * baseUrl = [[str componentsSeparatedByString:@"?"] objectAtIndex:0];
-    if ( [baseUrl hasPrefix:@"http://pp.sohu.com/bind/mobile/"] && [baseUrl hasSuffix:@"callback"]) {
+    if ([baseUrl hasPrefix:@"http://pp.sohu.com/bind/mobile/"] && [baseUrl hasSuffix:@"callback"]) {
         str  = [[str componentsSeparatedByString:@"?"] lastObject];
         NSDictionary * dic = [self putMasWithString:str];
         state = [dic objectForKey:@"state"];
@@ -220,6 +219,7 @@ static NSString * provider = nil;
         return NO;
     }
     if ([[[str componentsSeparatedByString:@"?"] objectAtIndex:0] hasPrefix:@"http://pp.sohu.com/oauth2/access_token"]) {
+        
         str  = [[str componentsSeparatedByString:@"?"] lastObject];
         NSDictionary * dic = [self putMasWithString:str];
         state = [dic objectForKey:@"state"];
@@ -237,9 +237,12 @@ static NSString * provider = nil;
 
 - (NSDictionary *)putMasWithString:(NSString *)string
 {
+    DLog();
     NSArray * array = [string componentsSeparatedByString:@"&"];
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithCapacity:0];
     for (NSString * str in array) {
+        if ([str isEqualToString:@""] || ![str hasPrefix:@"="])
+                                                        continue;
         NSRange rang = [str rangeOfString:@"="];
         NSString * key  = [str substringToIndex:rang.location];
         NSString * value = [str substringFromIndex:rang.length + rang.location];

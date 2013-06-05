@@ -99,6 +99,7 @@
     for (NSMutableArray * array in tempArray )
         [dataSourceArray addObject:[self coverAssertToDataSource:array]];
 }
+
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array
 {
     NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];

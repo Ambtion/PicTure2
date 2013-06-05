@@ -18,13 +18,14 @@
 
 + (NSString *)getUUID
 {
-//    CFUUIDRef theUUID = CFUUIDCreate(NULL);
-//    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-//    CFBridgingRelease(theUUID);
-//    return (NSString *)string;
-//    return [[[NSUserDefaults standardUserDefaults] objectForKey:@"OpenUDID"] objectForKey:@"OpenUDID"];
+    //    CFUUIDRef theUUID = CFUUIDCreate(NULL);
+    //    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+    //    CFBridgingRelease(theUUID);
+    //    return (NSString *)string;
+    //    return [[[NSUserDefaults standardUserDefaults] objectForKey:@"OpenUDID"] objectForKey:@"OpenUDID"];
     return [OpenUDID value];
 }
+
 + (BOOL)upDateDeviceToken
 {
     NSString * str = [LoginStateManager deviceToken];
@@ -107,8 +108,9 @@
         
     }
     return NO;
-} 
-+ (BOOL)unBinging:(KShareModel)shareModel 
+}
+
++ (BOOL)unBinging:(KShareModel)shareModel
 {
     NSString * string = nil;
     switch (shareModel) {
@@ -197,7 +199,6 @@
                     faiture(@"当前网络不给力，请稍后重试");
                     break;
             }
-            
         }else{
             faiture(@"当前网络不给力，请稍后重试");
         }

@@ -293,6 +293,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     if (_isAnimating || !_assetsArray.count)  return;
        if (_assetsArray.count <= 3) {
         _curPageNum = _scrollView.contentOffset.x / _scrollView.frame.size.width;
+        _curPageNum = [self validPageValue:_curPageNum];
         [self upCusTitle];
         return;
     }
@@ -305,8 +306,8 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
     int  x = aScrollView.contentOffset.x;
     if (x == aScrollView.frame.size.width) {
         if (_imagestate != AtNomal) {
-            if (_imagestate == AtLess) _curPageNum++;
-            if (_imagestate == AtMore) _curPageNum--;
+            if (_imagestate == AtLess) _curPageNum = [self validPageValue:_curPageNum + 1];
+            if (_imagestate == AtMore) _curPageNum = [self validPageValue:_curPageNum - 1];
             _imagestate = AtNomal;
             [self refreshScrollView];
         }

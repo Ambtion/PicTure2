@@ -158,7 +158,7 @@
         [tip show];
         return;
     }
-    DLog(@"LLLLL:%@ %d",commentView.textView.internalTextView.text,_isLoading);
+    
     if (_isSending) return;
     _isSending  = YES;
     [RequestManager postCommentWithSourceType:type andSourceID:sourceId onwerID:self.ownerId andAccessToken:[LoginStateManager currentToken] comment:commentView.textView.internalTextView.text success:^(NSString *response) {

@@ -85,31 +85,33 @@
     return NO;
 }
 
-//网络连接状态
-+ (NetworkStatus)netWorkStatues
-{
-    Reachability * reachability;
-    NetworkStatus  status;
-    reachability = [Reachability reachabilityForLocalWiFi];
-    status       = [reachability currentReachabilityStatus];
-    return  status;
-}
-+ (BOOL)isConnecting
-{
-    return [self netWorkStatues] != NotReachable;
-}
+////网络连接状态
+//+ (NetworkStatus)netWorkStatues
+//{
+//    Reachability * reachability;
+//    NetworkStatus  status;
+//    reachability = [Reachability reachabilityForLocalWiFi];
+//    status       = [reachability currentReachabilityStatus];
+//    return  status;
+//}
+//
+//+ (BOOL)isConnecting
+//{
+//    return [self netWorkStatues] != NotReachable;
+//}
 
 + (void)getWithUrlStr:(NSString *)strUrl andMethod:(NSString *)method body:(NSDictionary *)body asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:strUrl]];
     [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]]; //开启缓冲
-    if (![self isConnecting]) {
-        [request setCachePolicy:ASIDontLoadCachePolicy];
-        [self objectPopAlerViewRatherThentasView:NO WithMes:@"网络已断开"];
-    }else{
-        [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy];
-    }
+//    if (![self isConnecting]) {
+//        [request setCachePolicy:ASIDontLoadCachePolicy];
+////        [self objectPopAlerViewRatherThentasView:NO WithMes:@"网络已断开"];
+//    }else{
+//        [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy];
+//    }
+    [request setCachePolicy:ASIFallbackToCacheIfLoadFailsCachePolicy];
     [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:method];
@@ -119,7 +121,7 @@
         [request setPostValue:[body objectForKey:key] forKey:key];
     __weak ASIFormDataRequest * weakSelf = request;
     [request setCompletionBlock:^{
-        DLog(@"url :%@ code :%d",request.url,[weakSelf responseStatusCode]);
+        DLog(@"url :%@ code :%d",weakSelf.url,[weakSelf responseStatusCode]);
         NSInteger code = [weakSelf responseStatusCode];
         if ([self handlerequsetStatucode:code withblock:failure]) {
             success([weakSelf responseString]);
@@ -141,7 +143,7 @@
         }
     }];
     [request setFailedBlock:^{
-        DLog(@"failturl :%@ :%d %@",request.url,[weakSelf responseStatusCode],[weakSelf responseString]);
+        DLog(@"failturl :%@ :%d %@",weakSelf.url,[weakSelf responseStatusCode],[weakSelf responseString]);
         if (![self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
         [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
         if (failure)
