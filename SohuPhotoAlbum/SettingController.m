@@ -116,7 +116,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
             infoCell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"infoCell"];
         }
         UserInfoCellDataSource * dataSource = [[UserInfoCellDataSource alloc] init];
-        if (_userInfodic) {
+        if ([LoginStateManager isLogin] && _userInfodic) {
             dataSource.userName =[NSString stringWithFormat:@"%@(@%@)", [_userInfodic objectForKey:@"user_nick"],[_userInfodic objectForKey:@"sname"]];
             dataSource.sizeOfAll = [[_userInfodic objectForKey:@"quota"] floatValue];
             dataSource.sizeOfUsed = [[_userInfodic objectForKey:@"usage"] floatValue];
