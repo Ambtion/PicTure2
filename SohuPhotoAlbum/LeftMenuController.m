@@ -75,10 +75,10 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         _accountView.desLabel.text = nil;
     }else{
         [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
-            NSDictionary * dic = [response JSONValue];
-            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]]];
-            _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
-            _accountView.nameLabel.text = [dic objectForKey:@"user_nick"];
+            _userInfo = [response JSONValue];
+            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[_userInfo objectForKey:@"user_icon"]]];
+            _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[_userInfo objectForKey:@"sname"]];
+            _accountView.nameLabel.text = [_userInfo objectForKey:@"user_nick"];
         } failure:^(NSString *error) {
             
         }];
@@ -220,6 +220,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 {
     SettingController * sc = [[SettingController alloc] init];
     sc.delegate = self;
+    sc.userInfodic = _userInfo;
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:sc];
     [self presentModalViewController:nav animated:YES];
 }

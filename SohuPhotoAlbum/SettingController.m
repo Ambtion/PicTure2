@@ -19,6 +19,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 
 @implementation SettingController
 @synthesize isChangeLoginState;
+@synthesize userInfodic = _userInfodic;
 
 - (void)viewDidLoad
 {
@@ -84,7 +85,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 {
     if ([LoginStateManager isLogin]) {
         [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
-            userInfodic = [response JSONValue];
+            _userInfodic = [response JSONValue];
             [_myTableView reloadData];
         } failure:^(NSString *error) {
             
@@ -115,10 +116,10 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
             infoCell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"infoCell"];
         }
         UserInfoCellDataSource * dataSource = [[UserInfoCellDataSource alloc] init];
-        if (userInfodic) {
-            dataSource.userName =[NSString stringWithFormat:@"%@(@%@)", [userInfodic objectForKey:@"user_nick"],[userInfodic objectForKey:@"sname"]];
-            dataSource.sizeOfAll = [[userInfodic objectForKey:@"quota"] floatValue];
-            dataSource.sizeOfUsed = [[userInfodic objectForKey:@"usage"] floatValue];
+        if (_userInfodic) {
+            dataSource.userName =[NSString stringWithFormat:@"%@(@%@)", [_userInfodic objectForKey:@"user_nick"],[_userInfodic objectForKey:@"sname"]];
+            dataSource.sizeOfAll = [[_userInfodic objectForKey:@"quota"] floatValue];
+            dataSource.sizeOfUsed = [[_userInfodic objectForKey:@"usage"] floatValue];
         }else{
             dataSource.userName = @"用户未登陆";
             dataSource.sizeOfAll = 0.f;

@@ -24,6 +24,7 @@
 @interface LeftMenuController : UIViewController<UITableViewDataSource,UITableViewDelegate,LoginViewControllerDelegate,LeftAccountViewDelegate,SettingControllerDelegate,OAuthorControllerDelegate,PopAlertViewDeleagte>
 {
     UITableView * _tableView;
+    NSDictionary * _userInfo;
     LeftAccountView * _accountView;
     OauthirizeView * _oauthorBindView;
     NSIndexPath * _selectPath;

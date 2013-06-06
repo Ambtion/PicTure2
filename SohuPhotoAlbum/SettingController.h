@@ -18,11 +18,11 @@
 {
     UITableView * _myTableView;
     UIImageView * _navBar;
-    NSDictionary * userInfodic;
     PopAlertView * _cache;
     PopAlertView * _loginView;
     BOOL isInit;
 }
 @property(weak,nonatomic)id delegate;
+@property(nonatomic,strong) NSDictionary * userInfodic;
 @property(nonatomic,assign) BOOL isChangeLoginState;
 @end
