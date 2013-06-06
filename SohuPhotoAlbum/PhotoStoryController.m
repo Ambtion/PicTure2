@@ -267,6 +267,10 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //分享
+        if (![LoginStateManager isLogin]) {
+            [self showLoginViewWithMethodNav:YES];
+            return;
+        }
         if (!_dataSourceArray.count) return;
         [self showShareViewIsAllshare:YES];
     }

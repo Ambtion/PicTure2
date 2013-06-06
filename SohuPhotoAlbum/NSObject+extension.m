@@ -9,6 +9,7 @@
 #import "NSObject+extension.h"
 #import "GTMBase64.h"
 
+
 @implementation NSObject (extension)
 #pragma mark ShowAlert
 - (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage
@@ -52,6 +53,7 @@
 }
 
 #pragma mark - 
+
 - (NetworkStatus)netWorkStatues
 {
     Reachability * reachability;

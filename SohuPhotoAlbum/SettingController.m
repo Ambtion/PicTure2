@@ -38,6 +38,9 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     [loginOutButton setImage:[UIImage imageNamed:@"loginOut.png"] forState:UIControlStateNormal];
     [view addSubview:loginOutButton];
     loginOutButton.center = CGPointMake(160, 32);
+    //不可点
+    if (![LoginStateManager isLogin]) [loginOutButton setAlpha:0.7];
+    [loginOutButton setUserInteractionEnabled:[LoginStateManager isLogin]];
     _myTableView.tableFooterView = view;
     
     _navBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navBar_signalLine.png"]];
@@ -121,7 +124,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
             dataSource.sizeOfAll = 0.f;
             dataSource.sizeOfUsed = 0.f;
         }
-        
         infoCell.dataSource = dataSource;
         return infoCell;
     }
@@ -130,6 +132,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     if (!cell){
         cell = [[MySettingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL"];
     }
+    
     //sectionTitle
     [cell setSectionTitle:[self getSectionByIndexpath:indexPath]];
     //title
@@ -160,6 +163,9 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 - (void)setDifCellSwithcByRow:(NSInteger)row cell:(MySettingCell *)cell
 {
     [cell.cusSwitch setHidden:NO];
+    [cell.cusSwitch setUserInteractionEnabled:[LoginStateManager isLogin]];
+    if (![LoginStateManager isLogin])
+        [cell.cusSwitch setAlpha:0.7];
     BOOL isTure = NO;
     switch (row) {
         case 1:
@@ -193,6 +199,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     }
     return nil;
 }
+
 - (NSString *)getDetaiStringByIndexpath:(NSIndexPath *)path
 {
     switch (path.row) {
@@ -204,6 +211,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     }
     return nil;
 }
+
 #pragma mark  Action
 - (void)mySettingCell:(MySettingCell *)cell didSwitchValueChange:(CusSwitch *)Aswitch
 {

@@ -2562,8 +2562,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2579,8 +2579,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
+				PROVISIONING_PROFILE = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2590,8 +2590,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2607,8 +2607,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
+				PROVISIONING_PROFILE = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

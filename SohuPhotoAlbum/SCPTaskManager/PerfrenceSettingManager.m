@@ -47,6 +47,7 @@
 }
 +(void)setIsUploadJPEGImage:(BOOL)ture
 {
+    if (![LoginStateManager isLogin]) return;
     [self userDefoultStoreValue:[NSNumber numberWithBool:ture] forKey:ISUPLOADJPEGIMAGE];
 }
 

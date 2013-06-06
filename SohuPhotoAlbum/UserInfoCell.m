@@ -18,6 +18,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:[self getSectionViewWithTitle:@"个人信息"]];
         CGFloat offset = 30;
         UILabel * nameTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, 20 + offset, 80, 20)];

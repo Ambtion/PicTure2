@@ -86,6 +86,10 @@
         self.viewDeckController.centerController = leftCon.localAllController;
     }
     if (button.tag == RIGHT2BUTTON) { //上传
+        if (![LoginStateManager isLogin]) {
+            [self showLoginViewWithMethodNav:YES];
+            return;
+        }
         [self setViewState:UPloadState];
     }
     if (button.tag == CANCELBUTTONTAG) {

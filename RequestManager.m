@@ -53,13 +53,11 @@
 
 + (BOOL)handlerequsetStatucode:(NSInteger)requsetCode withblock:(void (^) (NSString * error))failure
 {
-    
-    if (requsetCode >= 200 && requsetCode <= 300) return YES;
     if (requsetCode == 401) {
         [self refreshTokenWithblock:failure];
         return NO;
     }
-    return NO;
+    return YES;
 }
 
 + (void)refreshTokenWithblock:(void (^) (NSString * error))failure
@@ -124,7 +122,7 @@
     }];
     [request setFailedBlock:^{
         DLog(@"failturl :%@ :%d %@",weakSelf.url,[weakSelf responseStatusCode],[weakSelf responseString]);
-        if (![self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
+        if ([self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
         [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
         if (failure)
             failure(REQUSETFAILERROR);
@@ -192,7 +190,7 @@
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId withAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * str = nil;
-    if (token) {
+    if (token && [LoginStateManager isLogin]) {
         str = [NSString stringWithFormat:@"%@/portfolios?owner_id=%@&start=%d&count=%d&access_token=%@",BASICURL_V1,ownId,start,count,token];
     }else{
         str = [NSString stringWithFormat:@"%@/portfolios?owner_id=%@&start=%d&count=%d",BASICURL_V1,ownId,start,count];
@@ -257,12 +255,12 @@
         str = [NSString stringWithFormat:@"%@/users/%@?access_token=%@",BASICURL_V1,userId,[LoginStateManager currentToken]];
     }else{
         str = [NSString stringWithFormat:@"%@/users/%@",BASICURL_V1,userId];
-        
     }
     [self getSourceWithStringUrl:str asynchronou:YES success:success failure:nil];
 }
 
 //喜欢
+
 #pragma mark like
 + (void)likeWithSourceId:(NSString *)sourceID source:(source_type)type OwnerID:(NSString *)ownId Accesstoken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -271,6 +269,7 @@
     NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:token,@"access_token",ownId,@"owner_id", nil];
     [self postWithURL:str body:dic success:success failure:failure];
 }
+
 + (void)unlikeWithSourceId:(NSString *)sourceID source:(source_type)type OwnerID:(NSString *)ownId Accesstoken:(NSString *)token success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * soure = [self sourceToString:type];

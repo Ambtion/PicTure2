@@ -114,7 +114,8 @@
     _passwordTextField.placeholder = @"密码";
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.backgroundColor = [UIColor clearColor];
-    
+    [_passwordTextField addTarget:self action:@selector(doRegister) forControlEvents:UIControlEventEditingDidEndOnExit];
+
     _dealPassButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _dealPassButton.frame = CGRectMake(38, 210 - offset , 22, 22);
     _dealPassButton.selected = YES;

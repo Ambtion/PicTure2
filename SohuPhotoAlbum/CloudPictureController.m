@@ -37,12 +37,11 @@
     _refresHeadView.delegate = self;
     [self.myTableView addSubview:_refresHeadView];
     [self.view addSubview:self.myTableView];
-    
     _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
     _moreFootView.delegate = self;
     //    self.myTableView.tableFooterView = _moreFootView;
     [self initDataContainer];
-    [self refrshDataFromNetWork];
+    [self refrshDataFromNetWorkThenAddImage:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudDetailDidDeletePhoto:) name:DELETEPHOTO object:nil];
 }
 
@@ -63,7 +62,7 @@
 - (void)reloadTableViewDataSource
 {
     _isLoading = YES;
-    [self refrshDataFromNetWork];
+    [self refrshDataFromNetWorkThenAddImage:NO];
 }
 - (void)doneRefrshLoadingTableViewData
 {
@@ -104,15 +103,18 @@
 }
 
 #pragma mark - refrshDataFromNetWork
-- (void)refrshDataFromNetWork
+- (void)refrshDataFromNetWorkThenAddImage:(BOOL)addImage
 {
     [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil asynchronou:YES  success:^(NSString *response) {
         [self initDataContainer];
         [self.assetsSection addObjectsFromArray:[[response JSONValue] objectForKey:@"days"]];
         [self reloadTableViewWithAssetsSection:self.assetsSection andRefresh:YES];
         [self.myTableView reloadData];
+        if (addImage) {
+            [self scrollViewDidEndDecelerating:self.myTableView];
+            return ;
+        }
         [self doneRefrshLoadingTableViewData];
-        [self scrollViewDidEndDecelerating:self.myTableView];
     } failure:^(NSString *error) {
         [self doneRefrshLoadingTableViewData];
     }];
@@ -208,6 +210,7 @@
 }
 - (void)insertDataSourceWithDays:(NSInteger )section
 {
+    
     NSDictionary * dic = [self.assetsSection objectAtIndex:section];
     NSString * days = [dic objectForKey:@"day"];
     if ([_assetDictionary objectForKey:days]) {
@@ -216,6 +219,7 @@
     [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:days success:^(NSString *response) {
         NSMutableArray * array = [_dataSourceArray objectAtIndex:section];
         NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
+        if (!photoArray || !photoArray.count) return;
         [_assetDictionary setObject:photoArray forKey:days];
         [self insertInfo:photoArray intoDataSourceArray:array];
         [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
@@ -343,7 +347,7 @@
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
     if (_shouldRefreshOnce) {
-        [self refrshDataFromNetWork];
+        [self refrshDataFromNetWorkThenAddImage:YES];
         _shouldRefreshOnce = NO;
     }
 }
@@ -453,7 +457,7 @@
         
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[self photosIdArray] success:^(NSString *response)
          {
-             [self refrshDataFromNetWork];
+             [self refrshDataFromNetWorkThenAddImage:YES];
              [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
              [self setViewState:NomalState];
          } failure:^(NSString *error) {

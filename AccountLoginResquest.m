@@ -28,8 +28,9 @@
 
 + (BOOL)upDateDeviceToken
 {
+    
     NSString * str = [LoginStateManager deviceToken];
-    if (!str) return NO;
+    if (!str || ![LoginStateManager isLogin]) return NO;
     NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/device_tokens/add",BASICURL];
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
@@ -60,6 +61,7 @@
 
 + (BOOL)resigiterDevice
 {
+    if (![LoginStateManager isLogin]) return NO;
     NSString * url_s = [NSString stringWithFormat:@"%@/api/v1/devices",BASICURL];
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url_s]];
     [request addRequestHeader:@"accept" value:@"application/json"];
@@ -77,68 +79,68 @@
     return NO;
 }
 
-+ (BOOL)setBindingInfo
-{
-    NSString * url_s = [NSString stringWithFormat:@"http://pp.sohu.com/bind/mobile/list?access_token=%@",[LoginStateManager currentToken]];
-    __block ASIHTTPRequest * request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url_s]];
-    [request startSynchronous];
-    if (request.responseStatusCode == 200) {
-        
-        NSDictionary * dic = [request.responseString JSONValue];
-        DLog(@"%@",dic);
-        NSDictionary * dataInfo = [dic objectForKey:@"data"];
-        NSArray * keys = [dataInfo allKeys];
-        for (int i = 0; i < keys.count ; i ++ ) {
-            NSString * key_str = [keys objectAtIndex:i];
-            NSDictionary * dic = [dataInfo objectForKey:key_str];
-            NSString * type = [dic objectForKey:@"type"];
-            if (type && [type isKindOfClass:[NSString class]]) {
-                if ([type isEqualToString:@"QQ"]) {
-                    [LoginStateManager storeQQTokenInfo:dic];
-                }
-                if ([type isEqualToString:@"WEIBO"]) {
-                    [LoginStateManager storeSinaTokenInfo:dic];
-                }
-                if ([type isEqualToString:@"RENREN"]) {
-                    [LoginStateManager storeRenRenTokenInfo:dic];
-                }
-            }
-        }
-        return YES;
-        
-    }
-    return NO;
-}
+//+ (BOOL)setBindingInfo
+//{
+//    NSString * url_s = [NSString stringWithFormat:@"http://pp.sohu.com/bind/mobile/list?access_token=%@",[LoginStateManager currentToken]];
+//    __block ASIHTTPRequest * request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url_s]];
+//    [request startSynchronous];
+//    if (request.responseStatusCode == 200) {
+//        
+//        NSDictionary * dic = [request.responseString JSONValue];
+//        DLog(@"%@",dic);
+//        NSDictionary * dataInfo = [dic objectForKey:@"data"];
+//        NSArray * keys = [dataInfo allKeys];
+//        for (int i = 0; i < keys.count ; i ++ ) {
+//            NSString * key_str = [keys objectAtIndex:i];
+//            NSDictionary * dic = [dataInfo objectForKey:key_str];
+//            NSString * type = [dic objectForKey:@"type"];
+//            if (type && [type isKindOfClass:[NSString class]]) {
+//                if ([type isEqualToString:@"QQ"]) {
+//                    [LoginStateManager storeQQTokenInfo:dic];
+//                }
+//                if ([type isEqualToString:@"WEIBO"]) {
+//                    [LoginStateManager storeSinaTokenInfo:dic];
+//                }
+//                if ([type isEqualToString:@"RENREN"]) {
+//                    [LoginStateManager storeRenRenTokenInfo:dic];
+//                }
+//            }
+//        }
+//        return YES;
+//        
+//    }
+//    return NO;
+//}
 
-+ (BOOL)unBinging:(KShareModel)shareModel
-{
-    NSString * string = nil;
-    switch (shareModel) {
-        case QQShare:
-            string = @"http://pp.sohu.com/bind/mobile/qq";
-            break;
-        case SinaWeiboShare:
-            string = @"http://pp.sohu.com/bind/mobile/weibo";
-            break;
-        case RenrenShare:
-            string = @"http://pp.sohu.com/bind/mobile/renren";
-            break;
-        default:
-            break;
-    }
-    NSDictionary * tokenInfo = [LoginStateManager getTokenInfo:shareModel];
-    string = [string stringByAppendingFormat:@"?access_token=%@&uid=%@&identify=%@",[LoginStateManager currentToken],[tokenInfo objectForKey:@"uid"],[tokenInfo objectForKey:@"identify"]];
-    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:string]];
-    [request setRequestMethod:@"DELETE"];
-    [request addRequestHeader:@"accept" value:@"application/json"];
-    [request startAsynchronous];
-    if (request.responseStatusCode == 200) {
-        if ([request responseString] && [[[[request responseString] JSONValue] objectForKey:@"code"] intValue] == 0) {
-            return YES;
-        }
-    }
-    return NO;
-}
+//+ (BOOL)unBinging:(KShareModel)shareModel
+//{
+//    NSString * string = nil;
+//    switch (shareModel) {
+//        case QQShare:
+//            string = @"http://pp.sohu.com/bind/mobile/qq";
+//            break;
+//        case SinaWeiboShare:
+//            string = @"http://pp.sohu.com/bind/mobile/weibo";
+//            break;
+//        case RenrenShare:
+//            string = @"http://pp.sohu.com/bind/mobile/renren";
+//            break;
+//        default:
+//            break;
+//    }
+//    NSDictionary * tokenInfo = [LoginStateManager getTokenInfo:shareModel];
+//    string = [string stringByAppendingFormat:@"?access_token=%@&uid=%@&identify=%@",[LoginStateManager currentToken],[tokenInfo objectForKey:@"uid"],[tokenInfo objectForKey:@"identify"]];
+//    __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:string]];
+//    [request setRequestMethod:@"DELETE"];
+//    [request addRequestHeader:@"accept" value:@"application/json"];
+//    [request startAsynchronous];
+//    if (request.responseStatusCode == 200) {
+//        if ([request responseString] && [[[[request responseString] JSONValue] objectForKey:@"code"] intValue] == 0) {
+//            return YES;
+//        }
+//    }
+//    return NO;
+//}
 
 + (void)sohuLoginWithuseName:(NSString *)useName password:(NSString *)password sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {

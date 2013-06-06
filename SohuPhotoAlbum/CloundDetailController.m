@@ -51,6 +51,10 @@
         [self showDeletePhotoesView];
     }
     if (button.tag == TABBARSHARETAG){        //分享图片
+        if (![LoginStateManager isLogin]) {
+            [self showLoginViewWithMethodNav:YES];
+            return;
+        }
         if (!_shareBox){
             _shareBox = [[ShareBox alloc] init];
             _shareBox.delegate = self;

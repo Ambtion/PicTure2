@@ -189,6 +189,10 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //上传
+        if (![LoginStateManager isLogin]) {
+            [self showLoginViewWithMethodNav:YES];
+            return;
+        }
         [self setViewState:UPloadState];
 
 //        if ([LoginStateManager isLogin]) {

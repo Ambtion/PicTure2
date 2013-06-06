@@ -9,7 +9,7 @@
 #import "LoginStateManager.h"
 #import "DataBaseManager.h"
 
-#define USER_ID             [NSString stringWithFormat:@"__USER_ID__%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"VersionCode"]]
+#define USER_ID             [NSString stringWithFormat:@"__USER_ID__%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]
 #define DEVICE_TOKEN        @"__device_token__"
 #define LASTUSERNAME        @"__last_usrName__"
 #define USER_TOKEN          @"__USER_TOKEN__"
@@ -40,7 +40,7 @@
 
 + (void)userDefoultRemoveValeuForKey:(NSString *)key
 {
-    if (!key) return;
+    if (!key || [key isEqualToString:@""]) return;
     NSUserDefaults * userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary * userinfo = [NSMutableDictionary dictionaryWithDictionary:[self valueForUserinfo]];
     if (!userinfo) userinfo = [NSMutableDictionary dictionaryWithCapacity:0];

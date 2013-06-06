@@ -53,13 +53,22 @@
 }
 - (void)feedBackWithidea:(NSString *)idea
 {
-    UMFeedback * umFeedBack = [UMFeedback sharedInstance];
-	[umFeedBack setAppkey:UM_APP_KEY delegate:self];
-	NSMutableDictionary * dic = [NSMutableDictionary dictionary];
-	[dic setObject:idea forKey:@"content"];
-	[dic setObject:[NSDictionary dictionaryWithObject:[LoginStateManager currentUserId] forKey:@"user_id"] forKey:@"contact"];
-	[umFeedBack post:dic];
+    @try {
+        UMFeedback * umFeedBack = [UMFeedback sharedInstance];
+        [umFeedBack setAppkey:UM_APP_KEY delegate:self];
+        NSMutableDictionary * dic = [NSMutableDictionary dictionary];
+        [dic setObject:idea forKey:@"content"];
+        [dic setObject:[NSDictionary dictionaryWithObject:[LoginStateManager currentUserId] forKey:@"user_id"] forKey:@"contact"];
+        [umFeedBack post:dic];
+    }
+    @catch (NSException *exception) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"当前网络不给力,请稍后重试"];
+    }
+    @finally {
+        
+    }
 }
+
 - (void)postFinishedWithError:(NSError *)error
 {
     if (error) {
@@ -69,6 +78,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
+
 #pragma mark -
 - (void)addSubviews
 {

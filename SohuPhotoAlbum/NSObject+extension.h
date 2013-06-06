@@ -17,7 +17,6 @@
 + (void)objectPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)message;
 - (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)message;
 
-
 - (NSString *)encodeWithBase64:(NSString *)input;
 - (NSString*)decodeBase64:(NSString*)input;
 
