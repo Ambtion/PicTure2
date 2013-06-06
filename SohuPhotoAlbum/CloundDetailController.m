@@ -200,6 +200,7 @@
     if (lefttime) {
         [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:lefttime success:^(NSString *response) {
             NSArray * array = [[response JSONValue] objectForKey:@"photos"];
+            DLog(@" %@ ::%@",lefttime,array);
             if (array && array.count) {
                 [self.assetsArray addObjectsFromArray:array];
                 self.isLoading = NO;
@@ -265,6 +266,7 @@
 }
 - (NSString *)getRithtTime
 {
+    DLog(@"%@",self.assetsArray);
     if (rightBoudsDays < self.sectionArray.count - 1) {
         NSDictionary * dic = [self.sectionArray objectAtIndex:rightBoudsDays + 1];
         rightBoudsDays++;

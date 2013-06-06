@@ -12,6 +12,7 @@
 
 @implementation RegisterViewController
 
+@synthesize loginController = _loginController;
 @synthesize backgroundImageView = _backgroundImageView;
 @synthesize backgroundControl = _backgroundControl;
 @synthesize usernameTextField = _usernameTextField;
@@ -86,7 +87,7 @@
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
-    _usernameTextField.placeholder = @"邮箱";
+    _usernameTextField.placeholder = @"用户名";
     _usernameTextField.delegate = self;
     _usernameTextField.backgroundColor = [UIColor clearColor];
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -115,7 +116,7 @@
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.backgroundColor = [UIColor clearColor];
     [_passwordTextField addTarget:self action:@selector(doRegister) forControlEvents:UIControlEventEditingDidEndOnExit];
-
+    
     _dealPassButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _dealPassButton.frame = CGRectMake(38, 210 - offset , 22, 22);
     _dealPassButton.selected = YES;
@@ -226,21 +227,28 @@
     NSString * username = [NSString stringWithFormat:@"%@@sohu.com",_usernameTextField.text];
     NSString * password = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     [AccountLoginResquest resigiterWithuseName:username password:password nickName:nil sucessBlock:^(NSDictionary *response) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [AccountLoginResquest sohuLoginWithuseName:username password:password sucessBlock:^(NSDictionary * response) {
-                [LoginStateManager loginUserId:[NSString stringWithFormat:@"%@",[response objectForKey:@"user_id"]] withToken:[response objectForKey:@"access_token"] RefreshToken:[response objectForKey:@"refresh_token"]];
-                [self backhome];
-            } failtureSucess:^(NSString *error) {
-                [self stopWait];
-                [self showPopAlerViewRatherThentasView:YES WithMes:error];
-            }];
-        });
+        [AccountLoginResquest sohuLoginWithuseName:username password:password sucessBlock:^(NSDictionary * response) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self backHomeWithRespose:response];
+            });
+        } failtureSucess:^(NSString *error) {
+            [self stopWait];
+            [self showPopAlerViewRatherThentasView:YES WithMes:error];
+        }];
+        
     }failtureSucess:^(NSString *error) {
         [self stopWait];
         [self showPopAlerViewRatherThentasView:YES WithMes:error];
     }];
 }
+- (void)backHomeWithRespose:(NSDictionary *)response
+{
+    [self stopWait];
+    [self.navigationController popViewControllerAnimated:NO];
+    LoginViewController * vc = _loginController;
+    [vc handleLoginInfo:response];
+}
+
 -(void)waitForMomentsWithTitle:(NSString*)str
 {
     //    if (_alterView.superview) return;
@@ -252,19 +260,13 @@
     }
     [_alterView show:YES];
 }
+
 -(void)stopWait
 {
     DLog(@"%s",__FUNCTION__);
     [_alterView hide:YES];
 }
-- (void)backhome
-{
-    [self stopWait];
-    LoginViewController * vc = [[self.navigationController childViewControllers] objectAtIndex:0];
-    if ([vc.delegate respondsToSelector:@selector(loginViewController:loginSucessWithinfo:)])
-        [vc.delegate loginViewController:vc loginSucessWithinfo:nil];
-    
-}
+
 #pragma mark KeyBoardnotification
 - (void)keyboardWillShow:(NSNotification *)notification
 {

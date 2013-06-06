@@ -54,7 +54,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
+    //    [self.navigationItem setHidesBackButton:YES];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
@@ -254,10 +254,10 @@
     if (!cell) {
         cell = [[PhotoStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:str thenHiddeDeleteButton:![self isMineWithOwnerId:self.ownerID]];
         cell.delegate  = self;
-//        cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
+        //        cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
     }
     cell.dataSource = [_dataSourceArray objectAtIndex:indexPath.row];
-//    [cell resetImageWithAnimation:YES];
+    //    [cell resetImageWithAnimation:YES];
     return cell;
 }
 #pragma mark Action
@@ -335,14 +335,14 @@
     if (cell.dataSource.isLiking) {
         [RequestManager unlikeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
             cell.dataSource.isLiking = NO;
-            [cell updateAllSubViewsFrames];
+            [cell updateLikebutton];
         } failure:^(NSString *error) {
             
         }];
     }else{
         [RequestManager likeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
             cell.dataSource.isLiking = YES;
-            [cell updateAllSubViewsFrames];
+            [cell updateLikebutton];
         } failure:^(NSString *error) {
             
         }];
@@ -403,7 +403,7 @@
     //    _pushView = YES;
     PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];
     if (_isShareAll)
-         _shareDateSource = source;
+        _shareDateSource = source;
     NSString * photoString = [NSString stringWithFormat:@"%@",[_shareDateSource imageUrl]];
     [self.navigationController pushViewController:[[ShareViewController alloc] initWithModel:model bgPhotoUrl:photoString andDelegate:self] animated:YES];
 }
@@ -456,7 +456,7 @@
 
 - (void)shareAllSourceWithWeixin:(enum WXScene)scene
 {
-    NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];    
+    NSString * commentNews = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@/w%@",self.ownerID,self.showID];
     NSString * title = [NSString stringWithFormat:@"分享%@的图集",[_userInfo objectForKey:@"user_nick"]];
     if (self.storyName && ![self.storyName isEqualToString:@""]) title = [title stringByAppendingFormat:@"[%@]",self.storyName];
     PhotoStoryCellDataSource * source = [_dataSourceArray objectAtIndex:0];

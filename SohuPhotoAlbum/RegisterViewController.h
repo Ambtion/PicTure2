@@ -17,7 +17,7 @@
     MBProgressHUD * _alterView;
     CustomizationNavBar * _navBar;
 }
-
+@property (weak, nonatomic) id loginController;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIControl * backgroundControl;
 @property (strong, nonatomic) UITextField *usernameTextField;

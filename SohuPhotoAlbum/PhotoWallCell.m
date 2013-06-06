@@ -246,7 +246,6 @@ double radians(float degrees) {
 {
     if (_dataSource.isLiking) {
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon1.png"] forState:UIControlStateNormal];
-        
     }else{
         [_footView.likeCountbutton setImage:[UIImage imageNamed:@"likeCountIcon.png"] forState:UIControlStateNormal];
     }

@@ -152,6 +152,7 @@
     [_photoView setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
     [self updateAllOhterViewButImageView];
 }
+
 - (void)updateAllOhterViewButImageView
 {
     [self.contentView setHidden:NO];
@@ -191,8 +192,13 @@
         _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y ,320, _footView.frame.size.height);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
-    [_footView setLikeStateTolike:_dataSource.isLiking];
+    [self updateLikebutton];
     _bgImageView.frame = CGRectMake(0, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _footView.frame.origin.y + _footView.frame.size.height - 10);
+}
+- (void)updateLikebutton
+{
+    [_footView setLikeStateTolike:_dataSource.isLiking];
+
 }
 - (void)setFootViewWithView:(UIView *)view
 {

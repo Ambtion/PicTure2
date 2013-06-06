@@ -56,7 +56,7 @@
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
-    _usernameTextField.placeholder = @"通行证";
+    _usernameTextField.placeholder = @"请输入用户名";
     _usernameTextField.backgroundColor = [UIColor clearColor];
     _usernameTextField.text = [[LoginStateManager lastUserName] copy];
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -71,9 +71,8 @@
     _passwordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     _passwordTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     _passwordTextField.secureTextEntry = YES;
-    _passwordTextField.placeholder = @"密码";
+    _passwordTextField.placeholder = @"请输入密码";
     _passwordTextField.backgroundColor = [UIColor clearColor];
-    
     //    [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEndOnExit];
     //     [_passwordTextField addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventEditingDidEnd];
     
@@ -139,6 +138,7 @@
     rect.origin.y = screenRect.size.height - 60;
     sohu2003.frame = rect;
     [self.view addSubview:sohu2003];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -196,7 +196,6 @@
         [self showPopAlerViewRatherThentasView:YES WithMes:@"您还没有填写密码"];
         return;
     }
-    [LoginStateManager storelastName:_usernameTextField.text];
     NSString * useName = [NSString stringWithFormat:@"%@",[_usernameTextField.text lowercaseString]];
     NSString * passWord = [NSString stringWithFormat:@"%@",_passwordTextField.text];
     MBProgressHUD * hud = [[MBProgressHUD alloc] initWithView:self.view];
@@ -230,7 +229,7 @@
 }
 - (void)showError:(NSString *)error
 {
-    [self showPopAlerViewRatherThentasView:NO WithMes:error];
+    [self showPopAlerViewRatherThentasView:YES WithMes:error];
     if ([_delegate respondsToSelector:@selector(loginViewController:loginFailtureWithinfo:)])
         [_delegate loginViewController:self loginFailtureWithinfo:error];
 }
@@ -293,6 +292,7 @@
     [_passwordTextField resignFirstResponder];
     [_usernameTextField resignFirstResponder];
     RegisterViewController *reg = [[RegisterViewController alloc] init];
+    reg.loginController = self;
     [self.navigationController pushViewController:reg animated:YES];
 }
 

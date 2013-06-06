@@ -217,6 +217,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     DLog(@"%d",self.curPageNum);
     if (!self.assetsArray.count) return;
+    self.curPageNum = [self validPageValue:self.curPageNum];
     _canGetActualImage = YES;
     //prevent than  when seting offset it can  scrollViewDidScroll
     _scrollView.delegate = nil;

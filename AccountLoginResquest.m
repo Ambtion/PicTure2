@@ -154,6 +154,7 @@
     [request setCompletionBlock:^{
         DLog(@"%d %@",[request responseStatusCode],[request responseString]);
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] < 300 &&[[request responseString] JSONValue]) {
+            [LoginStateManager storelastName:useName];
             success([[request responseString] JSONValue]);
         }else if([request responseStatusCode] == 403){
             faiture(@"您的用户名与密码不匹配");
@@ -170,6 +171,7 @@
 
 + (void)resigiterWithuseName:(NSString *)useName password:(NSString *)password nickName:(NSString *)nick sucessBlock:(void (^)(NSDictionary  * response))success failtureSucess:(void (^)(NSString * error))faiture
 {
+    DLog(@"register::%@ : password:%@",useName,password);
     NSString * str = [NSString stringWithFormat:@"%@/api/v1/register",BASICURL];
     __block ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:str]];
     [request setPostValue:useName forKey:@"passport"];
@@ -177,6 +179,7 @@
     [request setTimeOutSeconds:5.f];
     [request setCompletionBlock:^{
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
+            DLog(@"%@",[request responseString]);
             success(nil);
         }else if([request responseStatusCode] == 403){
             NSDictionary * dic = [[request responseString] JSONValue];

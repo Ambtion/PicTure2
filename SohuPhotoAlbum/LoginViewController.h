@@ -32,5 +32,5 @@
 @property (strong, nonatomic) UIControl *backgroundControl;
 @property (strong, nonatomic) EmailTextField *usernameTextField;
 @property (strong, nonatomic) UITextField *passwordTextField;
-
+- (void)handleLoginInfo:(NSDictionary *)response;
 @end

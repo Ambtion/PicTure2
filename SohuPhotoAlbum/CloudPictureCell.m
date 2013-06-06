@@ -91,12 +91,12 @@
 }
 
 #pragma mark - SetImage
-- (void)setImageViews:(StatusImageView*)imageView With:(NSDictionary *)dic  
+- (void)setImageViews:(StatusImageView*)imageView With:(NSDictionary *)dic
 {
+    [imageView setImage:[UIImage imageNamed:@"moren.png"]];
     if (dic) {
         //设置图片
         if ([dic allKeys].count) {
-            
             canBeOperated = YES;
             NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
             UIImage * image = [cache imageFromKey:strUrl];
@@ -105,9 +105,9 @@
                 [imageView setImage:image];
                 return;
             }
-            __weak StatusImageView* weakSelf = imageView;
+            __weak StatusImageView * weakSelf = imageView;
             UIImageView * AimageView = [[UIImageView alloc] init];
-            [AimageView setImageWithURL:[NSURL URLWithString:strUrl]placeholderImage:[UIImage imageNamed:@"moren.png"] success:^(UIImage *image) {
+            [AimageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"moren.png"] success:^(UIImage *image) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf setImage:image];
                 });
@@ -115,13 +115,13 @@
             }];
         }else{
             canBeOperated = NO;
-            [imageView setImage:[UIImage imageNamed:@"moren.png"]];
         }
     }else{
         //temp
         [imageView setImage:nil];
     }
 }
+
 - (void)handleGustrure:(UITapGestureRecognizer *)gesture
 {
     if (!canBeOperated) return;

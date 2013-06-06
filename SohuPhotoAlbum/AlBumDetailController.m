@@ -43,16 +43,12 @@
     [super viewDidLoad];
     //fix tabBar
     [self.tabBar.deleteButton setHidden:YES];
-//    SEL ori = @selector(getMoreAssetsAfterCurNum);
-//    SEL ovr = @selector(getNullMore);
-//    MethodSwizzle([self superclass], ori, ovr);
 }
 
 - (void)getMoreAssetsAfterCurNum
 {
     if (self.assetsArray.count % 20 || self.isLoading)  return;
     self.isLoading = YES;
-//    DLog(@"FFFFFFF::%d",self.assetsArray.count);
     [RequestManager getAllPhototInStoryWithOwnerId:self.ownerId stroyId:self.storyID start:[self.assetsArray count] count:20 success:^(NSString *response) {
 //        DLog(@"%d ::%@",[[self assetsArray] count],[response JSONValue]);
         [self.assetsArray addObjectsFromArray:[[response JSONValue] objectForKey:@"photos"]];
@@ -63,6 +59,6 @@
 }
 - (void)getMoreAssetsBeforeCurNum
 {
-    
+    return;
 }
 @end

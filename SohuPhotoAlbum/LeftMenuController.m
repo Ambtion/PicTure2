@@ -130,24 +130,28 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         }
     }
     [self.viewDeckController closeLeftViewBouncing:^(IIViewDeckController *controller) {
-        if (indexPath.row == 0) {
-            self.viewDeckController.centerController = localAllController;
-        }
-        if (indexPath.row == 1) {
-            CloudPictureController * cp = [[CloudPictureController alloc] init];
-            self.viewDeckController.centerController = cp;
-        }
-        if (indexPath.row == 2) {
-            PhotoWallController * lp = [[PhotoWallController alloc] initWithOwnerID:[LoginStateManager currentUserId] isRootController:YES];
-            self.viewDeckController.centerController = lp;
-        }
-        if (indexPath.row == 3) {
-            HostUserController * hs = [[HostUserController alloc] init];
-            self.viewDeckController.centerController = hs;
-        }
+        [self changeCenterControllerWith:indexPath];
     }];
 }
 
+- (void)changeCenterControllerWith:(NSIndexPath*)indexPath
+{
+    if (indexPath.row == 0) {
+        self.viewDeckController.centerController = localAllController;
+    }
+    if (indexPath.row == 1) {
+        CloudPictureController * cp = [[CloudPictureController alloc] init];
+        self.viewDeckController.centerController = cp;
+    }
+    if (indexPath.row == 2) {
+        PhotoWallController * lp = [[PhotoWallController alloc] initWithOwnerID:[LoginStateManager currentUserId] isRootController:YES];
+        self.viewDeckController.centerController = lp;
+    }
+    if (indexPath.row == 3) {
+        HostUserController * hs = [[HostUserController alloc] init];
+        self.viewDeckController.centerController = hs;
+    }
+}
 #pragma mark - Delegate of LoginViewController
 - (void)loginViewController:(LoginViewController *)loginController cancleClick:(id)sender
 {
@@ -158,6 +162,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     [self setAccountView];
     [self dismissModalViewControllerAnimated:YES];
     [self.viewDeckController toggleLeftViewAnimated:NO];
+    [self changeCenterControllerWith:_selectPath];
 }
 
 #pragma mark - Delegate of SetttingControlelr

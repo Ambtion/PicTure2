@@ -185,6 +185,7 @@
 //    [self.myTableView reloadData];
     [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:[gesture view].tag] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
+
 #pragma mark Refresh-More function
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -208,6 +209,7 @@
     }
     return array;
 }
+
 - (void)insertDataSourceWithDays:(NSInteger )section
 {
     
@@ -375,27 +377,30 @@
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
     NSIndexPath * path = [self.myTableView indexPathForCell:cell];
-    NSInteger  leftTime = 0;
-    NSInteger  rightTime = 0;
+    NSInteger  leftTime = path.section;
+    NSInteger  rightTime = path.section;
     NSArray *  array = [self commentcontinuousTimeFormcurtimeSection:path.section ArrayAndSetLeftTime:&leftTime
                                                            RinghTime:&rightTime];
     CloundDetailController * cd = [[CloundDetailController alloc] initWithAssetsArray:array andCurAsset:dic];
     cd.sectionArray = self.assetsSection;
+    DLog(@"%d %d ",leftTime,rightTime);
     cd.leftBoundsDays = leftTime;
     cd.rightBoudsDays = rightTime;
     [self.navigationController pushViewController:cd animated:YES];
 }
 - (NSArray *)commentcontinuousTimeFormcurtimeSection:(NSInteger)section ArrayAndSetLeftTime:(int *)lefttime RinghTime:(int *)rightTime
 {
-    
+    DLog(@"%@",self.assetsSection);
+    NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray * rightarray = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray * leftArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = section - 1; i >=0 ; i--) {
         NSString * days = [[self.assetsSection objectAtIndex:i] objectForKey:@"day"];
         NSArray * array = [self.assetDictionary objectForKey:days];
         if (array) {
-            * lefttime = i;
+           (* lefttime) --;
             [leftArray addObjectsFromArray:array];
+            [tempArray addObject:days];
         }else{
             break;
         }
@@ -404,16 +409,19 @@
         NSString * days = [[self.assetsSection objectAtIndex:i] objectForKey:@"day"];
         NSArray * array = [self.assetDictionary objectForKey:days];
         if (array) {
-            * rightTime = i;
+           ( * rightTime) ++ ;
             [rightarray addObjectsFromArray:array];
+            [tempArray addObject:days];
         }else{
             break;
         }
     }
+
     NSString * days = [[self.assetsSection objectAtIndex:section] objectForKey:@"day"];
     NSArray * array = [self.assetDictionary objectForKey:days];
     [leftArray addObjectsFromArray:array];
     [leftArray  addObjectsFromArray:rightarray];
+    DLog(@"%@ %d %d %@",tempArray , *lefttime, *rightTime,[self.assetsSection objectAtIndex:*rightTime]);
     return leftArray;
 }
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
