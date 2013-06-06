@@ -469,7 +469,7 @@
              [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
              [self setViewState:NomalState];
          } failure:^(NSString *error) {
-             [self showPopAlerViewRatherThentasView:NO WithMes:error];
+             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
              [self setViewState:NomalState];
          }];
     }

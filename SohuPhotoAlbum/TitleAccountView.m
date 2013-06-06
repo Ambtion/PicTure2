@@ -68,6 +68,9 @@
 - (void)refreshUserInfoWithDic:(NSDictionary *)dic
 {
     DLog(@"");
+    if (!dic || ![dic allKeys].count) {
+        return;
+    }
     [portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"user_icon"]]];
     sname.text  = [NSString stringWithFormat:@"@%@",[dic objectForKey:@"sname"]];
     nameLabel.text = [dic objectForKey:@"user_nick"];

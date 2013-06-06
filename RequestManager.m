@@ -122,7 +122,7 @@
     }];
     [request setFailedBlock:^{
         DLog(@"failturl :%@ :%d %@",weakSelf.url,[weakSelf responseStatusCode],[weakSelf responseString]);
-        if ([self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
+        if (![self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
         [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
         if (failure)
             failure(REQUSETFAILERROR);
