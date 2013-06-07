@@ -14,5 +14,5 @@ xcuserdata
 *.xcworkspace
 xcuserdata
 
-SohuPhotoAlbum.xcodeproj/xcuserdata/*
-SohuPhotoAlbum.xcodeproj/project.xcworkspace/xcuserdata/*
+SohuPhotoAlbum.xcodeproj/
+.gitignore

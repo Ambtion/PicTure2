@@ -125,7 +125,11 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 }
 - (void)addBar
 {
-    self.tabBar = [[CustomizetionTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 49, 320, 49) delegate:self];
+    if (!self.tabBar){
+        self.tabBar = [[CustomizetionTabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 49, 320, 49) delegate:self];
+    }else{
+        self.tabBar.frame = CGRectMake(0, self.view.bounds.size.height - 49, 320, 49);
+    }
     if (CGAffineTransformEqualToTransform([self getTransfrom], CGAffineTransformIdentity) || !_isHidingBar)
         [self.view addSubview:_tabBar];
     if (_isHidingBar) {
