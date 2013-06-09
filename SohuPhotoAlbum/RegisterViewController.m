@@ -87,12 +87,13 @@
     _usernameTextField.font = [UIFont systemFontOfSize:15];
     _usernameTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
     _usernameTextField.returnKeyType = UIReturnKeyNext;
+//    _usernameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _usernameTextField.placeholder = @"用户名";
     _usernameTextField.delegate = self;
     _usernameTextField.backgroundColor = [UIColor clearColor];
     _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [_usernameTextField addTarget:self action:@selector(usernameDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
-    
+
     //    _mailBindTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 110 -offset, 190, 22) ];
     //    _mailBindTextField.font = [UIFont systemFontOfSize:15];
     //    _mailBindTextField.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1];
@@ -113,7 +114,6 @@
     _passwordTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     _passwordTextField.secureTextEntry = YES;
     _passwordTextField.placeholder = @"密码";
-    _passwordTextField.secureTextEntry = YES;
     _passwordTextField.backgroundColor = [UIColor clearColor];
     [_passwordTextField addTarget:self action:@selector(doRegister) forControlEvents:UIControlEventEditingDidEndOnExit];
     
@@ -163,7 +163,6 @@
     sohu2003.frame = rect;
     [self.view addSubview:sohu2003];
 }
-
 #pragma mark - TextFiledDelegate
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {

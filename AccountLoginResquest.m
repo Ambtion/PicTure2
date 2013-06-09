@@ -178,8 +178,8 @@
     [request setPostValue:password forKey:@"password"];
     [request setTimeOutSeconds:5.f];
     [request setCompletionBlock:^{
+        DLog(@"%@",[request responseString]);
         if ([request responseStatusCode]>= 200 && [request responseStatusCode] <= 300 ) {
-            DLog(@"%@",[request responseString]);
             success(nil);
         }else if([request responseStatusCode] == 403){
             NSDictionary * dic = [[request responseString] JSONValue];

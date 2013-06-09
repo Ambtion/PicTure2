@@ -243,7 +243,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
         });
     } failure:^(NSError *error) {
         [self stopWaitProgressView:nil];
-        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",error]];
+        [self showPopAlerViewRatherThentasView:NO WithMes:[NSString stringWithFormat:@"%@",@"保存失败"]];
     }];
 }
 - (void)image: (UIImage *) image didFinishSavingWithError:(NSError *)error contextInfo: (void *) contextInfo

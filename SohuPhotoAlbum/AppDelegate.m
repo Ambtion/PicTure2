@@ -50,7 +50,7 @@
     NSDictionary * dic = [[NSBundle mainBundle] infoDictionary];
     NSString *bundleId = [dic  objectForKey: @"CFBundleIdentifier"];
     NSUserDefaults *appUserDefaults = [[NSUserDefaults alloc] init];
-    NSDictionary * cacheDic = [appUserDefaults persistentDomainForName: bundleId];
+    NSDictionary *cacheDic = [appUserDefaults persistentDomainForName: bundleId];
     DLog(@"cacheDic::%@",cacheDic);
     return YES;
 }

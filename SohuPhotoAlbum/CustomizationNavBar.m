@@ -36,6 +36,7 @@
 {
     [self removeObserverOnCenter];
 }
+
 #pragma mark Notification upload
 - (void)setButtoUploadState:(BOOL)isUploadStateButton
 {

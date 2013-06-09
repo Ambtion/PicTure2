@@ -161,6 +161,7 @@ static NSString * provider = nil;
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setRequestMethod:@"GET"];
     __weak ASIFormDataRequest * weakSelf = request;
+    NSLog(@"%@",url_s);
     [request setCompletionBlock:^{
         
         [self handleBingInfo:weakSelf];

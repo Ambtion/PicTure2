@@ -215,13 +215,13 @@
     
     NSDictionary * dic = [self.assetsSection objectAtIndex:section];
     NSString * days = [dic objectForKey:@"day"];
-    if ([_assetDictionary objectForKey:days]) {
+    if ([_assetDictionary objectForKey:days]) { //存在就不加载....
         return;
     }
     [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:days success:^(NSString *response) {
         NSMutableArray * array = [_dataSourceArray objectAtIndex:section];
         NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
-        if (!photoArray || !photoArray.count) return;
+        if ((!photoArray) || (!photoArray.count)) return;
         [_assetDictionary setObject:photoArray forKey:days];
         [self insertInfo:photoArray intoDataSourceArray:array];
         [self.myTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
@@ -276,6 +276,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     photoAssert(nil);
+    if (!self.assetSectionisShow.count || !self.assetsSection) return nil;
     return [self getSectionView:section withImageCount:[[[_assetsSection objectAtIndex:section] objectForKey:@"count"] intValue] ByisShow:[[self.assetSectionisShow objectAtIndex:section] boolValue] WithTimeText:[[self.assetsSection objectAtIndex:section] objectForKey:@"day"]];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

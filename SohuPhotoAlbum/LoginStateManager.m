@@ -148,6 +148,14 @@
 + (void)storeQQTokenInfo:(NSDictionary *)info
 {
     NSString * openid = [self getQQopenIdWithAccess_token:[info objectForKey:@"access_token"]];
+    if (!openid) {
+        openid = [self getQQopenIdWithAccess_token:[info objectForKey:@"access_token"]];
+        if (!openid) {
+//两次获取失败,默认绑定失败
+//            [self objectPopAlerViewRatherThentasView:NO WithMes:@"绑定失败,请稍后重试"];
+            return;
+        }
+    }
     NSMutableDictionary * dic = [info mutableCopy];
     [dic setObject:openid forKey:@"openid"];
     [self userDefoultStoreValue:dic forKey:QQ_TOKEN];
@@ -158,6 +166,9 @@
     ASIHTTPRequest * getOpneUid = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
     [getOpneUid startSynchronous];
     NSString * finalStr = [getOpneUid responseString];
+    if (finalStr.length < 9) {
+        return nil;
+    }
     finalStr = [finalStr substringFromIndex:9];
     finalStr = [finalStr substringToIndex:[finalStr length] - 4];
     return [[finalStr JSONValue] objectForKey:@"openid"];

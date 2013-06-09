@@ -61,7 +61,6 @@
             self.contentInset = insets;            
         }
 	}
-    	
 	[super setContentOffset:s];
 }
 

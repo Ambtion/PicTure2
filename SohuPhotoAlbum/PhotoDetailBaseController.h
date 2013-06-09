@@ -11,6 +11,8 @@
 #import "CustomizationNavBar.h"
 #import "CustomizetionTabBar.h"
 
+
+/*这是一个确定图片滑到最左边或者最右边的状态量,以确定是否重新刷新数据 */
 typedef enum _imageStatePosition
 {
     AtLess = 0,
@@ -18,6 +20,7 @@ typedef enum _imageStatePosition
     AtMore
     
 }imageStatePosition;
+
 
 @interface PhotoDetailBaseController : UIViewController <UIScrollViewDelegate,ImageScaleViewDelegate,CusTabBarDelegate,UIActionSheetDelegate,PopAlertViewDeleagte>
 {
@@ -35,6 +38,7 @@ typedef enum _imageStatePosition
     BOOL _isRotating;
     BOOL _isAnimating;
 }
+
 @property(nonatomic,strong)NSMutableArray * assetsArray;
 @property(nonatomic,assign)NSInteger curPageNum;
 @property(nonatomic,strong)UIScrollView * scrollView;

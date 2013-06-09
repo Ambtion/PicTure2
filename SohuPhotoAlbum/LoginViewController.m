@@ -267,20 +267,6 @@
     [self dismissModalViewControllerAnimated:NO];
     [self handleLoginInfo:dic];
     [self handleInfoWithshareModel:controller.shareModel infoDic:dic];
-    //    NSDictionary * third_dic = [NSDictionary dictionaryWithObject:[dic objectForKey:@"third_access_token"] forKey:@"access_token"];
-    //    switch (controller.shareModel) {
-    //        case QQShare:
-    //            [LoginStateManager storeQQTokenInfo:third_dic];
-    //            break;
-    //        case SinaWeiboShare:
-    //            [LoginStateManager storeSinaTokenInfo:third_dic];
-    //            break;
-    //        case RenrenShare:
-    //            [LoginStateManager storeRenRenTokenInfo:third_dic];;
-    //            break;
-    //        default:
-    //            break;
-    //    }
 }
 - (void)oauthorController:(OAuthorController *)controlle loginFailture:(NSString *)error
 {

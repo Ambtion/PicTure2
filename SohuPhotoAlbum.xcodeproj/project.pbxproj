@@ -1012,6 +1012,15 @@
 			path = ../new;
 			sourceTree = "<group>";
 		};
+		C56D4C8517618776009B88FB /* DetailTextView */ = {
+			isa = PBXGroup;
+			children = (
+				B89A47001743C0E500CA16DC /* DetailTextView.h */,
+				B89A47011743C0E500CA16DC /* DetailTextView.m */,
+			);
+			name = DetailTextView;
+			sourceTree = "<group>";
+		};
 		C57ED935170287E100505ECF /* PhotoDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1468,6 +1477,7 @@
 		C588B0C41700304A006BBC34 /* external */ = {
 			isa = PBXGroup;
 			children = (
+				C56D4C8517618776009B88FB /* DetailTextView */,
 				C590CA051757054400E87C39 /* ASIHttpRuquest */,
 				C598F4A7175505B50006A379 /* Open_UDID */,
 				C56323D717475CE900685951 /* HPGrowingTextView */,
@@ -1575,8 +1585,6 @@
 				C58A5735171E87DC003B6817 /* PhotoStoryController.m */,
 				C58A5737171E8CE9003B6817 /* PhotoStoryCell.h */,
 				C58A5738171E8CE9003B6817 /* PhotoStoryCell.m */,
-				B89A47001743C0E500CA16DC /* DetailTextView.h */,
-				B89A47011743C0E500CA16DC /* DetailTextView.m */,
 				C58A573E171E90BC003B6817 /* StoryCommentView.h */,
 				C58A573F171E90BC003B6817 /* StoryCommentView.m */,
 				C58A573B171E8EF7003B6817 /* StoryFootView.h */,
@@ -2562,8 +2570,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: luo ziyang (J8PX8W78GE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: luo ziyang (J8PX8W78GE)";
+				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2579,8 +2588,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				PROVISIONING_PROFILE = "438DFF42-A239-4F75-B3BD-8688E347544C";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "438DFF42-A239-4F75-B3BD-8688E347544C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2590,8 +2599,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sohu.com Inc. (NASDAQ: SOHU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: luo ziyang (J8PX8W78GE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: luo ziyang (J8PX8W78GE)";
+				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/SohuPhotoAlbum\"",
@@ -2607,8 +2617,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F0B6F354-32BE-4A6E-B345-447C12A2E829";
+				PROVISIONING_PROFILE = "438DFF42-A239-4F75-B3BD-8688E347544C";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "438DFF42-A239-4F75-B3BD-8688E347544C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
