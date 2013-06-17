@@ -19,10 +19,12 @@
 @implementation LocalAlbumsController
 @synthesize assetGroups = _assetGroups;
 @synthesize dataSourceArray = _dataSourceArray;
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -38,6 +40,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDidwriteImage:) name:WRITEIMAGE object:nil];
     [self readAlbum];
 }
+
 #pragma mark - CUSBar
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -45,25 +48,19 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-//        [_cusBar.nLabelImage setImage:[UIImage imageNamed:@"localAlbums.png"]];
         _cusBar.nLabelText.text = @"本地相册";
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
-        
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton2 setButtoUploadState:YES];
-        
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         _cusBar.sLabelText.text = @"请选择专辑";
-        
         [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-        
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     //界面出现,bar恢复normal状态
     [self setViewState:NomalState];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
-    
     if (needReadonce) {
         [self readAlbum];
         needReadonce = NO;
@@ -110,7 +107,7 @@
 {
     if (_isReading) return;
     _isReading = YES;
-   
+    
 	self.assetGroups = [NSMutableArray arrayWithCapacity:0];
     [[self libiary] readAlbumsIntoGroupArray:self.assetGroups sucess:^{
         [self prepareData];
@@ -134,6 +131,7 @@
     }
     [self.myTableView reloadData];
 }
+
 #pragma mark TableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -168,7 +166,6 @@
 #pragma mark CellDelegate
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
 {
-    
     [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] animated:YES];
 }
 

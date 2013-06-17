@@ -363,6 +363,8 @@
 		C5A87303174776950087C800 /* navbarnoline.png in Resources */ = {isa = PBXBuildFile; fileRef = C5A87302174776950087C800 /* navbarnoline.png */; };
 		C5ACE697174785A40036926A /* leftMenuHigthed.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACE696174785A40036926A /* leftMenuHigthed.png */; };
 		C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */; };
+		C5BB14DB176F05B20061A897 /* CloudAlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BB14DA176F05B10061A897 /* CloudAlbumController.m */; };
+		C5BB14E0176F0B4A0061A897 /* EGRefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BB14DF176F0B4A0061A897 /* EGRefreshTableView.m */; };
 		C5CDCCC3171FF48400044330 /* sectionIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC2171FF48400044330 /* sectionIcon.png */; };
 		C5CDCCC5171FFF5000044330 /* sectionNo.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC4171FFF5000044330 /* sectionNo.png */; };
 		C5CDCCC7171FFF9100044330 /* section.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC6171FFF9100044330 /* section.png */; };
@@ -904,6 +906,10 @@
 		C5ACE696174785A40036926A /* leftMenuHigthed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftMenuHigthed.png; sourceTree = "<group>"; };
 		C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
+		C5BB14D9176F05B10061A897 /* CloudAlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudAlbumController.h; sourceTree = "<group>"; };
+		C5BB14DA176F05B10061A897 /* CloudAlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudAlbumController.m; sourceTree = "<group>"; };
+		C5BB14DE176F0B4A0061A897 /* EGRefreshTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGRefreshTableView.h; sourceTree = "<group>"; };
+		C5BB14DF176F0B4A0061A897 /* EGRefreshTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGRefreshTableView.m; sourceTree = "<group>"; };
 		C5CDCCC2171FF48400044330 /* sectionIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionIcon.png; sourceTree = "<group>"; };
 		C5CDCCC4171FFF5000044330 /* sectionNo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionNo.png; sourceTree = "<group>"; };
 		C5CDCCC6171FFF9100044330 /* section.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = section.png; sourceTree = "<group>"; };
@@ -1384,6 +1390,8 @@
 				C5850D2E1741E85C005AC9C9 /* moren.png */,
 				C586DCEC171CE75D000A4014 /* CloudPictureController.h */,
 				C586DCED171CE75D000A4014 /* CloudPictureController.m */,
+				C5BB14D9176F05B10061A897 /* CloudAlbumController.h */,
+				C5BB14DA176F05B10061A897 /* CloudAlbumController.m */,
 				C586DCEF171CF9CB000A4014 /* CloudPictureCell.h */,
 				C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */,
 			);
@@ -1450,6 +1458,7 @@
 				C5863CC517181216005D12ED /* UPLoadViewController */,
 				C584D0B0170BBCB700ACCD7C /* Login */,
 				C59F0F1F1732183C005F890C /* commentView */,
+				C5BB14DD176F0AB90061A897 /* EGRefshTableView */,
 				C58DD14017350688006FF7BB /* catory */,
 				C5A32B9E1706EF820084B253 /* ShareController */,
 				C588B0EB17014291006BBC34 /* DataBase */,
@@ -2079,6 +2088,16 @@
 			path = sinaweibo_ios_sdk/SinaWeibo;
 			sourceTree = "<group>";
 		};
+		C5BB14DD176F0AB90061A897 /* EGRefshTableView */ = {
+			isa = PBXGroup;
+			children = (
+				C5BB14DE176F0B4A0061A897 /* EGRefreshTableView.h */,
+				C5BB14DF176F0B4A0061A897 /* EGRefreshTableView.m */,
+			);
+			name = EGRefshTableView;
+			path = ..;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2489,6 +2508,8 @@
 				C590CA5E1757054400E87C39 /* ASIInputStream.m in Sources */,
 				C590CA5F1757054400E87C39 /* ASINetworkQueue.m in Sources */,
 				C590CA7F175705CD00E87C39 /* Reachability.m in Sources */,
+				C5BB14DB176F05B20061A897 /* CloudAlbumController.m in Sources */,
+				C5BB14E0176F0B4A0061A897 /* EGRefreshTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

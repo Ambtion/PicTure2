@@ -77,11 +77,7 @@
 {
     return _isLoading;
 }
-//- (void)refeshOnce:(id)sender
-//{
-//    [_refresHeadView refreshImmediately];
-//    [self reloadTableViewDataSource];
-//}
+
 #pragma mark - more
 - (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
 {
@@ -103,6 +99,7 @@
 }
 
 #pragma mark - refrshDataFromNetWork
+
 - (void)refrshDataFromNetWorkThenAddImage:(BOOL)addImage
 {
     [RequestManager getTimeStructWithAccessToken:[LoginStateManager currentToken] withtime:nil asynchronou:YES  success:^(NSString *response) {
@@ -137,6 +134,7 @@
         [self doneMoreLoadingTableViewData];
     }];
 }
+
 - (void)reloadTableViewWithAssetsSection:(NSMutableArray *)asssetSection andRefresh:(BOOL)isRefresh
 {
     NSInteger numberSource = _dataSourceArray.count;
@@ -146,7 +144,6 @@
         [_dataSourceArray addObject:[self sectionSourceArrayWithSectionInfo:dic]];
         [self.assetSectionisShow addObject:[NSNumber numberWithBool:YES]];
     }
-    
 }
 - (NSMutableArray *)sectionSourceArrayWithSectionInfo:(NSDictionary *)info
 {
@@ -389,6 +386,7 @@
     cd.rightBoudsDays = rightTime;
     [self.navigationController pushViewController:cd animated:YES];
 }
+
 - (NSArray *)commentcontinuousTimeFormcurtimeSection:(NSInteger)section ArrayAndSetLeftTime:(int *)lefttime RinghTime:(int *)rightTime
 {
     DLog(@"%@",self.assetsSection);
@@ -417,7 +415,6 @@
             break;
         }
     }
-
     NSString * days = [[self.assetsSection objectAtIndex:section] objectForKey:@"day"];
     NSArray * array = [self.assetDictionary objectForKey:days];
     [leftArray addObjectsFromArray:array];
@@ -425,6 +422,7 @@
     DLog(@"%@ %d %d %@",tempArray , *lefttime, *rightTime,[self.assetsSection objectAtIndex:*rightTime]);
     return leftArray;
 }
+
 - (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
 {
     if (isSelected) {
