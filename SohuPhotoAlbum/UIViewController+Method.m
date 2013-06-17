@@ -69,7 +69,7 @@
 }
 - (BOOL)array:(NSMutableArray *)array hasTimeString:(NSString *)date
 {
-    //获得的string time是否有重复;
+    //获得的string date是否存在;
     for (NSString * str in array) {
         if ([str isEqualToString:date])
             return YES;
@@ -80,24 +80,27 @@
 #pragma mark Local
 - (void)localDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray
 {
+    
     NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < assetsArray.count; i++) {
         ALAsset * asset = [assetsArray objectAtIndex:i];
         NSDate * date = [asset valueForProperty:ALAssetPropertyDate];
+        //获取图片的格式时间
         NSString * dateString = [self stringFromdate:date];
         if (![self array:assetsSection hasTimeString:dateString]){
+            
             [assetsSection addObject:dateString];
             NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
             [array addObject:asset];
             [tempArray addObject:array];
             [assetSectionisShow addObject:[NSNumber numberWithBool:YES]];
         }else{
-            NSMutableArray * array = [tempArray objectAtIndex:[assetsSection indexOfObject:dateString]];
-            [array addObject:asset];
+            NSMutableArray * sameTimeArray = [tempArray objectAtIndex:[assetsSection indexOfObject:dateString]];
+            [sameTimeArray addObject:asset];
         }
     }
-    for (NSMutableArray * array in tempArray )
-        [dataSourceArray addObject:[self coverAssertToDataSource:array]];
+    for (NSMutableArray * sameTimeArray in tempArray)
+        [dataSourceArray addObject:[self coverAssertToDataSource:sameTimeArray]];
 }
 
 - (NSMutableArray *)coverAssertToDataSource:(NSMutableArray *)array

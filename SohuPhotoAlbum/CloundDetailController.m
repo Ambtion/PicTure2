@@ -125,7 +125,7 @@
     if (resp.errCode == 0) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     }else{
-        [self showPopAlerViewRatherThentasView:NO WithMes:@"分析失败"];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }
 }
 - (void) respImageContentToSence:(enum WXScene)scene
