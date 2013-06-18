@@ -33,18 +33,22 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = BASEWALLCOLOR;
-    _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
-    _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.backgroundColor = [UIColor clearColor];
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
-    _refresHeadView.delegate = self;
-    [_myTableView addSubview:_refresHeadView];
-    [self.view addSubview:_myTableView];
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-    _moreFootView.delegate = self;
+//    _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+//    _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    _myTableView.delegate = self;
+//    _myTableView.dataSource = self;
+//    _myTableView.separatorColor = [UIColor clearColor];
+//    _myTableView.backgroundColor = [UIColor clearColor];
+//    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
+//    _refresHeadView.delegate = self;
+//    [_myTableView addSubview:_refresHeadView];
+//    [self.view addSubview:_myTableView];
+//    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+//    _moreFootView.delegate = self;
+    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    _refreshTableView.pDelegate = self;
+    _refreshTableView.dataSource = self;
+    [self.view addSubview:_refreshTableView];
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     _assetArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
@@ -102,57 +106,16 @@
         
     }];
 }
-#pragma mark - refresh
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
+#pragma mark refrshDataFromNetWork
+- (void)pullingreloadTableViewDataSource:(id)sender
 {
-    return [NSDate date];
-}
-- (void)reloadTableViewDataSource
-{
-    _isLoading = YES;
     [self refrshDataFromNetWork];
 }
-- (void)doneRefrshLoadingTableViewData
+- (void)pullingreloadMoreTableViewData:(id)sender
 {
-    _isLoading = NO;
-    [_refresHeadView egoRefreshScrollViewDataSourceDidFinishedLoading:_myTableView];
-}
-
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view
-{
-    [self reloadTableViewDataSource];
-}
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)view
-{
-    return _isLoading;
-}
-- (void)refeshOnce:(id)sender
-{
-    [_refresHeadView refreshImmediately];
-    [self reloadTableViewDataSource];
-}
-
-#pragma mark - more
-- (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
-{
-    [self moreTableViewDataSource];
-}
-- (BOOL)scpMoreTableFootViewDelegateDataSourceIsLoading:(SCPMoreTableFootView *)view
-{
-    return _isLoading;
-}
-- (void)moreTableViewDataSource
-{
-    _isLoading = YES;
     [self getMoreFromNetWork];
 }
-- (void)doneMoreLoadingTableViewData
-{
-    _isLoading = NO;
-    [_moreFootView scpMoreScrollViewDataSourceDidFinishedLoading:_myTableView];
-}
 
-#pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
     [self getuserInfoWithRefresh:YES];
@@ -160,24 +123,19 @@
         [_dataSourceArray removeAllObjects];
         [_assetArray removeAllObjects];
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
-        [self doneRefrshLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
-        [self doneRefrshLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
+
 - (void)getMoreFromNetWork
 {
-    if (_dataSourceArray.count % 20) {
-        [_moreFootView setMoreFunctionOff:YES];
-        [self doneMoreLoadingTableViewData];
-        return;
-    }
-    [_moreFootView setMoreFunctionOff:NO];
     [RequestManager getAllPhototInStoryWithOwnerId:self.ownerID stroyId:self.storyID start:[_dataSourceArray count] count:20 success:^(NSString *response) {
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
-        [self doneMoreLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
-        [self doneMoreLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
 
@@ -188,7 +146,7 @@
     [_assetArray addObjectsFromArray:array];
     for (NSDictionary * info in array)
         [_dataSourceArray addObject:[self getdataSourceFromInfo:info]];
-    [_myTableView reloadData];
+    [_refreshTableView reloadData];
 }
 
 - (PhotoStoryCellDataSource *)getdataSourceFromInfo:(NSDictionary *)info
@@ -217,17 +175,6 @@
     dataSource.commentInfoArray = array;
     dataSource.allCommentCount = [[info objectForKey:@"comment_num"] integerValue];
     return dataSource;
-}
-#pragma mark TableView Delegate
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
-    [_moreFootView scpMoreScrollViewDidEndDragging:scrollView];
-}
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 
 #pragma mark DataSource
@@ -277,7 +224,7 @@
 }
 - (void)photoStoryCellImageClick:(PhotoStoryCell *)cell
 {
-    NSIndexPath * path = [_myTableView indexPathForCell:cell];
+    NSIndexPath * path = [_refreshTableView indexPathForCell:cell];
     NSDictionary  * dic = [_assetArray objectAtIndex:path.row];
     AlBumDetailController * detailController = [[AlBumDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic];
     detailController.ownerId = self.ownerID;
@@ -360,21 +307,22 @@
     
 }
 
-#pragma mark Deleget
+#pragma mark Delegate
 - (void)showDeleteView
 {
     PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
 }
+
 - (void)popAlertView:(AHAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
         [RequestManager deletePhotoFromStoryWithAccessToken:[LoginStateManager currentToken] stroyid:self.storyID photoId:[[tempCellForDelete dataSource] photoId]success:^(NSString *response) {
             [_dataSourceArray removeObject:[tempCellForDelete dataSource]];
-            NSIndexPath * path = [_myTableView  indexPathForCell:tempCellForDelete];
-            [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
-            [_myTableView reloadData];
+            NSIndexPath * path = [_refreshTableView  indexPathForCell:tempCellForDelete];
+            [_refreshTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
+            [_refreshTableView reloadData];
             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
         } failure:^(NSString *error) {
             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];

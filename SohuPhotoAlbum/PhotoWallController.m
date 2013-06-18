@@ -32,22 +32,13 @@
 {
     
     [super viewDidLoad];
-    
-    _myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
-    _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.backgroundColor = BASEWALLCOLOR;
+    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    _refreshTableView.pDelegate = self;
+    _refreshTableView.dataSource = self;
+    _refreshTableView.showsVerticalScrollIndicator = NO;
+    _refreshTableView.backgroundColor = BASEWALLCOLOR;
 
-    _myTableView.showsVerticalScrollIndicator = NO;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
-    _refresHeadView.delegate = self;
-    [_myTableView addSubview:_refresHeadView];
-    [self.view addSubview:_myTableView];
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-    _moreFootView.delegate = self;
-    //    _myTableView.tableFooterView = _moreFootView;
+    [self.view addSubview:_refreshTableView];
     _timelabel = [[TimeLabelView alloc] initWithFrame:CGRectMake(320 - 78, 5, 77, 20)];
     [_timelabel setHidden:YES];
     [self.view addSubview:_timelabel];
@@ -69,8 +60,7 @@
         if (source)
             [_dataSourceArray addObject:source];
     }
-    [self resetLabel];
-    [_myTableView reloadData];
+    [_refreshTableView reloadData];
 }
 - (PhotoWallCellDataSource *)getCellDataSourceFromDic:(NSDictionary *)dic
 {
@@ -158,58 +148,16 @@
 //    [super viewWillDisappear:animated];
     [_navBar removeFromSuperview];
 }
-#pragma mark - refresh
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
+
+#pragma mark Pulling_refreshData
+- (void)pullingreloadTableViewDataSource:(id)sender
 {
-    return [NSDate date];
-}
-- (void)reloadTableViewDataSource
-{
-    _isLoading = YES;
     [self refrshDataFromNetWork];
 }
-- (void)doneRefrshLoadingTableViewData
+- (void)pullingreloadMoreTableViewData:(id)sender
 {
-    _isLoading = NO;
-    [_refresHeadView egoRefreshScrollViewDataSourceDidFinishedLoading:_myTableView];
-}
-
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view
-{
-    [self reloadTableViewDataSource];
-}
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)view
-{
-    return _isLoading;
-}
-
-//- (void)refeshOnce:(id)sender
-//{
-//    [_refresHeadView refreshImmediately];
-//    [self reloadTableViewDataSource];
-//    [self resetLabel];
-//}
-//
-#pragma mark - more
-- (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
-{
-    [self moreTableViewDataSource];
-}
-- (BOOL)scpMoreTableFootViewDelegateDataSourceIsLoading:(SCPMoreTableFootView *)view
-{
-    return _isLoading;
-}
-- (void)moreTableViewDataSource
-{
-    _isLoading = YES;
     [self getMoreFromNetWork];
 }
-- (void)doneMoreLoadingTableViewData
-{
-    _isLoading = NO;
-    [_moreFootView scpMoreScrollViewDataSourceDidFinishedLoading:_myTableView];
-}
-
 #pragma mark refrshDataFromNetWork
 - (void)refrshDataFromNetWork
 {
@@ -220,28 +168,26 @@
     [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID withAccessToken:token start:0 count:20  success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
-        [self doneRefrshLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
-        [self doneRefrshLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
 
 - (void)getMoreFromNetWork
 {
-    if (_dataSourceArray.count % 20 != 0) {
-        [_moreFootView setMoreFunctionOff:YES];
-        [self doneMoreLoadingTableViewData];
-        return;
-    }
-    [_moreFootView setMoreFunctionOff:NO];
+//    if (_dataSourceArray.count % 20) {
+//        [_refreshTableView didFinishedLoadingTableViewData];
+//        return;
+//    }
     NSString * token = nil;
     if ([LoginStateManager isLogin])
         token = [LoginStateManager currentToken];
     [RequestManager getTimePhtotWallStorysWithOwnerId:self.ownerID withAccessToken:token start:[_dataSourceArray count] count:20 success:^(NSString *response) {
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
-        [self doneMoreLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
-        [self doneMoreLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
 
@@ -250,18 +196,11 @@
 {
     [_timelabel  setHidden:YES];
 }
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
-    [_moreFootView scpMoreScrollViewDidEndDragging:scrollView];
-}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if ( scrollView.contentSize.height >= scrollView.frame.size.height)
         [self updataLabelWithScrollView:scrollView];
-    [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 
 - (void)resetLabel
@@ -283,7 +222,7 @@
         return;
     }
     [_timelabel  setHidden:NO];
-    NSArray * cells = _myTableView.visibleCells;
+    NSArray * cells = _refreshTableView.visibleCells;
     _timelabel.frame = [self getLabelRectWithOffset:aScrollView.contentOffset.y];
     for (PhotoWallCell * cell in cells) {
         CGRect cellRect = [self.view convertRect:cell.frame fromView:cell.superview];
@@ -303,9 +242,9 @@
 }
 - (CGRect)getLabelRectWithOffset:(CGFloat)pointY
 {
-    CGFloat ratioInTableView = pointY / (_myTableView.contentSize.height - _myTableView.frame.size.height);
+    CGFloat ratioInTableView = pointY / (_refreshTableView.contentSize.height - _refreshTableView.frame.size.height);
     CGRect rect = _timelabel.frame;
-    rect.origin.y = _myTableView.frame.origin.y + 5 + ratioInTableView * (_myTableView.frame.size.height - rect.size.height - 10);
+    rect.origin.y = _refreshTableView.frame.origin.y + 5 + ratioInTableView * (_refreshTableView.frame.size.height - rect.size.height - 10);
     return rect;
 }
 
@@ -449,9 +388,9 @@
         [RequestManager deleteStoryFromWallWithaccessToken:[LoginStateManager currentToken] StoryId:[tempCellForDelete.dataSource wallId] success:^(NSString *response) {
             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
             [_dataSourceArray removeObject:tempCellForDelete.dataSource];
-            NSIndexPath * path =  [_myTableView indexPathForCell:tempCellForDelete];
-            [_myTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
-            [self updataLabelWithScrollView:_myTableView];
+            NSIndexPath * path =  [_refreshTableView  indexPathForCell:tempCellForDelete];
+            [_refreshTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationFade];
+            [self updataLabelWithScrollView:_refreshTableView];
             //删除成功
         }  failure:^(NSString *error) {
             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];

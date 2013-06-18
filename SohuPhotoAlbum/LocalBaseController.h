@@ -11,13 +11,6 @@
 #import "CustomizationNavBar.h"
 #import "UPLoadController.h"
 
-typedef enum ViewState {
-    NomalState  ,
-    UPloadState ,
-    ShareState,
-    DeleteState
-}viewState;
-
 #define  photoAssert(a)     if (!self.dataSourceArray.count) return a
 
 @interface LocalBaseController : UIViewController<CusNavigationBarDelegate,UPLoadControllerDelegate>
@@ -28,7 +21,7 @@ typedef enum ViewState {
 }
 @property(nonatomic,assign)viewState viewState;
 @property(nonatomic,strong)UITableView * myTableView;
-//@property(nonatomic,assign)NSMutableArray * selectedArray;
+
 - (CGRect)subTableViewRect;
 
 #pragma mark Uplaod Function

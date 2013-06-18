@@ -80,10 +80,10 @@
 #pragma mark Responding to Scrolling and Dragging
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([_tableView.pDelegate respondsToSelector:@selector(scrollViewDidScroll:)])
-        [_tableView.pDelegate scrollViewDidScroll:scrollView];
     [_headerView egoRefreshScrollViewDidScroll:scrollView];
     [_footMoreView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
+    if ([_tableView.pDelegate respondsToSelector:@selector(scrollViewDidScroll:)])
+        [_tableView.pDelegate scrollViewDidScroll:scrollView];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -100,6 +100,8 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    [_headerView egoRefreshScrollViewDidEndDragging:scrollView];
+    [_footMoreView scpMoreScrollViewDidEndDragging:scrollView];
     if ([_tableView.pDelegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)])
         [_tableView.pDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
 }
@@ -120,9 +122,9 @@
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
+    [_headerView egoRefreshScrollViewDidEndDragging:scrollView];
     if ([_tableView.pDelegate respondsToSelector:@selector(scrollViewWillBeginDecelerating:)])
         [_tableView.pDelegate scrollViewWillBeginDecelerating:scrollView];
-    [_headerView egoRefreshScrollViewDidEndDragging:scrollView];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -336,17 +338,17 @@
 {
     if (self = [super initWithFrame:frame style:style]) {
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.backgroundColor = [UIColor clearColor];
         _egoManager = [[EGOManager alloc] init];
         
         self.delegate = _egoManager;
-        self.separatorStyle = UITableViewCellSeparatorStyleNone;
         _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
         _refresHeadView.delegate = _egoManager;
         [self addSubview:_refresHeadView];
         
         _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
         _moreFootView.delegate = _egoManager;
-        
         _egoManager->_tableView = self;
         _egoManager->_headerView = _refresHeadView;
         _egoManager->_footMoreView = _moreFootView;

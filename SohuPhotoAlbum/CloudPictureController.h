@@ -7,22 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EGORefreshTableHeaderView.h"
-#import "SCPMoreTableFootView.h"
+#import "EGRefreshTableView.h"
 #import "CloudPictureCell.h"
-#import "LocalBaseController.h"
 #import "RequestManager.h"
 #import "ShareViewController.h"
 #import "ShareBox.h"
+#import "LocalBaseController.h"
 
-@protocol CloudPictureControllerDelegate <NSObject>
 
-@end
-
-@interface CloudPictureController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate,CloudPictureCellDelegate,UIActionSheetDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate>
+@interface CloudPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloudPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate>
 {
-    EGORefreshTableHeaderView * _refresHeadView;
-    SCPMoreTableFootView * _moreFootView;
+ 
+    EGRefreshTableView * _refreshTableView;
+    CustomizationNavBar * _cusBar;
     BOOL _isLoading;
     BOOL _isLoadingMax;
     ShareBox * _shareBox;
@@ -30,4 +27,5 @@
 }
 
 @property(nonatomic,strong)NSMutableDictionary * assetDictionary;
+@property(nonatomic,assign)viewState viewState;
 @end

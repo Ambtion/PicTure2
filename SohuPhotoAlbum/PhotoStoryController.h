@@ -8,20 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomizationNavBar.h"
-#import "EGORefreshTableHeaderView.h"
-#import "SCPMoreTableFootView.h"
+#import "EGRefreshTableView.h"
 #import "PhotoStoryCell.h"
 #import "ShareViewController.h"
 #import "RequestManager.h"
 #import "TitleAccountView.h"
 #import "ShareBox.h"
 
-@interface PhotoStoryController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
-                            SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,PhotoStoryCellDelegate,UIActionSheetDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte>
+@interface PhotoStoryController : UIViewController<EGRefreshTableViewDelegate,UITableViewDataSource,CusNavigationBarDelegate,PhotoStoryCellDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte>
 {
-    UITableView * _myTableView;
-    EGORefreshTableHeaderView * _refresHeadView;
-    SCPMoreTableFootView * _moreFootView;
+     
+    EGRefreshTableView * _refreshTableView;
     NSMutableArray * _dataSourceArray;
     NSMutableArray * _assetArray;
 
@@ -30,11 +27,11 @@
     
     ShareBox * _shareBox;
     BOOL _isShareAll;
-    BOOL _isLoading;
     PhotoStoryCellDataSource * _shareDateSource;
     PhotoStoryCell * tempCellForDelete;
     NSDictionary * _userInfo;
 }
+
 @property(strong,nonatomic)NSString * ownerID;
 @property(strong,nonatomic)NSString * storyID;
 @property(strong,nonatomic)NSString * storyName;

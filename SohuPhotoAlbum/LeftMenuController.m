@@ -8,6 +8,7 @@
 #import "LeftMenuController.h"
 #import "RequestManager.h"
 #import "UIImageView+WebCache.h"
+#import "CloudAlbumController.h"
 
 #define MENUMAXNUMBER 4
 
@@ -141,6 +142,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     }
     if (indexPath.row == 1) {
         CloudPictureController * cp = [[CloudPictureController alloc] init];
+//        CloudAlbumController * cp = [[CloudAlbumController alloc] init];
         self.viewDeckController.centerController = cp;
     }
     if (indexPath.row == 2) {

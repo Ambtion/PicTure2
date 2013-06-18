@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EGORefreshTableHeaderView.h"
-#import "SCPMoreTableFootView.h"
+#import "EGRefreshTableView.h"
 #import "PhotoWallCell.h"
 #import "CustomizationNavBar.h"
 #import "TimeLabelView.h"
@@ -17,18 +16,14 @@
 #import "TitleAccountView.h"
 #import "ShareBox.h"
 
-@interface PhotoWallController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,      SCPMoreTableFootViewDelegate,PhotoWallCellDelegate,CusNavigationBarDelegate,
-            UIActionSheetDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte>
+@interface PhotoWallController : UIViewController<EGRefreshTableViewDelegate,UITableViewDataSource,PhotoWallCellDelegate,CusNavigationBarDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte>
 {
-    UITableView * _myTableView;
-    EGORefreshTableHeaderView * _refresHeadView;
-    SCPMoreTableFootView * _moreFootView;
+    EGRefreshTableView * _refreshTableView;
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
     TimeLabelView * _timelabel;
     TitleAccountView * _titleAccoutView;
     ShareBox * _shareBox;
-    BOOL _isLoading;
     BOOL _isRoot;
     BOOL _pushView;
     PhotoWallCell * tempCellForDelete;

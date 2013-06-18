@@ -11,13 +11,13 @@
 
 @class PhotoAlbumCell;
 @interface  PhotoAlbumCellDataSource:NSObject
-@property(nonatomic,strong)ALAssetsGroup * leftGroup;
-@property(nonatomic,strong)ALAssetsGroup * rightGroup;
+@property(nonatomic,strong)id  leftGroup;
+@property(nonatomic,strong)id  rightGroup;
 + (CGFloat)cellHight;
 @end
 
 @protocol PhotoAlbumCellDelegate <NSObject>
-- (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group;
+- (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(id)group;
 @end
 
 @interface PhotoAlbumCell : UITableViewCell

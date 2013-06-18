@@ -23,19 +23,22 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.myTableView.delegate = self;
-    self.myTableView.dataSource = self;
-    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
-    _refresHeadView.delegate = self;
-    [self.myTableView addSubview:_refresHeadView];
-    [self.view addSubview:self.myTableView];
-    
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-    _moreFootView.delegate = self;
-    selectedArray = [NSMutableArray arrayWithCapacity:0];
+//    self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+//    self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    self.myTableView.delegate = self;
+//    self.myTableView.dataSource = self;
+//    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
+//    _refresHeadView.delegate = self;
+//    [self.myTableView addSubview:_refresHeadView];
+//    [self.view addSubview:self.myTableView];
+//    
+//    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+//    _moreFootView.delegate = self;
+    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    _refreshTableView.pDelegate = self;
+    _refreshTableView.dataSource = self;
+    [self.view addSubview:_refreshTableView];
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
     [self refrshDataFromNetWork];
 }
@@ -59,72 +62,41 @@
     [super viewWillDisappear:animated];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-
-#pragma mark - Refresh
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
+- (void)viewDidDisappear:(BOOL)animated
 {
-    return [NSDate date];
-}
-- (void)reloadTableViewDataSource
-{
-    _isLoading = YES;
-    [self refrshDataFromNetWork];
-}
-- (void)doneRefrshLoadingTableViewData
-{
-    _isLoading = NO;
-    [_refresHeadView egoRefreshScrollViewDataSourceDidFinishedLoading:self.myTableView];
-}
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view
-{
-    [self reloadTableViewDataSource];
-}
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)view
-{
-    return _isLoading;
-}
-
-#pragma mark - more
-- (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
-{
-    [self moreTableViewDataSource];
-}
-- (BOOL)scpMoreTableFootViewDelegateDataSourceIsLoading:(SCPMoreTableFootView *)view
-{
-    return _isLoading;
-}
-- (void)moreTableViewDataSource
-{
-    _isLoading = YES;
-    [self getMoreFromNetWork];
-}
-- (void)doneMoreLoadingTableViewData
-{
-    _isLoading = NO;
-    [_moreFootView scpMoreScrollViewDataSourceDidFinishedLoading:self.myTableView];
+    [_cusBar removeFromSuperview];
 }
 
 #pragma mark refrshDataFromNetWork
+- (void)pullingreloadTableViewDataSource:(id)sender
+{
+    [self refrshDataFromNetWork];
+}
+- (void)pullingreloadMoreTableViewData:(id)sender
+{
+    [self getMoreFromNetWork];
+}
 - (void)refrshDataFromNetWork
 {
     [RequestManager getRecomendusersWithsuccess:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"users"]];
-        [self doneRefrshLoadingTableViewData];
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
-        [self doneRefrshLoadingTableViewData];
-
+        [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
+
 - (void)getMoreFromNetWork
 {
-    [self doneMoreLoadingTableViewData];
+    //星公户一次全部加载,无需更多
+    [_refreshTableView didFinishedLoadingTableViewData];
 }
 - (void)addDataSourceWithArray:(NSArray *)array
 {
     for (int i = 0; i < array.count; i++)
         [_dataSourceArray addObject:[self getDataSourceFromInfo:[array objectAtIndex:i]]];
-    [self.myTableView reloadData];
+    [_refreshTableView reloadData];
 }
 - (HostUserCellDataSource *)getDataSourceFromInfo:(NSDictionary *)info
 {
@@ -134,17 +106,6 @@
     dataSource.accountName = [NSString stringWithFormat:@"@%@",[info objectForKey:@"sname"]];
     dataSource.portrait = [info objectForKey:@"avatar"];
     return dataSource;
-}
-#pragma mark Refresh-More function
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
-    [_moreFootView scpMoreScrollViewDidEndDragging:scrollView];
-}
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
 }
 
 #pragma mark - tableViewdelgate

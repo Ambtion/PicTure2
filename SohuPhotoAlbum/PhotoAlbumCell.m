@@ -101,19 +101,25 @@
 }
 - (void)updataViews
 {
-    [_leftImage setImage:[UIImage imageWithCGImage:[self.dataSource.leftGroup posterImage]]];
-    [_leftLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.leftGroup valueForProperty:ALAssetsGroupPropertyName]]];
-    [self setCoutLabelFrame:_leftCount WithNumber:[[self.dataSource leftGroup] numberOfAssets]];
-    
-    if (self.dataSource.rightGroup) {
-        [_rightImgae.superview setHidden:NO];
-        [(ALAssetsGroup *)self.dataSource.rightGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-        [_rightImgae setImage:[UIImage imageWithCGImage:[self.dataSource.rightGroup posterImage]]];
-        [_rigthLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.rightGroup valueForProperty:ALAssetsGroupPropertyName]]];
-        [self setCoutLabelFrame:_rightCount WithNumber:[[self.dataSource rightGroup] numberOfAssets]];
+    if ([_dataSource.leftGroup isKindOfClass:[ALAssetsGroup class]]) {
+        //本地
+        [_leftImage setImage:[UIImage imageWithCGImage:[self.dataSource.leftGroup posterImage]]];
+        [_leftLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.leftGroup valueForProperty:ALAssetsGroupPropertyName]]];
+        [self setCoutLabelFrame:_leftCount WithNumber:[[self.dataSource leftGroup] numberOfAssets]];
+        if (self.dataSource.rightGroup) {
+            [_rightImgae.superview setHidden:NO];
+            [(ALAssetsGroup *)self.dataSource.rightGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+            [_rightImgae setImage:[UIImage imageWithCGImage:[self.dataSource.rightGroup posterImage]]];
+            [_rigthLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.rightGroup valueForProperty:ALAssetsGroupPropertyName]]];
+            [self setCoutLabelFrame:_rightCount WithNumber:[[self.dataSource rightGroup] numberOfAssets]];
+        }else{
+            [_rightImgae.superview setHidden:YES];
+        }
     }else{
-        [_rightImgae.superview setHidden:YES];
+        //网络
+        
     }
+    
 }
 
 - (void)setCoutLabelFrame:(CountLabel *)label WithNumber:(NSInteger)num

@@ -17,6 +17,9 @@
 @end
 
 @class EGOManager;
+/*
+    这是一个封装了下拉刷新和自动加载更多的tableView
+ */
 @interface EGRefreshTableView : UITableView
 {
     EGORefreshTableHeaderView * _refresHeadView;

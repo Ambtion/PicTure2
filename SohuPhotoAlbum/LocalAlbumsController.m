@@ -164,9 +164,11 @@
 }
 
 #pragma mark CellDelegate
-- (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(ALAssetsGroup *)group
+- (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(id)group
 {
-    [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] animated:YES];
+    if ([group isKindOfClass:[ALAssetsGroup class]]) {
+            [self.navigationController pushViewController:[[AlbumPhotoesController alloc] initWithAssetGroup:group andViewState:_viewState] animated:YES];
+    }
 }
 
 @end

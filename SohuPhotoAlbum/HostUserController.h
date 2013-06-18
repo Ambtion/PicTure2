@@ -7,14 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LocalBaseController.h"
-#import "EGORefreshTableHeaderView.h"
-#import "SCPMoreTableFootView.h"
+#import "EGRefreshTableView.h"
 
-@interface HostUserController :  LocalBaseController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,SCPMoreTableFootViewDelegate>
+@interface HostUserController :  UIViewController<UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate>
 {
-    EGORefreshTableHeaderView * _refresHeadView;
-    SCPMoreTableFootView * _moreFootView;
-    BOOL _isLoading;
+    CustomizationNavBar * _cusBar;
+    EGRefreshTableView * _refreshTableView;
 }
 @end

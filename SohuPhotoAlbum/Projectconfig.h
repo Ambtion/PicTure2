@@ -16,6 +16,13 @@ typedef enum __shareModel {
     NoShare,
 }KShareModel;
 
+//本地/云端 . 图片 视图状态
+typedef enum ViewState {
+    NomalState  ,
+    UPloadState ,
+    ShareState,
+    DeleteState
+}viewState;
 
 #import "IIViewDeckController.h"
 //alert
