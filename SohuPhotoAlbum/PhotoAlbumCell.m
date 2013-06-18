@@ -7,6 +7,7 @@
 //
 
 #import "PhotoAlbumCell.h"
+#import "UIImageView+WebCache.h"
 
 #define CELLHEIGTH 160
 
@@ -21,6 +22,8 @@
     return CELLHEIGTH;
 }
 @end
+
+
 @implementation PhotoAlbumCell
 
 @synthesize dataSource = _dataSource;
@@ -35,44 +38,33 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        UIImageView * imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alume-pic.png"]];
-        imageView1.frame = LEFTFRAME;
-        [imageView1 setUserInteractionEnabled:YES];
-        _leftImage = [[UIImageView alloc] initWithFrame:CGRectMake(12, 12, imageView1.frame.size.width - 24, imageView1.frame.size.height - 24)];
-        [imageView1 addSubview:_leftImage];
-        [self.contentView addSubview:imageView1];
+        _leftImage = [[FolderImageView alloc] initWithFrame:LEFTFRAME];
         _leftCount = [[CountLabel alloc] initWithFrame:CGRectZero];
         [self setCountLabelProperty:_leftCount];
-        [imageView1 addSubview:_leftCount];
-        
+        [_leftImage addSubview:_leftCount];
+        [self.contentView addSubview:_leftImage];
+
         UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGusture:)];
         gesture.numberOfTapsRequired = 1;
         [_leftImage addGestureRecognizer:gesture];
-        [_leftImage setUserInteractionEnabled:YES];
-        _leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView1.frame.origin.x,
-                                                               imageView1.frame.size.height + imageView1.frame.origin.y,
-                                                               imageView1.frame.size.width, 20)];
+        _leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(_leftImage.frame.origin.x,
+                                                               _leftImage.frame.size.height + _leftImage.frame.origin.y,
+                                                               _leftImage.frame.size.width, 20)];
         [self setNameLabelProperty:_leftLabel];
         [self.contentView addSubview:_leftLabel];
         
-        UIImageView * imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alume-pic.png"]];
-        imageView2.frame = RIGHTFRAME;
-        [imageView2 setUserInteractionEnabled:YES];
-        _rightImgae = [[UIImageView alloc] initWithFrame:_leftImage.frame];
-        [imageView2 addSubview:_rightImgae];
-        [self.contentView addSubview:imageView2];
+        _rightImage = [[FolderImageView alloc] initWithFrame:RIGHTFRAME];
+        [self.contentView addSubview:_rightImage];
         _rightCount = [[CountLabel alloc] initWithFrame:CGRectZero];
         [self setCountLabelProperty:_rightCount];
-        [imageView2 addSubview:_rightCount];
+        [_rightImage addSubview:_rightCount];
         
         UITapGestureRecognizer * gesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGusture:)];
         gesture2.numberOfTapsRequired = 1;
-        [_rightImgae addGestureRecognizer:gesture2];
-        [_rightImgae setUserInteractionEnabled:YES];
-        _rigthLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView2.frame.origin.x,
-                                                                imageView2.frame.size.height + imageView2.frame.origin.y,
-                                                                imageView2.frame.size.width, 20)];
+        [_rightImage addGestureRecognizer:gesture2];
+        _rigthLabel = [[UILabel alloc] initWithFrame:CGRectMake(_rightImage.frame.origin.x,
+                                                                _rightImage.frame.size.height + _rightImage.frame.origin.y,
+                                                                _rightImage.frame.size.width, 20)];
         [self setNameLabelProperty:_rigthLabel];
         [self.contentView addSubview:_rigthLabel];
     }
@@ -103,23 +95,40 @@
 {
     if ([_dataSource.leftGroup isKindOfClass:[ALAssetsGroup class]]) {
         //本地
-        [_leftImage setImage:[UIImage imageWithCGImage:[self.dataSource.leftGroup posterImage]]];
+        [_leftImage.actualView setImage:[UIImage imageWithCGImage:[self.dataSource.leftGroup posterImage]]];
         [_leftLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.leftGroup valueForProperty:ALAssetsGroupPropertyName]]];
         [self setCoutLabelFrame:_leftCount WithNumber:[[self.dataSource leftGroup] numberOfAssets]];
         if (self.dataSource.rightGroup) {
-            [_rightImgae.superview setHidden:NO];
+            [_rightImage setHidden:NO];
+            [_rigthLabel setHidden:NO];
+
             [(ALAssetsGroup *)self.dataSource.rightGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-            [_rightImgae setImage:[UIImage imageWithCGImage:[self.dataSource.rightGroup posterImage]]];
+            [_rightImage.actualView setImage:[UIImage imageWithCGImage:[self.dataSource.rightGroup posterImage]]];
             [_rigthLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.rightGroup valueForProperty:ALAssetsGroupPropertyName]]];
             [self setCoutLabelFrame:_rightCount WithNumber:[[self.dataSource rightGroup] numberOfAssets]];
         }else{
-            [_rightImgae.superview setHidden:YES];
+            [_rightImage setHidden:YES];
+            [_rigthLabel setHidden:YES];
         }
     }else{
         //网络
-        
+        NSString * str = [NSString stringWithFormat:@"%@_c205",[[_dataSource leftGroup] objectForKey:@"cover_url"]];
+        [_leftImage.actualView setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"moren.png"]];
+        [_leftLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.leftGroup objectForKey:@"folder_name"]]];
+        [self setCoutLabelFrame:_leftCount WithNumber:[[self.dataSource.leftGroup objectForKey:@"photo_num"] integerValue]];
+        if (self.dataSource.rightGroup) {
+            [_rightImage setHidden:NO];
+            [_rigthLabel setHidden:NO];
+
+            NSString * str = [NSString stringWithFormat:@"%@_c205",[[_dataSource rightGroup] objectForKey:@"cover_url"]];
+            [_rightImage.actualView setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"moren.png"]];
+            [_rigthLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.rightGroup objectForKey:@"folder_name"]]];
+            [self setCoutLabelFrame:_rightCount WithNumber:[[self.dataSource.rightGroup objectForKey:@"photo_num"] integerValue]];
+        }else{
+            [_rightImage setHidden:YES];
+            [_rigthLabel setHidden:YES];
+        }
     }
-    
 }
 
 - (void)setCoutLabelFrame:(CountLabel *)label WithNumber:(NSInteger)num
@@ -129,21 +138,34 @@
     label.frame = CGRectMake(label.superview.frame.size.width - label.frame.size.width - 18,
                              label.superview.frame.size.height - label.frame.size.height - 15,
                              label.frame.size.width > 22 ? label.frame.size.width : 22 , 22);
-
+    
 }
-
 - (void)handleGusture:(UITapGestureRecognizer *)gesture
 {
-    id view = [gesture view];
-    ALAssetsGroup * group = nil;
+    FolderImageView *  view = (FolderImageView *)[gesture view];
+    id group = nil;
     if ([view isEqual:_leftImage]) {
         group = _dataSource.leftGroup;
     }else{
         group = _dataSource.rightGroup;
     }
+    if (!view.isNomalState) {
+        view.isSelected = !view.isSelected;
+    }
     if ([_delegate respondsToSelector:@selector(photoAlbumCell:clickCoverGroup:)])
         [_delegate photoAlbumCell:self clickCoverGroup:group];
 }
+- (void)showNomalState:(BOOL)isShow
+{
+    _leftImage.isNomalState = isShow;
+    _rightImage.isNomalState = isShow;
+}
+- (void)isSelectedinSeletedArray:(NSArray *)array
+{
+    _leftImage.isSelected = [array containsObject:_dataSource.leftGroup];
+    _rightImage.isSelected = [array containsObject:_dataSource.rightGroup];
+}
+
 ////customise delete button
 //- (void)willTransitionToState:(UITableViewCellStateMask)state
 //{

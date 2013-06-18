@@ -13,6 +13,7 @@ enum Soruce_Type {
     KSourcePortfolios = 1
     };
 typedef enum  Soruce_Type source_type;
+/*所有的错误处理均在调用的class中,除分享,删除统一使用"失败"提示.另外分享单张图片到第三方使用三方反馈的提示*/
 
 @interface RequestManager : NSObject
 
@@ -20,7 +21,12 @@ typedef enum  Soruce_Type source_type;
 + (void)getTimeStructWithAccessToken:(NSString *)token withtime:(NSString *)beforeTime asynchronou:(BOOL)asy success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 + (void)getTimePhtotWithAccessToken:(NSString *)token day:(NSString *)days success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 + (void)deletePhotosWithaccessToken:(NSString *)token photoIds:(NSArray *)photo_ids success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
-
+//网络相册
++ (void)getFoldersWithAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)deleteFoldersWithAccessToken:(NSString *)token folderId:(NSString *)folderId success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
+//网络图片
++ (void)getfoldersPicWithAccessToken:(NSString *)token folderId:(NSString*)folderId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
++ (void)deleteFoldersPhotosWithAccessToken:(NSString *)token folderId:(NSString *)folderId  photos:(NSArray *)photosArray success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 //获取图片墙storys
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId withAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 +(void)deleteStoryFromWallWithaccessToken:(NSString *)token StoryId:(NSString *)storyId  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;

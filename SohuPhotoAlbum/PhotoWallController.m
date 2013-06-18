@@ -170,16 +170,13 @@
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
 
 - (void)getMoreFromNetWork
 {
-//    if (_dataSourceArray.count % 20) {
-//        [_refreshTableView didFinishedLoadingTableViewData];
-//        return;
-//    }
     NSString * token = nil;
     if ([LoginStateManager isLogin])
         token = [LoginStateManager currentToken];
@@ -187,6 +184,7 @@
         [self addDataSourceWith:[[response JSONValue] objectForKey:@"portfolios"]];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
@@ -320,7 +318,7 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     } failure:^(NSString *error) {
         [self.navigationController popViewControllerAnimated:YES];
-        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }];
 }
 
@@ -411,7 +409,7 @@
             cell.dataSource.likeCount = MAX(cell.dataSource.likeCount, 0);
             [cell updataLikeState];
         } failure:^(NSString *error) {
-            
+            [self showPopAlerViewRatherThentasView:NO WithMes:error];
         }];
     }else{
         [RequestManager likeWithSourceId:[[cell dataSource] wallId] source:KSourcePortfolios OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
@@ -419,7 +417,7 @@
             cell.dataSource.likeCount ++;
             [cell updataLikeState];
         } failure:^(NSString *error) {
-            
+            [self showPopAlerViewRatherThentasView:NO WithMes:error];
         }];
     }
 }

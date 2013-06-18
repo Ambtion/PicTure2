@@ -49,6 +49,8 @@
 		C56323ED17475D1900685951 /* MessageEntrySendButtonPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = C56323E517475D1900685951 /* MessageEntrySendButtonPressed.png */; };
 		C56323EE17475D1900685951 /* MessageEntrySendButtonPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C56323E617475D1900685951 /* MessageEntrySendButtonPressed@2x.png */; };
 		C567F5481741FEF100293864 /* moren1.png in Resources */ = {isa = PBXBuildFile; fileRef = C567F5471741FEF100293864 /* moren1.png */; };
+		C56E31E6177049C300E8936B /* FolderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C56E31E5177049C300E8936B /* FolderImageView.m */; };
+		C56E31E917705ED800E8936B /* CloudAlbumPhotosController.m in Sources */ = {isa = PBXBuildFile; fileRef = C56E31E817705ED700E8936B /* CloudAlbumPhotosController.m */; };
 		C57ED93B17028A1900505ECF /* ImageScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageScaleView.m */; };
 		C57ED93E17028C9B00505ECF /* PhotoDetailBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93D17028C9B00505ECF /* PhotoDetailBaseController.m */; };
 		C5830C721740C11C00E56AC8 /* CacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C5830C711740C11C00E56AC8 /* CacheManager.m */; };
@@ -432,6 +434,10 @@
 		C56323E517475D1900685951 /* MessageEntrySendButtonPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MessageEntrySendButtonPressed.png; sourceTree = "<group>"; };
 		C56323E617475D1900685951 /* MessageEntrySendButtonPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MessageEntrySendButtonPressed@2x.png"; sourceTree = "<group>"; };
 		C567F5471741FEF100293864 /* moren1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moren1.png; sourceTree = "<group>"; };
+		C56E31E4177049C200E8936B /* FolderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderImageView.h; sourceTree = "<group>"; };
+		C56E31E5177049C300E8936B /* FolderImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderImageView.m; sourceTree = "<group>"; };
+		C56E31E717705ED700E8936B /* CloudAlbumPhotosController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudAlbumPhotosController.h; sourceTree = "<group>"; };
+		C56E31E817705ED700E8936B /* CloudAlbumPhotosController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudAlbumPhotosController.m; sourceTree = "<group>"; };
 		C57ED93917028A1900505ECF /* ImageScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageScaleView.h; sourceTree = "<group>"; };
 		C57ED93A17028A1900505ECF /* ImageScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScaleView.m; sourceTree = "<group>"; };
 		C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailBaseController.h; sourceTree = "<group>"; };
@@ -1392,6 +1398,8 @@
 				C586DCED171CE75D000A4014 /* CloudPictureController.m */,
 				C5BB14D9176F05B10061A897 /* CloudAlbumController.h */,
 				C5BB14DA176F05B10061A897 /* CloudAlbumController.m */,
+				C56E31E717705ED700E8936B /* CloudAlbumPhotosController.h */,
+				C56E31E817705ED700E8936B /* CloudAlbumPhotosController.m */,
 				C586DCEF171CF9CB000A4014 /* CloudPictureCell.h */,
 				C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */,
 			);
@@ -1563,6 +1571,8 @@
 				C583CF24170434BE00CD3485 /* CountLabel.m */,
 				C583CF061703D6B300CD3485 /* StatusImageView.h */,
 				C583CF071703D6B300CD3485 /* StatusImageView.m */,
+				C56E31E4177049C200E8936B /* FolderImageView.h */,
+				C56E31E5177049C300E8936B /* FolderImageView.m */,
 				C583B37E17126ABA00EB8F7A /* ALAssetsLibrary+Read.h */,
 				C583B37F17126ABA00EB8F7A /* ALAssetsLibrary+Read.m */,
 			);
@@ -2510,6 +2520,8 @@
 				C590CA7F175705CD00E87C39 /* Reachability.m in Sources */,
 				C5BB14DB176F05B20061A897 /* CloudAlbumController.m in Sources */,
 				C5BB14E0176F0B4A0061A897 /* EGRefreshTableView.m in Sources */,
+				C56E31E6177049C300E8936B /* FolderImageView.m in Sources */,
+				C56E31E917705ED800E8936B /* CloudAlbumPhotosController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

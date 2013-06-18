@@ -103,7 +103,6 @@
             [_titleAccoutView refreshUserInfoWithDic:_userInfo];
         }
     } failure:^(NSString *error) {
-        
     }];
 }
 #pragma mark refrshDataFromNetWork
@@ -125,6 +124,7 @@
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
@@ -135,6 +135,7 @@
         [self addSoruceFromArray:[[response JSONValue] objectForKey:@"photos"]];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
@@ -284,14 +285,14 @@
             cell.dataSource.isLiking = NO;
             [cell updateLikebutton];
         } failure:^(NSString *error) {
-            
+            [self showPopAlerViewRatherThentasView:NO WithMes:error];
         }];
     }else{
         [RequestManager likeWithSourceId:[[cell dataSource] photoId] source:KSourcePhotos OwnerID:self.ownerID Accesstoken:[LoginStateManager currentToken] success:^(NSString *response) {
             cell.dataSource.isLiking = YES;
             [cell updateLikebutton];
         } failure:^(NSString *error) {
-            
+            [self showPopAlerViewRatherThentasView:NO WithMes:error];
         }];
     }
 }

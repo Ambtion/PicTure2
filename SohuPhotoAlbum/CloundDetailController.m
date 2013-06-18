@@ -224,6 +224,7 @@
                 _hasLessAssets = NO;
             }
         } failure:^(NSString *error) {
+//            [self showPopAlerViewRatherThentasView:NO WithMes:error];
             self.isLoading = NO;
         }];
     }

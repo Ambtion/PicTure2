@@ -12,9 +12,10 @@
 #import "EGRefreshTableView.h"
 #import "RequestManager.h"
 
-@interface CloudAlbumController : LocalBaseController <UITableViewDataSource,PhotoAlbumCellDelegate,EGRefreshTableViewDelegate>
+@interface CloudAlbumController : UIViewController <UITableViewDataSource,PhotoAlbumCellDelegate,EGRefreshTableViewDelegate,CusNavigationBarDelegate,PopAlertViewDeleagte>
 {
     EGRefreshTableView * _refreshTableView;
-    BOOL _isLoadingMax;
+    CustomizationNavBar * _cusBar;
 }
+@property(nonatomic,assign)viewState viewState;
 @end

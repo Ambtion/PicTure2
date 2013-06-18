@@ -28,14 +28,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
-    self.myTableView.separatorColor = [UIColor clearColor];
-    self.myTableView.backgroundColor = [UIColor clearColor];
-    [self.myTableView setScrollsToTop:YES];
-    [self.view addSubview:self.myTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDidwriteImage:) name:WRITEIMAGE object:nil];
     [self readAlbum];

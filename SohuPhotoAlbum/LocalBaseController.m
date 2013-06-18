@@ -24,6 +24,16 @@
     }
     return self;
 }
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
+    self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.myTableView.separatorColor = [UIColor clearColor];
+    self.myTableView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.myTableView];
+}
 #pragma mark Life Circle
 - (void)viewWillDisappear:(BOOL)animated
 {

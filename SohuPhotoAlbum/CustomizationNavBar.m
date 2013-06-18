@@ -181,6 +181,8 @@
         [_delegate cusNavigationBar:self buttonClick:button isUPLoadState:NO];
     }
 }
+
+//程序是否在后台上传程序
 - (void)gifButtonClick:(GIFButton *)button
 {
     if ([_delegate respondsToSelector:@selector(cusNavigationBar:buttonClick: isUPLoadState:)]) {

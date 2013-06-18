@@ -141,8 +141,8 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         self.viewDeckController.centerController = localAllController;
     }
     if (indexPath.row == 1) {
-        CloudPictureController * cp = [[CloudPictureController alloc] init];
-//        CloudAlbumController * cp = [[CloudAlbumController alloc] init];
+//        CloudPictureController * cp = [[CloudPictureController alloc] init];
+        CloudAlbumController * cp = [[CloudAlbumController alloc] init];
         self.viewDeckController.centerController = cp;
     }
     if (indexPath.row == 2) {

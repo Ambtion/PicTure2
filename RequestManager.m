@@ -53,9 +53,31 @@
 
 + (BOOL)handlerequsetStatucode:(NSInteger)requsetCode withblock:(void (^) (NSString * error))failure
 {
-    if (requsetCode == 401) {
-        [self refreshTokenWithblock:failure];
+    if (requsetCode <= 300 &&requsetCode >= 200) {
         return NO;
+    }
+    switch (requsetCode) {
+        case 401:
+            [self refreshTokenWithblock:failure];
+            if (failure)
+                failure(REQUSETFAILERROR);
+            return YES;
+            break;
+        case 404:
+            if (failure)
+                failure(REQUSETSOURCEFIAL);
+            return YES;
+            break;
+        case 407:
+            if (failure)
+                failure(REQUSETSOURCEFIAL);
+            return YES;
+            break;
+        default:
+            if (failure)
+                failure(REQUSETFAILERROR);
+            return YES;
+            break;
     }
     return YES;
 }
@@ -101,31 +123,13 @@
     [request setCompletionBlock:^{
         DLog(@"url :%@ code :%d",weakSelf.url,[weakSelf responseStatusCode]);
         NSInteger code = [weakSelf responseStatusCode];
-        if ([self handlerequsetStatucode:code withblock:failure]) {
+        if (![self handlerequsetStatucode:code withblock:failure]) {
             success([weakSelf responseString]);
-        }else{
-            if (code == 404) {
-                [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETSOURCEFIAL];
-                if (failure)
-                    failure(REQUSETSOURCEFIAL);
-            }else if(code == 407){
-                [self objectPopAlerViewRatherThentasView:NO WithMes:INVISABLETOKEN];
-                if (failure)
-                    failure(REQUSETSOURCEFIAL);
-            }
-            else{
-                [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
-                if (failure)
-                    failure(REQUSETFAILERROR);
-            }
         }
     }];
     [request setFailedBlock:^{
         DLog(@"failturl :%@ :%d %@",weakSelf.url,[weakSelf responseStatusCode],[weakSelf responseString]);
-        if (![self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure]) return;
-        [self objectPopAlerViewRatherThentasView:NO WithMes:REQUSETFAILERROR];
-        if (failure)
-            failure(REQUSETFAILERROR);
+        [self handlerequsetStatucode:[weakSelf responseStatusCode] withblock:failure];
     }];
     if (asy)
         [request startAsynchronous];
@@ -185,6 +189,30 @@
     [self postWithURL:strUrl body:dic success:success failure:failure];
 }
 
+//网络相册
++ (void)getFoldersWithAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * str = [NSString stringWithFormat:@"%@/folders?access_token=%@&start=%d&count=%d",BASICURL_V1,token,start,count];
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
+}
++ (void)deleteFoldersWithAccessToken:(NSString *)token folderId:(NSString *)folderId success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * str = [NSString stringWithFormat:@"%@/folders/%@?access_token=%@",BASICURL_V1,folderId,token];
+    [self deleteSoruce:str success:success failure:failure];
+}
+
+//网络图片
++ (void)getfoldersPicWithAccessToken:(NSString *)token folderId:(NSString*)folderId start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * str = [NSString stringWithFormat:@"%@/photos?access_token=%@&folder_id=%@&start=%d&count=%d",BASICURL_V1,token,folderId,start,count];
+    [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
+}
++ (void)deleteFoldersPhotosWithAccessToken:(NSString *)token folderId:(NSString *)folderId  photos:(NSArray *)photosArray success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
+{
+    NSString * photoIds = [photosArray componentsJoinedByString:@","];
+    NSString * str = [NSString stringWithFormat:@"%@/photos/destroy?access_token=%@&folder_id=%@&photo_ids=%@",BASICURL_V1,token,folderId,photoIds];
+    [self postWithURL:str body:nil success:success failure:failure];
+}
 //图片墙
 #pragma mark -
 + (void)getTimePhtotWallStorysWithOwnerId:(NSString *)ownId withAccessToken:(NSString *)token start:(NSInteger)start count:(NSInteger)count success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
@@ -345,7 +373,7 @@
 ////分享单张图片
 //+ (void)sharePhotoWithAccesstoken:(NSString *)token ownerId:(NSString *)ownerId portfilosId:(NSString *)portfolisId photoId:(NSString *)photoID share_to:(KShareModel)shareMode  shareAccestoken:(NSString *)sharetoken desc:(NSString *)description success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 //{
-//    
+//
 //    NSString * strURl = [NSString stringWithFormat:@"%@/portfolios/%@/photos/%@/share",BASICURL_V1,portfolisId,photoID];
 //    NSMutableDictionary * body = [NSMutableDictionary dictionaryWithCapacity:0];
 //    [body setValue:token forKey:@"access_token"];
@@ -356,7 +384,7 @@
 //        [body setValue:description forKey:@"description"];
 //    }
 //    [self postWithURL:strURl body:body success:success failure:failure];
-//    
+//
 //}
 
 //推荐
@@ -413,7 +441,7 @@
     NSData * data = UIImageJPEGRepresentation(image, compress);
     [request setData:data forKey:@"picture"];
     __weak ASIFormDataRequest * weakSelf = request;
-
+    
     [request setCompletionBlock:^{
         NSInteger ret = [[[[weakSelf responseString] JSONValue] objectForKey:@"ret"] integerValue];
         if (!ret) {
@@ -429,7 +457,7 @@
         failure(@"连接失败,请重新分享");
     }];
     [request startAsynchronous];
-
+    
 }
 + (void)sharePhoto:(UIImage*)image ToRenRenwithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
@@ -462,7 +490,7 @@
         failure(@"连接失败,请重新分享");
     }];
     [request startAsynchronous];
-
+    
 }
 
 + (void)sharePhoto:(UIImage*)image ToSinawithDes:(NSString *)des compressionQuality:(CGFloat)compress  success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
@@ -493,6 +521,6 @@
         failure(@"连接失败,请重新分享");
     }];
     [request startAsynchronous];
-
+    
 }
 @end

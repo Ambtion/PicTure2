@@ -70,6 +70,7 @@
         }
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
@@ -85,6 +86,7 @@
         }
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
@@ -181,7 +183,7 @@
         //        return;
         [_refreshTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSString *error) {
-        
+        //加载图片不提示错误
     }];
 }
 
@@ -407,7 +409,6 @@
         [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择图片"];
         return;
     }
-    
     if (_viewState == DeleteState) {
         [self showDeletePhotoesView];
         return;
@@ -471,7 +472,7 @@
         [_selectedArray removeAllObjects];
         [self setViewState:NomalState];
     } failure:^(NSString *error) {
-        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }];
     [self.navigationController popViewControllerAnimated:YES];
     

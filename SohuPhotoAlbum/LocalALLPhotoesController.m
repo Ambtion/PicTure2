@@ -37,13 +37,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
-    self.myTableView.separatorColor = [UIColor clearColor];
-    self.myTableView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.myTableView];
     if (isinit){
         isinit = NO;
         [self readAlbum];

@@ -7,17 +7,22 @@
 //
 
 #import "CloudAlbumController.h"
+#import "CloudAlbumPhotosController.h"
 
 @interface CloudAlbumController ()
 //总的专辑资源
 @property(nonatomic,strong)NSMutableArray *assetGroups;
 //对应的tableview的分类资源
-@property(nonatomic,strong)NSMutableArray *dataSourceArray;
+@property(nonatomic,strong)NSMutableArray * dataSourceArray;
+
+@property(nonatomic,strong)NSMutableArray * selectedArray;
 @end
 
 @implementation CloudAlbumController
 @synthesize assetGroups;
 @synthesize dataSourceArray;
+@synthesize selectedArray = _selectedArray;
+@synthesize viewState = _viewState;
 
 - (void)viewDidLoad
 {
@@ -28,6 +33,8 @@
     _refreshTableView.pDelegate = self;
     _refreshTableView.dataSource = self;
     [self.view addSubview:_refreshTableView];
+    _selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
+    [self refreshFromNetWork];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -50,18 +57,21 @@
 #pragma mark
 - (void)pullingreloadTableViewDataSource:(id)sender
 {
-    [_refreshTableView performSelector:@selector(didFinishedLoadingTableViewData) withObject:nil afterDelay:0.3];
+    [self refreshFromNetWork];
 }
 - (void)pullingreloadMoreTableViewData:(id)sender
 {
-    [_refreshTableView performSelector:@selector(didFinishedLoadingTableViewData) withObject:nil afterDelay:0.3];
+    [self getMoreFromNetWork];
 }
 
-- (void)refreshDataSoureRatherThenGetMore:(BOOL)isRefresh
+- (void)refreshDataSoure:(NSArray *)soureArray RatherThenGetMore:(BOOL)isRefresh
 {
     if (isRefresh)
-        self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 0; i< self.assetGroups.count ; i+=2) {
+        self.assetGroups = [NSMutableArray arrayWithCapacity:0];
+    self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
+    [self.assetGroups addObjectsFromArray:soureArray];
+    
+    for (int i = 0; i< self.assetGroups.count ; i+=2 ) {
         PhotoAlbumCellDataSource * dataSource = [[PhotoAlbumCellDataSource alloc] init];
         dataSource.leftGroup = [self.assetGroups objectAtIndex:i];
         if (i+1 < self.assetGroups.count) {
@@ -74,6 +84,33 @@
     [_refreshTableView reloadData];
 }
 
+- (void)refreshFromNetWork
+{
+    [RequestManager getFoldersWithAccessToken:[LoginStateManager currentToken] start:0 count:20 success:^(NSString *response) {
+        NSArray * array = [[response JSONValue] objectForKey:@"folders"];
+        DLog(@"array %@",[array lastObject]);
+        if (array && array.count) {
+            [self refreshDataSoure:array RatherThenGetMore:YES];
+        }
+        [_refreshTableView didFinishedLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+        [_refreshTableView didFinishedLoadingTableViewData];
+    }];
+}
+- (void)getMoreFromNetWork
+{
+    [RequestManager getFoldersWithAccessToken:[LoginStateManager currentToken] start:assetGroups.count  count:20 success:^(NSString *response) {
+        NSArray * array = [[response JSONValue] objectForKey:@"folders"];
+        if (array && array.count) {
+            [self refreshDataSoure:array RatherThenGetMore:NO];
+        }
+        [_refreshTableView didFinishedLoadingTableViewData];
+    } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
+        [_refreshTableView didFinishedLoadingTableViewData];
+    }];
+}
 #pragma mark TableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -98,6 +135,8 @@
     }
     if (indexPath.row < self.dataSourceArray.count)
         cell.dataSource =[self.dataSourceArray objectAtIndex:indexPath.row];
+    [cell showNomalState:_viewState == NomalState];
+    [cell isSelectedinSeletedArray:_selectedArray];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -105,13 +144,89 @@
     cell.backgroundColor = LOCALBACKGORUNDCOLOR;
 }
 
+#pragma mark Action
+- (void)setViewState:(viewState)viewState
+{
+    if (viewState == _viewState) return;
+    _viewState = viewState;
+    [_cusBar switchBarStateToUpload:_viewState != NomalState];
+    if (_viewState != NomalState) {
+        self.viewDeckController.panningMode = IIViewDeckNoPanning;
+    }else{
+        self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    }
+    if (_selectedArray.count)
+        [_selectedArray removeAllObjects];
+    [_refreshTableView reloadData];
+}
+
 #pragma mark CellDelegate
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    if (button.tag == LEFTBUTTON) {
+        [self.viewDeckController toggleLeftViewAnimated:YES];
+    }
+    if (button.tag == RIGHT1BUTTON) {           //分享
+//        [self setViewState:ShareState];
+    }
+    if (button.tag == RIGHT2BUTTON) {           //删除
+        [self setViewState:DeleteState];
+    }
+    if (button.tag == CANCELBUTTONTAG) {        //取消
+        [self setViewState:NomalState];
+    }
+    if (button.tag == RIGHTSELECTEDTAG) {       //确认
+        [self handleEnsureClick];
+    }
+}
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(id)group
 {
     if ([group isKindOfClass:[NSDictionary class]]) {
-        
+        if (_viewState == NomalState) {
+            NSString * folderId = [NSString stringWithFormat:@"%@",[group objectForKey:@"folder_id"]];
+            [self.navigationController pushViewController:[[CloudAlbumPhotosController alloc] initWithFoldersId:folderId] animated:YES];
+        }else{
+            [_selectedArray removeAllObjects];
+            if ([_selectedArray containsObject:group]){
+                [_selectedArray removeObject:group];
+            }else{
+                [_selectedArray addObject:group];
+            }
+            [_refreshTableView reloadData];
+        }
+    }
+}
+- (void)handleEnsureClick
+{
+    if (!_selectedArray.count) {
+        [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择图片"];
+        return;
+    }
+    if (_viewState == DeleteState) {
+        [self showDeletePhotoesView];
+        return;
     }
 }
 
+#pragma mark - Delete Photos
+- (void)showDeletePhotoesView
+{
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除相册" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
+    [alertView show];
+    return;
+}
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [RequestManager deleteFoldersWithAccessToken:[LoginStateManager currentToken] folderId:[[_selectedArray lastObject] valueForKey:@"folder_id"] success:^(NSString *response){
+             [self refreshFromNetWork];
+             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
+             [self setViewState:NomalState];
+         } failure:^(NSString *error) {
+             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
+             [self setViewState:NomalState];
+         }];
+    }
+}
 
 @end

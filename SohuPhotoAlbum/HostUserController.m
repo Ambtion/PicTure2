@@ -83,6 +83,7 @@
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"users"]];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }

@@ -44,14 +44,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    self.myTableView = [[UITableView alloc] initWithFrame:[self subTableViewRect] style:UITableViewStylePlain];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
-    self.myTableView.separatorColor = [UIColor clearColor];
-    self.myTableView.backgroundColor = [UIColor clearColor];
-    [self.myTableView setScrollsToTop:YES];
-    [self.view addSubview:self.myTableView];
     [self readPhotoAssetes];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDidwriteImage:) name:WRITEIMAGE object:nil];
@@ -61,9 +55,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES animated:NO];
     if (!_cusBar){
-        
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
@@ -110,6 +102,7 @@
         [self prepareDataWithTimeOrder];
     }];
 }
+
 - (void)prepareDataWithTimeOrder
 {
     self.dataSourceArray = [NSMutableArray arrayWithCapacity:0];
@@ -155,6 +148,7 @@
     }
     return [PhotoesCellDataSource cellHigth];
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * cellId = @"photoCELLId";

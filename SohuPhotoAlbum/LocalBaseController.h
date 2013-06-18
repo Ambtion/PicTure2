@@ -15,10 +15,11 @@
 
 @interface LocalBaseController : UIViewController<CusNavigationBarDelegate,UPLoadControllerDelegate>
 {
-    CustomizationNavBar * _cusBar;
     NSMutableArray * selectedArray;
+    CustomizationNavBar * _cusBar;
     viewState _viewState;
 }
+//视图状态
 @property(nonatomic,assign)viewState viewState;
 @property(nonatomic,strong)UITableView * myTableView;
 

@@ -168,6 +168,7 @@
         [_myTableView reloadData];
         _isSending  = NO;
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [commentView.textView resignFirstResponder];
         _isSending  = NO;
     }];
@@ -241,6 +242,7 @@
         [self doneRefrshLoadingTableViewData];
 
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [self doneRefrshLoadingTableViewData];
     }];
     [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
@@ -271,6 +273,7 @@
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
         [self doneMoreLoadingTableViewData];
     } failure:^(NSString *error) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [self doneMoreLoadingTableViewData];
     }];
 }
