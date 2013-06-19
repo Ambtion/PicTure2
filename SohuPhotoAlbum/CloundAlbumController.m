@@ -43,7 +43,7 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.nLabelText setText:@"云备份"];
+        [_cusBar.nLabelText setText:@"网络相册"];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
         //上传按钮
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
@@ -185,8 +185,10 @@
 {
     if ([group isKindOfClass:[NSDictionary class]]) {
         if (_viewState == NomalState) {
+            DLog(@"%@",group);
             NSString * folderId = [NSString stringWithFormat:@"%@",[group objectForKey:@"id"]];
-            [self.navigationController pushViewController:[[CloundAlbumPhotosController alloc] initWithFoldersId:folderId] animated:YES];
+            NSString * _folderName = [group objectForKey:@"folder_name"];
+            [self.navigationController pushViewController:[[CloundAlbumPhotosController alloc] initWithFoldersId:folderId folderName:_folderName] animated:YES];
         }else{
             [_selectedArray removeAllObjects];
             if ([_selectedArray containsObject:group]){

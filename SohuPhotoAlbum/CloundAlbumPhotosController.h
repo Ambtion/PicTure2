@@ -18,10 +18,11 @@
     EGRefreshTableView * _refreshTableView;
     ShareBox * _shareBox;
     NSString * _folderId;
+    NSString * _folderName;
 }
 
 @property(nonatomic,strong)NSString * folderId;
 @property(nonatomic,assign)viewState viewState;
-- (id)initWithFoldersId:(NSString *)folderId;
+- (id)initWithFoldersId:(NSString *)folderId folderName:(NSString *)name;
 
 @end

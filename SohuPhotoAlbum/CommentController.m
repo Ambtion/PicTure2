@@ -53,7 +53,7 @@
 }
 - (void)addBgView
 {
-    _myBgView  = [[UIImageView alloc] initWithFrame:_myTableView.bounds];
+    _myBgView  = [[UIImageView alloc] initWithFrame:_refrehsTableView.bounds];
     _myBgView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_myBgView];
     UIImageView * maskImageView = [[UIImageView alloc] initWithFrame:_myBgView.bounds];
@@ -74,20 +74,26 @@
 
 - (void)addTableView
 {
-    _myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height - 44 - 38) style:UITableViewStylePlain];
-    _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _myTableView.delegate = self;
-    _myTableView.dataSource = self;
-    _myTableView.separatorColor = [UIColor clearColor];
-    _myTableView.backgroundColor = [UIColor clearColor];
+//    _myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height - 44 - 38) style:UITableViewStylePlain];
+//    _myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    _myTableView.delegate = self;
+//    _myTableView.dataSource = self;
+//    _myTableView.separatorColor = [UIColor clearColor];
+//    _myTableView.backgroundColor = [UIColor clearColor];
+//    
+//    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
+//    _refresHeadView.delegate = self;
+//    [_myTableView addSubview:_refresHeadView];
+//    [self.view addSubview:_myTableView];
+//    
+//    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+//    _moreFootView.delegate = self;
+    _refrehsTableView = [[EGRefreshTableView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height - 44 - 38) style:UITableViewStylePlain];
+    _refrehsTableView.backgroundColor =  [UIColor clearColor];
+    _refrehsTableView.pDelegate = self;
+    _refrehsTableView.dataSource = self;
     
-    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, - 60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
-    _refresHeadView.delegate = self;
-    [_myTableView addSubview:_refresHeadView];
-    [self.view addSubview:_myTableView];
-    
-    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-    _moreFootView.delegate = self;
+    [self.view addSubview:_refrehsTableView];
     
 }
 - (void)addCommentView
@@ -165,7 +171,7 @@
         [_dataSourceArray insertObject:[self getCommentSoureWithComment:commentView.textView.internalTextView.text] atIndex:0];
         commentView.textView.internalTextView.text = nil;
         [commentView.textView resignFirstResponder];
-        [_myTableView reloadData];
+        [_refrehsTableView reloadData];
         _isSending  = NO;
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
@@ -183,67 +189,26 @@
     dataSource.commentStr = comment;
     return dataSource;
 }
-#pragma mark - refresh
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)view
-{
-    return [NSDate date];
-}
-- (void)reloadTableViewDataSource
-{
-    _isLoading = YES;
-    [self refrshDataFromNetWork];
-}
-- (void)doneRefrshLoadingTableViewData
-{
-    _isLoading = NO;
-    [_refresHeadView egoRefreshScrollViewDataSourceDidFinishedLoading:_myTableView];
-}
-
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)view
-{
-    [self reloadTableViewDataSource];
-}
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)view
-{
-    return _isLoading;
-}
-- (void)refeshOnce:(id)sender
-{
-    [_refresHeadView refreshImmediately];
-    [self reloadTableViewDataSource];
-}
-
-#pragma mark - more
-- (void)scpMoreTableFootViewDelegateDidTriggerRefresh:(SCPMoreTableFootView *)view
-{
-    [self moreTableViewDataSource];
-}
-- (BOOL)scpMoreTableFootViewDelegateDataSourceIsLoading:(SCPMoreTableFootView *)view
-{
-    return _isLoading;
-}
-- (void)moreTableViewDataSource
-{
-    _isLoading = YES;
-    [self getMoreFromNetWork];
-}
-- (void)doneMoreLoadingTableViewData
-{
-    _isLoading = NO;
-    [_moreFootView scpMoreScrollViewDataSourceDidFinishedLoading:_myTableView];
-}
 
 #pragma mark refrshDataFromNetWork
+- (void)pullingreloadTableViewDataSource:(id)sender
+{
+    [self refrshDataFromNetWork];
+}
+- (void)pullingreloadMoreTableViewData:(id)sender
+{
+    [self getMoreFromNetWork];
+}
 - (void)refrshDataFromNetWork
 {
     [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:0 success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
-        [self doneRefrshLoadingTableViewData];
+        [_refrehsTableView didFinishedLoadingTableViewData];
 
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
-        [self doneRefrshLoadingTableViewData];
+        [_refrehsTableView didFinishedLoadingTableViewData];
     }];
     [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
         userInfo = [response JSONValue];
@@ -255,7 +220,7 @@
 {
     for (int i = 0; i < array.count; i++)
         [_dataSourceArray addObject:[self getCellDataSourceFromInfo:[array objectAtIndex:i]]];
-    [_myTableView reloadData];
+    [_refrehsTableView reloadData];
 }
 - (CommentCellDeteSource *)getCellDataSourceFromInfo:(NSDictionary *)info
 {
@@ -271,24 +236,11 @@
     if (_dataSourceArray.count && _dataSourceArray.count%20) return;
     [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:_dataSourceArray.count / 20 + 1 success:^(NSString *response) {
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
-        [self doneMoreLoadingTableViewData];
-    } failure:^(NSString *error) {
+        [_refrehsTableView didFinishedLoadingTableViewData];    } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
-        [self doneMoreLoadingTableViewData];
-    }];
+        [_refrehsTableView didFinishedLoadingTableViewData];    }];
 }
 
-#pragma mark TableView Delegate
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    [_refresHeadView egoRefreshScrollViewDidEndDragging:scrollView];
-    [_moreFootView scpMoreScrollViewDidEndDragging:scrollView];
-}
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [_refresHeadView egoRefreshScrollViewDidScroll:scrollView];
-    [_moreFootView scpMoreScrollViewDidScroll:scrollView isAutoLoadMore:YES WithIsLoadingPoint:&_isLoading];
-}
 #pragma mark -tableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

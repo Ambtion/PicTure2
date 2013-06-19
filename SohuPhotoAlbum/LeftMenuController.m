@@ -12,7 +12,7 @@
 
 #define MENUMAXNUMBER 4
 
-static NSString *   menuText[5] =   {@"本地相册",@"云备份",@"图片墙",@"星用户",@"通知"};
+static NSString *   menuText[5] =   {@"本地相册",@"云相册",@"图片墙",@"星用户",@"通知"};
 static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shareHistory.png",@"hotUser.png",@"hotUser.png"};
 
 @implementation LeftMenuController

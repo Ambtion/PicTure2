@@ -7,20 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EGORefreshTableHeaderView.h"
-#import "SCPMoreTableFootView.h"
 #import "CustomizationNavBar.h"
 #import "CommentCell.h"
 #import "RequestManager.h"
 #import "MakeCommentView.h"
+#import "EGRefreshTableView.h"
 
-@interface CommentController : UIViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate,
-SCPMoreTableFootViewDelegate,CusNavigationBarDelegate,CommentCellDelegate,MakeCommentViewDelegate>
+@interface CommentController : UIViewController<UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CommentCellDelegate,MakeCommentViewDelegate>
 {
-    UITableView * _myTableView;
+    EGRefreshTableView * _refrehsTableView;
     UIImageView * _myBgView;
-    EGORefreshTableHeaderView * _refresHeadView;
-    SCPMoreTableFootView * _moreFootView;
     NSMutableArray * _dataSourceArray;
     CustomizationNavBar * _navBar;
     BOOL _isLoading;

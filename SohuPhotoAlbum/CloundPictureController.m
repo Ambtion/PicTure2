@@ -288,7 +288,7 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.nLabelText setText:@"云备份"];
+        [_cusBar.nLabelText setText:@"手机备份"];
         
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];

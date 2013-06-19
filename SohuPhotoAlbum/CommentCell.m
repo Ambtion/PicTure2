@@ -40,10 +40,10 @@
     
     porViews = [[PortraitView alloc] initWithFrame:CGRectMake(6, 6 + OFFSETY, 38, 38)];
     porViews.clipsToBounds = YES;
-    porViews.layer.cornerRadius = 5.f;
-    porViews.layer.borderWidth = 1.f;
-    porViews.layer.borderColor = [[UIColor blackColor] CGColor];
-    porViews.backgroundColor = [UIColor clearColor];
+//    porViews.layer.cornerRadius = 5.f;
+//    porViews.layer.borderWidth = 1.f;
+//    porViews.layer.borderColor = [[UIColor blackColor] CGColor];
+//    porViews.backgroundColor = [UIColor clearColor];
     [porViews setUserInteractionEnabled:YES];
     [self.contentView addSubview:porViews];
     UITapGestureRecognizer * ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleUserPortraitTap:) ];

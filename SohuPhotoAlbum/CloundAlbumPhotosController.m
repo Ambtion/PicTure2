@@ -22,16 +22,18 @@
 @synthesize dataSource = _dataSource;
 @synthesize selectedArray = _selectedArray;
 
-- (id)initWithFoldersId:(NSString *)folderId
+- (id)initWithFoldersId:(NSString *)folderId folderName:(NSString *)name
 {
     if (self = [super init]) {
         self.folderId = folderId;
+        _folderName = name;
     }
     return self;
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
     _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _refreshTableView.pDelegate = self;
@@ -54,7 +56,7 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-        [_cusBar.nLabelText setText:@"云备份"];
+        [_cusBar.nLabelText setText:(_folderName && ![_folderName isEqualToString:@""]) ? _folderName : @"网络相册"];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
         //上传按钮
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
@@ -100,7 +102,7 @@
 }
 - (void)getMoreFromNetWork
 {
-    [RequestManager getfoldersPicWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId start:[[self dataSource] count] count:100 success:^(NSString *response) {
+    [RequestManager getfoldersPicWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId start:[[self assetsSource] count] count:100 success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"photos"];
         if (array && array.count) {
             [self addArrayTodataSource:array];
