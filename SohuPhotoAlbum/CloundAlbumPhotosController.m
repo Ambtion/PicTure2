@@ -57,9 +57,13 @@
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:(_folderName && ![_folderName isEqualToString:@""]) ? _folderName : @"网络相册"];
-//        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
-//        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        //        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
+        //        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        _cusBar.normalBar.image = [UIImage imageNamed:@"navbar_edit.png"];
+        [_cusBar.nLabelText setText:@"云相册"];
         [_cusBar.nRightButton1 setTitle:@"操作" forState:UIControlStateNormal];
+        _cusBar.nRightButton1.frame = CGRectMake(320 - 62, 0, 62, 44);
+        
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
@@ -116,7 +120,7 @@
 }
 - (void)addArrayTodataSource:(NSArray *)photoInfo
 {
-    [_assetsSource addObjectsFromArray:photoInfo];    
+    [_assetsSource addObjectsFromArray:photoInfo];
     NSInteger count = _assetsSource.count;
     NSInteger last = count % 4;
     [_dataSource removeAllObjects];
@@ -205,12 +209,12 @@
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];
     }
-//    if (button.tag == RIGHT1BUTTON) {           //分享
-//        [self setViewState:ShareState];
-//    }
-//    if (button.tag == RIGHT2BUTTON) {           //删除
-//        [self setViewState:DeleteState];
-//    }
+    //    if (button.tag == RIGHT1BUTTON) {           //分享
+    //        [self setViewState:ShareState];
+    //    }
+    //    if (button.tag == RIGHT2BUTTON) {           //删除
+    //        [self setViewState:DeleteState];
+    //    }
     if (button.tag == RIGHT1BUTTON ) {          //操作
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"删除相册",@"批量删除照片", nil];
         sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -220,7 +224,7 @@
         [self setViewState:NomalState];
     }
     if (button.tag == RIGHTSELECTEDTAG) {       //确认
-            [self handleEnsureClick];
+        [self handleEnsureClick];
     }
 }
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -229,7 +233,7 @@
         case 0:
             [self setViewState:ShareState];
             break;
-         case 1:
+        case 1:
             [self showDeleteFolderView];
             break;
         case 2:
@@ -326,7 +330,7 @@
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
     
-  [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] optionalTitle:nil desc:des success:^(NSString *response) {
+    [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] optionalTitle:nil desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         [_selectedArray removeAllObjects];
         [self setViewState:NomalState];
@@ -334,10 +338,10 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }];
     [self.navigationController popViewControllerAnimated:YES];
-
+    
 }
 
-#pragma mark 
+#pragma mark
 - (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
 {
     if (isSelected) {

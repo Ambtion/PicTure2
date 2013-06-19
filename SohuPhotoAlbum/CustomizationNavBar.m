@@ -166,7 +166,7 @@
     [_normalBar addSubview:nRightButton1];
     [self.nRightButton1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nRightButton1 setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
-    self.nRightButton1.titleLabel.font = [UIFont systemFontOfSize:16];
+    self.nRightButton1.titleLabel.font = self.sLabelText.font;
     //
     self.nRightButton2 = [GIFButton buttonWithType:UIButtonTypeCustom];
     [self.nRightButton2 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];

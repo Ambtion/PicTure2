@@ -59,6 +59,7 @@
     segControll.frame = CGRectMake(0, 0, 320, 30);
     [self.view addSubview:segControll];
 }
+
 #pragma mark - refrshDataFromNetWork
 - (void)pullingreloadTableViewDataSource:(id)sender
 {
@@ -186,11 +187,11 @@
     __block NSInteger section_b = section;
     [RequestManager getTimePhtotWithAccessToken:[LoginStateManager currentToken] day:days success:^(NSString *response) {
         NSMutableArray * array = [_dataSourceArray objectAtIndex:section];
+        DLog(@"LLLL:%@ %d %d",[response JSONValue],section_b,_refreshTableView.numberOfSections);
         NSArray * photoArray = [[response JSONValue] objectForKey:@"photos"];
         if ((!photoArray) || (!photoArray.count)) return;
         [_assetDictionary setObject:photoArray forKey:days];
         [self insertInfo:photoArray intoDataSourceArray:array];
-        DLog(@"LLLL:%@ %d %d",photoArray,section_b,_refreshTableView.numberOfSections);
         //        return;
         [_refreshTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSString *error) {
@@ -298,8 +299,10 @@
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
+        _cusBar.normalBar.image = [UIImage imageNamed:@"navbar_edit.png"];
         [_cusBar.nLabelText setText:@"云相册"];
         [_cusBar.nRightButton1 setTitle:@"操作" forState:UIControlStateNormal];
+        _cusBar.nRightButton1.frame = CGRectMake(320 - 62, 0, 62, 44);
         [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         

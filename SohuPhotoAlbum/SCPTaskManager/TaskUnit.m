@@ -37,9 +37,9 @@
 
 - (NSData*)imageDataFromAsset
 {
+    //确保登陆
     @autoreleasepool {
-        //确保登陆
-        BOOL  isUploadJPEGImage = NO;
+        BOOL isUploadJPEGImage = NO;
         if ([LoginStateManager isLogin]){
             isUploadJPEGImage = [PerfrenceSettingManager isUploadJPEGImage];
         }else{
@@ -47,7 +47,7 @@
         }
         NSData * data  = [self fullData];
         DLog(@"original data: %f",[data length]/(1024 * 1024.f));
-        NSMutableDictionary * dic = [[self infoDic] mutableCopy]; //info
+        NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[self infoDic]]; //info
         if (isUploadJPEGImage) {
             CGDataProviderRef jpegdata = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
             CGImageRef imageRef = nil;
@@ -57,7 +57,9 @@
                 imageRef = CGImageCreateWithJPEGDataProvider(jpegdata, NULL, YES, kCGRenderingIntentDefault);
             }
             UIImage * image = [UIImage imageWithCGImage:imageRef];
-            data = UIImageJPEGRepresentation(image, 0.1);
+            data = UIImageJPEGRepresentation(image, 0.2);
+            CFRelease(imageRef);
+            CFRelease(jpegdata);
         }
         if (dic){
             [self fixinfoDic:dic];
@@ -75,6 +77,7 @@
     [dateFormatter setDateFormat:@"yyy:MM:dd HH:mm:ss"];
     return [dateFormatter stringFromDate:date];
 }
+
 - (void)fixinfoDic:(NSMutableDictionary *)dic
 {
     NSMutableDictionary * extfDic = [NSMutableDictionary dictionaryWithDictionary:[dic objectForKey:@"{Exif}"]];
@@ -84,6 +87,7 @@
     }
     [dic setObject:extfDic forKey:@"{Exif}"];
 }
+
 - (NSData *)fullData
 {
     ALAssetRepresentation * defaultRep = [self.asset defaultRepresentation];
@@ -95,15 +99,11 @@
         return UIImagePNGRepresentation(image);
     }
     return UIImageJPEGRepresentation(image, 0.8);
-    //    Byte *buffer = (Byte*)malloc(defaultRep.size);
-    //    NSUInteger buffered = [defaultRep getBytes:buffer fromOffset:0.0 length:defaultRep.size error:nil];
-    //    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-    //    return data;
 }
 
 - (NSDictionary *)infoDic
 {
-    return (NSDictionary *)[self getPropertyInfo];
+    return [self getPropertyInfo];
 }
 
 - (NSData *)writeExif:(NSDictionary *)dic intoImage:(NSData *)myimageData
@@ -114,15 +114,19 @@
     
     CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)mydata, kUTTypeJPEG, 1, NULL);
     CGImageDestinationAddImage(destination, imageRef, (__bridge CFDictionaryRef)dic);
+    
     CGImageDestinationFinalize(destination);
     CFRelease(destination);
+    CFRelease(jpegdata);
+    CFRelease(imageRef);
     return mydata;
 }
-- (CFDictionaryRef )getPropertyInfo
+
+- (NSDictionary *)getPropertyInfo
 {
     Byte *buffer = (Byte*)malloc(self.asset.defaultRepresentation.size);
     NSUInteger buffered = [self.asset.defaultRepresentation getBytes:buffer fromOffset:0.0 length:self.asset.defaultRepresentation.size error:nil];
-    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+    NSData * data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:NO];
     //1
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
     if (imageSource == NULL) {
@@ -134,6 +138,8 @@
                              [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
                              nil];
     CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (__bridge CFDictionaryRef)options);
-    return imageProperties;
+    CFRelease(imageSource);
+    free(buffer);
+    return (NSDictionary *)CFBridgingRelease(imageProperties);
 }
 @end

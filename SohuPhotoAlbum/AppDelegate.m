@@ -100,5 +100,8 @@
     //    [alterview show];
     //    application.applicationIconBadgeNumber -= 1;
 }
-
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    DLog(@"");
+}
 @end

@@ -192,6 +192,7 @@
 		C589913C1771842D00375509 /* seg_Normal.png in Resources */ = {isa = PBXBuildFile; fileRef = C589913A1771842D00375509 /* seg_Normal.png */; };
 		C589913D1771842D00375509 /* seg_Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = C589913B1771842D00375509 /* seg_Selected.png */; };
 		C58991441771950D00375509 /* CQSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C58991431771950D00375509 /* CQSegmentControl.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C58991461771BC3E00375509 /* navbar_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = C58991451771BC3E00375509 /* navbar_edit.png */; };
 		C58A0B2F1720E12500521715 /* TabBack.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2C1720E12500521715 /* TabBack.png */; };
 		C58A0B301720E12500521715 /* TabBarShare.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2D1720E12500521715 /* TabBarShare.png */; };
 		C58A0B311720E12500521715 /* TabBarLoad.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2E1720E12500521715 /* TabBarLoad.png */; };
@@ -651,6 +652,7 @@
 		C589913B1771842D00375509 /* seg_Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = seg_Selected.png; sourceTree = "<group>"; };
 		C58991421771950D00375509 /* CQSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQSegmentControl.h; sourceTree = "<group>"; };
 		C58991431771950D00375509 /* CQSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQSegmentControl.m; sourceTree = "<group>"; };
+		C58991451771BC3E00375509 /* navbar_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbar_edit.png; sourceTree = "<group>"; };
 		C58A0B2C1720E12500521715 /* TabBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBack.png; sourceTree = "<group>"; };
 		C58A0B2D1720E12500521715 /* TabBarShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarShare.png; sourceTree = "<group>"; };
 		C58A0B2E1720E12500521715 /* TabBarLoad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarLoad.png; sourceTree = "<group>"; };
@@ -1931,6 +1933,7 @@
 			isa = PBXGroup;
 			children = (
 				C5A87302174776950087C800 /* navbarnoline.png */,
+				C58991451771BC3E00375509 /* navbar_edit.png */,
 				C58353D017253E8600099E6E /* navBar_signalLine.png */,
 				C58A0B541720F94800521715 /* shareBtn_nomal.png */,
 				C58A0B2C1720E12500521715 /* TabBack.png */,
@@ -2377,6 +2380,7 @@
 				C598F4AC175505B50006A379 /* README.md in Resources */,
 				C589913C1771842D00375509 /* seg_Normal.png in Resources */,
 				C589913D1771842D00375509 /* seg_Selected.png in Resources */,
+				C58991461771BC3E00375509 /* navbar_edit.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2623,8 +2627,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: luo ziyang (J8PX8W78GE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: luo ziyang (J8PX8W78GE)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2641,8 +2645,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "438DFF42-A239-4F75-B3BD-8688E347544C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "438DFF42-A239-4F75-B3BD-8688E347544C";
+				PROVISIONING_PROFILE = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2652,8 +2656,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: luo ziyang (J8PX8W78GE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: luo ziyang (J8PX8W78GE)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 浩 陈 (A9KC29Q2F5)";
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2670,8 +2674,8 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "438DFF42-A239-4F75-B3BD-8688E347544C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "438DFF42-A239-4F75-B3BD-8688E347544C";
+				PROVISIONING_PROFILE = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0C6E88A9-0F35-4481-8E09-CDEFFDF0D6CB";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

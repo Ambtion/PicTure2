@@ -55,7 +55,7 @@
                     [self.currentTask.request setUserInfo:[NSDictionary dictionaryWithObject:@"图片太大,无法上传" forKey:@"FAILTURE"]];
                     [self requestFailed:self.currentTask.request];
                 }else{
-                    [self.currentTask.request setPostBody:[imageData mutableCopy]];
+                    [self.currentTask.request setPostBody:[NSMutableData dataWithData:imageData]];
                     [self.currentTask.request startAsynchronous];
                 }
             });
@@ -72,6 +72,7 @@
 {
     [self startNextTaskUnit];
 }
+
 - (void)cancelupLoadWithTag:(NSArray *)unitArray
 {
     for (TaskUnit * unit in unitArray) {
@@ -194,13 +195,14 @@
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
             if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
                 [self postNotificationWithStr:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传"];
-//                [self postNotification]
+                //                [self postNotification]
                 [self endBackgroundUpdateTask];
                 [[UploadTaskManager currentManager] cancelAllOperation];
             }else{
                 [self beginBackgroundUpdateTask];
                 if ([UIApplication sharedApplication].backgroundTimeRemaining < 20.f) {
                     [self postNotificationWithStr:@"程序将被终止,请重新打开保证后台上传"];
+                    return;
                 }
                 [self startNextTaskUnit];
             }
@@ -223,19 +225,18 @@
 
 - (ASIFormDataRequest *)getUploadRequest:(ALAsset *)asset
 {
-
-    //    http://pp.sohu.com/upload/api/sync
     NSString * photoName = [[asset defaultRepresentation] filename];
     NSString * str = [NSString stringWithFormat:@"%@/upload/api/sync?device=%lld&access_token=%@&filename=%@",BASICURL,[LoginStateManager deviceId],[LoginStateManager  currentToken],photoName];
     NSURL * url  = [NSURL URLWithString:str];
     ASIFormDataRequest * request = [ASIFormDataRequest requestWithURL:url];
+    [request setCachePolicy:ASIDoNotWriteToCacheCachePolicy];
     [request setStringEncoding:NSUTF8StringEncoding];
     [request addRequestHeader:@"accept" value:@"application/json"];
     [request setDelegate:self];
     [request setTimeOutSeconds:UPTIMEOUT];
     [request setShowAccurateProgress:YES];
     [request setShouldAttemptPersistentConnection:NO];
-    [request setNumberOfTimesToRetryOnTimeout:5];
+    [request setNumberOfTimesToRetryOnTimeout:3];
     
 #if TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_4_0
     [request setShouldContinueWhenAppEntersBackground:YES];

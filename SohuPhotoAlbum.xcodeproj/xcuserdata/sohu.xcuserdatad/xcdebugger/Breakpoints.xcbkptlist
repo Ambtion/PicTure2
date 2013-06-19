@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SohuPhotoAlbum/CloundAlbumPhotosController.m"
-         timestampString = "393321881.999614"
+         timestampString = "393330752.7964"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "92"
-         endingLineNumber = "92"
+         startingLineNumber = "96"
+         endingLineNumber = "96"
          landmarkName = "-refrshDataFromNetWork"
          landmarkType = "5">
       </FileBreakpoint>
