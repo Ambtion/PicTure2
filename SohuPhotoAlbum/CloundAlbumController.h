@@ -12,7 +12,7 @@
 #import "EGRefreshTableView.h"
 #import "RequestManager.h"
 
-@interface CloudAlbumController : UIViewController <UITableViewDataSource,PhotoAlbumCellDelegate,EGRefreshTableViewDelegate,CusNavigationBarDelegate,PopAlertViewDeleagte>
+@interface CloundAlbumController : UIViewController <UITableViewDataSource,PhotoAlbumCellDelegate,EGRefreshTableViewDelegate,CusNavigationBarDelegate,PopAlertViewDeleagte>
 {
     EGRefreshTableView * _refreshTableView;
     CustomizationNavBar * _cusBar;

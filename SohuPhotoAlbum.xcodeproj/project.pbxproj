@@ -50,7 +50,7 @@
 		C56323EE17475D1900685951 /* MessageEntrySendButtonPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C56323E617475D1900685951 /* MessageEntrySendButtonPressed@2x.png */; };
 		C567F5481741FEF100293864 /* moren1.png in Resources */ = {isa = PBXBuildFile; fileRef = C567F5471741FEF100293864 /* moren1.png */; };
 		C56E31E6177049C300E8936B /* FolderImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C56E31E5177049C300E8936B /* FolderImageView.m */; };
-		C56E31E917705ED800E8936B /* CloudAlbumPhotosController.m in Sources */ = {isa = PBXBuildFile; fileRef = C56E31E817705ED700E8936B /* CloudAlbumPhotosController.m */; };
+		C56E31E917705ED800E8936B /* CloundAlbumPhotosController.m in Sources */ = {isa = PBXBuildFile; fileRef = C56E31E817705ED700E8936B /* CloundAlbumPhotosController.m */; };
 		C57ED93B17028A1900505ECF /* ImageScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageScaleView.m */; };
 		C57ED93E17028C9B00505ECF /* PhotoDetailBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93D17028C9B00505ECF /* PhotoDetailBaseController.m */; };
 		C5830C721740C11C00E56AC8 /* CacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C5830C711740C11C00E56AC8 /* CacheManager.m */; };
@@ -159,8 +159,8 @@
 		C585988B1727B52F0037A14B /* Login_Bar.png in Resources */ = {isa = PBXBuildFile; fileRef = C585988A1727B52F0037A14B /* Login_Bar.png */; };
 		C5863CC817181266005D12ED /* UPLoadController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5863CC717181266005D12ED /* UPLoadController.m */; };
 		C586466F17448862001BE7F2 /* commentbgView.png in Resources */ = {isa = PBXBuildFile; fileRef = C586466E17448862001BE7F2 /* commentbgView.png */; };
-		C586DCEE171CE75D000A4014 /* CloudPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCED171CE75D000A4014 /* CloudPictureController.m */; };
-		C586DCF1171CF9CB000A4014 /* CloudPictureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */; };
+		C586DCEE171CE75D000A4014 /* CloundPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCED171CE75D000A4014 /* CloundPictureController.m */; };
+		C586DCF1171CF9CB000A4014 /* CloundPictureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF0171CF9CB000A4014 /* CloundPictureCell.m */; };
 		C586DCF4171D22A0000A4014 /* PhotoWallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF3171D22A0000A4014 /* PhotoWallCell.m */; };
 		C586DCF9171D3E70000A4014 /* ImageViewAdaper.m in Sources */ = {isa = PBXBuildFile; fileRef = C586DCF8171D3E70000A4014 /* ImageViewAdaper.m */; };
 		C586DCFC171D7245000A4014 /* LabelIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C586DCFB171D7245000A4014 /* LabelIcon.png */; };
@@ -188,6 +188,7 @@
 		C589100F1749BD9A00B90E28 /* ShareBox.m in Sources */ = {isa = PBXBuildFile; fileRef = C589100E1749BD9A00B90E28 /* ShareBox.m */; };
 		C5891013174A150100B90E28 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5891012174A150000B90E28 /* Icon.png */; };
 		C5891015174A150400B90E28 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5891014174A150300B90E28 /* Icon@2x.png */; };
+		C5899136177144A300375509 /* CloundAlbumDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5899135177144A300375509 /* CloundAlbumDetailController.m */; };
 		C58A0B2F1720E12500521715 /* TabBack.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2C1720E12500521715 /* TabBack.png */; };
 		C58A0B301720E12500521715 /* TabBarShare.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2D1720E12500521715 /* TabBarShare.png */; };
 		C58A0B311720E12500521715 /* TabBarLoad.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2E1720E12500521715 /* TabBarLoad.png */; };
@@ -365,7 +366,7 @@
 		C5A87303174776950087C800 /* navbarnoline.png in Resources */ = {isa = PBXBuildFile; fileRef = C5A87302174776950087C800 /* navbarnoline.png */; };
 		C5ACE697174785A40036926A /* leftMenuHigthed.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACE696174785A40036926A /* leftMenuHigthed.png */; };
 		C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */; };
-		C5BB14DB176F05B20061A897 /* CloudAlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BB14DA176F05B10061A897 /* CloudAlbumController.m */; };
+		C5BB14DB176F05B20061A897 /* CloundAlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BB14DA176F05B10061A897 /* CloundAlbumController.m */; };
 		C5BB14E0176F0B4A0061A897 /* EGRefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BB14DF176F0B4A0061A897 /* EGRefreshTableView.m */; };
 		C5CDCCC3171FF48400044330 /* sectionIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC2171FF48400044330 /* sectionIcon.png */; };
 		C5CDCCC5171FFF5000044330 /* sectionNo.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CDCCC4171FFF5000044330 /* sectionNo.png */; };
@@ -436,8 +437,8 @@
 		C567F5471741FEF100293864 /* moren1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moren1.png; sourceTree = "<group>"; };
 		C56E31E4177049C200E8936B /* FolderImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderImageView.h; sourceTree = "<group>"; };
 		C56E31E5177049C300E8936B /* FolderImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderImageView.m; sourceTree = "<group>"; };
-		C56E31E717705ED700E8936B /* CloudAlbumPhotosController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudAlbumPhotosController.h; sourceTree = "<group>"; };
-		C56E31E817705ED700E8936B /* CloudAlbumPhotosController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudAlbumPhotosController.m; sourceTree = "<group>"; };
+		C56E31E717705ED700E8936B /* CloundAlbumPhotosController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundAlbumPhotosController.h; sourceTree = "<group>"; };
+		C56E31E817705ED700E8936B /* CloundAlbumPhotosController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundAlbumPhotosController.m; sourceTree = "<group>"; };
 		C57ED93917028A1900505ECF /* ImageScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageScaleView.h; sourceTree = "<group>"; };
 		C57ED93A17028A1900505ECF /* ImageScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScaleView.m; sourceTree = "<group>"; };
 		C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailBaseController.h; sourceTree = "<group>"; };
@@ -591,10 +592,10 @@
 		C5863CC617181266005D12ED /* UPLoadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPLoadController.h; sourceTree = "<group>"; };
 		C5863CC717181266005D12ED /* UPLoadController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPLoadController.m; sourceTree = "<group>"; };
 		C586466E17448862001BE7F2 /* commentbgView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentbgView.png; sourceTree = "<group>"; };
-		C586DCEC171CE75D000A4014 /* CloudPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudPictureController.h; sourceTree = "<group>"; };
-		C586DCED171CE75D000A4014 /* CloudPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudPictureController.m; sourceTree = "<group>"; };
-		C586DCEF171CF9CB000A4014 /* CloudPictureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudPictureCell.h; sourceTree = "<group>"; };
-		C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudPictureCell.m; sourceTree = "<group>"; };
+		C586DCEC171CE75D000A4014 /* CloundPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundPictureController.h; sourceTree = "<group>"; };
+		C586DCED171CE75D000A4014 /* CloundPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundPictureController.m; sourceTree = "<group>"; };
+		C586DCEF171CF9CB000A4014 /* CloundPictureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundPictureCell.h; sourceTree = "<group>"; };
+		C586DCF0171CF9CB000A4014 /* CloundPictureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundPictureCell.m; sourceTree = "<group>"; };
 		C586DCF2171D22A0000A4014 /* PhotoWallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoWallCell.h; sourceTree = "<group>"; };
 		C586DCF3171D22A0000A4014 /* PhotoWallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoWallCell.m; sourceTree = "<group>"; };
 		C586DCF7171D3E70000A4014 /* ImageViewAdaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewAdaper.h; sourceTree = "<group>"; };
@@ -641,6 +642,8 @@
 		C589100E1749BD9A00B90E28 /* ShareBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareBox.m; sourceTree = "<group>"; };
 		C5891012174A150000B90E28 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		C5891014174A150300B90E28 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		C5899134177144A300375509 /* CloundAlbumDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundAlbumDetailController.h; sourceTree = "<group>"; };
+		C5899135177144A300375509 /* CloundAlbumDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundAlbumDetailController.m; sourceTree = "<group>"; };
 		C58A0B2C1720E12500521715 /* TabBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBack.png; sourceTree = "<group>"; };
 		C58A0B2D1720E12500521715 /* TabBarShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarShare.png; sourceTree = "<group>"; };
 		C58A0B2E1720E12500521715 /* TabBarLoad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarLoad.png; sourceTree = "<group>"; };
@@ -912,8 +915,8 @@
 		C5ACE696174785A40036926A /* leftMenuHigthed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftMenuHigthed.png; sourceTree = "<group>"; };
 		C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
-		C5BB14D9176F05B10061A897 /* CloudAlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudAlbumController.h; sourceTree = "<group>"; };
-		C5BB14DA176F05B10061A897 /* CloudAlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudAlbumController.m; sourceTree = "<group>"; };
+		C5BB14D9176F05B10061A897 /* CloundAlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundAlbumController.h; sourceTree = "<group>"; };
+		C5BB14DA176F05B10061A897 /* CloundAlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundAlbumController.m; sourceTree = "<group>"; };
 		C5BB14DE176F0B4A0061A897 /* EGRefreshTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGRefreshTableView.h; sourceTree = "<group>"; };
 		C5BB14DF176F0B4A0061A897 /* EGRefreshTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGRefreshTableView.m; sourceTree = "<group>"; };
 		C5CDCCC2171FF48400044330 /* sectionIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionIcon.png; sourceTree = "<group>"; };
@@ -1049,6 +1052,8 @@
 				C58773F5171658C300799730 /* LocalDetailController.m */,
 				C54DBC7C172BE15200925B82 /* CloundDetailController.h */,
 				C54DBC7D172BE15300925B82 /* CloundDetailController.m */,
+				C5899134177144A300375509 /* CloundAlbumDetailController.h */,
+				C5899135177144A300375509 /* CloundAlbumDetailController.m */,
 				C52F1F451744B0BE009CC605 /* AlBumDetailController.h */,
 				C52F1F461744B0BE009CC605 /* AlBumDetailController.m */,
 				C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */,
@@ -1394,14 +1399,14 @@
 				C5850D301741EAF7005AC9C9 /* nicheng.png */,
 				C567F5471741FEF100293864 /* moren1.png */,
 				C5850D2E1741E85C005AC9C9 /* moren.png */,
-				C586DCEC171CE75D000A4014 /* CloudPictureController.h */,
-				C586DCED171CE75D000A4014 /* CloudPictureController.m */,
-				C5BB14D9176F05B10061A897 /* CloudAlbumController.h */,
-				C5BB14DA176F05B10061A897 /* CloudAlbumController.m */,
-				C56E31E717705ED700E8936B /* CloudAlbumPhotosController.h */,
-				C56E31E817705ED700E8936B /* CloudAlbumPhotosController.m */,
-				C586DCEF171CF9CB000A4014 /* CloudPictureCell.h */,
-				C586DCF0171CF9CB000A4014 /* CloudPictureCell.m */,
+				C586DCEC171CE75D000A4014 /* CloundPictureController.h */,
+				C586DCED171CE75D000A4014 /* CloundPictureController.m */,
+				C5BB14D9176F05B10061A897 /* CloundAlbumController.h */,
+				C5BB14DA176F05B10061A897 /* CloundAlbumController.m */,
+				C56E31E717705ED700E8936B /* CloundAlbumPhotosController.h */,
+				C56E31E817705ED700E8936B /* CloundAlbumPhotosController.m */,
+				C586DCEF171CF9CB000A4014 /* CloundPictureCell.h */,
+				C586DCF0171CF9CB000A4014 /* CloundPictureCell.m */,
 			);
 			name = CloudPicture;
 			sourceTree = "<group>";
@@ -2470,8 +2475,8 @@
 				C591B4B1171BDA4C0047C496 /* LocalShareDesView.m in Sources */,
 				C591B4B4171BE5820047C496 /* EmojiUnit.m in Sources */,
 				C591B4E6171C20A10047C496 /* LeftAccountView.m in Sources */,
-				C586DCEE171CE75D000A4014 /* CloudPictureController.m in Sources */,
-				C586DCF1171CF9CB000A4014 /* CloudPictureCell.m in Sources */,
+				C586DCEE171CE75D000A4014 /* CloundPictureController.m in Sources */,
+				C586DCF1171CF9CB000A4014 /* CloundPictureCell.m in Sources */,
 				C586DCF4171D22A0000A4014 /* PhotoWallCell.m in Sources */,
 				C586DCF9171D3E70000A4014 /* ImageViewAdaper.m in Sources */,
 				C58A5736171E87DC003B6817 /* PhotoStoryController.m in Sources */,
@@ -2518,10 +2523,11 @@
 				C590CA5E1757054400E87C39 /* ASIInputStream.m in Sources */,
 				C590CA5F1757054400E87C39 /* ASINetworkQueue.m in Sources */,
 				C590CA7F175705CD00E87C39 /* Reachability.m in Sources */,
-				C5BB14DB176F05B20061A897 /* CloudAlbumController.m in Sources */,
+				C5BB14DB176F05B20061A897 /* CloundAlbumController.m in Sources */,
 				C5BB14E0176F0B4A0061A897 /* EGRefreshTableView.m in Sources */,
 				C56E31E6177049C300E8936B /* FolderImageView.m in Sources */,
-				C56E31E917705ED800E8936B /* CloudAlbumPhotosController.m in Sources */,
+				C56E31E917705ED800E8936B /* CloundAlbumPhotosController.m in Sources */,
+				C5899136177144A300375509 /* CloundAlbumDetailController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

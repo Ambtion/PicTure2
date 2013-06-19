@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "EGRefreshTableView.h"
-#import "CloudPictureCell.h"
+#import "CloundPictureCell.h"
 #import "RequestManager.h"
 #import "ShareViewController.h"
 #import "ShareBox.h"
 #import "LocalBaseController.h"
+#import "CloundAlbumController.h"
 
-
-@interface CloudPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloudPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate>
+@interface CloundPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate>
 {
  
     EGRefreshTableView * _refreshTableView;
@@ -24,6 +24,7 @@
     BOOL _isLoadingMax;
     ShareBox * _shareBox;
     BOOL _shouldRefreshOnce;
+    CloundAlbumController * cloudAlbumsConroller;
 }
 
 @property(nonatomic,strong)NSMutableDictionary * assetDictionary;

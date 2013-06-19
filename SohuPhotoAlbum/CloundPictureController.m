@@ -6,11 +6,12 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CloudPictureController.h"
+#import "CloundPictureController.h"
 #import "CloundDetailController.h"
 #import "ShareViewController.h"
+#import "CloundAlbumController.h"
 
-@interface CloudPictureController()
+@interface CloundPictureController()
 @property(strong,nonatomic)NSMutableArray * dataSourceArray;
 @property(strong,nonatomic)NSMutableArray * assetsArray;
 @property(strong,nonatomic)NSMutableArray * assetsSection;
@@ -18,7 +19,7 @@
 @property(strong,nonatomic)NSMutableArray * selectedArray;
 @end
 
-@implementation CloudPictureController
+@implementation CloundPictureController
 @synthesize dataSourceArray = _dataSourceArray;
 @synthesize assetsSection = _assetsSection;
 @synthesize assetSectionisShow = _assetSectionisShow;
@@ -109,11 +110,11 @@
     NSInteger last = count % 4;
     NSMutableArray * tempArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < count / 4; i++) {
-        CloudPictureCellDataSource * soure = [[CloudPictureCellDataSource alloc] init];
+        CloundPictureCellDataSource * soure = [[CloundPictureCellDataSource alloc] init];
         soure.firstDic  = soure.secoundDic = soure.thridDic = soure.lastDic = [NSMutableDictionary dictionaryWithCapacity:0];
         [tempArray addObject:soure];
     }
-    CloudPictureCellDataSource * soure = [[CloudPictureCellDataSource alloc] init];
+    CloundPictureCellDataSource * soure = [[CloundPictureCellDataSource alloc] init];
     switch (last) {
         case 3:
             soure.thridDic =  [NSMutableDictionary dictionaryWithCapacity:0];
@@ -179,7 +180,7 @@
         if ((!photoArray) || (!photoArray.count)) return;
         [_assetDictionary setObject:photoArray forKey:days];
         [self insertInfo:photoArray intoDataSourceArray:array];
-        DLog(@"LLLL:%@ %d %d",dic,section_b,_refreshTableView.numberOfSections);
+        DLog(@"LLLL:%@ %d %d",[photoArray lastObject],section_b,_refreshTableView.numberOfSections);
         //        return;
         [_refreshTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSString *error) {
@@ -192,7 +193,7 @@
     NSInteger count = photoInfo.count;
     NSInteger last = count % 4;
     for (int i = 0; i < count - last; i+=4) {
-        CloudPictureCellDataSource * soure  = nil;
+        CloundPictureCellDataSource * soure  = nil;
         if (i / 4 < sourceArray.count)
             soure = [sourceArray objectAtIndex:i / 4];
         soure.firstDic  = [photoInfo objectAtIndex:i];
@@ -201,7 +202,7 @@
         soure.lastDic = [photoInfo objectAtIndex:i + 3];
     }
     if (last && count / 4 < sourceArray.count) {
-        CloudPictureCellDataSource * soure = [sourceArray objectAtIndex:count / 4];
+        CloundPictureCellDataSource * soure = [sourceArray objectAtIndex:count / 4];
         switch (last) {
             case 3:
                 soure.thridDic = [photoInfo objectAtIndex:(count / 4)*4 + 2];
@@ -246,20 +247,20 @@
 {
     photoAssert(0.f);
     if (indexPath.row == [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count] - 1) {
-        return [CloudPictureCellDataSource cellLastHigth];
+        return [CloundPictureCellDataSource cellLastHigth];
     }
-    return [CloudPictureCellDataSource cellHigth];
+    return [CloundPictureCellDataSource cellHigth];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CloudPictureCellDataSource * source = nil;
+    CloundPictureCellDataSource * source = nil;
     if (indexPath.section < self.dataSourceArray.count
         && indexPath.row < [(NSMutableArray *)[self.dataSourceArray objectAtIndex:indexPath.section] count])
         source = [[[self dataSourceArray] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
-    CloudPictureCell * cell = [tableView dequeueReusableCellWithIdentifier:cloudIdentify[[source sourceNumber]]];
+    CloundPictureCell * cell = [tableView dequeueReusableCellWithIdentifier:cloudIdentify[[source sourceNumber]]];
     if (!cell) {
-        cell = [[CloudPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[source sourceNumber]];
+        cell = [[CloundPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[source sourceNumber]];
         cell.delegate = self;
     }
     cell.dataSource = source;
@@ -288,10 +289,11 @@
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:@"云备份"];
-        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
-        //上传按钮
-        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton3 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
@@ -331,10 +333,15 @@
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) {           //分享
+    if (button.tag == RIGHT1BUTTON) {           //切换
+        if (!cloudAlbumsConroller)
+            cloudAlbumsConroller = [[CloundAlbumController alloc] init];
+        self.viewDeckController.centerController = cloudAlbumsConroller;
+    }
+    if (button.tag == RIGHT2BUTTON) {           //分享
         [self setViewState:ShareState];
     }
-    if (button.tag == RIGHT2BUTTON) {           //删除
+    if (button.tag == RIGHT3BUTTON) {           //删除
         [self setViewState:DeleteState];
     }
     if (button.tag == CANCELBUTTONTAG) {        //取消
@@ -345,7 +352,7 @@
     }
 }
 
-- (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
+- (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
     NSIndexPath * path = [_refreshTableView indexPathForCell:cell];
     NSInteger  leftTime = path.section;
@@ -395,7 +402,7 @@
     return leftArray;
 }
 
-- (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
+- (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
 {
     if (isSelected) {
         [_selectedArray addObject:dic];

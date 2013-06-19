@@ -13,7 +13,7 @@
 static NSString * const cloudIdentify[5] = {@"____0",@"____1",@"____2",@"3____",@"____4"};
 
 
-@interface CloudPictureCellDataSource : NSObject
+@interface CloundPictureCellDataSource : NSObject
 @property(nonatomic,strong)NSDictionary * firstDic;
 @property(nonatomic,strong)NSDictionary * secoundDic;
 @property(nonatomic,strong)NSDictionary * thridDic;
@@ -25,24 +25,22 @@ static NSString * const cloudIdentify[5] = {@"____0",@"____1",@"____2",@"3____",
 + (CGFloat)cellLastHigth;
 @end
 
-@class CloudPictureCell;
-@protocol CloudPictureCellDelegate <NSObject>
-- (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic;
-- (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected;
+@class CloundPictureCell;
+@protocol CloundPictureCellDelegate <NSObject>
+- (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic;
+- (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected;
 @end
 
-@interface CloudPictureCell : UITableViewCell
-
-
+@interface CloundPictureCell : UITableViewCell
 {
-    CloudPictureCellDataSource * _dataSource;
+    CloundPictureCellDataSource * _dataSource;
     SDImageCache * cache;
     NSInteger sourceNumber;
     BOOL canBeOperated;
 }
 
-@property(nonatomic,weak)id<CloudPictureCellDelegate> delegate;
-@property(nonatomic,strong)CloudPictureCellDataSource * dataSource;
+@property(nonatomic,weak)id<CloundPictureCellDelegate> delegate;
+@property(nonatomic,strong)CloundPictureCellDataSource * dataSource;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSInteger)reuseIdentifier;
 - (void)showCellSelectedStatus;

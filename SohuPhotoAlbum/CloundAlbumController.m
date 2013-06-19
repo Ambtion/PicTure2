@@ -6,10 +6,11 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CloudAlbumController.h"
-#import "CloudAlbumPhotosController.h"
+#import "CloundAlbumController.h"
+#import "CloundAlbumPhotosController.h"
+#import "LeftMenuController.h"
 
-@interface CloudAlbumController ()
+@interface CloundAlbumController ()
 //总的专辑资源
 @property(nonatomic,strong)NSMutableArray *assetGroups;
 //对应的tableview的分类资源
@@ -18,7 +19,7 @@
 @property(nonatomic,strong)NSMutableArray * selectedArray;
 @end
 
-@implementation CloudAlbumController
+@implementation CloundAlbumController
 @synthesize assetGroups;
 @synthesize dataSourceArray;
 @synthesize selectedArray = _selectedArray;
@@ -43,7 +44,7 @@
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:@"云备份"];
-        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
         //上传按钮
         [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
@@ -166,8 +167,9 @@
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) {           //分享
-//        [self setViewState:ShareState];
+    if (button.tag == RIGHT1BUTTON) {           //切换
+        LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
+        self.viewDeckController.centerController = leftCon.cloudController;
     }
     if (button.tag == RIGHT2BUTTON) {           //删除
         [self setViewState:DeleteState];
@@ -183,8 +185,8 @@
 {
     if ([group isKindOfClass:[NSDictionary class]]) {
         if (_viewState == NomalState) {
-            NSString * folderId = [NSString stringWithFormat:@"%@",[group objectForKey:@"folder_id"]];
-            [self.navigationController pushViewController:[[CloudAlbumPhotosController alloc] initWithFoldersId:folderId] animated:YES];
+            NSString * folderId = [NSString stringWithFormat:@"%@",[group objectForKey:@"id"]];
+            [self.navigationController pushViewController:[[CloundAlbumPhotosController alloc] initWithFoldersId:folderId] animated:YES];
         }else{
             [_selectedArray removeAllObjects];
             if ([_selectedArray containsObject:group]){
@@ -218,7 +220,7 @@
 - (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        [RequestManager deleteFoldersWithAccessToken:[LoginStateManager currentToken] folderId:[[_selectedArray lastObject] valueForKey:@"folder_id"] success:^(NSString *response){
+        [RequestManager deleteFoldersWithAccessToken:[LoginStateManager currentToken] folderId:[[_selectedArray lastObject] valueForKey:@"id"] success:^(NSString *response){
              [self refreshFromNetWork];
              [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
              [self setViewState:NomalState];

@@ -6,16 +6,17 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CloudAlbumPhotosController.h"
+#import "CloundAlbumPhotosController.h"
 #import "RequestManager.h"
+#import "CloundAlbumDetailController.h"
 
-@interface CloudAlbumPhotosController()
+@interface CloundAlbumPhotosController()
 @property(nonatomic,strong)NSMutableArray * assetsSource;
 @property(nonatomic,strong)NSMutableArray * dataSource;
 @property(nonatomic,strong)NSMutableArray * selectedArray;
 @end
 
-@implementation CloudAlbumPhotosController
+@implementation CloundAlbumPhotosController
 @synthesize folderId = _folderId;
 @synthesize assetsSource = _assetsSource;
 @synthesize dataSource = _dataSource;
@@ -90,7 +91,6 @@
             [_assetsSource removeAllObjects];
             DLog(@"%@",array);
             [self addArrayTodataSource:array];
-            [_refreshTableView reloadData];
             [_refreshTableView didFinishedLoadingTableViewData];
         }
     } failure:^(NSString * error) {
@@ -104,7 +104,6 @@
         NSArray * array = [[response JSONValue] objectForKey:@"photos"];
         if (array && array.count) {
             [self addArrayTodataSource:array];
-            [_refreshTableView reloadData];
             [_refreshTableView didFinishedLoadingTableViewData];
         }
     } failure:^(NSString * error) {
@@ -114,38 +113,39 @@
 }
 - (void)addArrayTodataSource:(NSArray *)photoInfo
 {
-    [_assetsSource addObjectsFromArray:photoInfo];
-    NSInteger count = photoInfo.count;
+    [_assetsSource addObjectsFromArray:photoInfo];    
+    NSInteger count = _assetsSource.count;
     NSInteger last = count % 4;
     [_dataSource removeAllObjects];
     for (int i = 0; i < count - last; i+=4) {
-        CloudPictureCellDataSource * soure  = [[CloudPictureCellDataSource alloc] init];
-        soure.firstDic  = [photoInfo objectAtIndex:i];
-        soure.secoundDic = [photoInfo objectAtIndex:i + 1];
-        soure.thridDic = [photoInfo objectAtIndex:i + 2];
-        soure.lastDic = [photoInfo objectAtIndex:i + 3];
+        CloundPictureCellDataSource * soure  = [[CloundPictureCellDataSource alloc] init];
+        soure.firstDic  = [_assetsSource objectAtIndex:i];
+        soure.secoundDic = [_assetsSource objectAtIndex:i + 1];
+        soure.thridDic = [_assetsSource objectAtIndex:i + 2];
+        soure.lastDic = [_assetsSource objectAtIndex:i + 3];
         [_dataSource addObject:soure];
     }
     if (last) {
-        CloudPictureCellDataSource * soure  = [[CloudPictureCellDataSource alloc] init];
+        CloundPictureCellDataSource * soure  = [[CloundPictureCellDataSource alloc] init];
         switch (last) {
             case 3:
-                soure.thridDic = [photoInfo objectAtIndex:(count / 4)*4 + 2];
+                soure.thridDic = [_assetsSource objectAtIndex:(count / 4)*4 + 2];
             case 2:
-                soure.secoundDic =  [photoInfo objectAtIndex:(count / 4)*4  + 1];
+                soure.secoundDic =  [_assetsSource objectAtIndex:(count / 4)*4  + 1];
             case 1:
-                soure.firstDic = [photoInfo objectAtIndex:(count / 4) * 4 ];
+                soure.firstDic = [_assetsSource objectAtIndex:(count / 4) * 4 ];
                 break;
             default:
                 break;
         }
         [_dataSource addObject:soure];
     }
+    [_refreshTableView reloadData];
 }
 #pragma mark -
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ceil([[self dataSource] count] / 4.0);
+    return [[self dataSource] count];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -155,18 +155,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == [self.dataSource count] - 1) {
-        return [CloudPictureCellDataSource cellLastHigth];
+        return [CloundPictureCellDataSource cellLastHigth];
     }
-    return [CloudPictureCellDataSource cellHigth];
+    return [CloundPictureCellDataSource cellHigth];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CloudPictureCellDataSource * source = nil;
+    CloundPictureCellDataSource * source = nil;
     if (indexPath.row < self.dataSource.count)
         source = [[self dataSource] objectAtIndex:indexPath.row];
-    CloudPictureCell * cell = [tableView dequeueReusableCellWithIdentifier:cloudIdentify[[source sourceNumber]]];
+    CloundPictureCell * cell = [tableView dequeueReusableCellWithIdentifier:cloudIdentify[[source sourceNumber]]];
     if (!cell) {
-        cell = [[CloudPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[source sourceNumber]];
+        cell = [[CloundPictureCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[source sourceNumber]];
         cell.delegate = self;
     }
     cell.dataSource = source;
@@ -261,7 +261,7 @@
 {
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     for (NSDictionary * dic in _selectedArray) {
-        [array addObject:[NSString stringWithFormat:@"%@",[dic objectForKey:@"photo_id"]]];
+        [array addObject:[NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]]];
     }
     return array;
 }
@@ -280,7 +280,7 @@
 
 - (void)shareViewcontrollerDidShareClick:(ShareViewController *)controller withDes:(NSString *)des shareMode:(KShareModel)model
 {
-
+    
   [RequestManager sharePhotosWithAccesstoken:[LoginStateManager currentToken]  photoIDs:[self photosIdArray] share_to:model shareAccestoken:[[LoginStateManager getTokenInfo:model] objectForKey:@"access_token"] optionalTitle:nil desc:des success:^(NSString *response) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
         [_selectedArray removeAllObjects];
@@ -293,7 +293,7 @@
 }
 
 #pragma mark 
-- (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
+- (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic Select:(BOOL)isSelected
 {
     if (isSelected) {
         [_selectedArray addObject:dic];
@@ -301,10 +301,11 @@
         [_selectedArray removeObject:dic];
     }
 }
-- (void)cloudPictureCell:(CloudPictureCell *)cell clickInfo:(NSDictionary *)dic
+- (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
     //点击
-    
+    [self.navigationController pushViewController:[[CloundAlbumDetailController alloc] initWithAssetsArray:self.assetsSource andCurAsset:dic] animated:YES];
+    DLog(@"%@ %d",dic,self.assetsSource.count);
 }
 
 @end

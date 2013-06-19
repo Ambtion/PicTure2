@@ -178,6 +178,7 @@
     }];
 }
 
+
 #pragma mark - GetActualImage
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
@@ -190,6 +191,7 @@
 //        [weakImage.imageView stopLoading];
 //    }];
 }
+
 #pragma mark GetMoreAssets
 - (void)getMoreAssetsAfterCurNum
 {

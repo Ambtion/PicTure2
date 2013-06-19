@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "EGRefreshTableView.h"
-#import "CloudPictureCell.h"
+#import "CloundPictureCell.h"
 #import "ShareBox.h"
 #import "ShareViewController.h"
 
-@interface CloudAlbumPhotosController : UIViewController <EGRefreshTableViewDelegate,UITableViewDataSource,CusNavigationBarDelegate,CloudPictureCellDelegate,ShareBoxDelegate,WXApiDelegate,PopAlertViewDeleagte,ShareViewControllerDelegate>
+@interface CloundAlbumPhotosController : UIViewController <EGRefreshTableViewDelegate,UITableViewDataSource,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareBoxDelegate,WXApiDelegate,PopAlertViewDeleagte,ShareViewControllerDelegate>
 {
     CustomizationNavBar * _cusBar;
     EGRefreshTableView * _refreshTableView;

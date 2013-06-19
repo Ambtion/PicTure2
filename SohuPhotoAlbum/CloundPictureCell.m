@@ -6,13 +6,13 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "CloudPictureCell.h"
+#import "CloundPictureCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+WebCache.h"
 
 #define CELLHIGTH  80.f
 
-@implementation CloudPictureCellDataSource
+@implementation CloundPictureCellDataSource
 @synthesize firstDic,secoundDic,thridDic,lastDic;
 - (NSInteger)sourceNumber
 {
@@ -46,7 +46,7 @@
 }
 @end
 
-@implementation CloudPictureCell
+@implementation CloundPictureCell
 
 @synthesize delegate = _delegate;
 @synthesize dataSource = _dataSource;
@@ -77,7 +77,7 @@
     }
 }
 
-- (void)setDataSource:(CloudPictureCellDataSource *)dataSource
+- (void)setDataSource:(CloundPictureCellDataSource *)dataSource
 {
     _dataSource = dataSource;
     [self updataViews];

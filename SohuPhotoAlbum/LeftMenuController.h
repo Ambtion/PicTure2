@@ -10,7 +10,7 @@
 
 #import "AppDelegate.h"
 #import "LocalALLPhotoesController.h"   //本地相册
-#import "CloudPictureController.h"      //云端相册
+#import "CloundPictureController.h"      //云端相册
 #import "PhotoWallController.h"         //图片墙
 #import "HostUserController.h"          //星用户
 
@@ -30,5 +30,5 @@
     NSIndexPath * _selectPath;
 }
 @property(nonatomic,strong)LocalALLPhotoesController * localAllController;
-
+@property(nonatomic,strong)CloundPictureController *cloudController;
 @end

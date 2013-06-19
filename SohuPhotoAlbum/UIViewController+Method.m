@@ -8,7 +8,7 @@
 
 #import "UIViewController+Method.h"
 #import "AppDelegate.h"
-#import "CloudPictureCell.h"
+#import "CloundPictureCell.h"
 #import "PhotoesCell.h"
 #import "UIImageView+WebCache.h"
 #import "SDImageCache.h"
@@ -41,7 +41,7 @@
 {
     NSMutableArray * finalArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 0; i < array.count; i+=4) {
-        CloudPictureCellDataSource * source = [[CloudPictureCellDataSource alloc] init];
+        CloundPictureCellDataSource * source = [[CloundPictureCellDataSource alloc] init];
         source.firstDic = [array objectAtIndex:i];
         if (i + 3 < array.count) {
             source.secoundDic = [array objectAtIndex:i+1];

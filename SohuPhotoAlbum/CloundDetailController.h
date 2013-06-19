@@ -13,7 +13,7 @@
 #import "SDImageCache.h"
 
 #define DELETEPHOTO @"delePhoto"
-
+/*这是手机备份相册的最终展示页,包含分享,下载到本地,以及通过时间加载前后更多的逻辑*/
 @interface CloundDetailController : PhotoDetailBaseController<WXApiDelegate,ShareBoxDelegate,WXApiDelegate,ShareViewControllerDelegate>
 {
     BOOL _hasMoreAssets;

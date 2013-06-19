@@ -103,27 +103,33 @@
     if (self) {
         [self setUserInteractionEnabled:YES];
         
-        _normalBar = [[UIImageView alloc] initWithFrame:self.bounds];
-        [_normalBar setUserInteractionEnabled:YES];
-        _normalBar.image = [UIImage imageNamed:@"navbar.png"];
-        
-        self.nLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        nLeftButton.frame = CGRectMake(0, 0, 44, 44);
-        nLeftButton.tag = LEFTBUTTON;
-        [nLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_normalBar addSubview:nLeftButton];
-        
-        self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
-        [_normalBar addSubview:nLabelImage];
-        self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
-        self.nLabelText.backgroundColor = [UIColor clearColor];
-        self.nLabelText.textColor = [UIColor blackColor];
-        [_normalBar addSubview:nLabelText];
-        [self addRightButtonsOnNormalBar];
-        [self addSubview:_normalBar];
+        //普通状态下的bar状态
+        [self initNomalBar];
+        //视图切换带非普通状态下的bar状态
         [self initStateBar];
     }
     return self;
+}
+- (void)initNomalBar
+{
+    _normalBar = [[UIImageView alloc] initWithFrame:self.bounds];
+    [_normalBar setUserInteractionEnabled:YES];
+    _normalBar.image = [UIImage imageNamed:@"navbar.png"];
+    
+    self.nLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    nLeftButton.frame = CGRectMake(0, 0, 44, 44);
+    nLeftButton.tag = LEFTBUTTON;
+    [nLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_normalBar addSubview:nLeftButton];
+    
+    self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
+    [_normalBar addSubview:nLabelImage];
+    self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
+    self.nLabelText.backgroundColor = [UIColor clearColor];
+    self.nLabelText.textColor = [UIColor blackColor];
+    [_normalBar addSubview:nLabelText];
+    [self addRightButtonsOnNormalBar];
+    [self addSubview:_normalBar];
 }
 - (void)initStateBar
 {
@@ -163,6 +169,12 @@
     nRightButton2.frame = CGRectMake(320 - 88, 0, 44, 44);
     nRightButton2.tag = RIGHT2BUTTON;
     [_normalBar addSubview:nRightButton2];
+    
+    self.nRightButton3 = [GIFButton buttonWithType:UIButtonTypeCustom];
+    [self.nRightButton3 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    nRightButton3.frame = CGRectMake(320 - 88 - 44, 0, 44, 44);
+    nRightButton3.tag = RIGHT3BUTTON;
+    [_normalBar addSubview:nRightButton3];
     
 }
 

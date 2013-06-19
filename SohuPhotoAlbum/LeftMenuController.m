@@ -8,7 +8,7 @@
 #import "LeftMenuController.h"
 #import "RequestManager.h"
 #import "UIImageView+WebCache.h"
-#import "CloudAlbumController.h"
+#import "CloundAlbumController.h"
 
 #define MENUMAXNUMBER 4
 
@@ -17,6 +17,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 
 @implementation LeftMenuController
 @synthesize localAllController;
+@synthesize cloudController;
 
 - (void)viewDidLoad
 {
@@ -141,9 +142,9 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         self.viewDeckController.centerController = localAllController;
     }
     if (indexPath.row == 1) {
-//        CloudPictureController * cp = [[CloudPictureController alloc] init];
-        CloudAlbumController * cp = [[CloudAlbumController alloc] init];
-        self.viewDeckController.centerController = cp;
+        if (!cloudController)
+            cloudController = [[CloundPictureController alloc] init];
+        self.viewDeckController.centerController = cloudController;
     }
     if (indexPath.row == 2) {
         PhotoWallController * lp = [[PhotoWallController alloc] initWithOwnerID:[LoginStateManager currentUserId] isRootController:YES];
