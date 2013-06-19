@@ -19,6 +19,7 @@
     isShowWeixin = showWeiXin;
     isShowWall = showWall;
     UIActionSheet * sheet = [[UIActionSheet alloc] init];
+    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     sheet.delegate = self;
     [sheet addButtonWithTitle:@"新浪微博"];
     [sheet addButtonWithTitle:@"人人网"];

@@ -189,6 +189,9 @@
 		C5891013174A150100B90E28 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C5891012174A150000B90E28 /* Icon.png */; };
 		C5891015174A150400B90E28 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5891014174A150300B90E28 /* Icon@2x.png */; };
 		C5899136177144A300375509 /* CloundAlbumDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5899135177144A300375509 /* CloundAlbumDetailController.m */; };
+		C589913C1771842D00375509 /* seg_Normal.png in Resources */ = {isa = PBXBuildFile; fileRef = C589913A1771842D00375509 /* seg_Normal.png */; };
+		C589913D1771842D00375509 /* seg_Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = C589913B1771842D00375509 /* seg_Selected.png */; };
+		C58991441771950D00375509 /* CQSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C58991431771950D00375509 /* CQSegmentControl.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C58A0B2F1720E12500521715 /* TabBack.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2C1720E12500521715 /* TabBack.png */; };
 		C58A0B301720E12500521715 /* TabBarShare.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2D1720E12500521715 /* TabBarShare.png */; };
 		C58A0B311720E12500521715 /* TabBarLoad.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2E1720E12500521715 /* TabBarLoad.png */; };
@@ -644,6 +647,10 @@
 		C5891014174A150300B90E28 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		C5899134177144A300375509 /* CloundAlbumDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloundAlbumDetailController.h; sourceTree = "<group>"; };
 		C5899135177144A300375509 /* CloundAlbumDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloundAlbumDetailController.m; sourceTree = "<group>"; };
+		C589913A1771842D00375509 /* seg_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = seg_Normal.png; sourceTree = "<group>"; };
+		C589913B1771842D00375509 /* seg_Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = seg_Selected.png; sourceTree = "<group>"; };
+		C58991421771950D00375509 /* CQSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CQSegmentControl.h; sourceTree = "<group>"; };
+		C58991431771950D00375509 /* CQSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CQSegmentControl.m; sourceTree = "<group>"; };
 		C58A0B2C1720E12500521715 /* TabBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBack.png; sourceTree = "<group>"; };
 		C58A0B2D1720E12500521715 /* TabBarShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarShare.png; sourceTree = "<group>"; };
 		C58A0B2E1720E12500521715 /* TabBarLoad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarLoad.png; sourceTree = "<group>"; };
@@ -1407,6 +1414,10 @@
 				C56E31E817705ED700E8936B /* CloundAlbumPhotosController.m */,
 				C586DCEF171CF9CB000A4014 /* CloundPictureCell.h */,
 				C586DCF0171CF9CB000A4014 /* CloundPictureCell.m */,
+				C58991421771950D00375509 /* CQSegmentControl.h */,
+				C58991431771950D00375509 /* CQSegmentControl.m */,
+				C589913A1771842D00375509 /* seg_Normal.png */,
+				C589913B1771842D00375509 /* seg_Selected.png */,
 			);
 			name = CloudPicture;
 			sourceTree = "<group>";
@@ -2364,6 +2375,8 @@
 				C598F49E1754D40F0006A379 /* Default@2x.png in Resources */,
 				C598F4A01754D4140006A379 /* Default-568h@2x.png in Resources */,
 				C598F4AC175505B50006A379 /* README.md in Resources */,
+				C589913C1771842D00375509 /* seg_Normal.png in Resources */,
+				C589913D1771842D00375509 /* seg_Selected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2528,6 +2541,7 @@
 				C56E31E6177049C300E8936B /* FolderImageView.m in Sources */,
 				C56E31E917705ED800E8936B /* CloundAlbumPhotosController.m in Sources */,
 				C5899136177144A300375509 /* CloundAlbumDetailController.m in Sources */,
+				C58991441771950D00375509 /* CQSegmentControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

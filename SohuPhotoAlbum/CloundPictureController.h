@@ -15,7 +15,8 @@
 #import "LocalBaseController.h"
 #import "CloundAlbumController.h"
 
-@interface CloundPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate>
+@class CQSegmentControl;
+@interface CloundPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate,UIActionSheetDelegate>
 {
  
     EGRefreshTableView * _refreshTableView;
@@ -25,6 +26,7 @@
     ShareBox * _shareBox;
     BOOL _shouldRefreshOnce;
     CloundAlbumController * cloudAlbumsConroller;
+    CQSegmentControl *segControll;
 }
 
 @property(nonatomic,strong)NSMutableDictionary * assetDictionary;

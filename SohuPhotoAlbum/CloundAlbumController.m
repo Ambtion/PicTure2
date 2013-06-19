@@ -9,6 +9,7 @@
 #import "CloundAlbumController.h"
 #import "CloundAlbumPhotosController.h"
 #import "LeftMenuController.h"
+#import "CQSegmentControl.h"
 
 @interface CloundAlbumController ()
 //总的专辑资源
@@ -27,32 +28,46 @@
 
 - (void)viewDidLoad
 {
-    
     [super viewDidLoad];
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:CGRectMake(0, 30, 320, self.view.bounds.size.height - 30) style:UITableViewStylePlain];
     _refreshTableView.pDelegate = self;
     _refreshTableView.dataSource = self;
     [self.view addSubview:_refreshTableView];
     _selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
+    [self addsegment];
     [self refreshFromNetWork];
 }
+- (void)addsegment
+{
+    NSArray * items = [NSArray arrayWithObjects:@"手机备份",@"网络相册", nil];
+    segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
+    segControll.selectedSegmentIndex = 1;
+    [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
+    segControll.frame = CGRectMake(0, 0, 320, 30);
+    [self.view addSubview:segControll];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.nLabelText setText:@"网络相册"];
-        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
+        [_cusBar.normalBar setImage:[UIImage imageNamed:@"navbarnoline.png"]];
+        [_cusBar.nLabelText setText:@"云相册"];
+//        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
         //上传按钮
-        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+//        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
+        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    segControll.selectedSegmentIndex = 1;
 }
 
 #pragma mark
@@ -99,6 +114,7 @@
         [_refreshTableView didFinishedLoadingTableViewData];
     }];
 }
+
 - (void)getMoreFromNetWork
 {
     [RequestManager getFoldersWithAccessToken:[LoginStateManager currentToken] start:assetGroups.count  count:20 success:^(NSString *response) {
@@ -162,6 +178,7 @@
 }
 
 #pragma mark CellDelegate
+
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {
     if (button.tag == LEFTBUTTON) {
@@ -180,6 +197,15 @@
     if (button.tag == RIGHTSELECTEDTAG) {       //确认
         [self handleEnsureClick];
     }
+}
+- (void)segMentChnageValue:(UISegmentedControl *)seg
+{
+    DLog(@"%d",seg.selectedSegmentIndex);
+    if (seg.selectedSegmentIndex == 1) {
+        return;
+    }
+    LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
+    self.viewDeckController.centerController = leftCon.cloudController;
 }
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(id)group
 {
@@ -206,31 +232,31 @@
         [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择图片"];
         return;
     }
-    if (_viewState == DeleteState) {
-        [self showDeletePhotoesView];
-        return;
-    }
+//    if (_viewState == DeleteState) {
+//        [self showDeletePhotoesView];
+//        return;
+//    }
 }
 
-#pragma mark - Delete Photos
-- (void)showDeletePhotoesView
-{
-    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除相册" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
-    [alertView show];
-    return;
-}
-- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1) {
-        [RequestManager deleteFoldersWithAccessToken:[LoginStateManager currentToken] folderId:[[_selectedArray lastObject] valueForKey:@"id"] success:^(NSString *response){
-             [self refreshFromNetWork];
-             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
-             [self setViewState:NomalState];
-         } failure:^(NSString *error) {
-             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
-             [self setViewState:NomalState];
-         }];
-    }
-}
+//#pragma mark - Delete Photos
+//- (void)showDeletePhotoesView
+//{
+//    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除相册" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
+//    [alertView show];
+//    return;
+//}
+//- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (buttonIndex == 1) {
+//        [RequestManager deleteFoldersWithAccessToken:[LoginStateManager currentToken] folderId:[[_selectedArray lastObject] valueForKey:@"id"] success:^(NSString *response){
+//             [self refreshFromNetWork];
+//             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
+//             [self setViewState:NomalState];
+//         } failure:^(NSString *error) {
+//             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
+//             [self setViewState:NomalState];
+//         }];
+//    }
+//}
 
 @end

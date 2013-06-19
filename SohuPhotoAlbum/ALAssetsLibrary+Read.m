@@ -51,7 +51,7 @@
 }
 
 #pragma mark read All photoes
-- (void) readAlbumIntoGroupContainer:(NSMutableArray *)assetGroups  assetsContainer:(NSMutableArray *)assetsArray sucess:(void(^)(void))sucess failture:(void(^)(NSError * error))failture;
+- (void) readAlbumIntoGroupContainer:(NSMutableArray *)assetGroups  assetsContainer:(NSMutableArray *)assetsArray sucess:(void(^)(void))sucess failture:(void(^)(NSError * error))failture
 {
     @autoreleasepool {
     // Load Albums into assetGroups

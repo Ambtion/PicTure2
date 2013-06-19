@@ -57,9 +57,10 @@
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:(_folderName && ![_folderName isEqualToString:@""]) ? _folderName : @"网络相册"];
-        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
-        //上传按钮
-        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+//        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
+//        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton1 setTitle:@"操作" forState:UIControlStateNormal];
+        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
@@ -204,11 +205,16 @@
     if (button.tag == LEFTBUTTON) {
         [self.navigationController popViewControllerAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) {           //分享
-        [self setViewState:ShareState];
-    }
-    if (button.tag == RIGHT2BUTTON) {           //删除
-        [self setViewState:DeleteState];
+//    if (button.tag == RIGHT1BUTTON) {           //分享
+//        [self setViewState:ShareState];
+//    }
+//    if (button.tag == RIGHT2BUTTON) {           //删除
+//        [self setViewState:DeleteState];
+//    }
+    if (button.tag == RIGHT1BUTTON ) {          //操作
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"删除相册",@"批量删除照片", nil];
+        sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        [sheet showInView:self.view];
     }
     if (button.tag == CANCELBUTTONTAG) {        //取消
         [self setViewState:NomalState];
@@ -217,7 +223,23 @@
             [self handleEnsureClick];
     }
 }
-
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self setViewState:ShareState];
+            break;
+         case 1:
+            [self showDeleteFolderView];
+            break;
+        case 2:
+            [self setViewState:DeleteState];
+            break;
+            
+        default:
+            break;
+    }
+}
 - (void)handleEnsureClick
 {
     if (!_selectedArray.count) {
@@ -236,6 +258,41 @@
         [_shareBox showShareViewWithWeixinShow:NO photoWall:YES  andWriteImage:NO OnView:self.view];
     }
 }
+#pragma mark - Delete PhotoAlbum
+- (void)showDeleteFolderView
+{
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除相册" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
+    [alertView show];
+    return;
+}
+- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([alertView.identifyMes isEqualToString:@"确认删除图片"]) {
+        if (buttonIndex == 1) {
+            
+            [RequestManager deleteFoldersPhotosWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId photos:[self photosIdArray] success:^(NSString *response)
+             {
+                 [self refrshDataFromNetWork];
+                 [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
+                 [self setViewState:NomalState];
+             } failure:^(NSString *error) {
+                 [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
+                 [self setViewState:NomalState];
+             }];
+        }
+    }else{
+        if (buttonIndex == 1) {
+            [RequestManager deleteFoldersWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId success:^(NSString *response){
+                [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
+                [self setViewState:NomalState];
+                [self.navigationController popViewControllerAnimated:YES];
+            } failure:^(NSString *error) {
+                [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
+                [self setViewState:NomalState];
+            }];
+        }
+    }
+}
 
 #pragma mark - Delete Photos
 - (void)showDeletePhotoesView
@@ -244,21 +301,7 @@
     [alertView show];
     return;
 }
-- (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1) {
-        
-        [RequestManager deleteFoldersPhotosWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId photos:[self photosIdArray] success:^(NSString *response)
-         {
-             [self refrshDataFromNetWork];
-             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
-             [self setViewState:NomalState];
-         } failure:^(NSString *error) {
-             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除失败"];
-             [self setViewState:NomalState];
-         }];
-    }
-}
+
 - (NSArray *)photosIdArray
 {
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];

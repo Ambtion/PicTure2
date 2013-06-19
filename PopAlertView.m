@@ -11,9 +11,12 @@
 
 @implementation PopAlertView
 @synthesize userinfo;
+@synthesize identifyMes;
+
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<PopAlertViewDeleagte>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitle
 {
     if (self = [super init]) {
+        self.identifyMes = message;
 //        [AHAlertView applySystemAlertAppearance];
         [self applyCustomAlertAppearance];
         _delegate = delegate;

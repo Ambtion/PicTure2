@@ -20,6 +20,8 @@
     AHAlertView * alert;
 }
 @property(nonatomic,strong)NSDictionary * userinfo;
+@property(nonatomic,strong)NSString * identifyMes;
+
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<PopAlertViewDeleagte>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitle;
 - (void)show;
 @end

@@ -259,12 +259,14 @@
 #pragma mark - comment
 + (void)getCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId page:(NSInteger)page success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure;
 {
-    //从第一也开始,变成从0开始
-    page++;
+//    //从第一也开始,变成从0开始
+//    page++;
     NSString * soure = (type == KSourcePhotos ? @"photos":@"portfolios");
     NSString * str = [NSString stringWithFormat:@"%@/%@/%@/comments?page=%d",BASICURL_V1,soure,srouceId,page];
+    DLog(@"%@",soure);
     [self getSourceWithStringUrl:str asynchronou:YES success:success failure:failure];
 }
+
 + (void)postCommentWithSourceType:(source_type)type andSourceID:(NSString *)srouceId onwerID:(NSString *)ownerId andAccessToken:(NSString *)token comment:(NSString *)comment success:(void (^) (NSString * response))success  failure:(void (^) (NSString * error))failure
 {
     NSString * soure = [self sourceToString:type];

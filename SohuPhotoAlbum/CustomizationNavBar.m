@@ -162,8 +162,12 @@
     [self.nRightButton1 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     nRightButton1.frame = CGRectMake(320 - 44, 0, 44, 44);
     nRightButton1.tag = RIGHT1BUTTON;
-    [_normalBar addSubview:nRightButton1];
     
+    [_normalBar addSubview:nRightButton1];
+    [self.nRightButton1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.nRightButton1 setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
+    self.nRightButton1.titleLabel.font = [UIFont systemFontOfSize:16];
+    //
     self.nRightButton2 = [GIFButton buttonWithType:UIButtonTypeCustom];
     [self.nRightButton2 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     nRightButton2.frame = CGRectMake(320 - 88, 0, 44, 44);

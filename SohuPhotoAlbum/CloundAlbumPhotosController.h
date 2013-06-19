@@ -12,7 +12,7 @@
 #import "ShareBox.h"
 #import "ShareViewController.h"
 
-@interface CloundAlbumPhotosController : UIViewController <EGRefreshTableViewDelegate,UITableViewDataSource,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareBoxDelegate,WXApiDelegate,PopAlertViewDeleagte,ShareViewControllerDelegate>
+@interface CloundAlbumPhotosController : UIViewController <EGRefreshTableViewDelegate,UITableViewDataSource,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareBoxDelegate,WXApiDelegate,PopAlertViewDeleagte,ShareViewControllerDelegate,UIActionSheetDelegate>
 {
     CustomizationNavBar * _cusBar;
     EGRefreshTableView * _refreshTableView;

@@ -121,7 +121,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
             dataSource.sizeOfAll = [[_userInfodic objectForKey:@"quota"] floatValue];
             dataSource.sizeOfUsed = [[_userInfodic objectForKey:@"usage"] floatValue];
         }else{
-            dataSource.userName = @"用户未登陆";
+            dataSource.userName = @"";
             dataSource.sizeOfAll = 0.f;
             dataSource.sizeOfUsed = 0.f;
         }

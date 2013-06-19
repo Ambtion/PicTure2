@@ -347,6 +347,7 @@
 {
     if ([WXApi isWXAppInstalled]) {
         UIActionSheet * act = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
+        act.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [act showInView:self.view];
     }else{
         [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];

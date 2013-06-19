@@ -201,7 +201,7 @@
 }
 - (void)refrshDataFromNetWork
 {
-    [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:0 success:^(NSString *response) {
+    [RequestManager getCommentWithSourceType:type andSourceID:sourceId page: 1 success:^(NSString *response) {
         [_dataSourceArray removeAllObjects];
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
         [_refrehsTableView didFinishedLoadingTableViewData];
@@ -233,12 +233,17 @@
 }
 - (void)getMoreFromNetWork
 {
-    if (_dataSourceArray.count && _dataSourceArray.count%20) return;
-    [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:_dataSourceArray.count / 20 + 1 success:^(NSString *response) {
+    if (_dataSourceArray.count && _dataSourceArray.count % 20) {
+        [_refrehsTableView didFinishedLoadingTableViewData];
+        return;
+    }
+    [RequestManager getCommentWithSourceType:type andSourceID:sourceId page:(_dataSourceArray.count / 20 + 1) success:^(NSString *response) {
         [self addDataSourceWithArray:[[response JSONValue] objectForKey:@"comments"]];
-        [_refrehsTableView didFinishedLoadingTableViewData];    } failure:^(NSString *error) {
+        [_refrehsTableView didFinishedLoadingTableViewData];
+    } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
-        [_refrehsTableView didFinishedLoadingTableViewData];    }];
+        [_refrehsTableView didFinishedLoadingTableViewData];
+    }];
 }
 
 #pragma mark -tableViewDelegate
