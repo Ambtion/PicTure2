@@ -50,7 +50,6 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     [_navBar.nRightButton1 setHidden:YES];
     [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     isChangeLoginState = NO;
-    [self getUserInfo];
 }
 
 #pragma mark View lifeCircle
@@ -63,6 +62,7 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 {
     if (_navBar && !_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
+    [self getUserInfo];
 }
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {

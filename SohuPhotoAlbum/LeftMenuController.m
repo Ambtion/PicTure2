@@ -76,14 +76,16 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         _accountView.nameLabel.text =  @"请登录账号";
         _accountView.desLabel.text = nil;
     }else{
-        [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
-            _userInfo = [response JSONValue];
-            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[_userInfo objectForKey:@"user_icon"]]];
-            _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[_userInfo objectForKey:@"sname"]];
-            _accountView.nameLabel.text = [_userInfo objectForKey:@"user_nick"];
-        } failure:^(NSString *error) {
-            
-        }];
+        if (!_userInfo){
+            [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
+                _userInfo = [response JSONValue];
+                [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[_userInfo objectForKey:@"user_icon"]]];
+                _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[_userInfo objectForKey:@"sname"]];
+                _accountView.nameLabel.text = [_userInfo objectForKey:@"user_nick"];
+            } failure:^(NSString *error) {
+                
+            }];
+        }
     }
 }
 
@@ -221,6 +223,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 }
 - (void)accountView:(LeftAccountView *)acountView setttingClick:(id)sender
 {
+    
     SettingController * sc = [[SettingController alloc] init];
     sc.delegate = self;
     sc.userInfodic = _userInfo;
