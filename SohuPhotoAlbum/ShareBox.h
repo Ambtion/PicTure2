@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RequestManager.h"
 #import "OAuthorController.h"
+#import "SHActionSheet.h"
 
 @protocol ShareBoxDelegate <NSObject>
 @optional
@@ -20,7 +21,7 @@
 {
     UIView * showView;
     KShareModel model;
-    UIActionSheet * weixinAtion;
+    SHActionSheet * weixinAtion;
     BOOL isShowWeixin;
     BOOL isShowWall;
 }

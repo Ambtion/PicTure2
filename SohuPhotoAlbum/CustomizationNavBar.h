@@ -10,8 +10,6 @@
 
 #define LEFTBUTTON      10000
 #define RIGHT1BUTTON    10001
-#define RIGHT2BUTTON    10002
-#define RIGHT3BUTTON    10003
 
 #define CANCELBUTTONTAG 10004
 #define ALLSELECTEDTAG  10005
@@ -36,11 +34,8 @@
 @property(nonatomic,weak)id<CusNavigationBarDelegate> delegate;
 @property(nonatomic,strong)UIImageView * normalBar;
 @property(nonatomic,strong)UIButton * nLeftButton;
-@property(nonatomic,strong)UIImageView * nLabelImage;
 @property(nonatomic,strong)UILabel * nLabelText;
 @property(nonatomic,strong)GIFButton * nRightButton1;
-@property(nonatomic,strong)GIFButton * nRightButton2;
-@property(nonatomic,strong)GIFButton * nRightButton3;
 
 @property(nonatomic,strong)UILabel * sLabelText;
 @property(nonatomic,strong)UIButton * sLeftButton;

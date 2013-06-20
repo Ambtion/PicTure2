@@ -44,15 +44,11 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
     [loginOutButton setUserInteractionEnabled:[LoginStateManager isLogin]];
     _myTableView.tableFooterView = view;
     
-    _navBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navBar_signalLine.png"]];
+    _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
     _navBar.frame = CGRectMake(0, 0, 320, 45);
-    [_navBar setUserInteractionEnabled:YES];
-    //返回按钮
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
-    [_navBar addSubview:backButton];
+    _navBar.nLabelText.text = @"设置";
+    [_navBar.nRightButton1 setHidden:YES];
+    [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     isChangeLoginState = NO;
     [self getUserInfo];
 }
@@ -67,6 +63,11 @@ static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi�
 {
     if (_navBar && !_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];
+}
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    if (button.tag == LEFTBUTTON)
+        [self cancelLogin:nil];
 }
 - (void)cancelLogin:(UIButton *)button
 {

@@ -61,8 +61,6 @@
         [_cusBar.nLabelText setText:[NSString stringWithFormat:@"%@",[self.assetGroup valueForProperty:ALAssetsGroupPropertyName]]];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton1 setButtoUploadState:YES];
-        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
         
         if (_viewState == UPloadState) {
             [_cusBar.sLabelText setText:SLABELTEXT];

@@ -44,7 +44,6 @@
 {
     UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, _offsetY, 320, 44)];
     headView.backgroundColor = [UIColor clearColor];
-    //    headView.image = [UIImage imageNamed:@"desViewBar.png"];
     headView.image = [UIImage imageNamed:@"navbarnoline.png"];
     [headView setUserInteractionEnabled:YES];
     UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];

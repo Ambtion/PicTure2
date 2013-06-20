@@ -24,6 +24,7 @@
     }
     return self;
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -40,9 +41,13 @@
     [super viewWillDisappear:animated];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-- (void)viewDidDisappear:(BOOL)animated
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//    [_cusBar removeFromSuperview];
+//}
+- (void)viewWillAppear:(BOOL)animated
 {
-    [_cusBar removeFromSuperview];
+    [self.navigationController.navigationBar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
 {

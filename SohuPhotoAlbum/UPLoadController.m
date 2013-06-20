@@ -40,12 +40,17 @@
     [self.view addSubview:bgView];
     [bgView setUserInteractionEnabled:YES];
     
-    //返回按钮
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
+//    //返回按钮
+//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    backButton.frame = CGRectMake(0, 0, 44, 44);
+//    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//    [backButton addTarget:self action:@selector(cancelLogin:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:backButton];
+    _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+    [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    _navBar.nLabelText.text = @"上传进度";
+    [_navBar.nRightButton1 setHidden:YES];
+    [self.view addSubview:_navBar];
     
     _waitNum = [[UILabel alloc] initWithFrame:CGRectMake(10, 100, 150, 40)];
     _waitNum.backgroundColor = [UIColor clearColor];
@@ -79,7 +84,11 @@
     [self.view addSubview:_progressView];
     [self updataProgessViewProgessWithDic:[[UploadTaskManager currentManager] currentTaskInfo]];
 }
-
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    if (button.tag == LEFTBUTTON)
+        [self cancelLogin:nil];
+}
 - (void)cancelLogin:(UIButton *)button
 {
     if (self.navigationController) {

@@ -89,8 +89,9 @@
     });
 }
 @end
+
 @implementation CustomizationNavBar
-@synthesize nLeftButton,nLabelImage,nLabelText,nRightButton1,nRightButton2,nRightButton3,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
+@synthesize nLeftButton,nLabelText,nRightButton1,sLabelText,sAllSelectedbutton,sRightStateButton,sLeftButton;
 @synthesize normalBar = _normalBar;
 - (id)initwithDelegate:(id<CusNavigationBarDelegate>)Adelegate
 {
@@ -115,16 +116,14 @@
     _normalBar = [[UIImageView alloc] initWithFrame:self.bounds];
     [_normalBar setUserInteractionEnabled:YES];
     _normalBar.image = [UIImage imageNamed:@"navbar.png"];
-    
     self.nLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nLeftButton.frame = CGRectMake(0, 0, 44, 44);
     nLeftButton.tag = LEFTBUTTON;
     [nLeftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_normalBar addSubview:nLeftButton];
     
-    self.nLabelImage = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 90, 44)];
-    [_normalBar addSubview:nLabelImage];
-    self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
+    self.nLabelText = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, 200 , 44)];
+    self.nLabelText.textAlignment = UITextAlignmentCenter;
     self.nLabelText.backgroundColor = [UIColor clearColor];
     self.nLabelText.textColor = [UIColor blackColor];
     [_normalBar addSubview:nLabelText];
@@ -137,7 +136,8 @@
     [_stateBar setUserInteractionEnabled:YES];
     _stateBar.image = [UIImage imageNamed:@"navbar.png"];
     
-    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 200, 44)];
+    self.sLabelText = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 320 - 110, 44)];
+    self.sLabelText.textAlignment = UITextAlignmentCenter;
     self.sLabelText.backgroundColor = [UIColor clearColor];
     self.sLabelText.textColor = [UIColor blackColor];
     [_stateBar addSubview:sLabelText];
@@ -159,6 +159,7 @@
 - (void)addRightButtonsOnNormalBar
 {
     self.nRightButton1 = [GIFButton buttonWithType:UIButtonTypeCustom];
+    [self.nRightButton1 setImage:[UIImage imageNamed:@"moreActionButton.png"] forState: UIControlStateNormal];
     [self.nRightButton1 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     nRightButton1.frame = CGRectMake(320 - 44, 0, 44, 44);
     nRightButton1.tag = RIGHT1BUTTON;
@@ -167,19 +168,6 @@
     [self.nRightButton1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nRightButton1 setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
     self.nRightButton1.titleLabel.font = self.sLabelText.font;
-    //
-    self.nRightButton2 = [GIFButton buttonWithType:UIButtonTypeCustom];
-    [self.nRightButton2 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    nRightButton2.frame = CGRectMake(320 - 88, 0, 44, 44);
-    nRightButton2.tag = RIGHT2BUTTON;
-    [_normalBar addSubview:nRightButton2];
-    
-    self.nRightButton3 = [GIFButton buttonWithType:UIButtonTypeCustom];
-    [self.nRightButton3 addTarget:self action:@selector(gifButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    nRightButton3.frame = CGRectMake(320 - 88 - 44, 0, 44, 44);
-    nRightButton3.tag = RIGHT3BUTTON;
-    [_normalBar addSubview:nRightButton3];
-    
 }
 
 #pragma mark -

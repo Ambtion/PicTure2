@@ -61,25 +61,22 @@
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewWillAppear:animated]; //删除bar上所有子视图
     
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        _cusBar.nLabelText.text = @"本地相册";
-        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
-        //上传按钮
-        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
-        [_cusBar.nRightButton2 setButtoUploadState:YES];
-        
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
-        
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton1 setButtoUploadState:YES];
+        //上传按钮        
         [_cusBar.sLabelText setText:SLABELTEXT];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
+        [self addsegmentOnView:_cusBar];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    segControll.selectedSegmentIndex = 0;
     if (needReadonce) {
         [self readAlbum];
         needReadonce = NO;
@@ -87,7 +84,27 @@
         [self autoUplaodPic];
     }
 }
-
+- (void)addsegmentOnView:(UIView *)view
+{
+    if (!segControll) {
+        NSArray * items = [NSArray arrayWithObjects:@"时间线",@"相册", nil];
+        segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
+        [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
+        segControll.frame = CGRectMake(83, 8, 154, 27);
+    }
+    if (segControll.superview != view)
+        [view addSubview:segControll];
+    segControll.selectedSegmentIndex = 0;
+}
+- (void)segMentChnageValue:(UISegmentedControl *)seg
+{
+    if (seg.selectedSegmentIndex == 0) {
+        return;
+    }
+    if (!localAlbumsConroller)
+            localAlbumsConroller = [[LocalAlbumsController alloc] init];
+    self.viewDeckController.centerController = localAlbumsConroller;
+}
 #pragma mark - ReadData
 - (void)albumDidwriteImage:(NSNotification *)notification
 {
@@ -231,12 +248,7 @@
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) { //切换页面
-        if (!localAlbumsConroller)
-            localAlbumsConroller = [[LocalAlbumsController alloc] init];
-        self.viewDeckController.centerController = localAlbumsConroller;
-    }
-    if (button.tag == RIGHT2BUTTON) { //上传
+    if (button.tag == RIGHT1BUTTON) { //上传
         if (![LoginStateManager isLogin]) {
             [self showLoginViewWithMethodNav:YES];
             return;

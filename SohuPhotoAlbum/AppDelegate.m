@@ -34,7 +34,7 @@
     deckViewController.navigationControllerBehavior = IIViewDeckNavigationControllerIntegrated;
     deckViewController.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
     UINavigationController * nav =[[UINavigationController alloc] initWithRootViewController:deckViewController];
-    //    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbarnoline.png"] forBarMetrics:UIBarMetricsDefault];
+    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"NavigationBarBG.png"] forBarMetrics:UIBarMetricsDefault];
     nav.delegate = self;
     self.window.rootViewController = nav;
     self.assetsLibrary = [[ALAssetsLibrary alloc] init];

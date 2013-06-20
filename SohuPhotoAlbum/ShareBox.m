@@ -18,8 +18,8 @@
     showView = view;
     isShowWeixin = showWeiXin;
     isShowWall = showWall;
-    UIActionSheet * sheet = [[UIActionSheet alloc] init];
-    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    SHActionSheet * sheet = [[SHActionSheet alloc] init];
+    //    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     sheet.delegate = self;
     [sheet addButtonWithTitle:@"新浪微博"];
     [sheet addButtonWithTitle:@"人人网"];
@@ -130,7 +130,7 @@
 -(void)weixinUploadPic
 {
     if ([WXApi isWXAppInstalled]) {
-        weixinAtion = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
+        weixinAtion = [[SHActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
         [weixinAtion showInView:showView];
     }else{
         [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
@@ -142,4 +142,17 @@
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:Amessage delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
 }
+
+- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
+    CGSize theSize = actionSheet.frame.size;
+    // draw the background image and replace layer content
+    UIGraphicsBeginImageContext(theSize);
+    CGContextRef context =  UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextFillRect(context, CGRectMake(0, 0, theSize.width, theSize.height));
+    UIImage *  theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [[actionSheet layer] setContents:(id)theImage.CGImage];
+}
+
 @end

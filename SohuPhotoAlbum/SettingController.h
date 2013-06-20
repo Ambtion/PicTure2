@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "CustomizationNavBar.h"
 #import "MySettingCell.h"
+#import "CustomizationNavBar.h"
 
 @class SettingController;
 @protocol SettingControllerDelegate <NSObject>
 - (void)settingControllerDidDisappear:(SettingController *)controller;
 @end
-@interface SettingController : UIViewController<UITableViewDataSource,UITableViewDelegate,MySettingCellDelegate,PopAlertViewDeleagte>
+@interface SettingController : UIViewController<UITableViewDataSource,UITableViewDelegate,MySettingCellDelegate,PopAlertViewDeleagte,CusNavigationBarDelegate>
 {
     UITableView * _myTableView;
-    UIImageView * _navBar;
+    CustomizationNavBar * _navBar;
     PopAlertView * _cache;
     PopAlertView * _loginView;
     BOOL isInit;

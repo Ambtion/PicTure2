@@ -38,17 +38,16 @@
 #pragma mark - CUSBar
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewWillAppear:animated]; //删除bar上所有子视图
+    
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        _cusBar.nLabelText.text = @"本地相册";
-        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"grid-view.png"] forState:UIControlStateNormal];
-        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
-        [_cusBar.nRightButton2 setButtoUploadState:YES];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
-        _cusBar.sLabelText.text = @"请选择专辑";
+        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
+        [_cusBar.nRightButton1 setButtoUploadState:YES];
         [_cusBar.sLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+        [self addsegmentOnView:_cusBar];
+        _cusBar.sLabelText.text = @"请选择照片";
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
@@ -59,6 +58,27 @@
         [self readAlbum];
         needReadonce = NO;
     }
+    segControll.selectedSegmentIndex = 1; 
+}
+- (void)addsegmentOnView:(UIView *)view
+{
+    if (!segControll) {
+        NSArray * items = [NSArray arrayWithObjects:@"时间线",@"相册", nil];
+        segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
+        [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
+        segControll.frame = CGRectMake(83, 8, 154, 27);
+    }
+    if (segControll.superview != view)
+        [view addSubview:segControll];
+    segControll.selectedSegmentIndex = 1;
+}
+- (void)segMentChnageValue:(UISegmentedControl *)seg
+{
+    if (seg.selectedSegmentIndex == 1) {
+        return;
+    }
+    LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
+    self.viewDeckController.centerController = leftCon.localAllController;
 }
 
 - (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
@@ -72,11 +92,8 @@
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) {
-        LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
-        self.viewDeckController.centerController = leftCon.localAllController;
-    }
-    if (button.tag == RIGHT2BUTTON) { //上传
+    
+    if (button.tag == RIGHT1BUTTON) { //上传
         if (![LoginStateManager isLogin]) {
             [self showLoginViewWithMethodNav:YES];
             return;

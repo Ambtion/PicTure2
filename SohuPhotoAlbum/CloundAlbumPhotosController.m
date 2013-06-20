@@ -9,6 +9,7 @@
 #import "CloundAlbumPhotosController.h"
 #import "RequestManager.h"
 #import "CloundAlbumDetailController.h"
+#import "KxMenu.h"
 
 @interface CloundAlbumPhotosController()
 @property(nonatomic,strong)NSMutableArray * assetsSource;
@@ -53,19 +54,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         [_cusBar.nLabelText setText:(_folderName && ![_folderName isEqualToString:@""]) ? _folderName : @"网络相册"];
-        //        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
-        //        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        _cusBar.normalBar.image = [UIImage imageNamed:@"navbar_edit.png"];
-        [_cusBar.nLabelText setText:@"云相册"];
-        [_cusBar.nRightButton1 setTitle:@"操作" forState:UIControlStateNormal];
-        _cusBar.nRightButton1.frame = CGRectMake(320 - 62, 0, 62, 44);
-        
-        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
@@ -76,11 +69,10 @@
 {
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [_cusBar removeFromSuperview];
-}
-
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//    [_cusBar removeFromSuperview];
+//}
 #pragma mark refresh
 - (void)pullingreloadTableViewDataSource:(id)sender
 {
@@ -216,9 +208,7 @@
     //        [self setViewState:DeleteState];
     //    }
     if (button.tag == RIGHT1BUTTON ) {          //操作
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"删除相册",@"批量删除照片", nil];
-        sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        [sheet showInView:self.view];
+        [self showActionMenu];
     }
     if (button.tag == CANCELBUTTONTAG) {        //取消
         [self setViewState:NomalState];
@@ -227,23 +217,45 @@
         [self handleEnsureClick];
     }
 }
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)showActionMenu
 {
-    switch (buttonIndex) {
-        case 0:
-            [self setViewState:ShareState];
-            break;
-        case 1:
-            [self showDeleteFolderView];
-            break;
-        case 2:
-            [self setViewState:DeleteState];
-            break;
-            
-        default:
-            break;
+    if ([self isShowingKxMenu]) {
+        [KxMenu dismissMenu];
+        return;
+    }
+    NSArray *menuItems =
+    @[
+      [KxMenuItem menuItem:@"分享"
+                     image:[UIImage imageNamed:@"action_icon"]
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@"删除相册"
+                     image:[UIImage imageNamed:@"check_icon"]
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@"批量删除照片"
+                     image:[UIImage imageNamed:@"check_icon"]
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      ];
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(320 - 44, - 44,  44, 44)
+                 menuItems:menuItems];
+    
+}
+- (void)pushMenuItem:(KxMenuItem *)item
+{
+    if ([item.title isEqualToString:@"分享"]) {
+        [self setViewState:ShareState];
+    }
+    if ([item.title isEqualToString:@"删除相册"]) {
+        [self showDeleteFolderView];
+    }
+    if ([item.title isEqualToString:@"批量删除照片"]) {
+        [self setViewState:DeleteState];
     }
 }
+
 - (void)handleEnsureClick
 {
     if (!_selectedArray.count) {
@@ -268,12 +280,13 @@
     PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除相册" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
+
 }
+
 - (void)popAlertView:(PopAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if ([alertView.identifyMes isEqualToString:@"确认删除图片"]) {
         if (buttonIndex == 1) {
-            
             [RequestManager deleteFoldersPhotosWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId photos:[self photosIdArray] success:^(NSString *response)
              {
                  [self refrshDataFromNetWork];

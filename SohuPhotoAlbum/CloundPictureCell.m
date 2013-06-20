@@ -66,6 +66,7 @@
     }
     return self;
 }
+
 - (void)initSubViews
 {
     StatusImageView * imageView;
@@ -110,11 +111,12 @@
             }
             __weak StatusImageView * weakSelf = imageView;
             UIImageView * AimageView = [[UIImageView alloc] init];
-            [AimageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"moren.png"] success:^(UIImage *image) {
+            [AimageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf setImage:image];
                 });
-            } failure:^(NSError *error) {
+            } failure:^(NSError *error){
+                
             }];
         }else{
             canBeOperated = NO;

@@ -151,7 +151,7 @@
     if (!openid) {
         openid = [self getQQopenIdWithAccess_token:[info objectForKey:@"access_token"]];
         if (!openid) {
-//两次获取失败,默认绑定失败
+            //两次获取失败,默认绑定失败
 //            [self objectPopAlerViewRatherThentasView:NO WithMes:@"绑定失败,请稍后重试"];
             return;
         }

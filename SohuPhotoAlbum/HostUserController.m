@@ -23,18 +23,18 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-//    self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-//    self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-//    self.myTableView.delegate = self;
-//    self.myTableView.dataSource = self;
-//    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
-//    _refresHeadView.delegate = self;
-//    [self.myTableView addSubview:_refresHeadView];
-//    [self.view addSubview:self.myTableView];
-//    
-//    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
-//    _moreFootView.delegate = self;
+    //    self.myTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    //    self.myTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    //    self.myTableView.delegate = self;
+    //    self.myTableView.dataSource = self;
+    //    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //    _refresHeadView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0, -60, 320, 60) arrowImageName:nil textColor:[UIColor grayColor] backGroundColor:[UIColor clearColor]];
+    //    _refresHeadView.delegate = self;
+    //    [self.myTableView addSubview:_refresHeadView];
+    //    [self.view addSubview:self.myTableView];
+    //
+    //    _moreFootView = [[SCPMoreTableFootView alloc] initWithFrame:CGRectMake(0, 0, 320, 60) WithLodingImage:[UIImage imageNamed:@"load_more_pics.png"] endImage:[UIImage imageNamed:@"end_bg.png"] WithBackGroud:[UIColor clearColor]];
+    //    _moreFootView.delegate = self;
     _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _refreshTableView.pDelegate = self;
     _refreshTableView.dataSource = self;
@@ -46,10 +46,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         _cusBar.normalBar.image = [UIImage imageNamed:@"navbarnoline.png"];
         _cusBar.nLabelText.text = @"星用户";
+        [_cusBar.nRightButton1 setHidden:YES];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
     }
     if (!_cusBar.superview)
@@ -62,11 +64,10 @@
     [super viewWillDisappear:animated];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [_cusBar removeFromSuperview];
-}
-
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//    [_cusBar removeFromSuperview];
+//}
 #pragma mark refrshDataFromNetWork
 - (void)pullingreloadTableViewDataSource:(id)sender
 {

@@ -30,46 +30,51 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:CGRectMake(0, 30, 320, self.view.bounds.size.height - 30) style:UITableViewStylePlain];
+    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _refreshTableView.pDelegate = self;
     _refreshTableView.dataSource = self;
     [self.view addSubview:_refreshTableView];
     _selectedArray = [[NSMutableArray alloc] initWithCapacity:0];
-    [self addsegment];
     [self refreshFromNetWork];
 }
-- (void)addsegment
+- (void)addsegmentOnView:(UIView *)view
 {
-    NSArray * items = [NSArray arrayWithObjects:@"手机备份",@"网络相册", nil];
-    segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
-    segControll.selectedSegmentIndex = 1;
-    [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
-    segControll.frame = CGRectMake(0, 0, 320, 30);
-    [self.view addSubview:segControll];
+    if (!segControll) {
+        NSArray * items = [NSArray arrayWithObjects:@"手机备份",@"网络相册", nil];
+        segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
+        [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
+        segControll.frame = CGRectMake(83, 8, 154, 27);
+        segControll.selectedSegmentIndex = 1;
+    }
+    if (segControll.superview != view)
+        [view addSubview:segControll];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        [_cusBar.normalBar setImage:[UIImage imageNamed:@"navbarnoline.png"]];
-        [_cusBar.nLabelText setText:@"云相册"];
-//        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
-        //上传按钮
-//        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        [_cusBar.nRightButton1 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
+        [_cusBar.nRightButton1 setHidden:YES];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
+        [self addsegmentOnView:_cusBar];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
     segControll.selectedSegmentIndex = 1;
 }
-
+- (void)viewWillDisappear:(BOOL)animated
+{
+    self.viewDeckController.panningMode = IIViewDeckNoPanning;
+}
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    [_cusBar removeFromSuperview];
+//}
 #pragma mark
 - (void)pullingreloadTableViewDataSource:(id)sender
 {
@@ -184,13 +189,6 @@
     if (button.tag == LEFTBUTTON) {
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
-    if (button.tag == RIGHT1BUTTON) {           //切换
-        LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
-        self.viewDeckController.centerController = leftCon.cloudController;
-    }
-    if (button.tag == RIGHT2BUTTON) {           //删除
-        [self setViewState:DeleteState];
-    }
     if (button.tag == CANCELBUTTONTAG) {        //取消
         [self setViewState:NomalState];
     }
@@ -198,6 +196,7 @@
         [self handleEnsureClick];
     }
 }
+
 - (void)segMentChnageValue:(UISegmentedControl *)seg
 {
     DLog(@"%d",seg.selectedSegmentIndex);

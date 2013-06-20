@@ -10,11 +10,13 @@
 #import "PhotoesCell.h"
 #import "LocalBaseController.h"
 #import "LocalAlbumsController.h"
+#import "CQSegmentControl.h"
 
 @interface LocalALLPhotoesController : LocalBaseController<UITableViewDataSource,UITableViewDelegate,PhotoesCellDelegate,CusNavigationBarDelegate>
 {
-    BOOL _isReading; //for app bacome background
     LocalAlbumsController * localAlbumsConroller;
+    CQSegmentControl * segControll;
+    BOOL _isReading; //for app bacome background
     BOOL isinit;
     BOOL needReadonce;
 }

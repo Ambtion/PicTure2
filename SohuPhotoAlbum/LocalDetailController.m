@@ -345,6 +345,7 @@
 #pragma mark - Weixin
 -(void)weixinUploadPic
 {
+    //本地分享功能隐藏
     if ([WXApi isWXAppInstalled]) {
         UIActionSheet * act = [[UIActionSheet alloc] initWithTitle:@"发送到" delegate:self cancelButtonTitle:@"Cancal" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
         act.actionSheetStyle = UIActionSheetStyleBlackTranslucent;

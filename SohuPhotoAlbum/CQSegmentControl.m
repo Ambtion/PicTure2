@@ -39,13 +39,14 @@
 }
 - (void)setcustomizing
 {
-    UIImage *normal_left = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"seg_Normal" ofType:@"png"]];
-	UIImage *normal_right = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"seg_Normal" ofType:@"png"]];
+    UIImage *normal_left = [[UIImage imageNamed:@"seg_Normal.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+	UIImage *normal_right =[[UIImage imageNamed:@"seg_Normal.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
 	
 	NSMutableArray *unselectImages = [[NSMutableArray alloc]initWithObjects:normal_left, normal_right, nil];
 	
-	UIImage *select_left = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"seg_Selected" ofType:@"png"]];
-	UIImage *select_right = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"seg_Selected" ofType:@"png"]];
+	UIImage *select_left =  [[UIImage imageNamed:@"seg_Selected.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+	UIImage *select_right = [[UIImage imageNamed:@"seg_Selected.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+    
 	NSMutableArray *selectImages = [[NSMutableArray alloc]initWithObjects: select_left, select_right, nil];
     self.normalImageItems = unselectImages;
 	self.highlightImageItems = selectImages;

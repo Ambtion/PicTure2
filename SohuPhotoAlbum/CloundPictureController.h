@@ -16,14 +16,14 @@
 #import "CloundAlbumController.h"
 
 @class CQSegmentControl;
-@interface CloundPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate,UIActionSheetDelegate>
+@interface CloundPictureController : UIViewController <UITableViewDataSource,EGRefreshTableViewDelegate,CusNavigationBarDelegate,CloundPictureCellDelegate,ShareViewControllerDelegate,PopAlertViewDeleagte,WXApiDelegate,ShareBoxDelegate>
 {
- 
     EGRefreshTableView * _refreshTableView;
     CustomizationNavBar * _cusBar;
+    ShareBox * _shareBox;
+
     BOOL _isLoading;
     BOOL _isLoadingMax;
-    ShareBox * _shareBox;
     BOOL _shouldRefreshOnce;
     CloundAlbumController * cloudAlbumsConroller;
     CQSegmentControl *segControll;

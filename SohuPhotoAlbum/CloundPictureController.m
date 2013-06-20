@@ -11,6 +11,7 @@
 #import "ShareViewController.h"
 #import "CloundAlbumController.h"
 #import "CQSegmentControl.h"
+#import "KxMenu.h"
 
 @interface CloundPictureController()
 @property(strong,nonatomic)NSMutableArray * dataSourceArray;
@@ -32,11 +33,10 @@
     
     [super viewDidLoad];
     self.view.backgroundColor = LOCALBACKGORUNDCOLOR;
-    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:CGRectMake(0, 30, 320, self.view.bounds.size.height - 30) style:UITableViewStylePlain];
+    _refreshTableView = [[EGRefreshTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _refreshTableView.pDelegate = self;
     _refreshTableView.dataSource = self;
     [self.view addSubview:_refreshTableView];
-    [self addsegment];
     [self initDataContainer];
     [self refrshDataFromNetWorkThenAddImage:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudDetailDidDeletePhoto:) name:DELETEPHOTO object:nil];
@@ -50,14 +50,18 @@
     _assetSectionisShow = [NSMutableArray arrayWithCapacity:0];
     _dataSourceArray = [NSMutableArray arrayWithCapacity:0];
 }
-- (void)addsegment
+
+- (void)addsegmentOnView:(UIView *)view
 {
-    NSArray * items = [NSArray arrayWithObjects:@"手机备份",@"网络相册", nil];
-    segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
+    if (!segControll) {
+        NSArray * items = [NSArray arrayWithObjects:@"手机备份",@"网络相册", nil];
+        segControll = [[CQSegmentControl alloc] initWithItemsAndStype:items stype:TitleAndImageSegmented];
+        [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
+        segControll.frame = CGRectMake(83, 8, 154, 27);
+    }
+    if (segControll.superview != view)
+        [view addSubview:segControll];
     segControll.selectedSegmentIndex = 0;
-    [segControll addTarget:self action:@selector(segMentChnageValue:) forControlEvents:UIControlEventValueChanged];
-    segControll.frame = CGRectMake(0, 0, 320, 30);
-    [self.view addSubview:segControll];
 }
 
 #pragma mark - refrshDataFromNetWork
@@ -296,21 +300,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
-        _cusBar.normalBar.image = [UIImage imageNamed:@"navbar_edit.png"];
-        [_cusBar.nLabelText setText:@"云相册"];
-        [_cusBar.nRightButton1 setTitle:@"操作" forState:UIControlStateNormal];
-        _cusBar.nRightButton1.frame = CGRectMake(320 - 62, 0, 62, 44);
-        [_cusBar.nRightButton2 setUserInteractionEnabled:NO];
-        [_cusBar.nRightButton3 setUserInteractionEnabled:NO];
-        
-        //        [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"timeline-view.png"] forState:UIControlStateNormal];
-        //        [_cusBar.nRightButton2 setImage:[UIImage imageNamed:@"shareBtn_nomal.png"] forState:UIControlStateNormal];
-        //        [_cusBar.nRightButton3 setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
+        [self addsegmentOnView:_cusBar];
     }
     if (!_cusBar.superview)
         [self.navigationController.navigationBar addSubview:_cusBar];
@@ -321,14 +316,15 @@
     }
     segControll.selectedSegmentIndex = 0;
 }
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [_cusBar removeFromSuperview];
-}
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//    [_cusBar removeFromSuperview];
+//}
 
 #pragma mark Action
 - (void)setViewState:(viewState)viewState
@@ -352,9 +348,7 @@
         [self.viewDeckController toggleLeftViewAnimated:YES];
     }
     if (button.tag == RIGHT1BUTTON) { //操作
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"批量删除", nil];
-        sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        [sheet showInView:self.view];
+        [self showActionMenu];
     }
     //    if (button.tag == RIGHT1BUTTON) {           //切换
     //        if (!cloudAlbumsConroller)
@@ -374,19 +368,39 @@
         [self handleEnsureClick];
     }
 }
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)showActionMenu
 {
-    DLog(@"%d",buttonIndex);
-    switch (buttonIndex) {
-        case 0: //分享
-            [self setViewState:ShareState];
-            break;
-        case 1: //删除
-            [self setViewState:DeleteState];
-            break;
-        default:
-            break;
+    if ([self isShowingKxMenu]) {
+        [KxMenu dismissMenu];
+        return;
     }
+    NSArray *menuItems =
+    @[
+      [KxMenuItem menuItem:@"分享"
+                     image:[UIImage imageNamed:@"action_icon"]
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@"批量删除"
+                     image:[UIImage imageNamed:@"check_icon"]
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      
+      ];
+    
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(320 - 44, - 44,  44, 44)
+                 menuItems:menuItems];
+    
+}
+
+- (void)pushMenuItem:(KxMenuItem*)sender
+{
+    if ([sender.title isEqualToString:@"分享"]) {
+         [self setViewState:ShareState];
+    }else{
+        [self setViewState:DeleteState];
+    }
+    _cusBar.sLabelText.text = sender.title;
 }
 
 - (void)segMentChnageValue:(UISegmentedControl *)seg

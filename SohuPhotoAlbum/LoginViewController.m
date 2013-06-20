@@ -152,6 +152,7 @@
     if (!_navBar) {
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         _navBar.normalBar.image = [UIImage imageNamed:@"Login_Bar.png"];
+        [_navBar.nRightButton1 setHidden:YES];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     }
     [self.navigationController.navigationBar addSubview:_navBar];
