@@ -12,6 +12,9 @@
 
 #define CELLHIGTH  80.f
 
+#define IMAGEOFFSET             4.f
+#define IMAGEWIDTH              (320 - IMAGEOFFSET * 5 ) / 4.f
+
 @implementation CloundPictureCellDataSource
 @synthesize firstDic,secoundDic,thridDic,lastDic;
 - (NSInteger)sourceNumber
@@ -30,19 +33,19 @@
 }
 - (CGFloat)cellHigth
 {
-    return CELLHIGTH;
+    return IMAGEOFFSET + IMAGEWIDTH;
 }
 - (CGFloat)cellLastHigth
 {
-    return CELLHIGTH + 5;
+    return IMAGEWIDTH + IMAGEOFFSET * 2;
 }
 + (CGFloat)cellHigth
 {
-    return CELLHIGTH;
+    return IMAGEOFFSET + IMAGEWIDTH;
 }
 + (CGFloat)cellLastHigth
 {
-    return CELLHIGTH + 5;
+    return IMAGEWIDTH + IMAGEOFFSET * 2;
 }
 @end
 
@@ -57,7 +60,7 @@
     if (self) {
         sourceNumber = reuseIdentifier;
         cache = [[SDImageCache alloc] init];
-        self.frame = CGRectMake(0, 0, 320, CELLHIGTH);
+        self.frame = CGRectMake(0, 0, 320, IMAGEOFFSET + IMAGEWIDTH);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self initSubViews];
     }
@@ -66,14 +69,14 @@
 - (void)initSubViews
 {
     StatusImageView * imageView;
-    CGRect frame = CGRectMake(4, 5, 75, 75);
+    CGRect frame = CGRectMake(IMAGEOFFSET, IMAGEOFFSET, IMAGEWIDTH, IMAGEWIDTH);
     for (int i = 0; i < sourceNumber; i++) {
         imageView = [[StatusImageView alloc] initWithFrame:frame];
         imageView.tag = 1000 + i;
         [self.contentView addSubview:imageView];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGustrure:)];
         [imageView addGestureRecognizer:tap];
-        frame.origin.x = frame.origin.x + frame.size.width + 4;
+        frame.origin.x = frame.origin.x + frame.size.width + IMAGEOFFSET;
     }
 }
 

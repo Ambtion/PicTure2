@@ -9,20 +9,23 @@
 #import "PhotoesCell.h"
 #import "DataBaseManager.h"
 
-#define CELLHIGTH  80.f
+#define IMAGEOFFSET             4.f
+#define IMAGEWIDTH              (320 - IMAGEOFFSET * 5 ) / 4.f
 
 @implementation PhotoesCellDataSource
 @synthesize firstAsset,secoundAsset,thridAsset,lastAsset;
 
 + (CGFloat)cellHigth
 {
-    return CELLHIGTH;
+    return IMAGEWIDTH + IMAGEOFFSET;
 }
+
 + (CGFloat)cellLastHigth
 {
-    return CELLHIGTH + 5;
+    return IMAGEWIDTH + IMAGEOFFSET * 2;
 }
 @end
+
 
 @implementation PhotoesCell
 @synthesize delegate = _delegate;
@@ -31,7 +34,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.frame = CGRectMake(0, 0, 320, CELLHIGTH);
+        self.frame = CGRectMake(0, 0, 320, IMAGEWIDTH + IMAGEOFFSET);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self initSubViews];
     }
@@ -40,14 +43,14 @@
 - (void)initSubViews
 {
     StatusImageView * imageView;
-    CGRect frame = CGRectMake(4, 5, 75, 75);
+    CGRect frame = CGRectMake(IMAGEOFFSET, IMAGEOFFSET, IMAGEWIDTH, IMAGEWIDTH);
     for (int i = 0; i < 4; i++) {
         imageView = [[StatusImageView alloc] initWithFrame:frame];
         imageView.tag = 1000 + i;
         [self.contentView addSubview:imageView];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGustrure:)];
         [imageView addGestureRecognizer:tap];
-        frame.origin.x = frame.origin.x + frame.size.width + 4;
+        frame.origin.x = frame.origin.x + frame.size.width + IMAGEOFFSET;
     }
 }
 - (void)setDataSource:(PhotoesCellDataSource *)dataSource
