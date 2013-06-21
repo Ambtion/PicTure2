@@ -110,9 +110,7 @@
     [RequestManager getFoldersWithAccessToken:[LoginStateManager currentToken] start:0 count:20 success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"folders"];
         DLog(@"array %@",[array lastObject]);
-        if (array && array.count) {
-            [self refreshDataSoure:array RatherThenGetMore:YES];
-        }
+        [self refreshDataSoure:array RatherThenGetMore:YES];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];

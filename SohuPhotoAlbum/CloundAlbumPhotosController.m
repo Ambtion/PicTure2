@@ -84,14 +84,12 @@
 }
 - (void)refrshDataFromNetWork
 {
+    DLog();
     [RequestManager getfoldersPicWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId start:0 count:100 success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"photos"];
-        if (array && array.count) {
-            [_assetsSource removeAllObjects];
-            DLog(@"%@",array);
-            [self addArrayTodataSource:array];
-            [_refreshTableView didFinishedLoadingTableViewData];
-        }
+        [_assetsSource removeAllObjects];
+        [self addArrayTodataSource:array];
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString * error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];
@@ -103,8 +101,8 @@
         NSArray * array = [[response JSONValue] objectForKey:@"photos"];
         if (array && array.count) {
             [self addArrayTodataSource:array];
-            [_refreshTableView didFinishedLoadingTableViewData];
         }
+        [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString * error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
         [_refreshTableView didFinishedLoadingTableViewData];

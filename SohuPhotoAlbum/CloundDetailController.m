@@ -81,7 +81,12 @@
         NSString * photoId = [NSString stringWithFormat:@"%@",[[self.assetsArray objectAtIndex:self.curPageNum] objectForKey:@"id"]];
         [RequestManager deletePhotosWithaccessToken:[LoginStateManager currentToken] photoIds:[NSArray arrayWithObject:photoId]success:^(NSString *response) {
             [self.assetsArray removeObject:[self.assetsArray objectAtIndex:self.curPageNum]];
-            [self refreshScrollView];
+            if (self.assetsArray.count) {
+                [self refreshScrollView];
+            }else{
+                self.isPushView = YES;
+                [self.navigationController popViewControllerAnimated:YES];
+            }
             [self showPopAlerViewRatherThentasView:NO WithMes:@"删除成功"];
             [[NSNotificationCenter defaultCenter] postNotificationName:DELETEPHOTO object:nil];
         } failure:^(NSString *error) {

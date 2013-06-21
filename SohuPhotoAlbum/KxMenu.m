@@ -604,7 +604,6 @@ typedef enum {
         R,G,B,0.4,
         R,G,B,0.1
     };
-    
     return [self gradientImageWithSize:size locations:locations components:components count:5];
 }
 
