@@ -128,6 +128,7 @@
 #pragma mark - Weixin
 - (void)onResp:(BaseResp *)resp
 {
+    DLog(@"%d %@",resp.errCode,resp.errStr);
     if (resp.errCode == 0) {
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享成功"];
     }else{
@@ -137,7 +138,8 @@
 - (void) respImageContentToSence:(enum WXScene)scene
 {
     NSDictionary * info = [self.assetsArray objectAtIndex:self.curPageNum];
-    [self shareImageToWeixinWithUrl:[info objectForKey:@"photo_url"]ToSence:scene];
+    DLog(@"%@",info);
+    [self shareImageToWeixinWithUrl:[info objectForKey:@"photo_url"] ToSence:scene];
 }
 
 #pragma mark OverLoad

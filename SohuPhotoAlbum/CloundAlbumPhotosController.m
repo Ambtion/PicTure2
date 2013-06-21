@@ -97,6 +97,10 @@
 }
 - (void)getMoreFromNetWork
 {
+    if ([[self assetsSource] count] % 100) {
+        [_refreshTableView didFinishedLoadingTableViewData];
+        return;
+    }
     [RequestManager getfoldersPicWithAccessToken:[LoginStateManager currentToken] folderId:self.folderId start:[[self assetsSource] count] count:100 success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"photos"];
         if (array && array.count) {

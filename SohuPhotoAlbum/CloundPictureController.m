@@ -475,10 +475,15 @@
         [_selectedArray removeObject:dic];
     }
 }
+
 - (void)handleEnsureClick
 {
     if (!_selectedArray.count) {
         [self showPopAlerViewRatherThentasView:YES WithMes:@"请选择图片"];
+        return;
+    }
+    if (_selectedArray.count >=100 && _viewState == ShareState) {
+        [self showPopAlerViewRatherThentasView:NO WithMes:@"图片超过100张,无法分享"];
         return;
     }
     if (_viewState == DeleteState) {
@@ -547,7 +552,6 @@
         [self showPopAlerViewRatherThentasView:NO WithMes:@"分享失败"];
     }];
     [self.navigationController popViewControllerAnimated:YES];
-    
 }
 //#pragma mark - Weixin
 //-(void) onReq:(BaseReq*)req

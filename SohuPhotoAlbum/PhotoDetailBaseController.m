@@ -219,7 +219,6 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 #pragma mark - Refresh ScrollView
 - (void)refreshScrollView
 {
-    DLog(@"%d",self.curPageNum);
     if (!self.assetsArray.count) return;
     self.curPageNum = [self validPageValue:self.curPageNum];
     _canGetActualImage = YES;
@@ -483,6 +482,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)imageViewScale:(ImageScaleView *)imageScale clickCurImage:(UIImageView *)imageview
 {
     if (!CGAffineTransformIsIdentity([self getTransfrom])) return;
+    DLog();
     if (_isHidingBar) {
         [self.tabBar showBarWithAnimation:YES];
     }else{

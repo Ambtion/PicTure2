@@ -202,6 +202,7 @@
     LeftMenuController * leftCon = (LeftMenuController *)self.viewDeckController.leftController;
     self.viewDeckController.centerController = leftCon.cloudController;
 }
+
 - (void)photoAlbumCell:(PhotoAlbumCell *)photoCell clickCoverGroup:(id)group
 {
     if ([group isKindOfClass:[NSDictionary class]]) {
@@ -220,6 +221,7 @@
         }
     }
 }
+
 - (void)handleEnsureClick
 {
     if (!_selectedArray.count) {

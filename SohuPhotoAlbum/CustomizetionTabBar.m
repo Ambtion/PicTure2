@@ -128,7 +128,6 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self setUserInteractionEnabled:YES];
     }
-    
 }
 - (BOOL)isHiddenBar
 {

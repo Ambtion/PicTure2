@@ -114,22 +114,26 @@
 {
     [self readAlbum];
 }
-- (void) readAlbum
+- (void)readAlbum
 {
     if (_isReading) return;
     _isReading = YES;
     [self waitForMomentsWithTitle:@"加载中" withView:self.view];
-    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    @autoreleasepool {
-        [self initDataContainer];
-        [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
-            [self prepareDataWithTimeOrder];
-            [self autoUplaodPic];
-            [self stopWaitProgressView:nil];
-        } failture:^(NSError *error) {
-            [self showPopAlerViewRatherThentasView:NO WithMes:@"加载失败"];
-        }];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            [self initDataContainer];
+            [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+                [self prepareDataWithTimeOrder];
+                [self autoUplaodPic];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self stopWaitProgressView:nil];
+
+                });
+            } failture:^(NSError *error) {
+                [self showPopAlerViewRatherThentasView:NO WithMes:@"加载失败"];
+            }];
+        }
+    });
 }
 
 - (void)autoUplaodPic

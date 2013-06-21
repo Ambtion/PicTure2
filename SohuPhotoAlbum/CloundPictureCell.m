@@ -104,15 +104,15 @@
         if ([dic allKeys].count) {
             canBeOperated = YES;
             NSString * strUrl = [NSString stringWithFormat:@"%@_c100",[dic objectForKey:@"photo_url"]];
-            UIImage * image = [cache imageFromKey:strUrl];
-            if (image) {
-                //获取同步保证图片实时更替
-                [imageView setImage:image];
-                return;
-            }
+//            UIImage * image = [cache imageFromKey:strUrl];
+//            if (image) {
+//                //获取同步保证图片实时更替
+//                [imageView setImage:image];
+//                return;
+//            }
             __weak StatusImageView * weakSelf = imageView;
             [imageView.actualView cancelCurrentImageLoad];
-            [imageView.actualView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image) {
+            [imageView.actualView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"moren.png"] success:^(UIImage *image) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf setImage:image];
                 });

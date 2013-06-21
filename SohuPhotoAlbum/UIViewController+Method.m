@@ -304,11 +304,11 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 
 - (NSData *)getImgaeDateWithUrl:(NSString *)string
 {
-    NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
+    NSString * photoUrl = [NSString stringWithFormat:@"%@_w283",string];
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
 - (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene
-{
+{    
     //发送内容给微信
     WXMediaMessage * message = [WXMediaMessage message];
     UIImage  * tuumbail = [UIImage imageWithData:[self getImgaeDateWithUrl:imageURL]];
@@ -317,6 +317,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     SDImageCache * imageCache  = [[SDImageCache alloc] init];
     UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",imageURL]];
     if (image) {
+//        DLog(@"%dd",[UIImageJPEGRepresentation(image, 0.5) length]);
         ext.imageData = UIImageJPEGRepresentation(image, 0.5);
     }else{
         ext.imageUrl = imageURL;
@@ -328,6 +329,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     req.scene = scene;
     [WXApi sendReq:req];
 }
+
 @end
 
 @implementation UIViewController(Login)
