@@ -304,7 +304,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 - (NSData *)getImgaeDataWithUrl:(NSString *)string
 {
     NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
-    DLog(@"%@",[[NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]] class]);
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
 - (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene

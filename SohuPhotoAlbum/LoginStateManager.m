@@ -104,15 +104,18 @@
     //    [AccountLoginResquest deleteDeviceToken];
     //    [self removeDataForKey:[self currentUserId]];
     //    [self unbindAll];
+    [self removeCookie];
+    [self removeDataForKey:USER_ID];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOINGOUT object:nil];
+}
++ (void)removeCookie
+{
     NSHTTPCookie *cookie;
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (cookie in [storage cookies]) {
         [storage deleteCookie:cookie];
     }
-    [self removeDataForKey:USER_ID];
-    [[NSNotificationCenter defaultCenter] postNotificationName:LOINGOUT object:nil];
 }
-
 + (NSString *)currentUserId
 {
     return [self dataForKey:USER_ID];
@@ -234,6 +237,7 @@
             break;
     }
     [self userDefoultRemoveValeuForKey:str];
+    [self removeCookie];
 }
 
 #pragma mark Device
