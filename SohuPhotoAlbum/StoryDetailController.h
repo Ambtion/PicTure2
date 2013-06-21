@@ -8,7 +8,8 @@
 
 #import "CloundDetailController.h"
 
-@interface AlBumDetailController : CloundDetailController
+@interface StoryDetailController : CloundDetailController
 @property(strong,nonatomic)NSString * ownerId;
 @property(strong,nonatomic)NSString * storyID;
 @end
+

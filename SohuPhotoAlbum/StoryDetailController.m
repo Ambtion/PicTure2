@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 Qu. All rights reserved.
 //
 
-#import "AlBumDetailController.h"
+#import "StoryDetailController.h"
 #import "RequestManager.h"
 
 //#import <objc/runtime.h>
@@ -35,7 +35,7 @@
 //}
 //@end
 
-@implementation AlBumDetailController
+@implementation StoryDetailController
 @synthesize ownerId,storyID;
 
 - (void)viewDidLoad

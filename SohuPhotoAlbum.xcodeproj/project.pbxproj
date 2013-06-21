@@ -28,7 +28,7 @@
 		C51D266E1744E9E40044FCD0 /* footViewshare4.png in Resources */ = {isa = PBXBuildFile; fileRef = C51D26691744E9E30044FCD0 /* footViewshare4.png */; };
 		C51D266F1744E9E40044FCD0 /* footViewtalk4.png in Resources */ = {isa = PBXBuildFile; fileRef = C51D266A1744E9E30044FCD0 /* footViewtalk4.png */; };
 		C51D26701744E9E40044FCD0 /* footViewunlike4.png in Resources */ = {isa = PBXBuildFile; fileRef = C51D266B1744E9E40044FCD0 /* footViewunlike4.png */; };
-		C52F1F471744B0BE009CC605 /* AlBumDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C52F1F461744B0BE009CC605 /* AlBumDetailController.m */; };
+		C52F1F471744B0BE009CC605 /* StoryDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C52F1F461744B0BE009CC605 /* StoryDetailController.m */; };
 		C52F1F4A1744B985009CC605 /* TitleAccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = C52F1F491744B985009CC605 /* TitleAccountView.m */; };
 		C535D93B172BAC2E00A2FBAA /* UIViewController+Method.m in Sources */ = {isa = PBXBuildFile; fileRef = C535D93A172BAC2E00A2FBAA /* UIViewController+Method.m */; };
 		C54DBC77172BD6C000925B82 /* desShareBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = C54DBC76172BD6C000925B82 /* desShareBtn.png */; };
@@ -389,7 +389,6 @@
 		C5A32BC3170706A00084B253 /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A32BBC170706A00084B253 /* SinaWeiboAuthorizeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C5A32BC4170706A00084B253 /* SinaWeiboRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A32BBF170706A00084B253 /* SinaWeiboRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C5A8460E1738B21900E57476 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A8460D1738B21900E57476 /* ShareViewController.m */; };
-		C5A87303174776950087C800 /* navbarnoline.png in Resources */ = {isa = PBXBuildFile; fileRef = C5A87302174776950087C800 /* navbarnoline.png */; };
 		C5ACE697174785A40036926A /* leftMenuHigthed.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACE696174785A40036926A /* leftMenuHigthed.png */; };
 		C5B76EF417116E46001FCC8C /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */; };
 		C5BB14DB176F05B20061A897 /* CloundAlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BB14DA176F05B10061A897 /* CloundAlbumController.m */; };
@@ -432,8 +431,8 @@
 		C51D26691744E9E30044FCD0 /* footViewshare4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footViewshare4.png; sourceTree = "<group>"; };
 		C51D266A1744E9E30044FCD0 /* footViewtalk4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footViewtalk4.png; sourceTree = "<group>"; };
 		C51D266B1744E9E40044FCD0 /* footViewunlike4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footViewunlike4.png; sourceTree = "<group>"; };
-		C52F1F451744B0BE009CC605 /* AlBumDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlBumDetailController.h; sourceTree = "<group>"; };
-		C52F1F461744B0BE009CC605 /* AlBumDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlBumDetailController.m; sourceTree = "<group>"; };
+		C52F1F451744B0BE009CC605 /* StoryDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryDetailController.h; sourceTree = "<group>"; };
+		C52F1F461744B0BE009CC605 /* StoryDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryDetailController.m; sourceTree = "<group>"; };
 		C52F1F481744B985009CC605 /* TitleAccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleAccountView.h; sourceTree = "<group>"; };
 		C52F1F491744B985009CC605 /* TitleAccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleAccountView.m; sourceTree = "<group>"; };
 		C535D939172BAC2E00A2FBAA /* UIViewController+Method.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Method.h"; sourceTree = "<group>"; };
@@ -965,7 +964,6 @@
 		C5A32BBF170706A00084B253 /* SinaWeiboRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeiboRequest.m; sourceTree = "<group>"; };
 		C5A8460C1738B21900E57476 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		C5A8460D1738B21900E57476 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
-		C5A87302174776950087C800 /* navbarnoline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbarnoline.png; sourceTree = "<group>"; };
 		C5ACE696174785A40036926A /* leftMenuHigthed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftMenuHigthed.png; sourceTree = "<group>"; };
 		C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
@@ -1105,8 +1103,8 @@
 				C54DBC7D172BE15300925B82 /* CloundDetailController.m */,
 				C5899134177144A300375509 /* CloundAlbumDetailController.h */,
 				C5899135177144A300375509 /* CloundAlbumDetailController.m */,
-				C52F1F451744B0BE009CC605 /* AlBumDetailController.h */,
-				C52F1F461744B0BE009CC605 /* AlBumDetailController.m */,
+				C52F1F451744B0BE009CC605 /* StoryDetailController.h */,
+				C52F1F461744B0BE009CC605 /* StoryDetailController.m */,
 				C5B76EF217116E46001FCC8C /* UIImage+FixOrientation.h */,
 				C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */,
 			);
@@ -2024,7 +2022,6 @@
 			isa = PBXGroup;
 			children = (
 				C58BF6C11772EFEE00C55559 /* NavigationBarBG.png */,
-				C5A87302174776950087C800 /* navbarnoline.png */,
 				C58991451771BC3E00375509 /* navbar.png */,
 				C58A0B541720F94800521715 /* shareBtn_nomal.png */,
 				C58A0B2C1720E12500521715 /* TabBack.png */,
@@ -2445,7 +2442,6 @@
 				C56323EC17475D1900685951 /* MessageEntrySendButton@2x.png in Resources */,
 				C56323ED17475D1900685951 /* MessageEntrySendButtonPressed.png in Resources */,
 				C56323EE17475D1900685951 /* MessageEntrySendButtonPressed@2x.png in Resources */,
-				C5A87303174776950087C800 /* navbarnoline.png in Resources */,
 				C5ACE697174785A40036926A /* leftMenuHigthed.png in Resources */,
 				C5891013174A150100B90E28 /* Icon.png in Resources */,
 				C5891015174A150400B90E28 /* Icon@2x.png in Resources */,
@@ -2634,7 +2630,7 @@
 				C5940424173A09E500AA9B04 /* GTMBase64.m in Sources */,
 				C5830C721740C11C00E56AC8 /* CacheManager.m in Sources */,
 				B89A47021743C0E500CA16DC /* DetailTextView.m in Sources */,
-				C52F1F471744B0BE009CC605 /* AlBumDetailController.m in Sources */,
+				C52F1F471744B0BE009CC605 /* StoryDetailController.m in Sources */,
 				C52F1F4A1744B985009CC605 /* TitleAccountView.m in Sources */,
 				C56323DC17475CE900685951 /* HPGrowingTextView.m in Sources */,
 				C56323DD17475CE900685951 /* HPTextViewInternal.m in Sources */,

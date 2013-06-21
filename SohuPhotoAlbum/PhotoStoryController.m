@@ -12,7 +12,7 @@
 #import "LoginStateManager.h"
 #import "PhotoWallController.h"
 #import "UIImageView+WebCache.h"
-#import "AlBumDetailController.h"
+#import "StoryDetailController.h"
 #import "SDImageCache.h"
 
 @implementation PhotoStoryController
@@ -227,7 +227,7 @@
 {
     NSIndexPath * path = [_refreshTableView indexPathForCell:cell];
     NSDictionary  * dic = [_assetArray objectAtIndex:path.row];
-    AlBumDetailController * detailController = [[AlBumDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic];
+    StoryDetailController * detailController = [[StoryDetailController alloc] initWithAssetsArray:_assetArray andCurAsset:dic];
     detailController.ownerId = self.ownerID;
     detailController.storyID = self.storyID;
     //    detailController.show

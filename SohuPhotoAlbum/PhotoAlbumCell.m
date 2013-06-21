@@ -43,7 +43,6 @@
         [self setCountLabelProperty:_leftCount];
         [_leftImage addSubview:_leftCount];
         [self.contentView addSubview:_leftImage];
-
         UITapGestureRecognizer * gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGusture:)];
         gesture.numberOfTapsRequired = 1;
         [_leftImage addGestureRecognizer:gesture];
@@ -119,7 +118,6 @@
         if (self.dataSource.rightGroup) {
             [_rightImage setHidden:NO];
             [_rigthLabel setHidden:NO];
-
             NSString * str = [NSString stringWithFormat:@"%@_c205",[[_dataSource rightGroup] objectForKey:@"cover_url"]];
             [_rightImage.actualView setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"moren.png"]];
             [_rigthLabel setText:[NSString stringWithFormat:@"%@",[self.dataSource.rightGroup objectForKey:@"folder_name"]]];

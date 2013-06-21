@@ -120,12 +120,12 @@
 {
     [super viewWillAppear:animated];
 //    [self.navigationItem setHidesBackButton:YES];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+//    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-        _navBar.normalBar.image = [UIImage imageNamed:@"navbarnoline.png"];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
         _navBar.nLabelText.text = @"评论";
+        [_navBar.nRightButton1 setHidden:YES];
     }
     if (!_navBar.superview)
         [self.navigationController.navigationBar addSubview:_navBar];

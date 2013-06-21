@@ -122,9 +122,7 @@
 {
     [RequestManager getFoldersWithAccessToken:[LoginStateManager currentToken] start:assetGroups.count  count:20 success:^(NSString *response) {
         NSArray * array = [[response JSONValue] objectForKey:@"folders"];
-        if (array && array.count) {
-            [self refreshDataSoure:array RatherThenGetMore:NO];
-        }
+        [self refreshDataSoure:array RatherThenGetMore:NO];
         [_refreshTableView didFinishedLoadingTableViewData];
     } failure:^(NSString *error) {
         [self showPopAlerViewRatherThentasView:NO WithMes:error];
@@ -208,7 +206,6 @@
 {
     if ([group isKindOfClass:[NSDictionary class]]) {
         if (_viewState == NomalState) {
-            DLog(@"%@",group);
             NSString * folderId = [NSString stringWithFormat:@"%@",[group objectForKey:@"id"]];
             NSString * _folderName = [group objectForKey:@"folder_name"];
             [self.navigationController pushViewController:[[CloundAlbumPhotosController alloc] initWithFoldersId:folderId folderName:_folderName] animated:YES];
