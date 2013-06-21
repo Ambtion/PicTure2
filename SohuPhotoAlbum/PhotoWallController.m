@@ -333,7 +333,9 @@
     NSString * title = [NSString stringWithFormat:@"分享%@的图片墙",[_userInfo objectForKey:@"user_nick"]];
     PhotoWallCellDataSource * source = [_dataSourceArray objectAtIndex:0];
     NSString * photoUrl = [[[source imageWallInfo] objectAtIndex:0] objectForKey:@"photo_url"];
-    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title photoUrl:photoUrl des:[NSString stringWithFormat:@"%@",[_userInfo objectForKey:@"user_desc"]]];
+    id userDes = [_userInfo objectForKey:@"user_desc"];
+    if (!([userDes isKindOfClass:[NSString class]]&& ![userDes isEqualToString:@""])) userDes = nil;
+    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title photoUrl:photoUrl des:userDes];
 }
 
 - (void)onResp:(BaseResp *)resp
