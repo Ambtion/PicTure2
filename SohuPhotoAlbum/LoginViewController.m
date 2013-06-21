@@ -140,7 +140,6 @@
     [self.view addSubview:sohu2003];
     
 }
-
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];

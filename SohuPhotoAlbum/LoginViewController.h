@@ -17,6 +17,7 @@
 @class LoginViewController;
 
 @protocol LoginViewControllerDelegate <NSObject>
+
 @optional
 - (void)loginViewController:(LoginViewController *)loginController cancleClick:(id)sender;
 - (void)loginViewController:(LoginViewController *)loginController loginSucessWithinfo:(NSDictionary *)sucessInfo;

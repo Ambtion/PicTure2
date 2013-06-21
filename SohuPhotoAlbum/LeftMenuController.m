@@ -18,7 +18,10 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
 @implementation LeftMenuController
 @synthesize localAllController;
 @synthesize cloudController;
-
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (void)viewDidLoad
 {
     
@@ -55,6 +58,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     _accountView.delegate = self;
     [self setAccountView];
     [self.view addSubview:_accountView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginOut:) name:LOINGOUT object:nil];
     
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -65,9 +69,12 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
     if (!_selectPath)
         _selectPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [_tableView selectRowAtIndexPath:_selectPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    
 }
 #pragma mark AccoutView
+- (void)loginOut:(id)sender
+{
+    _userInfo = nil;
+}
 - (void)setAccountView
 {
     //暂时写着

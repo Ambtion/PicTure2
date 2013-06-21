@@ -110,6 +110,7 @@
         [storage deleteCookie:cookie];
     }
     [self removeDataForKey:USER_ID];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOINGOUT object:nil];
 }
 
 + (NSString *)currentUserId

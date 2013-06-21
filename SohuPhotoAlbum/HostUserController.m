@@ -49,7 +49,6 @@
     [self.navigationController.navigationBar.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
-        _cusBar.normalBar.image = [UIImage imageNamed:@"navbarnoline.png"];
         _cusBar.nLabelText.text = @"星用户";
         [_cusBar.nRightButton1 setHidden:YES];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
@@ -64,10 +63,7 @@
     [super viewWillDisappear:animated];
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 }
-//- (void)viewDidDisappear:(BOOL)animated
-//{
-//    [_cusBar removeFromSuperview];
-//}
+
 #pragma mark refrshDataFromNetWork
 - (void)pullingreloadTableViewDataSource:(id)sender
 {

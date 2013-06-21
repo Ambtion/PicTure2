@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "LoginViewController.h"
 
+#define  LOINGOUT   @"__LOGINOUNT__"
+
 @interface LoginStateManager : NSObject
 
 + (BOOL)isLogin;

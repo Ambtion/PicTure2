@@ -67,7 +67,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 {
     if (!self.navigationController.navigationBar.isHidden) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-        [self.navigationController setNavigationBarHidden:YES animated:!self.isPushView];
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
     }
     self.isPushView = NO;
 

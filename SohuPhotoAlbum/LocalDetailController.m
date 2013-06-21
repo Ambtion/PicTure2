@@ -150,6 +150,7 @@
         return;
     }
     if (![LoginStateManager isLogin]) {
+        self.isPushView = YES;
         [self showLoginViewWithMethodNav:YES];
         return;
     }
@@ -157,7 +158,6 @@
         [self showShareView];
     }
     if (button.tag == TABBARLOADPIC){        //上传图片
-        
         ALAsset * asset = [self.assetsArray objectAtIndex:self.curPageNum];
         [[UploadTaskManager currentManager] uploadPicTureWithALasset:asset];
     }

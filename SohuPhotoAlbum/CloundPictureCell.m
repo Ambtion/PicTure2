@@ -98,6 +98,7 @@
 - (void)setImageViews:(StatusImageView*)imageView With:(NSDictionary *)dic
 {
     [imageView setImage:[UIImage imageNamed:@"moren.png"]];
+    
     if (dic) {
         //设置图片
         if ([dic allKeys].count) {
@@ -110,8 +111,8 @@
                 return;
             }
             __weak StatusImageView * weakSelf = imageView;
-            UIImageView * AimageView = [[UIImageView alloc] init];
-            [AimageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image) {
+            [imageView.actualView cancelCurrentImageLoad];
+            [imageView.actualView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf setImage:image];
                 });
