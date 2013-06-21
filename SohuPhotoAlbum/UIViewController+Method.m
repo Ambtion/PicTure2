@@ -294,22 +294,28 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     WXWebpageObject *ext = [WXWebpageObject object];
     ext.webpageUrl = url;
     message.mediaObject = ext;
-    SendMessageToWXReq* req =[[SendMessageToWXReq alloc] init];
+    SendMessageToWXReq * req =[[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
     req.scene = scene;
-    
     [WXApi sendReq:req];
 }
 
 - (NSData *)getImgaeDateWithUrl:(NSString *)string
 {
-    NSString * photoUrl = [NSString stringWithFormat:@"%@_w283",string];
+    NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
+    DLog(@"%@",photoUrl);
+    SDImageCache * imageCache  = [[SDImageCache alloc] init];
+    UIImage * image = [imageCache imageFromKey:photoUrl];
+    if (image) {
+        return UIImageJPEGRepresentation(image, 1);
+    }
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
 - (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene
 {    
     //发送内容给微信
+    DLog();
     WXMediaMessage * message = [WXMediaMessage message];
     UIImage  * tuumbail = [UIImage imageWithData:[self getImgaeDateWithUrl:imageURL]];
     [message setThumbImage:tuumbail];
@@ -317,7 +323,6 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
     SDImageCache * imageCache  = [[SDImageCache alloc] init];
     UIImage * image = [imageCache imageFromKey:[NSString stringWithFormat:@"%@_w640",imageURL]];
     if (image) {
-//        DLog(@"%dd",[UIImageJPEGRepresentation(image, 0.5) length]);
         ext.imageData = UIImageJPEGRepresentation(image, 0.5);
     }else{
         ext.imageUrl = imageURL;

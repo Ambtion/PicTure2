@@ -370,7 +370,7 @@
 - (void)cloudPictureCell:(CloundPictureCell *)cell clickInfo:(NSDictionary *)dic
 {
     //点击
-    [self.navigationController pushViewController:[[CloundAlbumDetailController alloc] initWithAssetsArray:self.assetsSource andCurAsset:dic] animated:YES];
+    [self.navigationController pushViewController:[[CloundAlbumDetailController alloc] initWithAssetsArray:self.assetsSource andCurAsset:dic folderId:self.folderId] animated:YES];
     DLog(@"%@ %d",dic,self.assetsSource.count);
 }
 
