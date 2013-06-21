@@ -42,30 +42,52 @@
 }
 - (void)addheadView
 {
-    UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, _offsetY, 320, 44)];
-    headView.backgroundColor = [UIColor clearColor];
-    headView.image = [UIImage imageNamed:@"navbarnoline.png"];
-    [headView setUserInteractionEnabled:YES];
-    UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame = CGRectMake(0, 0, 44, 44);
-    [backBtn setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    backBtn.tag = 100;
-    
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(44 + 10, 0, 320 - 88, 44)];
-    [self setLabelProperty:label];
-    [headView addSubview:label];
-    [backBtn addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [headView addSubview:backBtn];
-    _shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _shareButton.frame = CGRectMake(320 - 44, 0, 44, 44);
-    [_shareButton setImage:[UIImage imageNamed:@"desShareBtn.png"] forState:UIControlStateNormal];
-    _shareButton.tag = 200;
-    [_shareButton addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [headView addSubview:_shareButton];
-    [self addSubview:headView];
-    headView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+//    UIImageView * headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, _offsetY, 320, 44)];
+//    headView.backgroundColor = [UIColor clearColor];
+//    headView.image = [UIImage imageNamed:@"navbarnoline.png"];
+//    [headView setUserInteractionEnabled:YES];
+//    UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    backBtn.frame = CGRectMake(0, 0, 44, 44);
+//    [backBtn setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+//    backBtn.tag = 100;
+//    
+//    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(44 + 10, 0, 320 - 88, 44)];
+//    [self setLabelProperty:label];
+//    [headView addSubview:label];
+//    [backBtn addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [headView addSubview:backBtn];
+//    _shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    _shareButton.frame = CGRectMake(320 - 44, 0, 44, 44);
+//    [_shareButton setImage:[UIImage imageNamed:@"desShareBtn.png"] forState:UIControlStateNormal];
+//    _shareButton.tag = 200;
+//    [_shareButton addTarget:self action:@selector(sharebuttonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [headView addSubview:_shareButton];
+//    [self addSubview:headView];
+//    headView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+    [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    _navBar.frame = CGRectMake(0, _offsetY, 320, 44);
+    [self setLabeltext:_navBar.nLabelText];
+    [_navBar.nRightButton1 setImage:[UIImage imageNamed:@"desShareBtn.png"] forState:UIControlStateNormal];
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    [self addSubview:_navBar];
 }
-
+- (void)cusNavigationBar:(CustomizationNavBar *)bar buttonClick:(UIButton *)button isUPLoadState:(BOOL)isupload
+{
+    if (button.tag == LEFTBUTTON) {
+    //back
+        if ([_delegate respondsToSelector:@selector(localShareDesViewcancelShare:)]) {
+            [_delegate localShareDesViewcancelShare:self];
+            return;
+        }
+        [self removeFromSuperview];
+     }else{
+      //share
+         if ([_delegate respondsToSelector:@selector(localShareDesView:shareTo:withDes:)]) {
+             [_delegate localShareDesView:self shareTo:_model withDes:_contentTextView.text];
+         }
+    }
+}
 - (void)addContentViewwithTunmbnail:(UIImage *)thumbnail
 {
     _contentView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 64 + _offsetY, 300, self.bounds.size.height - 100)];
@@ -102,10 +124,10 @@
     [_contentTextView  becomeFirstResponder];
 }
 
-- (void)setLabelProperty:(UILabel *)label
+- (void)setLabeltext:(UILabel *)label
 {
-    label.backgroundColor = [UIColor clearColor];
-    label.textColor = [UIColor blackColor];
+//    label.backgroundColor = [UIColor clearColor];
+//    label.textColor = [UIColor blackColor];
     switch (_model) {
         case QQShare:
             label.text = @"分享到腾讯QQ空间";

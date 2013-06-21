@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PortraitView.h"
+#import "CustomizationNavBar.h"
 
 @class LocalShareDesView;
 @protocol LocalShareDesViewDelegate <NSObject>
@@ -15,7 +16,7 @@
 @optional
 - (void)localShareDesViewcancelShare:(LocalShareDesView *)view;
 @end
-@interface LocalShareDesView : UIImageView<UITextViewDelegate>
+@interface LocalShareDesView : UIImageView<UITextViewDelegate,CusNavigationBarDelegate>
 {
     UIImageView * _thumbNailView;
     KShareModel  _model;
@@ -25,6 +26,7 @@
     UILabel * _textcount;
     PortraitView * _porTraitView;
     CGFloat _offsetY;
+    CustomizationNavBar*  _navBar;
 }
 @property(weak,nonatomic) id<LocalShareDesViewDelegate> delegate;
 - (id)initWithModel:(KShareModel )model thumbnail:(UIImage *)thumbnail andDelegate:(id<LocalShareDesViewDelegate>)Adelegete;
