@@ -122,8 +122,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
             [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+                [self prepareDataWithTimeOrder];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self prepareDataWithTimeOrder];
                     [self autoUplaodPic];
                 });
             } failture:^(NSError *error) {
