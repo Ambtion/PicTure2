@@ -397,6 +397,7 @@
 
 - (void)pushMenuItem:(KxMenuItem*)sender
 {
+    if (!_dataSourceArray.count) return;
     if ([sender.title isEqualToString:@"分享"]) {
          [self setViewState:ShareState];
     }else{

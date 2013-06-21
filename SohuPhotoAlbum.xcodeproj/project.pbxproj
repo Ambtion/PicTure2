@@ -52,7 +52,6 @@
 		C56E31E917705ED800E8936B /* CloundAlbumPhotosController.m in Sources */ = {isa = PBXBuildFile; fileRef = C56E31E817705ED700E8936B /* CloundAlbumPhotosController.m */; };
 		C57ED93B17028A1900505ECF /* ImageScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93A17028A1900505ECF /* ImageScaleView.m */; };
 		C57ED93E17028C9B00505ECF /* PhotoDetailBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C57ED93D17028C9B00505ECF /* PhotoDetailBaseController.m */; };
-		C57F672A17730C17002A6046 /* KxMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = C57F672917730C17002A6046 /* KxMenu.m */; };
 		C57F673E17731661002A6046 /* button_blue_press.png in Resources */ = {isa = PBXBuildFile; fileRef = C57F673817731661002A6046 /* button_blue_press.png */; };
 		C57F673F17731661002A6046 /* button_gray_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = C57F673917731661002A6046 /* button_gray_normal.png */; };
 		C57F674017731661002A6046 /* button_gray_press.png in Resources */ = {isa = PBXBuildFile; fileRef = C57F673A17731661002A6046 /* button_gray_press.png */; };
@@ -214,6 +213,7 @@
 		C589F6FF17742616003CA424 /* kxmenuDeleteFolder.png in Resources */ = {isa = PBXBuildFile; fileRef = C589F6FC17742615003CA424 /* kxmenuDeleteFolder.png */; };
 		C589F70017742616003CA424 /* kxmenuDeletePhotos.png in Resources */ = {isa = PBXBuildFile; fileRef = C589F6FD17742615003CA424 /* kxmenuDeletePhotos.png */; };
 		C589F70117742616003CA424 /* kxmenuShare.png in Resources */ = {isa = PBXBuildFile; fileRef = C589F6FE17742616003CA424 /* kxmenuShare.png */; };
+		C589F70C17743047003CA424 /* KxMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = C589F70B17743047003CA424 /* KxMenu.m */; };
 		C58A0B2F1720E12500521715 /* TabBack.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2C1720E12500521715 /* TabBack.png */; };
 		C58A0B301720E12500521715 /* TabBarShare.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2D1720E12500521715 /* TabBarShare.png */; };
 		C58A0B311720E12500521715 /* TabBarLoad.png in Resources */ = {isa = PBXBuildFile; fileRef = C58A0B2E1720E12500521715 /* TabBarLoad.png */; };
@@ -467,8 +467,6 @@
 		C57ED93A17028A1900505ECF /* ImageScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScaleView.m; sourceTree = "<group>"; };
 		C57ED93C17028C9B00505ECF /* PhotoDetailBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailBaseController.h; sourceTree = "<group>"; };
 		C57ED93D17028C9B00505ECF /* PhotoDetailBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDetailBaseController.m; sourceTree = "<group>"; };
-		C57F672817730C17002A6046 /* KxMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMenu.h; sourceTree = "<group>"; };
-		C57F672917730C17002A6046 /* KxMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMenu.m; sourceTree = "<group>"; };
 		C57F673817731661002A6046 /* button_blue_press.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_blue_press.png; sourceTree = "<group>"; };
 		C57F673917731661002A6046 /* button_gray_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_gray_normal.png; sourceTree = "<group>"; };
 		C57F673A17731661002A6046 /* button_gray_press.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_gray_press.png; sourceTree = "<group>"; };
@@ -697,6 +695,8 @@
 		C589F6FC17742615003CA424 /* kxmenuDeleteFolder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kxmenuDeleteFolder.png; sourceTree = "<group>"; };
 		C589F6FD17742615003CA424 /* kxmenuDeletePhotos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kxmenuDeletePhotos.png; sourceTree = "<group>"; };
 		C589F6FE17742616003CA424 /* kxmenuShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kxmenuShare.png; sourceTree = "<group>"; };
+		C589F70A17743047003CA424 /* KxMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMenu.h; sourceTree = "<group>"; };
+		C589F70B17743047003CA424 /* KxMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMenu.m; sourceTree = "<group>"; };
 		C58A0B2C1720E12500521715 /* TabBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBack.png; sourceTree = "<group>"; };
 		C58A0B2D1720E12500521715 /* TabBarShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarShare.png; sourceTree = "<group>"; };
 		C58A0B2E1720E12500521715 /* TabBarLoad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarLoad.png; sourceTree = "<group>"; };
@@ -1111,15 +1111,6 @@
 				C5B76EF317116E46001FCC8C /* UIImage+FixOrientation.m */,
 			);
 			name = PhotoDetail;
-			sourceTree = "<group>";
-		};
-		C57F672717730C17002A6046 /* kxmenu */ = {
-			isa = PBXGroup;
-			children = (
-				C57F672817730C17002A6046 /* KxMenu.h */,
-				C57F672917730C17002A6046 /* KxMenu.m */,
-			);
-			path = kxmenu;
 			sourceTree = "<group>";
 		};
 		C57F673617731661002A6046 /* SHActionSheet */ = {
@@ -1570,8 +1561,8 @@
 		C588B0C41700304A006BBC34 /* Plug */ = {
 			isa = PBXGroup;
 			children = (
+				C589F7091774303E003CA424 /* KXMenu */,
 				C57F673617731661002A6046 /* SHActionSheet */,
-				C57F672717730C17002A6046 /* kxmenu */,
 				C56D4C8517618776009B88FB /* DetailTextView */,
 				C590CA051757054400E87C39 /* ASIHttpRuquest */,
 				C598F4A7175505B50006A379 /* Open_UDID */,
@@ -1704,6 +1695,15 @@
 				C589F6E51773F79D003CA424 /* fenxiang-tupianqiang-normal.png */,
 			);
 			name = ShareIcon;
+			sourceTree = "<group>";
+		};
+		C589F7091774303E003CA424 /* KXMenu */ = {
+			isa = PBXGroup;
+			children = (
+				C589F70A17743047003CA424 /* KxMenu.h */,
+				C589F70B17743047003CA424 /* KxMenu.m */,
+			);
+			name = KXMenu;
 			sourceTree = "<group>";
 		};
 		C58A573A171E8CEE003B6817 /* photoStory */ = {
@@ -2656,8 +2656,8 @@
 				C56E31E917705ED800E8936B /* CloundAlbumPhotosController.m in Sources */,
 				C5899136177144A300375509 /* CloundAlbumDetailController.m in Sources */,
 				C58991441771950D00375509 /* CQSegmentControl.m in Sources */,
-				C57F672A17730C17002A6046 /* KxMenu.m in Sources */,
 				C57F674117731661002A6046 /* SHActionSheet.m in Sources */,
+				C589F70C17743047003CA424 /* KxMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

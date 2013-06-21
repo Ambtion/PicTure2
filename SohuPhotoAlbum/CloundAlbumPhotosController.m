@@ -245,11 +245,12 @@
 
 - (void)pushMenuItem:(KxMenuItem *)item
 {
-    if ([item.title isEqualToString:@"分享"]) {
-        [self setViewState:ShareState];
-    }
     if ([item.title isEqualToString:@"删除相册"]) {
         [self showDeleteFolderView];
+    }
+    if (!_dataSource.count) return;
+    if ([item.title isEqualToString:@"分享"]) {
+        [self setViewState:ShareState];
     }
     if ([item.title isEqualToString:@"批量删除照片"]) {
         [self setViewState:DeleteState];
