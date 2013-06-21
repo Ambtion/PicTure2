@@ -76,6 +76,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         _accountView.nameLabel.text =  @"请登录账号";
         _accountView.desLabel.text = nil;
     }else{
+        DLog(@"userinfo%@",_userInfo);
         if (!_userInfo){
             [RequestManager getUserInfoWithId:[LoginStateManager currentUserId] success:^(NSString *response) {
                 _userInfo = [response JSONValue];
@@ -85,6 +86,10 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
             } failure:^(NSString *error) {
                 
             }];
+        }else{
+            [_accountView.portraitImageView.imageView setImageWithURL:[NSURL URLWithString:[_userInfo objectForKey:@"user_icon"]]];
+            _accountView.desLabel.text  = [NSString stringWithFormat:@"@%@",[_userInfo objectForKey:@"sname"]];
+            _accountView.nameLabel.text = [_userInfo objectForKey:@"user_nick"];
         }
     }
 }
@@ -221,6 +226,7 @@ static NSString *   image[5]    =   {@"localPhoto.png",@"cloundPhoto.png",@"shar
         [self hideOAuthorView];
     }
 }
+
 - (void)accountView:(LeftAccountView *)acountView setttingClick:(id)sender
 {
     

@@ -320,6 +320,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
+    [KxMenu dismissMenu];
 }
 //- (void)viewDidDisappear:(BOOL)animated
 //{
@@ -377,16 +378,17 @@
     NSArray *menuItems =
     @[
       [KxMenuItem menuItem:@"分享"
-                     image:[UIImage imageNamed:@"action_icon"]
+                     image:[UIImage imageNamed:@"kxmenuShare.png"]
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@"批量删除"
-                     image:[UIImage imageNamed:@"check_icon"]
+      [KxMenuItem menuItem:@"批量删除照片"
+                     image:[UIImage imageNamed:@"kxmenuDeletePhotos.png"]
                     target:self
                     action:@selector(pushMenuItem:)],
       
       ];
-    
+    [KxMenu setTintColor:[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:1.f]];
+    [KxMenu setTintColor2:[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:1.f]];
     [KxMenu showMenuInView:self.view
                   fromRect:CGRectMake(320 - 44, - 44,  44, 44)
                  menuItems:menuItems];

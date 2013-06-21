@@ -145,6 +145,7 @@
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == TABBARCANCEL){
+        self.isPushView = YES;
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }

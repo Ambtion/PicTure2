@@ -13,7 +13,7 @@
 #import "UIImageView+WebCache.h"
 #import "SDImageCache.h"
 
-@implementation UIViewController (Method)
+@implementation UIViewController (Assets)
 #pragma mark Data divideAssettByDayTime
 
 - (void)cloundDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)_assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)_assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray
@@ -187,7 +187,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 @end
 
-@implementation UIViewController(Private)
+@implementation UIViewController(Tips)
 - (void)showLoginViewWithMethodNav:(BOOL)isNav
 {
     LoginViewController * loginView = [[LoginViewController alloc] init];
@@ -234,7 +234,7 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 @end
 
-@implementation UIViewController(writeImage)
+@implementation UIViewController(WriteImage)
 
 - (void)writePicToAlbumWith:(NSString *)imageStr
 {
@@ -261,21 +261,21 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 }
 @end
 
-@implementation UIViewController(libiary)
+@implementation UIViewController(Libiary)
 - (ALAssetsLibrary *)libiary
 {
     return [(AppDelegate *)[[UIApplication sharedApplication] delegate] assetsLibrary];
 }
 @end
 
-@implementation UIViewController(isMine)
+@implementation UIViewController(IsMine)
 - (BOOL)isMineWithOwnerId:(NSString *)ownerID
 {
     return [LoginStateManager isLogin] && [[LoginStateManager currentUserId] isEqualToString:ownerID];
 }
 @end
 
-@implementation UIViewController(share)
+@implementation UIViewController(ShareToWeixin)
 - (AppDelegate *)Appdelegate
 {
     return (AppDelegate *)[[UIApplication sharedApplication] delegate];

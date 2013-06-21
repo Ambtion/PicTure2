@@ -12,33 +12,33 @@
 
 #define WRITEIMAGE @"WriteImage"
 
-@interface UIViewController (Method)
+@interface UIViewController (Assets)
 - (void)cloundDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)_assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)_assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray;
 - (void)localDivideAssettByDayTimeWithAssetArray:(NSMutableArray *)assetsArray exportToassestionArray:(NSMutableArray *)assetsSection assetSectionisShow:(NSMutableArray *)assetSectionisShow dataScource:(NSMutableArray *)dataSourceArray;
 - (NSMutableArray *)sortArrayByTime:(NSMutableArray *)array;
 - (UIView *)getSectionView:(NSInteger)section withImageCount:(NSInteger)count ByisShow:(BOOL)isShowRow WithTimeText:(NSString *)labelText;
 @end
 
-@interface UIViewController (Private)
+@interface UIViewController (Tips)
 - (void)showLoginViewWithMethodNav:(BOOL)isNav;
 - (void)showBingViewWithShareModel:(KShareModel)model delegate:(id)Adelegete andShowWithNav:(BOOL)isNav;
 - (MBProgressHUD *)waitForMomentsWithTitle:(NSString*)str withView:(UIView *)view;
 - (void)stopWaitProgressView:(MBProgressHUD *)view;
 @end
 
-@interface UIViewController(writeImage)
+@interface UIViewController(WriteImage)
 - (void)writePicToAlbumWith:(NSString *)imageStr;
 @end
 
-@interface UIViewController(libiary)
+@interface UIViewController(Libiary)
 - (ALAssetsLibrary *)libiary;
 @end
 
-@interface UIViewController(isMine)
+@interface UIViewController(IsMine)
 - (BOOL)isMineWithOwnerId:(NSString *)ownerID;
 @end
 
-@interface UIViewController(share)
+@interface UIViewController(ShareToWeixin)
 - (void)shareNewsToWeixinWithUrl:(NSString *)url ToSence:(enum WXScene)scene Title:(NSString *)title photoUrl:(NSString *)photoUrl des:(NSString *)des;
 - (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene;
 @end

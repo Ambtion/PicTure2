@@ -44,6 +44,7 @@
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
     if (button.tag == TABBARCANCEL){
+        self.isPushView = YES;
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
@@ -159,7 +160,7 @@
 - (void)setImageView:(ImageScaleView *)scaleView imageFromAsset:(id)asset
 {
     [super setImageView:scaleView imageFromAsset:asset];
-   
+    
     NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
     if(!imageCache) imageCache = [[SDImageCache alloc] init];
     UIImage * image = [imageCache imageFromKey:strUrl];
@@ -182,14 +183,14 @@
 #pragma mark - GetActualImage
 - (void)setImageView:(ImageScaleView *)scaleView ActualImage:(id)asset andOrientation:(UIImageOrientation)orientation
 {
-//    [scaleView.imageView startLoading];
-//    __weak ImageScaleView * weakImage = scaleView;
-//    NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
-//    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image){
-//        [weakImage.imageView stopLoading];
-//    } failure:^(NSError *error) {
-//        [weakImage.imageView stopLoading];
-//    }];
+    //    [scaleView.imageView startLoading];
+    //    __weak ImageScaleView * weakImage = scaleView;
+    //    NSString * strUrl = [NSString stringWithFormat:@"%@_w640",[asset objectForKey:@"photo_url"]];
+    //    [scaleView.imageView setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:nil success:^(UIImage *image){
+    //        [weakImage.imageView stopLoading];
+    //    } failure:^(NSError *error) {
+    //        [weakImage.imageView stopLoading];
+    //    }];
 }
 
 #pragma mark GetMoreAssets
@@ -226,7 +227,7 @@
                 _hasLessAssets = NO;
             }
         } failure:^(NSString *error) {
-//            [self showPopAlerViewRatherThentasView:NO WithMes:error];
+            //            [self showPopAlerViewRatherThentasView:NO WithMes:error];
             self.isLoading = NO;
         }];
     }

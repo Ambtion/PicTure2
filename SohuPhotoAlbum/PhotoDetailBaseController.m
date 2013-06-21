@@ -43,7 +43,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (!isPushView)
+    if (isPushView)
         [self resetStatueBar];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -51,7 +51,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    if (!isPushView)
+    if (isPushView)
         [self resetStatueBar];
 }
 - (void)viewDidAppear:(BOOL)animated
@@ -433,6 +433,7 @@ static  UIDeviceOrientation PreOrientation = UIDeviceOrientationPortrait;
 - (void)cusTabBar:(CustomizetionTabBar *)bar buttonClick:(UIButton *)button
 {
     DLog(@"%s",__FUNCTION__);
+    
 }
 
 #pragma mark - Function

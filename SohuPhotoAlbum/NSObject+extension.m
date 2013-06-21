@@ -10,7 +10,8 @@
 #import "GTMBase64.h"
 
 
-@implementation NSObject (extension)
+@implementation NSObject (Extension)
+
 #pragma mark ShowAlert
 - (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)mesage
 {
@@ -53,7 +54,6 @@
 }
 
 #pragma mark - 
-
 - (NetworkStatus)netWorkStatues
 {
     Reachability * reachability;
@@ -80,13 +80,13 @@
     //推送声音
     noti.soundName = UILocalNotificationDefaultSoundName;
     //内容
-    noti.alertBody = @"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传";
+    noti.alertBody = str;
     //显示在icon上的红色圈中的数子
     //设置userinfo 方便在之后需要撤销的时候使用
     NSDictionary * infoDic = [NSDictionary dictionaryWithObject:@"name" forKey:@"key"];
     noti.userInfo = infoDic;
     //添加推送到uiapplication
-    UIApplication *app = [UIApplication sharedApplication];
+    UIApplication * app = [UIApplication sharedApplication];
     [app scheduleLocalNotification:noti];
 }
 @end

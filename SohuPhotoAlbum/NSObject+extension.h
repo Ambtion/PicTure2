@@ -13,7 +13,7 @@
 #import "MBProgressHUD.h"
 #import "Reachability.h"
 
-@interface NSObject (extension)
+@interface NSObject (Extension)
 + (void)objectPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)message;
 - (void)showPopAlerViewRatherThentasView:(BOOL)isPopView WithMes:(NSString *)message;
 

@@ -226,23 +226,23 @@
     NSArray *menuItems =
     @[
       [KxMenuItem menuItem:@"分享"
-                     image:[UIImage imageNamed:@"action_icon"]
+                     image:[UIImage imageNamed:@"kxmenuShare.png"]
                     target:self
                     action:@selector(pushMenuItem:)],
       [KxMenuItem menuItem:@"删除相册"
-                     image:[UIImage imageNamed:@"check_icon"]
+                     image:[UIImage imageNamed:@"kxmenuDeleteFolder.png"]
                     target:self
                     action:@selector(pushMenuItem:)],
       [KxMenuItem menuItem:@"批量删除照片"
-                     image:[UIImage imageNamed:@"check_icon"]
+                     image:[UIImage imageNamed:@"kxmenuDeletePhotos.png"]
                     target:self
-                    action:@selector(pushMenuItem:)],
+                    action:@selector(pushMenuItem:)]
       ];
     [KxMenu showMenuInView:self.view
                   fromRect:CGRectMake(320 - 44, - 44,  44, 44)
                  menuItems:menuItems];
-    
 }
+
 - (void)pushMenuItem:(KxMenuItem *)item
 {
     if ([item.title isEqualToString:@"分享"]) {
@@ -254,6 +254,7 @@
     if ([item.title isEqualToString:@"批量删除照片"]) {
         [self setViewState:DeleteState];
     }
+    _cusBar.sLabelText.text = item.title;
 }
 
 - (void)handleEnsureClick
