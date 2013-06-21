@@ -516,7 +516,7 @@ typedef enum {
             titleLabel.text = menuItem.title;
             titleLabel.font = titleFont;
             titleLabel.textAlignment = menuItem.alignment;
-            titleLabel.textColor = menuItem.foreColor ? menuItem.foreColor : [UIColor colorWithRed:153.f/255 green:153.f/255 blue:153.f/255 alpha:1.f];
+            titleLabel.textColor = menuItem.foreColor ? menuItem.foreColor : [UIColor whiteColor];
             titleLabel.backgroundColor = [UIColor clearColor];
             titleLabel.autoresizingMask = UIViewAutoresizingNone;
             //titleLabel.backgroundColor = [UIColor greenColor];
@@ -635,8 +635,8 @@ typedef enum {
 - (void)drawBackground:(CGRect)frame
              inContext:(CGContextRef) context
 {
-    CGFloat R0 = 1, G0 = 1, B0 = 1;
-    CGFloat R1 = 1, G1 = 1, B1 = 1;
+    CGFloat R0 = 0, G0 = 0, B0 = 0;
+    CGFloat R1 = 0, G1 = 0, B1 = 0;
 //    CGFloat R0 = 0.267, G0 = 0.303, B0 = 0.335;
 //    CGFloat R1 = 0.040, G1 = 0.040, B1 = 0.040;
     UIColor *tintColor = [KxMenu tintColor];
@@ -739,8 +739,8 @@ typedef enum {
     
     const CGFloat locations[] = {0, 1};
     const CGFloat components[] = {
-        R0, G0, B0, 1,
-        R1, G1, B1, 1,
+        R0, G0, B0, 0.7,
+        R1, G1, B1, 0.7,
     };
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();

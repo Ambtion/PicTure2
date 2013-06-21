@@ -387,8 +387,6 @@
                     action:@selector(pushMenuItem:)],
       
       ];
-    [KxMenu setTintColor:[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:1.f]];
-    [KxMenu setTintColor2:[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:1.f]];
     [KxMenu showMenuInView:self.view
                   fromRect:CGRectMake(320 - 44, - 44,  44, 44)
                  menuItems:menuItems];

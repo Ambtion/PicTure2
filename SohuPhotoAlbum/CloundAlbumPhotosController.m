@@ -240,6 +240,7 @@
                     target:self
                     action:@selector(pushMenuItem:)]
       ];
+    
     [KxMenu showMenuInView:self.view
                   fromRect:CGRectMake(320 - 44, - 44,  44, 44)
                  menuItems:menuItems];

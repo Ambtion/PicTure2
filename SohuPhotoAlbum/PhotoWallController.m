@@ -70,7 +70,12 @@
     NSArray * phtotArray = [dic objectForKey:@"photos"];
     if (!phtotArray || !phtotArray.count) return nil;
     dataSource.imageWallInfo = phtotArray;
-    dataSource.wallDescription = [NSString stringWithFormat:@"%@",[dic objectForKey:@"description"]];
+    id  des = [dic objectForKey:@"description"];
+    if ([des isKindOfClass:[NSString class]] && ![des isEqualToString:@""]) {
+        dataSource.wallDescription = des;
+    }else{
+        dataSource.wallDescription = nil;
+    }
     dataSource.stroyName = [dic objectForKey:@"name"];
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
     dataSource.likeCount = [[dic objectForKey:@"like_count"] intValue];
