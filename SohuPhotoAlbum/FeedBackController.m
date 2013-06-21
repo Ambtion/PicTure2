@@ -89,6 +89,7 @@
     imageView.image = nil;
     [self.view addSubview:imageView];
     _bavBar = [[CustomizationNavBar alloc] initwithDelegate:self];
+    [_bavBar.nRightButton1 setHidden:YES];
     _bavBar.nLabelText.text = @"意见反馈";
     [self.view addSubview:_bavBar];
     UILabel * titleLabel = [[UILabel alloc] init];

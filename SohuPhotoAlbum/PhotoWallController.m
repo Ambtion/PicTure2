@@ -70,7 +70,7 @@
     NSArray * phtotArray = [dic objectForKey:@"photos"];
     if (!phtotArray || !phtotArray.count) return nil;
     dataSource.imageWallInfo = phtotArray;
-    dataSource.wallDescription = [dic objectForKey:@"description"];
+    dataSource.wallDescription = [NSString stringWithFormat:@"%@",[dic objectForKey:@"description"]];
     dataSource.stroyName = [dic objectForKey:@"name"];
     dataSource.shareTime = [self stringFromdate:[NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"updated_at"] longLongValue]/ 1000.f]];
     dataSource.likeCount = [[dic objectForKey:@"like_count"] intValue];
@@ -322,14 +322,15 @@
     }];
 }
 
-- (void) respNewsContentToSence:(enum WXScene)scene
+- (void)respNewsContentToSence:(enum WXScene)scene
 {
     NSString * contentURl = [NSString stringWithFormat:@"http://pp.sohu.com/u/%@",self.ownerID];
     NSString * title = [NSString stringWithFormat:@"分享%@的图片墙",[_userInfo objectForKey:@"user_nick"]];
     PhotoWallCellDataSource * source = [_dataSourceArray objectAtIndex:0];
     NSString * photoUrl = [[[source imageWallInfo] objectAtIndex:0] objectForKey:@"photo_url"];
-    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title photoUrl:photoUrl des:[_userInfo objectForKey:@"user_desc"]];
+    [self shareNewsToWeixinWithUrl:contentURl ToSence:scene Title:title photoUrl:photoUrl des:[NSString stringWithFormat:@"%@",[_userInfo objectForKey:@"user_desc"]]];
 }
+
 - (void)onResp:(BaseResp *)resp
 {
     if (resp.errCode == 0) {
@@ -375,7 +376,7 @@
 #pragma mark  Delete
 - (void)showDeleteView
 {
-    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片墙" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
 }

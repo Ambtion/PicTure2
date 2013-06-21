@@ -159,7 +159,7 @@
     dataSource.photoShowID = [NSString stringWithFormat:@"%@",[info objectForKey:@"show_id"]];
     dataSource.higth = [[info objectForKey:@"height"] floatValue];
     dataSource.weigth = [[info objectForKey:@"width"] floatValue];
-    dataSource.imageDes = [info objectForKey:@"description"];
+    dataSource.imageDes = [NSString stringWithFormat:@"%@",[info objectForKey:@"description"]];
     dataSource.isLiking = [[info objectForKey:@"is_liked"] boolValue];
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:0];
     NSArray * commentarray = [info objectForKey:@"comments"];
