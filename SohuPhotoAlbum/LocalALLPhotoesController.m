@@ -68,7 +68,7 @@
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton1 setImage:[UIImage imageNamed:@"upload.png"] forState:UIControlStateNormal];
         [_cusBar.nRightButton1 setButtoUploadState:YES];
-        //上传按钮        
+        //上传按钮
         [_cusBar.sLabelText setText:SLABELTEXT];
         [_cusBar.sRightStateButton setImage:[UIImage imageNamed:@"ensure.png"] forState:UIControlStateNormal];
         [self addsegmentOnView:_cusBar];
@@ -102,7 +102,7 @@
         return;
     }
     if (!localAlbumsConroller)
-            localAlbumsConroller = [[LocalAlbumsController alloc] init];
+        localAlbumsConroller = [[LocalAlbumsController alloc] init];
     self.viewDeckController.centerController = localAlbumsConroller;
 }
 #pragma mark - ReadData
@@ -118,19 +118,18 @@
 {
     if (_isReading) return;
     _isReading = YES;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
-            [self initDataContainer];
-            [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
-                [self prepareDataWithTimeOrder];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self autoUplaodPic];
-                });
-            } failture:^(NSError *error) {
-                
-            }];
-        }
-    });
+    [self waitForMomentsWithTitle:@"加载中" withView:self.view];
+    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    @autoreleasepool {
+        [self initDataContainer];
+        [[self libiary] readAlbumIntoGroupContainer:assetGroups assetsContainer:assetsArray sucess:^{
+            [self prepareDataWithTimeOrder];
+            [self autoUplaodPic];
+            [self stopWaitProgressView:nil];
+        } failture:^(NSError *error) {
+            [self showPopAlerViewRatherThentasView:NO WithMes:@"加载失败"];
+        }];
+    }
 }
 
 - (void)autoUplaodPic

@@ -119,8 +119,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.navigationItem setHidesBackButton:YES];
-//    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    [self.navigationItem setHidesBackButton:YES];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     if (!_navBar){
         _navBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_navBar.nLeftButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
