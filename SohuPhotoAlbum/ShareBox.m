@@ -128,7 +128,7 @@
         weixinAtion = [[SHActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"朋友圈",@"会话", nil];
         [weixinAtion showInView:showView];
     }else{
-        [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认安装微信"];
+        [self showInvalidTokenOrOpenIDMessageWithMes:@"请确认已安装微信"];
     }
 }
 

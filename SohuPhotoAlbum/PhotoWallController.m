@@ -383,7 +383,7 @@
 #pragma mark  Delete
 - (void)showDeleteView
 {
-    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认删除图片墙" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
+    PopAlertView * alertView = [[PopAlertView alloc] initWithTitle:nil message:@"确认图片集下墙" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认"];
     [alertView show];
     return;
 }

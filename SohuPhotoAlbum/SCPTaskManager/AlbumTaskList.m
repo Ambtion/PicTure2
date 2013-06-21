@@ -194,14 +194,14 @@
     if (self.taskList.count) {
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
             if (![self netWorkStatues] == kReachableViaWiFi && [PerfrenceSettingManager WifiLimitedAutoUpload]) { //不是wifi环境
-                [self postNotificationWithStr:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传"];
+                [self postNotificationWithStr:@"您当前网络环境不是Wi-Fi，上传终止。请到设置中确认允许3G上传。"];
                 //                [self postNotification]
                 [self endBackgroundUpdateTask];
                 [[UploadTaskManager currentManager] cancelAllOperation];
             }else{
                 [self beginBackgroundUpdateTask];
                 if ([UIApplication sharedApplication].backgroundTimeRemaining < 20.f) {
-                    [self postNotificationWithStr:@"程序将被终止,请重新打开保证后台上传"];
+                    [self postNotificationWithStr:@"程序将被终止，请打开程序保证后台继续上传。"];
                     return;
                 }
                 [self startNextTaskUnit];

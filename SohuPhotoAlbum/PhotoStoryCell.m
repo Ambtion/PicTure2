@@ -38,9 +38,9 @@
         imageDes = nil;
     }else{
         CGSize size = [imageDes sizeWithFont:DESLABELFONT constrainedToSize:DESLABELMAXSIZE lineBreakMode:DESLABLELINEBREAK];
-        heigth +=  5 ; //desOffset
+        heigth +=  10 ; //desOffset
         heigth += size.height; //des
-        heigth +=  5; //des下边界
+        heigth +=  10; //des下边界
     }
     
     
@@ -146,7 +146,7 @@
 }
 
 - (void)updateAllSubViewsFrames
-{    
+{
     NSString * str = [NSString stringWithFormat:@"%@_w640",[_dataSource imageUrl]];
     _photoView.frame = CGRectMake(6, 1, 308, 308 * _dataSource.higth / _dataSource.weigth);
     [_photoView setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
@@ -158,12 +158,10 @@
     [self.contentView setHidden:NO];
     _desLabel.text = [_dataSource imageDes];
     CGSize size = [self sizeOfLabel:_desLabel containSize:DESLABELMAXSIZE];
-    CGFloat offsetDes = size.height ? OFFSETY + 5 : 0;
+    CGFloat offsetDes = size.height ? 10 : 0;
     _desLabel.frame = CGRectMake(OFFSETX + 2 , _photoView.bounds.size.height + _photoView.frame.origin.y + offsetDes , size.width, size.height);
-    
     for (StoryCommentView * view in _commentArray)
         [view setHidden:YES];
-    
     if (_dataSource.commentInfoArray && _dataSource.commentInfoArray.count) {
         StoryCommentView * view = [_commentArray objectAtIndex:0];
         view.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:0]; //计算view.frame
@@ -177,7 +175,7 @@
             view1.frame = CGRectMake(view1.frame.origin.x, view.frame.size.height + view.frame.origin.y, view1.frame.size.width, view1.frame.size.height);
             [view1 setHidden:NO];
             [self setFootViewWithView:view1];
-
+            
             if (_dataSource.commentInfoArray.count > 2){
                 StoryCommentView * view2 = [_commentArray objectAtIndex:2];
                 view2.dataScoure = [[_dataSource commentInfoArray] objectAtIndex:2];
@@ -187,18 +185,18 @@
             }
         }
     }else{
-        
         [_commentCount.superview setHidden:YES];
-        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y ,320, _footView.frame.size.height);
+        _footView.frame = CGRectMake(0, _desLabel.frame.size.height + _desLabel.frame.origin.y +offsetDes,320, _footView.frame.size.height);
     }
     _commentCount.text = [NSString stringWithFormat:@"共%d条评论",_dataSource.allCommentCount];
     [self updateLikebutton];
     _bgImageView.frame = CGRectMake(0, _bgImageView.frame.origin.y, _bgImageView.frame.size.width, _footView.frame.origin.y + _footView.frame.size.height - 10);
+    DLog(@"%f %f",_bgImageView.frame.size.height + _bgImageView.frame.origin.y , [self.dataSource   cellHeigth]);
 }
 - (void)updateLikebutton
 {
     [_footView setLikeStateTolike:_dataSource.isLiking];
-
+    
 }
 - (void)setFootViewWithView:(UIView *)view
 {

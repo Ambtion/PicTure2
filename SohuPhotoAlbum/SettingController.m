@@ -15,7 +15,7 @@
 
 #define maxRow 8
 
-static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wifi环境上传",@"压缩上传图片",@"清除缓存",@"意见反馈",@"为相机伴侣打分",@"检查新版本"};
+static NSString * const titleOfRow[maxRow] = {@"", @"自动备份",@"仅在Wi-Fi环境上传",@"压缩上传图片",@"清除缓存",@"意见反馈",@"为相机伴侣打分",@"检查新版本"};
 
 @implementation SettingController
 @synthesize isChangeLoginState;

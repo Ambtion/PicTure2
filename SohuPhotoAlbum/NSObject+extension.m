@@ -64,7 +64,7 @@
 }
 - (void)showNetWorkAlertView
 {
-    PopAlertView * alerView = [[PopAlertView alloc] initWithTitle:nil message:@"您当前网络环境不是wifi,上传终止,请到设置中确认允许3G上传" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil];
+    PopAlertView * alerView = [[PopAlertView alloc] initWithTitle:nil message:@"您当前网络环境不是Wi-Fi，上传终止。请到设置中确认允许3G上传。" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil];
     [alerView show];
     [[UploadTaskManager currentManager] cancelAllOperation];
 }

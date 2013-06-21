@@ -61,8 +61,8 @@
 #pragma mark - CusNavigatinBar
 - (void)viewWillAppear:(BOOL)animated
 {
+    DLog();
     [super viewWillAppear:animated]; //删除bar上所有子视图
-    
     if (!_cusBar){
         _cusBar = [[CustomizationNavBar alloc] initwithDelegate:self];
         [_cusBar.nLeftButton setImage:[UIImage imageNamed:@"list.png"] forState:UIControlStateNormal];
@@ -77,6 +77,11 @@
         [self.navigationController.navigationBar addSubview:_cusBar];
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
     segControll.selectedSegmentIndex = 0;
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    DLog();
+    [super viewDidAppear:animated];
     if (needReadonce) {
         [self readAlbum];
         needReadonce = NO;
@@ -113,12 +118,15 @@
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self readAlbum];
+    DLog();
+    //    needReadonce = YES;
 }
 - (void)readAlbum
 {
     if (_isReading) return;
     _isReading = YES;
-    [self waitForMomentsWithTitle:@"加载中" withView:self.view];
+    UIWindow * window = [[[UIApplication  sharedApplication] delegate] window];
+    __block MBProgressHUD * hhd = [self waitForMomentsWithTitle:@"本地图片加载中" withView:window];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
             [self initDataContainer];
@@ -126,8 +134,7 @@
                 [self prepareDataWithTimeOrder];
                 [self autoUplaodPic];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self stopWaitProgressView:nil];
-
+                    [self stopWaitProgressView:hhd];
                 });
             } failture:^(NSError *error) {
                 [self showPopAlerViewRatherThentasView:NO WithMes:@"加载失败"];

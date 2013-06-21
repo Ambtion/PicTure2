@@ -213,10 +213,10 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 - (MBProgressHUD *)waitForMomentsWithTitle:(NSString*)str withView:(UIView *)view
 {
     
-    MBProgressHUD * progressView = [[MBProgressHUD alloc] initWithView:self.view];
+    MBProgressHUD * progressView = [[MBProgressHUD alloc] initWithView:view];
     progressView.animationType = MBProgressHUDAnimationZoomOut;
     progressView.labelText = str;
-    [self.view addSubview:progressView];
+    [view addSubview:progressView];
     [progressView show:YES];
     return progressView;
     
@@ -303,9 +303,15 @@ NSInteger sort( ALAsset *asset1,ALAsset *asset2,void *context)
 
 - (NSData *)getImgaeDataWithUrl:(NSString *)string
 {
-    NSString * photoUrl = [NSString stringWithFormat:@"%@_c90",string];
+    NSString * photoUrl = [NSString stringWithFormat:@"%@_c150",string];
+    SDImageCache * imageCache  = [[SDImageCache alloc] init];
+    UIImage * image = [imageCache imageFromKey:photoUrl];
+    if (image) {
+        return  UIImageJPEGRepresentation(image, 1.0);
+    }
     return [NSData dataWithContentsOfURL:[NSURL URLWithString:photoUrl]];
 }
+
 - (void)shareImageToWeixinWithUrl:(NSString *)imageURL ToSence:(enum WXScene)scene
 {
     //发送内容给微信

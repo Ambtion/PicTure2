@@ -658,8 +658,8 @@ typedef enum {
     UIBezierPath *arrowPath = [UIBezierPath bezierPath];
     
     // fix the issue with gap of arrow's base if on the edge
-    const CGFloat kEmbedFix = 3.f;
-    
+    const CGFloat kEmbedFix = 0.f;
+    CGFloat alpha = 0.7;
     if (_arrowDirection == KxMenuViewArrowDirectionUp) {
         
         const CGFloat arrowXM = _arrowPosition;
@@ -673,7 +673,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowY1}];
         [arrowPath addLineToPoint: (CGPoint){arrowXM, arrowY0}];
         
-        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:1] set];
+        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:alpha] set];
         
         Y0 += kArrowSize;
         
@@ -690,7 +690,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowY0}];
         [arrowPath addLineToPoint: (CGPoint){arrowXM, arrowY1}];
         
-        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:1] set];
+        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:alpha] set];
         
         Y1 -= kArrowSize;
         
@@ -707,7 +707,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX1, arrowY1}];
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowYM}];
         
-        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:1] set];
+        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:alpha] set];
         
         X0 += kArrowSize;
         
@@ -724,7 +724,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX1, arrowY1}];
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowYM}];
         
-        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:1] set];
+        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:alpha] set];
         
         X1 -= kArrowSize;
     }
